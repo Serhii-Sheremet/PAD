@@ -89,11 +89,16 @@ namespace PAD
 
         private void YearTranzits_Shown(object sender, EventArgs e)
         {
-            Cursor.Current = Cursors.WaitCursor;
+            using (WaitForm wForm = new WaitForm(DrawYearTranzits, _langCode))
+            {
+                wForm.ShowDialog(this);
+            }
+        }
+
+        private void DrawYearTranzits()
+        {
             dayList = PrepareYearDays(_sYear, _sProfile);
             YearTranzitDrawing(dayList);
-
-            Cursor.Current = Cursors.Default;
         }
 
         public YearTranzits(
@@ -203,9 +208,6 @@ namespace PAD
             List<Day> daysList = new List<Day>();
             DateTime startDate = new DateTime(year, 1, 1);
             DateTime endDate = new DateTime(year, 12, 31, 23, 59, 59);
-
-            //EAppSetting weekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-            //int startDayOfWeek = Utility.GetDayOfWeekNumberFromDate(startDateOfMonth, weekSetting);
 
             double latitude, longitude;
             string timeZone = string.Empty;

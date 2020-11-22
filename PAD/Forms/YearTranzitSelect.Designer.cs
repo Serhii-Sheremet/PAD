@@ -28,52 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.buttonSelect = new System.Windows.Forms.Button();
-            this.buttonCancel = new System.Windows.Forms.Button();
-            this.comboBoxYear = new System.Windows.Forms.ComboBox();
             this.labelTranzits = new System.Windows.Forms.Label();
+            this.comboBoxYear = new System.Windows.Forms.ComboBox();
+            this.buttonCancel = new System.Windows.Forms.Button();
+            this.buttonSelect = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // buttonSelect
+            // labelTranzits
             // 
-            this.buttonSelect.BackColor = System.Drawing.SystemColors.Window;
-            this.buttonSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonSelect.Location = new System.Drawing.Point(62, 71);
-            this.buttonSelect.Name = "buttonSelect";
-            this.buttonSelect.Size = new System.Drawing.Size(75, 26);
-            this.buttonSelect.TabIndex = 5;
-            this.buttonSelect.Text = "Choose";
-            this.buttonSelect.UseVisualStyleBackColor = false;
-            this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
+            this.labelTranzits.AutoSize = true;
+            this.labelTranzits.Location = new System.Drawing.Point(18, 26);
+            this.labelTranzits.Name = "labelTranzits";
+            this.labelTranzits.Size = new System.Drawing.Size(91, 16);
+            this.labelTranzits.TabIndex = 16;
+            this.labelTranzits.Text = "Year\'s tranzits";
+            // 
+            // comboBoxYear
+            // 
+            this.comboBoxYear.FormattingEnabled = true;
+            this.comboBoxYear.Location = new System.Drawing.Point(136, 23);
+            this.comboBoxYear.Name = "comboBoxYear";
+            this.comboBoxYear.Size = new System.Drawing.Size(100, 24);
+            this.comboBoxYear.TabIndex = 15;
             // 
             // buttonCancel
             // 
             this.buttonCancel.BackColor = System.Drawing.SystemColors.Window;
             this.buttonCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonCancel.Location = new System.Drawing.Point(162, 71);
+            this.buttonCancel.Location = new System.Drawing.Point(161, 70);
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(75, 26);
-            this.buttonCancel.TabIndex = 6;
+            this.buttonCancel.TabIndex = 14;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = false;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
-            // comboBoxYear
+            // buttonSelect
             // 
-            this.comboBoxYear.FormattingEnabled = true;
-            this.comboBoxYear.Location = new System.Drawing.Point(137, 24);
-            this.comboBoxYear.Name = "comboBoxYear";
-            this.comboBoxYear.Size = new System.Drawing.Size(100, 24);
-            this.comboBoxYear.TabIndex = 7;
-            // 
-            // labelTranzits
-            // 
-            this.labelTranzits.AutoSize = true;
-            this.labelTranzits.Location = new System.Drawing.Point(19, 27);
-            this.labelTranzits.Name = "labelTranzits";
-            this.labelTranzits.Size = new System.Drawing.Size(91, 16);
-            this.labelTranzits.TabIndex = 8;
-            this.labelTranzits.Text = "Year\'s tranzits";
+            this.buttonSelect.BackColor = System.Drawing.SystemColors.Window;
+            this.buttonSelect.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSelect.Location = new System.Drawing.Point(61, 70);
+            this.buttonSelect.Name = "buttonSelect";
+            this.buttonSelect.Size = new System.Drawing.Size(75, 26);
+            this.buttonSelect.TabIndex = 13;
+            this.buttonSelect.Text = "Choose";
+            this.buttonSelect.UseVisualStyleBackColor = false;
+            this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
             // 
             // YearTranzitSelect
             // 
@@ -99,9 +99,10 @@
         }
 
         #endregion
-        private System.Windows.Forms.Button buttonSelect;
-        private System.Windows.Forms.Button buttonCancel;
-        private System.Windows.Forms.ComboBox comboBoxYear;
+
         private System.Windows.Forms.Label labelTranzits;
+        private System.Windows.Forms.ComboBox comboBoxYear;
+        private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.Button buttonSelect;
     }
 }

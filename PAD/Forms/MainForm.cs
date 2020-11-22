@@ -126,6 +126,7 @@ namespace PAD
 
         private List<Day> _daysList;
         private List<Day> _daysOfMonth;
+        private PdfDocument _pdfDoc;
 
         public DateTime MonthDate
         {
@@ -448,11 +449,18 @@ namespace PAD
             {
                 _selectedProfile = workingProfile;
                 PrepareProfileAndTimeZoneLabels();
+                using (WaitForm wForm = new WaitForm(DrawCalendarData, _activeLanguageCode))
+                {
+                    wForm.ShowDialog(this);
+                }
+
+                
+               /*
                 _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
 
                 //Drawing
                 CalendarDrawing(_daysList);
-                TranzitDrawing(_daysList);
+                TranzitDrawing(_daysList);*/
             }
         }
 
@@ -533,7 +541,12 @@ namespace PAD
 
             if (_selectedProfile != null && _yearMin != 0 && _yearMax != 0)
             {
-                Cursor.Current = Cursors.WaitCursor;
+                //Cursor.Current = Cursors.WaitCursor;
+                using (WaitForm wForm = new WaitForm(DrawCalendarData, _activeLanguageCode))
+                {
+                    wForm.ShowDialog(this);
+                }
+                /*
                 // Redrawing calendar for a new selected month
                 _selectedDate = datePicker.Value.Date;
                 _daysList = null;
@@ -544,9 +557,23 @@ namespace PAD
                 CalendarDrawing(_daysList);
                 TranzitDrawing(_daysList);
 
-                Cursor.Current = Cursors.Default;
+                Cursor.Current = Cursors.Default;*/
             }
         }
+
+        private void DrawCalendarData()
+        {
+            // Redrawing calendar for a new selected month
+            _selectedDate = datePicker.Value.Date;
+            _daysList = null;
+            _daysOfMonth = null;
+            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Date.Month, 1), _selectedProfile);
+
+            //Drawing
+            CalendarDrawing(_daysList);
+            TranzitDrawing(_daysList);
+        }
+
 
         private string FindIfPlanetChangeZnak(Day day)
         {
@@ -2528,88 +2555,17 @@ namespace PAD
             {
                 try
                 {
-                    Cursor.Current = Cursors.WaitCursor;
-                    PdfDocument doc = new PdfDocument();
-
-                    string filename = string.Empty;
-                    switch (_activeLanguageCode)
+                    using (WaitForm wForm = new WaitForm(CreatePDF, _activeLanguageCode))
                     {
-                        case ELanguage.ru:
-                            filename = "Titul_ru.pdf";
-                            break;
-
-                        case ELanguage.en:
-                            filename = "Titul_en.pdf";
-                            break;
+                        wForm.ShowDialog(this);
                     }
-
-                    PdfDocument titulPDF = PdfReader.Open(@".\Data\" + filename, PdfDocumentOpenMode.Import);
-                    for (int i = 0; i < titulPDF.PageCount; i++)
-                    {
-                        PdfPage titulPage = titulPDF.Pages[i];
-                        doc.AddPage(titulPage);
-                    }
-
-                    PdfPage page = doc.AddPage();
-                    page.Orientation = PageOrientation.Landscape;
-                    XSize size = PageSizeConverter.ToSize(PageSize.A4);
-                    page.Width = size.Height;
-                    page.Height = size.Width;
-
-                    XFont font = new XFont("", 12, XFontStyle.Bold);
-                    XFont fontTZ = new XFont("", 8, XFontStyle.Regular);
-                    XFont fontAuthor = new XFont("", 6, XFontStyle.Regular);
-
-                    string localInfo = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
-                    string textAuthor = Utility.GetLocalizedText("Concept: Halyna Sheremet", _activeLanguageCode) + " (VK: Halyna Sheremet http://vk.com/id263300332, Facebook: Halyna Sheremet https://www.facebook.com/halyna.sheremet)     " + Utility.GetLocalizedText("Programming: Sergey Sheremet", _activeLanguageCode);
-
-                    XImage[] imageArray = new XImage[2];
-
-                    Bitmap bmp42 = new Bitmap(Convert.ToInt32(page.Width.Point - 20), Convert.ToInt32(page.Height.Point - 100));
-                    bmp42 = (Bitmap)_currentCalendarImage;
-                    XImage image42 = XImage.FromStream(GetStream(bmp42, ImageFormat.Bmp));
-
-                    Bitmap bmpTransit = new Bitmap(Convert.ToInt32(page.Width.Point - 20), Convert.ToInt32(page.Height.Point - 100));
-                    bmpTransit = (Bitmap)_currentTranzitsImage;
-                    XImage imageTransit = XImage.FromStream(GetStream(bmpTransit, ImageFormat.Bmp));
-
-                    imageArray[0] = image42;
-                    imageArray[1] = imageTransit;
-
-                    for (int i = 0; i < imageArray.Length; i++)
-                    {
-                        XGraphics graph = XGraphics.FromPdfPage(page);
-                        graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
-                                    new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
-                        graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
-                                        new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
-
-                        graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
-                        graph.DrawImage(imageArray[i], 10, 20, page.Width.Point - 20, page.Height - 130);
-                        graph.DrawString(textAuthor, fontAuthor, XBrushes.Black, new XRect(10, page.Height.Point - 8, page.Width.Point - 20, 8), XStringFormats.TopRight);
-
-                        if (i < imageArray.Length - 1)
-                        {
-                            page = doc.AddPage();
-                            page.Orientation = PageOrientation.Landscape;
-                            size = PageSizeConverter.ToSize(PageSize.A4);
-                            page.Width = size.Height;
-                            page.Height = size.Width;
-                        }
-                    }
-
-                    DrawDetailedMonth(doc, localInfo, textAuthor, font, fontTZ, fontAuthor, new DateTime(datePicker.Value.Year, datePicker.Value.Month, 1));
-
-                    Cursor.Current = Cursors.Default;
-
                     string exportfilename = datePicker.Value.ToString("MMMM", CultureInfo.InvariantCulture) + "_" + datePicker.Value.Year + ".pdf";
-
                     SaveFileDialog savefile = new SaveFileDialog();
                     savefile.FileName = exportfilename;
                     savefile.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
                     if (savefile.ShowDialog() == DialogResult.OK)
                     {
-                        doc.Save(Path.GetFullPath(savefile.FileName));
+                        _pdfDoc.Save(Path.GetFullPath(savefile.FileName));
                         frmShowMessage.Show(Utility.GetLocalizedText("File", _activeLanguageCode) + " " + exportfilename + " " + Utility.GetLocalizedText("created successfuly!", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.OK);
                     }
                 }
@@ -2620,17 +2576,86 @@ namespace PAD
             }
         }
 
-        private void DrawDetailedMonth(PdfDocument doc, string localInfo, string textAuthor, XFont font, XFont fontTZ, XFont fontAuthor, DateTime startDate)
+        private void CreatePDF()
         {
+            _pdfDoc = null;
+            _pdfDoc = new PdfDocument();
+
+            string filename = string.Empty;
+            switch (_activeLanguageCode)
+            {
+                case ELanguage.ru:
+                    filename = "Titul_ru.pdf";
+                    break;
+
+                case ELanguage.en:
+                    filename = "Titul_en.pdf";
+                    break;
+            }
+
+            PdfDocument titulPDF = PdfReader.Open(@".\Data\" + filename, PdfDocumentOpenMode.Import);
+            for (int i = 0; i < titulPDF.PageCount; i++)
+            {
+                PdfPage titulPage = titulPDF.Pages[i];
+                _pdfDoc.AddPage(titulPage);
+            }
+
+            PdfPage page = _pdfDoc.AddPage();
+            page.Orientation = PageOrientation.Landscape;
+            XSize size = PageSizeConverter.ToSize(PageSize.A4);
+            page.Width = size.Height;
+            page.Height = size.Width;
+
+            XFont font = new XFont("", 12, XFontStyle.Bold);
+            XFont fontTZ = new XFont("", 8, XFontStyle.Regular);
+            XFont fontAuthor = new XFont("", 6, XFontStyle.Regular);
+
+            string localInfo = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+            string textAuthor = Utility.GetLocalizedText("Concept: Halyna Sheremet", _activeLanguageCode) + " (VK: Halyna Sheremet http://vk.com/id263300332, Facebook: Halyna Sheremet https://www.facebook.com/halyna.sheremet)     " + Utility.GetLocalizedText("Programming: Sergey Sheremet", _activeLanguageCode);
+
+            XImage[] imageArray = new XImage[2];
+
+            Bitmap bmp42 = new Bitmap(Convert.ToInt32(page.Width.Point - 20), Convert.ToInt32(page.Height.Point - 100));
+            bmp42 = (Bitmap)_currentCalendarImage;
+            XImage image42 = XImage.FromStream(GetStream(bmp42, ImageFormat.Bmp));
+
+            Bitmap bmpTransit = new Bitmap(Convert.ToInt32(page.Width.Point - 20), Convert.ToInt32(page.Height.Point - 100));
+            bmpTransit = (Bitmap)_currentTranzitsImage;
+            XImage imageTransit = XImage.FromStream(GetStream(bmpTransit, ImageFormat.Bmp));
+
+            imageArray[0] = image42;
+            imageArray[1] = imageTransit;
+
+            XGraphics graph = null;
+            for (int i = 0; i < imageArray.Length; i++)
+            {
+                graph = XGraphics.FromPdfPage(page);
+                graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
+                            new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
+                graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
+                                new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
+
+                graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
+                graph.DrawImage(imageArray[i], 10, 20, page.Width.Point - 20, page.Height - 130);
+                graph.DrawString(textAuthor, fontAuthor, XBrushes.Black, new XRect(10, page.Height.Point - 8, page.Width.Point - 20, 8), XStringFormats.TopRight);
+
+                if (i < imageArray.Length - 1)
+                {
+                    page = _pdfDoc.AddPage();
+                    page.Orientation = PageOrientation.Landscape;
+                    size = PageSizeConverter.ToSize(PageSize.A4);
+                    page.Width = size.Height;
+                    page.Height = size.Width;
+                }
+            }
+
             int day = 0, startIndexForPage = 0, nextIndexForPage = 0;
             int posY = 0, height = 0;
-            PdfPage page = null;
-            XGraphics graph = null;
             do
             {
                 if (_daysList[day].IsDayOfMonth)
                 {
-                    
+
                     if (nextIndexForPage == 0)
                         nextIndexForPage = day;
                     startIndexForPage = day;
@@ -2638,21 +2663,21 @@ namespace PAD
                     if (startIndexForPage == nextIndexForPage)
                     {
                         nextIndexForPage = startIndexForPage + 2;
-                    page = doc.AddPage();
-                    posY = 30;
-                    //page.Orientation = PageOrientation.Landscape;
-                    XSize size = PageSizeConverter.ToSize(PageSize.A4);
-                    page.Width = size.Width; //size.Height;
-                    page.Height = size.Height; //size.Width;
+                        page = _pdfDoc.AddPage();
+                        posY = 30;
+                        //page.Orientation = PageOrientation.Landscape;
+                        size = PageSizeConverter.ToSize(PageSize.A4);
+                        page.Width = size.Width; //size.Height;
+                        page.Height = size.Height; //size.Width;
 
-                    graph = XGraphics.FromPdfPage(page);
-                    graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
-                        new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
-                    graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
-                                    new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
-                    graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
+                        graph = XGraphics.FromPdfPage(page);
+                        graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
+                            new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
+                        graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
+                                        new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
+                        graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
 
-                    graph.DrawString(textAuthor, fontAuthor, XBrushes.Black, new XRect(10, page.Height.Point - 8, page.Width.Point - 20, 8), XStringFormats.TopRight);
+                        graph.DrawString(textAuthor, fontAuthor, XBrushes.Black, new XRect(10, page.Height.Point - 8, page.Width.Point - 20, 8), XStringFormats.TopRight);
                     }
 
                     height = Convert.ToInt32(page.Height.Point - 50) / 2;
