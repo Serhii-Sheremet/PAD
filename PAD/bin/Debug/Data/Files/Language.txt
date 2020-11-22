@@ -1,0 +1,2 @@
+1|en|en-US
+2|ru|ru-RU

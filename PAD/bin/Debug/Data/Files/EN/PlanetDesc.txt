@@ -1,0 +1,11 @@
+1|Moon|en
+2|Sun|en
+3|Venus|en
+4|Jupiter|en
+5|Mercury|en
+6|Mars|en
+7|Saturn|en
+8|Rahu|en
+9|Ketu|en
+10|Rahu|en
+11|Ketu|en

@@ -1,0 +1,20 @@
+1|Mu|Muhurta|en
+2|Yo|Yoga|en
+3|Na|Nakshatra|en
+4|TB|Tara Bala|en
+5|Ti|Tithi|en
+6|Ka|Karana|en
+7|NY|Nitya Yoga|en
+8|CB|Chandra Bala|en
+9|Ho|Hora|en
+10|30M|30 Muhurts|en
+11|60G|60 Ghati|en
+12|MoP|Moon Nakshatra's Pada|en
+13|SuP|Sun Nakshatra's Pada|en
+14|VeP|Venus Nakshatra's Pada|en
+15|JuP|Jupiter Nakshatra's Pada|en
+16|MeP|Mercury Nakshatra's Pada|en
+17|MaP|Mars Nakshatra's Pada|en
+18|SaP|Saturn Nakshatra's Pada|en
+19|RaP|Rahu Nakshatra's Pada|en
+20|KeP|Ketu Nakshatra's Pada|en

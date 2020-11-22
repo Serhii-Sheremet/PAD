@@ -1,0 +1,466 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{82BF1407-BA71-484B-8B61-592448489905}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>PAD</RootNamespace>
+    <AssemblyName>PAD</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>false</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Calendar.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Calendar.DayView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DayView\bin\Debug\Calendar.DayView.dll</HintPath>
+    </Reference>
+    <Reference Include="GeoTimeZone, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e20ab7d0d9479841, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Lib\GeoTimeZone.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Innovative.Geometry.Angle, Version=3.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Lib\Innovative.Geometry.Angle.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Innovative.SolarCalculator, Version=3.0.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Lib\Innovative.SolarCalculator.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="MonthCalendarControl">
+      <HintPath>bin\Debug\Lib\MonthCalendarControl.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>bin\Debug\Lib\PdfSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="PopupControl">
+      <HintPath>bin\Debug\Lib\PopupControl.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>bin\Debug\Lib\System.Data.SQLite.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TimeZoneConverter, Version=3.2.0.0, Culture=neutral, PublicKeyToken=e20ab7d0d9479841, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Lib\TimeZoneConverter.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Calendar\Calendar.cs" />
+    <Compile Include="Calendar\ChandraBalaCalendar.cs" />
+    <Compile Include="Calendar\Day.cs" />
+    <Compile Include="Calendar\EclipseCalendar.cs" />
+    <Compile Include="Calendar\Ghati60Calendar.cs" />
+    <Compile Include="Calendar\HoraCalendar.cs" />
+    <Compile Include="Calendar\JogaCalendar.cs" />
+    <Compile Include="Calendar\JogaColoredBlock.cs" />
+    <Compile Include="Calendar\Muhurta30Calendar.cs" />
+    <Compile Include="Calendar\MuhurtaCalendar.cs" />
+    <Compile Include="Calendar\NityaJogaCalendar.cs" />
+    <Compile Include="Calendar\KaranaCalendar.cs" />
+    <Compile Include="Calendar\NakshatraCalendar.cs" />
+    <Compile Include="Calendar\PlanetCalendar.cs" />
+    <Compile Include="Calendar\TaraBalaCalendar.cs" />
+    <Compile Include="Calendar\TithiCalendar.cs" />
+    <Compile Include="Entities\AppSettingDescList.cs" />
+    <Compile Include="Entities\AppSettingList.cs" />
+    <Compile Include="Entities\ColorDescription.cs" />
+    <Compile Include="Entities\DateTimeInterval.cs" />
+    <Compile Include="Entities\DomPlanet.cs" />
+    <Compile Include="Entities\DVLineNameDescription.cs" />
+    <Compile Include="Entities\DVLineNames.cs" />
+    <Compile Include="Entities\FontList.cs" />
+    <Compile Include="Entities\FontListDescription.cs" />
+    <Compile Include="Entities\Ghati60.cs" />
+    <Compile Include="Entities\Ghati60Description.cs" />
+    <Compile Include="Entities\HoraPlanet.cs" />
+    <Compile Include="Entities\Joga.cs" />
+    <Compile Include="Entities\JogaDescription.cs" />
+    <Compile Include="Calendar\NityaJogaData.cs" />
+    <Compile Include="Entities\LanguageDescription.cs" />
+    <Compile Include="Entities\NityaJoga.cs" />
+    <Compile Include="Entities\NityaJogaDescription.cs" />
+    <Compile Include="Entities\Karana.cs" />
+    <Compile Include="Entities\KaranaDescription.cs" />
+    <Compile Include="Entities\Language.cs" />
+    <Compile Include="Entities\Muhurta.cs" />
+    <Compile Include="Entities\Muhurta30.cs" />
+    <Compile Include="Entities\Muhurta30Description.cs" />
+    <Compile Include="Entities\MuhurtaDescription.cs" />
+    <Compile Include="Entities\Nakshatra.cs" />
+    <Compile Include="Entities\NakshatraDescription.cs" />
+    <Compile Include="Entities\Eclipse.cs" />
+    <Compile Include="Calendar\EclipseData.cs" />
+    <Compile Include="Entities\EclipseDescription.cs" />
+    <Compile Include="Entities\Pada.cs" />
+    <Compile Include="Entities\Planet.cs" />
+    <Compile Include="Calendar\PlanetData.cs" />
+    <Compile Include="Entities\PlanetDescription.cs" />
+    <Compile Include="Entities\SystemFont.cs" />
+    <Compile Include="Entities\TaraBala.cs" />
+    <Compile Include="Entities\TaraBalaDescription.cs" />
+    <Compile Include="Entities\Tithi.cs" />
+    <Compile Include="Calendar\TithiData.cs" />
+    <Compile Include="Entities\TithiDescription.cs" />
+    <Compile Include="Entities\Tranzit.cs" />
+    <Compile Include="Entities\TranzitDescription.cs" />
+    <Compile Include="Entities\VedhaEntity.cs" />
+    <Compile Include="Entities\Zodiak.cs" />
+    <Compile Include="Entities\ZodiakDescription.cs" />
+    <Compile Include="Enums\EAppSetting.cs" />
+    <Compile Include="Enums\EAppSettingList.cs" />
+    <Compile Include="Enums\EColor.cs" />
+    <Compile Include="Enums\EDVNames.cs" />
+    <Compile Include="Enums\EEclipse.cs" />
+    <Compile Include="Enums\EExaltation.cs" />
+    <Compile Include="Enums\EFontList.cs" />
+    <Compile Include="Enums\EFontStyle.cs" />
+    <Compile Include="Enums\EGhati60.cs" />
+    <Compile Include="Enums\EHoraPlanet.cs" />
+    <Compile Include="Enums\EJoga.cs" />
+    <Compile Include="Enums\ELanguage.cs" />
+    <Compile Include="Enums\EMuhurta.cs" />
+    <Compile Include="Enums\EMuhurta30.cs" />
+    <Compile Include="Enums\ENakshatra.cs" />
+    <Compile Include="Enums\ENityaJoga.cs" />
+    <Compile Include="Enums\EPlanet.cs" />
+    <Compile Include="Enums\ESun.cs" />
+    <Compile Include="Enums\EZodiak.cs" />
+    <Compile Include="Forms\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\AppSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AppSettings.Designer.cs">
+      <DependentUpon>AppSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ColorSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ColorSettings.Designer.cs">
+      <DependentUpon>ColorSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DBAdministration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DBAdministration.Designer.cs">
+      <DependentUpon>DBAdministration.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\DBPassword.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\DBPassword.Designer.cs">
+      <DependentUpon>DBPassword.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\frmShowMessage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\frmShowMessage.Designer.cs">
+      <DependentUpon>frmShowMessage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LanguageSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LanguageSelect.Designer.cs">
+      <DependentUpon>LanguageSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LocationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\LocationForm.Designer.cs">
+      <DependentUpon>LocationForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ProfileForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ProfileForm.Designer.cs">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\FontSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FontSettings.Designer.cs">
+      <DependentUpon>FontSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\TabDay.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TabDay.Designer.cs">
+      <DependentUpon>TabDay.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\UserEventMenu.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\UserEventMenu.Designer.cs">
+      <DependentUpon>UserEventMenu.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\WaitForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\WaitForm.Designer.cs">
+      <DependentUpon>WaitForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\YearTranzitSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\YearTranzitSelect.Designer.cs">
+      <DependentUpon>YearTranzitSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\YearSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\YearSelect.Designer.cs">
+      <DependentUpon>YearSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Entities\Colors.cs" />
+    <Compile Include="Forms\YearTranzits.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\YearTranzits.Designer.cs">
+      <DependentUpon>YearTranzits.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Profile\Location.cs" />
+    <Compile Include="Profile\PersonsEventsList.cs" />
+    <Compile Include="Profile\Profile.cs" />
+    <Compile Include="Forms\TransitsMap.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\TransitsMap.Designer.cs">
+      <DependentUpon>TransitsMap.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTips\TranzitsToolTip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolTips\TranzitsToolTip.Designer.cs">
+      <DependentUpon>TranzitsToolTip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTips\CalendarToolTip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolTips\CalendarToolTip.Designer.cs">
+      <DependentUpon>CalendarToolTip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTips\DayViewTooltip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolTips\DayViewTooltip.Designer.cs">
+      <DependentUpon>DayViewTooltip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTips\PersonEventTooltip.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ToolTips\PersonEventTooltip.Designer.cs">
+      <DependentUpon>PersonEventTooltip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ToolTips\ToolTipEntity.cs" />
+    <Compile Include="Utilities\AppTexts.cs" />
+    <Compile Include="Utilities\CacheLoad.cs" />
+    <Compile Include="Utilities\DateTimeUtils.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Profile\Locations.cs" />
+    <Compile Include="Utilities\GoogleTimeZone .cs" />
+    <Compile Include="Utilities\KeyValueData.cs" />
+    <Compile Include="Utilities\Utility.cs" />
+    <EmbeddedResource Include="Forms\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AppSettings.resx">
+      <DependentUpon>AppSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ColorSettings.resx">
+      <DependentUpon>ColorSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DBAdministration.resx">
+      <DependentUpon>DBAdministration.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\DBPassword.resx">
+      <DependentUpon>DBPassword.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\frmShowMessage.resx">
+      <DependentUpon>frmShowMessage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LanguageSelect.resx">
+      <DependentUpon>LanguageSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\LocationForm.resx">
+      <DependentUpon>LocationForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ProfileForm.resx">
+      <DependentUpon>ProfileForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\FontSettings.resx">
+      <DependentUpon>FontSettings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\TabDay.resx">
+      <DependentUpon>TabDay.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\UserEventMenu.resx">
+      <DependentUpon>UserEventMenu.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\WaitForm.resx">
+      <DependentUpon>WaitForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\YearTranzitSelect.resx">
+      <DependentUpon>YearTranzitSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\YearSelect.resx">
+      <DependentUpon>YearSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\YearTranzits.resx">
+      <DependentUpon>YearTranzits.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="Forms\TransitsMap.resx">
+      <DependentUpon>TransitsMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolTips\TranzitsToolTip.resx">
+      <DependentUpon>TranzitsToolTip.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolTips\CalendarToolTip.resx">
+      <DependentUpon>CalendarToolTip.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolTips\DayViewTooltip.resx">
+      <DependentUpon>DayViewTooltip.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ToolTips\PersonEventTooltip.resx">
+      <DependentUpon>PersonEventTooltip.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Images\close_10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Information.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Question.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Images\green-check_32.png" />
+    <None Include="bin\Debug\Images\Moon_Eclipse_alpha.png" />
+    <None Include="bin\Debug\Images\Sun_Eclipse_alpha.png" />
+    <Content Include="Calendar.ico" />
+    <Content Include="Resources\green-check_32.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5.2 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

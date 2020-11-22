@@ -1,0 +1,12 @@
+1|Aries|en
+2|Taurus|en
+3|Gemini|en
+4|Cancer|en
+5|Leo|en
+6|Virgo|en
+7|Libra|en
+8|Scorpio|en
+9|Sagittarius|en
+10|Capricorn|en
+11|Aquarius|en
+12|Pisces|en

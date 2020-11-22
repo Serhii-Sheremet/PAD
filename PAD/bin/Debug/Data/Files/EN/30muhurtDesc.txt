@@ -1,0 +1,30 @@
+1|Rudra|1st MUHURTA RAUDRA|Lord of screaming, roaring, fear, upheaval, destruction and change|en
+2|Akhi|2nd MUHURTA AKHI|Serpent lord|en
+3|Mitra|3rd MUHURTA MAITRA|Lord of friendliness|en
+4|Pitri|4th MUHURTA PITRA|Lord of the ancestors|en
+5|Vasu|5th MUHURTA SAVITRA (VASU)|Lord of the Life Force|en
+6|Vayra|6th MUHURTA VAYRA (AMBU)|Lord of enmity, revenge, quarrel, hostility|en
+7|Vishva|7th MUHURTA VISHVA (VISHVADEVA)|Lord of wholeness, fullness, unity, universality|en
+8|Abhidjit|8th MUHURTA ABHIDJIT (Vidhi)|Lord of victory and good luck|en
+9|Raukhina|9th MUHURTA RAUKHINA (Vidhata, Satamukhi)|Lord of the sandalwood|en
+10|Puruhuta|10th MUHURTA BALA (Puruhuta)|Lord of youth, youth, children|en
+11|Wahini|11th MUHURTA WAHI (Indraagni)|Lord of transportation|en
+12|Nirriti|12th MUHURTA NIRITTA (Naktanchara)|Lord of death|en
+13|Varuna|13th MUHURTA VARUNA|Lord of the water|en
+14|Aryama|14th MUHURTA ARYAMA|Lord of partnership, partnership, matchmaking|en
+15|Bhaha|15th MUHURTA BHAHA|Lord of prosperity, prosperity, good luck, family happiness|en
+16|Girisha|16th MUHURTA GIRISHA|Lord of the mountains|en
+17|Ajapada|17th MUHURTA AJAPADA|Lord of the first step|en
+18|Akhirbudhnya|18th MUHURTA AKHIRBUDHNYA|Lord of the Underworlds|en
+19|Pusha|19th MUHURTA PUSHA|Lord of growth, prosperity, herds and travel|en
+20|Ashvi|20th MUHURTA ASHVI|Lord of healing and movement|en
+21|Yama|21st MUHURTA YAMA|Lord of DHARMA and death|en
+22|Agni|22nd MUHURTA AGNI|Lord of fire|en
+23|Vidhatra|23rd MUHURTA VIDHATRA|Lord of Gifts and Distributions|en
+24|Chandra|24th MUHURTA RATRINATHA (Chandra)|Lord of the night|en
+25|Aditi|25th MUHURTA ADITYA|Lord of Blessings|en
+26|Jyva|26th MUHURTA JYVA|Sovereign of health and vitality|en
+27|Vishnu|27th MUHURTA VISHNU|Lord, Custodian and Patron|en
+28|Tapas|28th MUHURTA TAPAS (Yamigaduti)|Lord austerity|en
+29|Brahma|29th MUHURTA BRAHMA (Tyastur)|Master of creation|en
+30|Vayu|30th MUHURTA VAYU (Maruta, Samdram)|Lord of the Winds|en

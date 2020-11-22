@@ -1,0 +1,9 @@
+1|Janma|Janma|Danger to the body, absence of risky actions, excellent state of routine duties|en
+2|Sampath|Sampath|Financial well-being, good food, family pleasures|en
+3|Vipat|Vipat|Dangers, losses and accidents, avoid important things|en
+4|Kshema|Kshema|Success in your efforts, follow your plans|en
+5|Pratyak|Pratyak|Obstacles to the path of your aspirations, postpone important matters|en
+6|Sadhana|Sadhana|Realizing your desires, assign important things to this time|en
+7|Naidhana|Naidhana|Losses, accidents, do not expect immediate results|en
+8|Mitra|Mitra|Promotes the implementation of ordinary cases|en
+9|Parama Mitra|P.Mitra|Very friendly to achieve the desired goal|en

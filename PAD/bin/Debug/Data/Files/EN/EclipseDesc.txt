@@ -1,0 +1,2 @@
+1|Moon eclipse|en
+2|Sun eclipse|en

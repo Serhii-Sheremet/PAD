@@ -1,0 +1,27 @@
+1|Vishkumbha|Yama|"Jug of poison"|Unfavorable yoga, is violent. Favorable for conflicts, competitions, health-related procedures, cleansing. Don't plan important things.|en
+2|Priti|Vishnu|"Beloved, joy"|Favorable for acquaintances, contacts, marriage, relationships, public events, conferences.|en
+3|Ayushmaan|Chandra|"Long-lived, healthy"|Ideal for health, especially everything related to longevity: rasayana, rejuvenation of the body. Good for legal action and politics. This Yoga is favorable for any action where the stability and durability of the result obtained plays an important role.|en
+4|Saubhagya|Brahma|"Luck, prosperity"|Favorable for almost everything. The result is easy, effortless. Speeches, presentations, conferences - if we want to achieve something. Provides additional options.|en
+5|Shobhana|Brihaspati|"Bright, shining"|Favorable for making decisions, for acquaintances, contacts, to make a good impression. For love, romance.|en
+6|Atiganda|Chandra|"Strongly tied knot"|Unfavorable yoga can give a huge number of problems and obstacles. Dissatisfaction with the result. Conflicts, accidents, accidents, secret, hidden. Don't plan important things.|en
+7|Sukarmaa|Indra|"Good job"|Favorable yoga, especially for cases related to real estate.|en
+8|Dhriti|Jala|"Stable"|A good yoga for start-up, business, money, for relations, management. Contributes craving for great luxury.|en
+9|Shula|Sarpa|"A spear"|Unfavorable yoga, creates problems, conflicts, scandals, negative emotions. Don't plan important things.|en
+10|Ganda|Agni|"Knot, cheek, tangle of problems, obstacles"|Unfavorable yoga. Karmic knot, a difficult entangled situation, deception, fraud is possible. Unfavorable for transactions where there is an element of trust. Don't plan important things.|en
+11|Vriddhi|Surya|"Growth, rise, increase"|Favorable yoga for all. Overcoming obstacles, success, wealth.|en
+12|Dhruva|Bhumi|"Stable, reliable"|Favorable yoga. Contains the blessings of Lakshmi and Saraswati. Ideal for marriage and contracts, long-term items.|en
+13|Vyaghata|Vayu|"The obstacle leading to death"|A very unfavorable yoga, it carries conflicts, disputes, competitions. Don't plan important things.|en
+14|Harshana|Bhaga|"Joyful, happy, prosperity"|Good for relationships, for romance. Helps to overcome difficulties and get a favorable result.|en
+15|Vajra|Varuna|"Lightning strike"|Unfavorable yoga for important endeavors. Gives determination, defending one's position, fighting for justice. Good yoga to defeat the influence of black magic. Achieving goals with tough methods.|en
+16|Siddhi|Ganesh|"Completeness, prosperity, knowledge, superpowers"|Yoga is very favorable. Sidhi will help in any action when the situation is unfavorable and some kind of mystical help is needed.|en
+17|Vyatipaata|Rudra|"Trouble, disaster"|A very unfavorable yoga. Serious danger. Harbinger of disaster. Avoid for the important things.|en
+18|Variyana|Kubera|"Comfort, best, favorable"|Good yoga for everything, especially for acquiring or buying anything that is expensive, for love.|en
+19|Parigha|Vishwakarma|"Iron bar to close the gate"|Unfavorable yoga, gives obstacles, problems. Don't plan important things.|en
+20|Shiva|Mitra|"Favorable"|Support from Shiva, for everything related to power, leadership. Good for training, study and for making money.|en
+21|Siddha|Kartikeya|"Completed"|Favorable yoga in order to get maximum results in all areas of life.|en
+22|Sadhya|Savitri|"Friendly"|Favorable yoga for diplomatic important conversations, showdown peacefully, to find a compromise.|en
+23|Shubha|Lakshmi|"Lucky, favorable"|Favorable yoga for everything related to money and wealth, for health.|en
+24|Shukla|Parvati|"Light, shiny"|Easy yoga for easy things. Positive, but not always stable. Changeable, impulsive.|en
+25|Brahma|Ashwani Kumaras|"Energized, Divine Source"|Development, expansion. Good for business, for development, for creating something. Very reliable, specific, for signing contracts, etc.|en
+26|Indra|Pitri|"Leader, king of all Devatas"|Good for everything. Especially for studying, learning something, creating something.|en
+27|Vaidhriti|Diti|"Stopper, delay, stop"|Very unfavorable yoga, lack of support. It is favorable for conspiracies, intrigues, writing a claim. Don't plan important things.|en

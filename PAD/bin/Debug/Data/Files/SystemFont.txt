@@ -1,0 +1,16 @@
+0|Arial
+0|Berlin Sans FB
+0|Book Antiqua
+0|Calibri
+0|Cambria
+0|Century
+0|Courier New
+0|Georgia
+1|Microsoft Sans Serif
+0|Monotype Corsiva
+0|Palatino Linotype
+0|Segoe UI
+0|Segoe Print
+0|Tahoma
+0|Times New Roman
+0|Yu Gothic UI Semilight

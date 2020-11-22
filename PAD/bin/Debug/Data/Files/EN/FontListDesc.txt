@@ -1,0 +1,11 @@
+1|Header|en
+2|Calendar text|en
+3|Tranzit text|en
+4|Tranzit tooltip header|en
+5|Tranzit tooltip text|en
+6|Diary tooltip title|en
+7|Diary tooltip time period|en
+8|Diary tooltip text|en
+9|Appointment tooltip date|en
+10|Appointment tooltip time|en
+11|Appointment tooltip text|en

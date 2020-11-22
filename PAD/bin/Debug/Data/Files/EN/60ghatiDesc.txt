@@ -1,0 +1,60 @@
+1|Ghora|1st GHATI GHORA|Lord of horror, respect, shock, magical influences|en
+2|Rakshas|2nd GHATI RAKSHAS|Lord of the guards, guards, harm, destruction and trials|en
+3|Naga|3rd GHATI NAGA|Lord of snakes with mystic powers|en
+4|Kubera|4th GHATI KUBERA|Lord of treasure and wealth|en
+5|Yaksha|5th GHATI YAKSHA|Lord of mystic abilities|en
+6|Kinara|6th GHATI KINARA|Lord of heavenly music|en
+7|Bhrashtra|7th GHATI BHRASHTRA|Lord of falls, loss of path and error|en
+8|Kulagna|8th GHATI KULAGNA|Lord of family fire|en
+9|Visha|9th GHATI VISHA|Lord of the Poisons|en
+10|Agni|10th GHATI AGNI|Lord of fire|en
+11|Maya|11th GHATI MAYA|Lord of illusion and deception|en
+12|Pretapurisha|12th GHATI PRETAPURISHA|Lord of the land of ghosts who have died|en
+13|Apampathi|13th GHATI APAMPATHI|Lord of the waters|en
+14|Marutvana|14th GHATI MARUTVANA|Lord of the wind and thunderstorms|en
+15|Kala|15th GHATI KALA|Sovereign of time|en
+16|Shesha|16th GHATI SHESHA|Lord of constancy and eternity|en
+17|Avamrita|17th GHATI AVAMRITA|Lord of the Nectar of Longevity|en
+18|Soma|18th GHATI SOMA|Lord of the drink of pleasure|en
+19|Mridva|19th GHATI MRIDVA|Lord of affection, gentleness|en
+20|Komala|20th GHATI KOMALA|Lord of charm, acceptance|en
+21|Padma|21st GHATI PADMA|Lord of the Lotus|en
+22|Brahma|22st GHATI BRAHMA|Lord of the beginnings|en
+23|Dishta|23st GHATI DISHTA|Lord of the inevitable|en
+24|Digambara|24th GHATI DIGAMBARA|Lord of the inevitable|en
+25|Deva|25th GHATI DEVA|Lord of heaven|en
+26|Ardra|26th GHATI ARDRA|Lord of Tears|en
+27|Kalinasha|27th GHATI KALINASHA|Lord of the Lost Time|en
+28|Kshitishwara|28th GHATI KSHITISHWARA|Lord of the earth|en
+29|Kamalakara|29th GHATI KAMALAKARA|Lord of the lotuses|en
+30|Mandamaja|30th GHATI MANDAMAJA|Lord of the slow beginning, slow birth|en
+31|Mrityu|31st GHATI MRITYU|Lord of death|en
+32|Asita|32nd GHATI ASITA|Lord of the Dark|en
+33|Davagni|33rd GHATI DAVAGNI|Lord of the forest fire|en
+34|Samshaya|34th GHATI SAMSHAYA|Lord of doubt|en
+35|Yama|35th GHATI YAMA|Lord of transport, twins, severity, law, death|en
+36|Kantaka|36th GHATI KANTAKA|Lord of obstacles, spikes and pain|en
+37|Sudha|37th GHATI SUDHA|Lord of nectar, honey, prosperity and comfort|en
+38|Amrita|38th GHATI AMRITA|Lord of the drink of longevity, immortality|en
+39|Purnachandra|39th GHATI PURNACHANDRA|Lord of the night light|en
+40|Vishapradagdha|40th GHATI VISHAPRADAGDHA|Lord of antidotes|en
+41|Kulanasha|41st GHATI KULANASHA|Lord of family loss|en
+42|Vamshaksya|42nd GHATI VAMSHAKSYA|Lord of renunciation of pernicious qualities|en
+43|Utpataka|43rd GHATI UTPATAKA|Sovereign of flight, rise up, elevation|en
+44|Rupa|44th GHATI RUPA|Lord of forms and their transformations, changes|en
+45|Saumya|45th GHATI SAUMYA|Lord of appeasement and auspiciousness|en
+46|Mridu|46th GHATI MRIDU|Lord of reverence, courtesy, tenderness and gentleness|en
+47|Shitala|47th GHATI SHITALA|Lord of calm and cool|en
+48|Kadamshtra|48th GHATI KADAMSHTRA|Lord of Obstacles|en
+49|Indumukha|49th GHATI INDUMUKHA|Lord of Beauty|en
+50|Pravina|50th GHATI PRAVINA|Lord of Qualifications, Knowledge, Awareness|en
+51|Kalabala|51st GHATI KALABALA|Lord of the power of time|en
+52|Danda|52nd GHATI DANDA|Lord of the staff and reverence|en
+53|Nirmala|53rd GHATI NIRMALA|Lord of purity and chastity|en
+54|Shubha|54th GHATI SHUBHA|Lord of Virtue|en
+55|Ashubha|55th GHATI ASHUBHA|Lord of Trials|en
+56|Dala|56th GHATI DALA|Lord of detachment|en
+57|Amrita|57th GHATI AMRITA|Lord of the Nectar of Well-Being|en
+58|Payodhividya|58th GHATI PAYODHIVIDYA|Lord of the Ocean of Knowledge|en
+59|Bhrama|59th GHATI BHRAMA|Lord of wanderings|en
+60|Rekha|60th GHATI REKHA|Lord of lines and borders|en

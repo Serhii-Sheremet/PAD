@@ -1,0 +1,16 @@
+1|Green|en
+2|Red|en
+3|Light green|en
+4|Light red|en
+5|Pink|en
+6|Joga merge|en
+7|Muhurta merge|en
+8|Selection rectangle|en
+9|Hora: Sun|en
+10|Hora: Venus|en
+11|Hora: Mercury|en
+12|Hora: Moon|en
+13|Hora: Saturn|en
+14|Hora: Jupiter|en
+15|Hora: Mars|en
+16|Gray|en

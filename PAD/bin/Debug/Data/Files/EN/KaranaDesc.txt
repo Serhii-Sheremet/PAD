@@ -1,0 +1,60 @@
+1|Kimstughna|Maruta, Ketu, 10 house owner|Actions aimed at improving health; religious activity.|An unfavorable day for important things.|en
+2|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+3|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+4|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+5|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+6|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+7|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+8|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+9|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+10|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+11|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+12|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+13|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+14|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+15|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+16|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+17|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+18|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+19|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+20|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+21|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+22|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+23|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+24|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+25|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+26|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+27|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+28|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+29|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+30|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+31|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+32|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+33|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+34|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+35|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+36|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+37|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+38|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+39|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+40|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+41|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+42|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+43|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+44|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+45|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+46|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+47|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+48|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+49|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+50|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+51|Bava|Indra, Sun|Actions to improve health; expansion, development of something; performing religious rites, ceremonies and spiritual practices.||en
+52|Balava|Brahma, Moon|Charity; performing religious rites, ceremonies; training.||en
+53|Kaulava|Mitra, Mars|Acquaintances, acquiring friends, dates, agreements (contracts, agreements).||en
+54|Taitila|Vishvakarma, Mercury|Performing actions associated with a large number of people, actions leading to fame, popularity; building.||en
+55|Gara|Bhoomi, Jupiter|Agriculture, land cultivation, sowing; home economics; building.||en
+56|Vanija|Lakshmi, Venera|Trade; enjoyment of comfort and luxury; meeting, creating relationships.||en
+57|Vishti|Yama, Saturn|Perform actions aimed at the destruction of enemies, obstacles.|Do not perform favorable actions. Unfavorable day for important matters.|en
+58|Shakuni|Kali, Rahu, Lagnesha|Taking action to improve health; taking medications; reading mantras.|Unfavorable day for important matters.|en
+59|Chatushpada|Rudra, Ketu, house 4 owner|Politics, government affairs; actions regarding ancestors; performing religious rites; animal husbandry.|Unfavorable day for important matters.|en
+60|Naga|Nagi, Rahu, house 7 owner|Suitable for cruel cases, tricks, evil actions, performing work with fixed objects.|Unfavorable day for important matters. Carries the impulse leading to failure, hostility.|en

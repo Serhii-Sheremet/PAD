@@ -1,0 +1,47 @@
+1|Mu|Muhurta|en
+2|Yo|Yoga|en
+3|Na|Nakshatra|en
+4|TB|Tara Bala|en
+5|Ti|Tithi|en
+6|Ka|Karana|en
+7|NY|Nitya Yoga|en
+8|CB|Chandra Bala|en
+9|Ho|Hora|en
+10|30M|30 Muhurts|en
+11|60G|60 Ghati|en
+12|MoZ|Moon in Zodiak|en
+13|MoN|Moon in Nakshatra|en
+14|MoP|Moon Nakshatra's Pada|en
+15|MoTB|Tara Bala of Moon|en
+16|SuZ|Sun in Zodiak|en
+17|SuN|Sun in Nakshatra|en
+18|SuP|Sun Nakshatra's Pada|en
+19|SuTB|Tara Bala of Sun|en
+20|VeZ|Venus in Zodiak|en
+21|VeN|Venus in Nakshatra|en
+22|VeP|Venus Nakshatra's Pada|en
+23|VeTB|Tara Bala of Venus|en
+24|JuZ|Jupiter in Zodiak|en
+25|JuN|Jupiter in Nakshatra|en
+26|JuP|Jupiter Nakshatra's Pada|en
+27|JuTB|Tara Bala of Jupiter|en
+28|MeZ|Mercury in Zodiak|en
+29|MeN|Mercury in Nakshatra|en
+30|MeP|Mercury Nakshatra's Pada|en
+31|MeTB|Tara Bala of Mercury|en
+32|MaZ|Mars in Zodiak|en
+33|MaN|Mars in Nakshatra|en
+34|MaP|Mars Nakshatra's Pada|en
+35|MaTB|Tara Bala of Mars|en
+36|SaZ|Saturn in Zodiak|en
+37|SaN|Saturn in Nakshatra|en
+38|SaP|Saturn Nakshatra's Pada|en
+39|SaTB|Tara Bala of Saturn|en
+40|RaZ|Rahu in Zodiak|en
+41|RaN|Rahu in Nakshatra|en
+42|RaP|Rahu Nakshatra's Pada|en
+43|RaTB|Tara Bala of Rahu|en
+44|KeZ|Ketu in Zodiak|en
+45|KeN|Ketu in Nakshatra|en
+46|KeP|Ketu Nakshatra's Pada|en
+47|KeTB|Tara Bala of Ketu|en

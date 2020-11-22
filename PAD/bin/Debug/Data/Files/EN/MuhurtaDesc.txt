@@ -1,0 +1,5 @@
+1|Abhijit Muhurta|AM|en
+2|Rahu Kala|RK|en
+3|Brahma Muhurta|BM|en
+4|Gulika Kala|GK|en
+5|Yamaganda|YG|en
