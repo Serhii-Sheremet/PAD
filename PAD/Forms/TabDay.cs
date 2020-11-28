@@ -794,7 +794,7 @@ namespace PAD
                         {
                             desc2 = Utility.GetLocalizedText("Bad for", lCode) + ": " + kar.BadFor;
                         }
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KARANA, Title = kc.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + kc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + kc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KARANA, Title = kName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + kc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + kc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
                     }
                     break;
                     
