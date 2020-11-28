@@ -1946,7 +1946,7 @@ namespace PAD
                     currentZodiakId = pd.ZodiakId;
                 }
             }
-            DateTime endDate = new DateTime(pcList.Last().DateStart.Year, 12, 31, 23, 59, 59);
+            DateTime endDate = new DateTime(pdList.Last().Date.Year, 12, 31, 23, 59, 59);
             int index = 0, max = pcList.Count;
             foreach (PlanetCalendar pc in pcList)
             {
@@ -1990,7 +1990,7 @@ namespace PAD
                     currentRetro = pd.Retro;
                 }
             }
-            DateTime endDate = new DateTime(pcList.Last().DateStart.Year, 12, 31, 23, 59, 59);
+            DateTime endDate = new DateTime(pdList.Last().Date.Year, 12, 31, 23, 59, 59);
             int index = 0, max = pcList.Count;
             foreach (PlanetCalendar pc in pcList)
             {
