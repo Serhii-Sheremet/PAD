@@ -1350,7 +1350,6 @@ namespace PAD
                 posX = posX + _dayTranzWidth;
             }
 
-
             // Drawing Panchanga rectangles
             posX = labelsWidth;
             posY = posYPanchanga;
@@ -1434,7 +1433,7 @@ namespace PAD
         {
             if (c.Count > 0)
             {
-                string text = c.First().GetTranzitPada(_activeLanguageCode);
+                string text = c.First().GetTranzitPada();
                 Size textSize = TextRenderer.MeasureText(text, font);
                 int heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
@@ -1571,7 +1570,7 @@ namespace PAD
                         if (currentPada != previousPada)
                         {
                             int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
-                            string text = pc.GetTranzitPada(_activeLanguageCode);
+                            string text = pc.GetTranzitPada();
                             Size textSize = TextRenderer.MeasureText(text, font);
                             int heightPadding = (height - textSize.Height) / 2;
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);

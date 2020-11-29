@@ -787,6 +787,200 @@ namespace PAD
                 posX = posX + dayWidth;
             }
 
+            // Setting current start zodiak 
+            posX = labelsWidth;
+
+            // Moon
+            nextPlanetY = posYTranzits;
+            posY = nextPlanetY;
+            //SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().MoonZodiakRetroDayList);
+            //SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().MoonNakshatraDayList, true);
+            //SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().MoonPadaDayList);
+            //SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().MoonTaraBalaDayList, true);
+
+            // Sun
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().SunZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().SunNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().SunPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().SunTaraBalaDayList, false);
+
+            // Venus
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().VenusZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().VenusNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().VenusPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().VenusTaraBalaDayList, false);
+
+            // Jupiter
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().JupiterZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().JupiterNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().JupiterPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().JupiterTaraBalaDayList, false);
+
+            // Mercury
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().MercuryZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().MercuryNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().MercuryPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().MercuryTaraBalaDayList, false);
+
+            // Mars
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().MarsZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().MarsNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().MarsPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().MarsTaraBalaDayList, false);
+
+            // Saturn
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().SaturnZodiakRetroDayList);
+            SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().SaturnNakshatraDayList, false);
+            SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().SaturnPadaDayList);
+            SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().SaturnTaraBalaDayList, false);
+
+            // Rahu
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            if (nodeSettings == EAppSetting.NODEMEAN)
+            {
+                SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().RahuMeanZodiakRetroDayList);
+                SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().RahuMeanNakshatraDayList, false);
+                SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().RahuMeanPadaDayList);
+                SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().RahuMeanTaraBalaDayList, false);
+            }
+            else
+            {
+                SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().RahuTrueZodiakRetroDayList);
+                SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().RahuTrueNakshatraDayList, false);
+                SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().RahuTruePadaDayList);
+                SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().RahuTrueTaraBalaDayList, false);
+            }
+
+            // Ketu
+            nextPlanetY += 4 * lineHeight + 4;
+            posY = nextPlanetY;
+            if (nodeSettings == EAppSetting.NODEMEAN)
+            {
+                SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().KetuMeanZodiakRetroDayList);
+                SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().KetuMeanNakshatraDayList, false);
+                SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().KetuMeanPadaDayList);
+                SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().KetuMeanTaraBalaDayList, false);
+            }
+            else
+            {
+                SetLineStartZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().KetuTrueZodiakRetroDayList);
+                SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().KetuTrueNakshatraDayList, false);
+                SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().KetuTruePadaDayList);
+                SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().KetuTrueTaraBalaDayList, false);
+            }
+
+            //Drawing zodiac, nakshatra and pada changes
+            posX = labelsWidth;
+            foreach (Day d in dayList)
+            {
+                // Moon
+                nextPlanetY = posYTranzits;
+                posY = nextPlanetY;
+                //SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.MoonZodiakRetroDayList, d.Date);
+                //SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.MoonNakshatraDayList, d.Date, true);
+                //SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.MoonPadaDayList, d.Date);
+                //SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.MoonTaraBalaDayList, d.Date, true);
+
+                // Sun
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.SunZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.SunNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.SunPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.SunTaraBalaDayList, d.Date, false);
+
+                // Venus
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.VenusZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.VenusNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.VenusPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.VenusTaraBalaDayList, d.Date, false);
+
+                // Jupiter
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.JupiterZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.JupiterNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.JupiterPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.JupiterTaraBalaDayList, d.Date, false);
+
+                // Mercury
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.MercuryZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.MercuryNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.MercuryPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.MercuryTaraBalaDayList, d.Date, false);
+
+                // Mars
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.MarsZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.MarsNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.MarsPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.MarsTaraBalaDayList, d.Date, false);
+
+                // Saturn
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.SaturnZodiakRetroDayList, d.Date);
+                SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.SaturnNakshatraDayList, d.Date, false);
+                SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.SaturnPadaDayList, d.Date);
+                SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.SaturnTaraBalaDayList, d.Date, false);
+
+                // Rahu
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                if (nodeSettings == EAppSetting.NODEMEAN)
+                {
+                    SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.RahuMeanZodiakRetroDayList, d.Date);
+                    SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.RahuMeanNakshatraDayList, d.Date, false);
+                    SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.RahuMeanPadaDayList, d.Date);
+                    SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.RahuMeanTaraBalaDayList, d.Date, false);
+                }
+                else
+                {
+                    SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.RahuTrueZodiakRetroDayList, d.Date);
+                    SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.RahuTrueNakshatraDayList, d.Date, false);
+                    SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.RahuTruePadaDayList, d.Date);
+                    SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.RahuTrueTaraBalaDayList, d.Date, false);
+                }
+
+                // Ketu
+                nextPlanetY += 4 * lineHeight + 4;
+                posY = nextPlanetY;
+                if (nodeSettings == EAppSetting.NODEMEAN)
+                {
+                    SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.KetuMeanZodiakRetroDayList, d.Date);
+                    SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.KetuMeanNakshatraDayList, d.Date, false);
+                    SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.KetuMeanPadaDayList, d.Date);
+                    SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.KetuMeanTaraBalaDayList, d.Date, false);
+                }
+                else
+                {
+                    SetPlanetZodiak(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.KetuTrueZodiakRetroDayList, d.Date);
+                    SetPlanetNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.KetuTrueNakshatraDayList, d.Date, false);
+                    SetPlanetPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.KetuTruePadaDayList, d.Date);
+                    SetPlanetTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.KetuTrueTaraBalaDayList, d.Date, false);
+                }
+
+                posX = posX + dayWidth;
+            }
+
             //Drawing Tranzits rectangles
             posX = labelsWidth;
             nextPlanetY = posYTranzits;
@@ -805,6 +999,242 @@ namespace PAD
             }
             pictureBoxYearTranzits.Image = canvas;
             _currentImage = pictureBoxYearTranzits.Image;
+        }
+
+        private void SetLineStartZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
+        {
+            if (c.Count > 0)
+            {
+                int endPosX = 0;
+                string text = c.First().GetNumberForYear();
+                Size textSize = TextRenderer.MeasureText(text, font);
+                int heightPadding = (height - textSize.Height) / 2;
+                
+                if (c.Count == 1)
+                {
+                    endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width <= endPosX)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                }
+                else
+                {
+                    endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width <= endPosX)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                }
+            }
+        }
+
+        private void SetLineStartNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, bool isMoon)
+        {
+            if (c.Count > 0)
+            {
+                string text = c.First().GetTranzitNakshatraForYear().ToString();
+                Size textSize = TextRenderer.MeasureText(text, font);
+                int heightPadding = (height - textSize.Height) / 2;
+                if (c.Count == 1)
+                {
+                    g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                }
+                else
+                {
+                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width < endPosX && !isMoon)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                    else
+                    {
+                        var newText = text.Split('.');
+                        textSize = TextRenderer.MeasureText(newText[0], font);
+                        if (textSize.Width <= endPosX)
+                        {
+                            g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetLineStartPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
+        {
+            if (c.Count > 0)
+            {
+                string text = c.First().GetTranzitPada();
+                Size textSize = TextRenderer.MeasureText(text, font);
+                int heightPadding = (height - textSize.Height) / 2;
+                if (c.Count == 1)
+                {
+                    g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                }
+                else
+                {
+                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width < endPosX)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                }
+            }
+        }
+
+        private void SetLineStartTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, bool isMoon)
+        {
+            if (c.Count > 0)
+            {
+                string text = c.First().GetTranzitTaraBala(_langCode);
+                var newText = text.Split('.');
+                Size textSize = TextRenderer.MeasureText(newText[0], font);
+                int heightPadding = (height - textSize.Height) / 2;
+                if (c.Count == 1)
+                {
+                    g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
+                }
+                else
+                {
+                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width < endPosX)
+                    {
+                        if (textSize.Width <= endPosX)
+                        {
+                            g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetPlanetZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        {
+            if (cList.Count > 0)
+            {
+                List<PlanetCalendar> pcList = new List<PlanetCalendar>();
+                cList.ForEach(i => pcList.Add((PlanetCalendar)i));
+
+                EZodiak previousZodiak = pcList.First().ZodiakCode;
+                foreach (PlanetCalendar pc in pcList)
+                {
+                    if (pc.DateStart > date)
+                    {
+                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        string text = pc.GetNumberForYear();
+                        Size textSize = TextRenderer.MeasureText(text, font);
+                        int heightPadding = (height - textSize.Height) / 2;
+                        if (pc.PlanetCode != EPlanet.RAHUMEAN && pc.PlanetCode != EPlanet.KETUMEAN && pc.PlanetCode != EPlanet.RAHUTRUE && pc.PlanetCode != EPlanet.KETUTRUE)
+                        {
+                            g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                            g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                        }
+                        else
+                        {
+                            if (pc.ZodiakCode != previousZodiak)
+                            {
+                                g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                                g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                            }
+                        }
+                    }
+                    previousZodiak = pc.ZodiakCode;
+                }
+            }
+        }
+
+        private void SetPlanetNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, bool isMoon)
+        {
+            if (cList.Count > 0)
+            {
+                List<PlanetCalendar> pcList = new List<PlanetCalendar>();
+                cList.ForEach(i => pcList.Add((PlanetCalendar)i));
+
+                ENakshatra previousNakshatra = pcList.First().NakshatraCode;
+                foreach (PlanetCalendar pc in pcList)
+                {
+                    if (pc.DateStart > date)
+                    {
+                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        string text = pc.GetTranzitNakshatraForYear().ToString();
+                        Size textSize = TextRenderer.MeasureText(text, font);
+                        int heightPadding = (height - textSize.Height) / 2;
+                        if (pc.NakshatraCode != previousNakshatra)
+                        {
+                            if (!isMoon)
+                            {
+                                g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                                g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                            }
+                            else
+                            {
+                                var newText = text.Split('.');
+                                textSize = TextRenderer.MeasureText(newText[0], font);
+                                g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                                g.DrawString(newText[0], font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                            }
+                        }
+                    }
+                    previousNakshatra = pc.NakshatraCode;
+                }
+            }
+        }
+
+        private void SetPlanetPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        {
+            if (cList.Count > 0)
+            {
+                List<PlanetCalendar> pcList = new List<PlanetCalendar>();
+                cList.ForEach(i => pcList.Add((PlanetCalendar)i));
+
+                int previousPada = CacheLoad._padaList.Where(i => i.Id == pcList.First().PadaId).FirstOrDefault().PadaNumber;
+                foreach (PlanetCalendar pc in pcList)
+                {
+                    if (pc.DateStart > date)
+                    {
+                        int currentPada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault().PadaNumber;
+                        if (currentPada != previousPada)
+                        {
+                            int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                            string text = pc.GetTranzitPada();
+                            Size textSize = TextRenderer.MeasureText(text, font);
+                            int heightPadding = (height - textSize.Height) / 2;
+                            g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                            g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                            previousPada = currentPada;
+                        }
+                    }
+                }
+            }
+        }
+
+        private void SetPlanetTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, bool isMoon)
+        {
+            if (cList.Count > 0)
+            {
+                List<PlanetCalendar> pcList = new List<PlanetCalendar>();
+                cList.ForEach(i => pcList.Add((PlanetCalendar)i));
+
+                int previousTaraBala = pcList.First().TaraBalaId;
+                foreach (PlanetCalendar pc in pcList)
+                {
+                    if (pc.DateStart > date)
+                    {
+                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        string text = pc.GetTranzitTaraBala(_langCode);
+                        Size textSize = TextRenderer.MeasureText(text, font);
+                        int heightPadding = (height - textSize.Height) / 2;
+                        if (pc.TaraBalaId != previousTaraBala)
+                        {
+                            var newText = text.Split('.');
+                            textSize = TextRenderer.MeasureText(newText[0], font);
+                            g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                            g.DrawString(newText[0], font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                        }
+                    }
+                    previousTaraBala = pc.TaraBalaId;
+                }
+            }
         }
 
         private void DrawPlanetBlockRectangles(Graphics g, Pen pen, int posX, int posY, int width, int height)

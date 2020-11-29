@@ -33,12 +33,22 @@ namespace PAD
             return string.Empty;
         }
 
+        public virtual string GetNumberForYear()
+        {
+            return string.Empty;
+        }
+
         public virtual string GetTranzitNakshatra(ELanguage langCode)
         {
             return string.Empty;
         }
 
-        public virtual string GetTranzitPada(ELanguage langCode)
+        public virtual int GetTranzitNakshatraForYear()
+        {
+            return 0;
+        }
+
+        public virtual string GetTranzitPada()
         {
             return string.Empty;
         }

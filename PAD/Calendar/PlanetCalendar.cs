@@ -74,13 +74,41 @@ namespace PAD
             return (CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)ZodiakCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name??string.Empty) + planetAddon;
         }
 
+        public override string GetNumberForYear()
+        {
+            string planetAddon = string.Empty;
+            EExaltation exaltation = Utility.GetExaltationByPlanetAndZnak(PlanetCode, ZodiakCode);
+            if (Retro.Equals("R") && PlanetCode != EPlanet.RAHUMEAN && PlanetCode != EPlanet.KETUMEAN && PlanetCode != EPlanet.RAHUTRUE && PlanetCode != EPlanet.KETUTRUE)
+            {
+                planetAddon = "." + Retro;
+            }
+            else if (Retro.Equals("D") && (PlanetCode == EPlanet.RAHUMEAN || PlanetCode == EPlanet.KETUMEAN || PlanetCode == EPlanet.RAHUTRUE || PlanetCode == EPlanet.KETUTRUE))
+            {
+                planetAddon = "." + Retro;
+            }
+            else
+            {
+                if (exaltation == EExaltation.EXALTATION)
+                    planetAddon = "↑";
+                else if (exaltation == EExaltation.DEBILITATION)
+                    planetAddon = "↓";
+            }
+            string zodiac = ZodiakCode.ToString().Substring(0, 1).ToUpper() + ZodiakCode.ToString().Substring(1).ToLower();
+            return zodiac + planetAddon;
+        }
+
         public override string GetTranzitNakshatra(ELanguage langCode)
         {
             int nId = CacheLoad._nakshatraList.Where(i => i.Code.Equals(NakshatraCode.ToString())).FirstOrDefault()?.Id ?? 0;
             return (int)NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == nId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.ShortName ?? string.Empty;
         }
 
-        public override string GetTranzitPada(ELanguage langCode)
+        public override int GetTranzitNakshatraForYear()
+        {
+            return (int)NakshatraCode;
+        }
+
+        public override string GetTranzitPada()
         {
             return (CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault()?.PadaNumber ?? 0).ToString();
         }
