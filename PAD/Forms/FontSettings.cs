@@ -21,13 +21,18 @@ namespace PAD
             }
         }
 
+        //private bool _fontChanged = false;
         private ELanguage _activeLang;
+        private List<FontList> _activeFontList;
+        private List<FontList> _changedFontList;
         private List<FontListDescription> _fDescList;
 
-        public FontSettings(ELanguage langCode)
+        public FontSettings(List<FontList> fList, ELanguage langCode)
         {
             InitializeComponent();
 
+            _activeFontList = fList;
+            _changedFontList = fList.Select(item => (FontList)item.Clone()).ToList(); 
             _activeLang = langCode;
             _fDescList = CacheLoad._fontDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
         }
@@ -54,13 +59,12 @@ namespace PAD
         private void ShowSettingsData()
         {
             KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
-
-            listBoxFont.SelectedIndex = (CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontId ?? 0) - 1;
-            labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, GetFontStyleById((CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0)));
-            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            listBoxFont.SelectedIndex = (_changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontId ?? 0) - 1;
+            labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, GetFontStyleById(_changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0));
+            int styleId = _changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
             SetFontStyle((EFontStyle)styleId);
         }
-        
+
         private void SetFontStyle(EFontStyle fontStyle)
         {
             switch (fontStyle)
@@ -141,22 +145,84 @@ namespace PAD
                 radioButtonNormal.Enabled = false;
                 radioButtonItalic.Checked = true;
             }
+
+            KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
+            int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
+            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
+        }
+
+        private void UpdateChangedFontList(int fontSettingId, int systemFontId, int styleId)
+        {
+            foreach (FontList fl in _changedFontList)
+            {
+                if (fl.Id == fontSettingId)
+                {
+                    fl.FontId = systemFontId;
+                    fl.FontStyleId = styleId;
+                    //_fontChanged = true;
+                    break;
+                }
+            }
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            Close();
+            if (CheckFontSettingsChanges())
+            {
+                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Font settings has been changed. Do you want to apply new settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    UpdateFontsSettings(_changedFontList);
+                    CacheLoad._fontList = null;
+                    CacheLoad._fontList = CacheLoad.GetFontList();
+                    Close();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private bool CheckFontSettingsChanges()
+        {
+            for (int i = 0; i < _changedFontList.Count; i++)
+            {
+                if (_changedFontList[i].FontId != _activeFontList[i].FontId || _changedFontList[i].FontStyleId != _activeFontList[i].FontStyleId)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to save current settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            if (CheckFontSettingsChanges())
             {
-                UpdateFontsSettings();
-                CacheLoad._fontList = null;
-                CacheLoad._fontList = CacheLoad.GetFontList();
-                ShowSettingsData();
+                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to save current settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    UpdateFontsSettings(_changedFontList);
+                    CacheLoad._fontList = null;
+                    CacheLoad._fontList = CacheLoad.GetFontList();
+                    ShowSettingsData();
+                    frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
+                    Close();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Nothing has been changed.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
             }
         }
 
@@ -173,56 +239,74 @@ namespace PAD
 
         private void SetDefaultSettings()
         {
-            int sysFontId = CacheLoad._systemFontList.Where(i => i.AppMain == 1).FirstOrDefault()?.Id ?? 0;
-            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
-            {
-                dbCon.Open();
-                try
-                {
-                    SQLiteCommand command = new SQLiteCommand("update FONTLIST set FONTID = " + sysFontId + ", FONTSTYLEID = 1", dbCon);
-                    command.ExecuteNonQuery();
-                }
-                catch { }
-                dbCon.Close();
-            }
+            //default fonts list
+            List<FontList> defaultList = new List<FontList>();
+            defaultList.Add(new FontList { Id = 1, FontId = 13, Code = "HEADER", FontStyleId = 2 });
+            defaultList.Add(new FontList { Id = 2, FontId = 14, Code = "CALENDARTEXT", FontStyleId = 1 });
+            defaultList.Add(new FontList { Id = 3, FontId = 14, Code = "TRANZITTEXT", FontStyleId = 1 });
+            defaultList.Add(new FontList { Id = 4, FontId = 8, Code = "TRANSTOOLTIPHEADER", FontStyleId = 2 });
+            defaultList.Add(new FontList { Id = 5, FontId = 8, Code = "TRANSTOOLTIPTEXT", FontStyleId = 3 });
+            defaultList.Add(new FontList { Id = 6, FontId = 12, Code = "DWTOOLTIPTITLE", FontStyleId = 2 });
+            defaultList.Add(new FontList { Id = 7, FontId = 12, Code = "DWTOOLTIPTIME", FontStyleId = 1 });
+            defaultList.Add(new FontList { Id = 8, FontId = 12, Code = "DWTOOLTIPTEXT", FontStyleId = 3 });
+            defaultList.Add(new FontList { Id = 9, FontId = 12, Code = "PEVTOOLTIPDATE", FontStyleId = 2 });
+            defaultList.Add(new FontList { Id = 10, FontId = 12, Code = "PEVTOOLTIPTIME", FontStyleId = 1 });
+            defaultList.Add(new FontList { Id = 11, FontId = 12, Code = "PEVTOOLTIPTEXT", FontStyleId = 3 });
+
+            UpdateFontsSettings(defaultList);
+            CacheLoad._fontList = CacheLoad.GetFontList();
+            ShowSettingsData();
         }
         
-        private void UpdateFontsSettings()
+        private void UpdateFontsSettings(List<FontList> fList)
         {
-            KeyValueData lbfSelectedItem = (KeyValueData)listBoxFont.SelectedItem;
-            KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
-            int fontId = lbfSelectedItem.ItemId;
-            int fontStyle = GetFontStyleId(SetFontStyle());
-            int settingsId = lbsnSelectedItem.ItemId;
-            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            for (int i = 0; i < fList.Count; i++)
             {
-                dbCon.Open();
-                try
+                using (SQLiteConnection dbCon = Utility.GetSQLConnection())
                 {
-                    SQLiteCommand command = new SQLiteCommand("update FONTLIST set FONTID = @FONTID, FONTSTYLEID = @FONTSTYLEID where ID = @ID", dbCon);
-                    command.Parameters.AddWithValue("@FONTID", fontId);
-                    command.Parameters.AddWithValue("@FONTSTYLEID", fontStyle);
-                    command.Parameters.AddWithValue("@ID", settingsId);
-                    command.ExecuteNonQuery();
+                    dbCon.Open();
+                    try
+                    {
+                        SQLiteCommand command = new SQLiteCommand("update FONTLIST set FONTID = @FONTID, FONTSTYLEID = @FONTSTYLEID where ID = @ID", dbCon);
+                        command.Parameters.AddWithValue("@FONTID", fList[i].FontId);
+                        command.Parameters.AddWithValue("@FONTSTYLEID", fList[i].FontStyleId);
+                        command.Parameters.AddWithValue("@ID", fList[i].Id);
+                        command.ExecuteNonQuery();
+                    }
+                    catch { }
+                    dbCon.Close();
                 }
-                catch { }
-                dbCon.Close();
             }
         }
 
         private void radioButtonNormal_Click(object sender, EventArgs e)
         {
             labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, SetFontStyle());
+
+            KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
+            int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
+            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
         }
 
         private void radioButtonBold_Click(object sender, EventArgs e)
         {
             labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, SetFontStyle());
+
+            KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
+            int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
+            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
         }
 
         private void radioButtonItalic_Click(object sender, EventArgs e)
         {
             labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, SetFontStyle());
+
+            KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
+            int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
+            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
         }
     }
 }

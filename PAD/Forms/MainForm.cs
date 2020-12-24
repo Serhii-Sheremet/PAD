@@ -2526,7 +2526,7 @@ namespace PAD
 
         private void fontSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FontSettings fsForm = new FontSettings(_activeLanguageCode);
+            FontSettings fsForm = new FontSettings(CacheLoad._fontList, _activeLanguageCode);
             fsForm.ShowDialog(this);
         }
 
