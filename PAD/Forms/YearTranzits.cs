@@ -1012,7 +1012,7 @@ namespace PAD
                 
                 if (c.Count == 1)
                 {
-                    endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width <= endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1020,7 +1020,7 @@ namespace PAD
                 }
                 else
                 {
-                    endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width <= endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1042,7 +1042,7 @@ namespace PAD
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width < endPosX && !isMoon)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1073,7 +1073,7 @@ namespace PAD
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width < endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1096,7 +1096,7 @@ namespace PAD
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width < endPosX)
                     {
                         if (textSize.Width <= endPosX)

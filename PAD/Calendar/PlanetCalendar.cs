@@ -93,7 +93,7 @@ namespace PAD
                 else if (exaltation == EExaltation.DEBILITATION)
                     planetAddon = "↓";
             }
-            string zodiac = ZodiakCode.ToString().Substring(0, 1).ToUpper() + ZodiakCode.ToString().Substring(1).ToLower();
+            string zodiac = ((int)ZodiakCode).ToString(); //ZodiakCode.ToString().Substring(0, 1).ToUpper() + ZodiakCode.ToString().Substring(1).ToLower();
             return zodiac + planetAddon;
         }
 
