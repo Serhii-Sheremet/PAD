@@ -113,13 +113,15 @@ Lagna|Лагна|ru
 Make default|Make default|en
 Make default|Выбрать по умолчанию|ru
 Color settings|Color settings|en
-Color settings|Конфигурация цветовой гаммы|ru
+Color settings|Конфигурация цветa|ru
+Color settings have been changed. Do you want to apply new settings?|Color settings have been changed. Do you want to apply new settings?|en
+Color settings have been changed. Do you want to apply new settings?|Настройки цвета были изменены. Применить изменения?|ru
 Font settings|Font settings|en
 Font settings|Конфигурация шрифта|ru
 Nothing has been changed.|Nothing has been changed.|en
 Nothing has been changed.|Ничего не было изменено.|ru
-Font settings has been changed. Do you want to apply new settings?|Font settings has been changed. Do you want to apply new settings?|en
-Font settings has been changed. Do you want to apply new settings?|Настройки шрифта были изменены. Применить изменения?|ru
+Font settings have been changed. Do you want to apply new settings?|Font settings have been changed. Do you want to apply new settings?|en
+Font settings have been changed. Do you want to apply new settings?|Настройки шрифта были изменены. Применить изменения?|ru
 Do you want to revert default settings?|Do you want to revert default settings?|en
 Do you want to revert default settings?|Вернуть настройки по умолчанию?|ru
 Do you want to save current settings?|Do you want to save current settings?|en

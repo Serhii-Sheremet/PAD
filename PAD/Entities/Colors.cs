@@ -5,11 +5,21 @@ namespace PAD
     /// <summary>
     /// Class describing Colors entity (For now used 3 of these entities)
     /// </summary>
-    public class Colors
+    public class Colors : ICloneable
     {
         public int Id { get; set; }
         public string Code { get; set; }
         public int ARGBValue { get; set; }
+
+        public object Clone()
+        {
+            return new Colors
+            {
+                Id = this.Id,
+                Code = this.Code,
+                ARGBValue = this.ARGBValue
+            };
+        }
 
         /// <summary>
         /// Returns <see cref = "ATColor"/> object parsed from one row of a file with colors

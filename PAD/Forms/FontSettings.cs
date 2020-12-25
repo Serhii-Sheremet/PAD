@@ -61,27 +61,27 @@ namespace PAD
             listBoxFont.SelectedIndex = (_changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontId ?? 0) - 1;
             labelExample.Font = new Font(listBoxFont.GetItemText(listBoxFont.SelectedItem), 20, GetFontStyleById(_changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0));
             int styleId = _changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
-            SetFontStyle((EFontStyle)styleId);
+            SetFontStyle(styleId);
         }
-
-        private void SetFontStyle(EFontStyle fontStyle)
+        
+        private void SetFontStyle(int styleId)
         {
-            switch (fontStyle)
+            switch (styleId)
             {
-                case EFontStyle.REGULAR:
+                case 1:
                     radioButtonNormal.Checked = true;
                     break;
 
-                case EFontStyle.BOLD:
+                case 2:
                     radioButtonBold.Checked = true;
                     break;
 
-                case EFontStyle.ITALIC:
+                case 3:
                     radioButtonItalic.Checked = true;
                     break;
             }
         }
-
+        
         private FontStyle GetFontStyleById(int id)
         {
             FontStyle curStyle = 0;
@@ -100,33 +100,21 @@ namespace PAD
             return curStyle;
         }
 
-        private int GetFontStyleId(FontStyle fStyle)
-        {
-            int id = 0;
-            switch (fStyle)
-            {
-                case FontStyle.Regular:
-                    id = 1;
-                    break;
-                case FontStyle.Bold:
-                    id = 2;
-                    break;
-                case FontStyle.Italic:
-                    id = 3;
-                    break;
-            }
-            return id;
-        }
-
         private FontStyle SetFontStyle()
         {
             FontStyle curStyle = 0;
             if (radioButtonNormal.Checked)
-                curStyle =  FontStyle.Regular;
+            {
+                curStyle = FontStyle.Regular;
+            }
             if (radioButtonBold.Checked)
-                curStyle =  FontStyle.Bold;
+            {
+                curStyle = FontStyle.Bold;
+            }
             if (radioButtonItalic.Checked)
-                curStyle =  FontStyle.Italic;
+            {
+                curStyle = FontStyle.Italic;
+            }
             return curStyle;
         }
 
@@ -147,7 +135,7 @@ namespace PAD
 
             KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
             int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
-            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
+            int styleId = _changedFontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
             UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
         }
 
@@ -168,12 +156,11 @@ namespace PAD
         {
             if (CheckFontSettingsChanges())
             {
-                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Font settings has been changed. Do you want to apply new settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Font settings have been changed. Do you want to apply new settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     UpdateFontsSettings(_changedFontList);
-                    CacheLoad._fontList = null;
-                    CacheLoad._fontList = CacheLoad.GetFontList();
+                    CacheLoad._fontList = _changedFontList;
                     Close();
                 }
                 else
@@ -208,7 +195,6 @@ namespace PAD
                 {
                     UpdateFontsSettings(_changedFontList);
                     CacheLoad._fontList = _changedFontList;
-                    ShowSettingsData();
                     frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
                     Close();
                 }
@@ -229,7 +215,6 @@ namespace PAD
             if (dialogResult == DialogResult.Yes)
             {
                 SetDefaultSettings();
-                ShowSettingsData();
             }
         }
 
@@ -251,9 +236,6 @@ namespace PAD
 
             UpdateFontsSettings(defaultList);
             CacheLoad._fontList = defaultList;
-            //_activeFontList = defaultList.Select(item => (FontList)item.Clone()).ToList();
-            //_changedFontList = defaultList.Select(item => (FontList)item.Clone()).ToList();
-            //ShowSettingsData();
             frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
             Close();
         }
@@ -286,8 +268,7 @@ namespace PAD
 
             KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
             int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
-            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
-            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, 1);
         }
 
         private void radioButtonBold_Click(object sender, EventArgs e)
@@ -296,8 +277,7 @@ namespace PAD
 
             KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
             int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
-            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
-            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, 2);
         }
 
         private void radioButtonItalic_Click(object sender, EventArgs e)
@@ -306,8 +286,7 @@ namespace PAD
 
             KeyValueData lbsnSelectedItem = (KeyValueData)listBoxSettingsName.SelectedItem;
             int systemFontId = CacheLoad._systemFontList.Where(i => i.SystemName == listBoxFont.GetItemText(listBoxFont.SelectedItem)).FirstOrDefault()?.Id ?? 0;
-            int styleId = CacheLoad._fontList.Where(i => i.Id == lbsnSelectedItem.ItemId).FirstOrDefault()?.FontStyleId ?? 0;
-            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, styleId);
+            UpdateChangedFontList(lbsnSelectedItem.ItemId, systemFontId, 3);
         }
     }
 }

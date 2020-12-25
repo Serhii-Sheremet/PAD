@@ -21,7 +21,8 @@ namespace PAD
             }
         }
 
-        private int[] _colorsDefault;
+        private List<Colors> _activeColorsList;
+        private List<Colors> _changedColorsList;
         private List<ColorDescription> _colorDescList;
         private ELanguage _activeLang;
 
@@ -30,29 +31,14 @@ namespace PAD
             InitializeComponent();
         }
 
-        public ColorSettings(ELanguage langCode)
+        public ColorSettings(List<Colors> cList, ELanguage langCode)
         {
             InitializeComponent();
             _activeLang = langCode;
+            _activeColorsList = cList;
+            _changedColorsList = cList.Select(item => (Colors)item.Clone()).ToList();
             _colorDescList = CacheLoad._colorDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
-            _colorsDefault = new int[] {
-                                    -13631697,      // 1|GREEN
-                                    -45233,         // 2|RED
-                                    -3211314,       // 3|LIGHTGREEN
-                                    -361121,        // 4|LIGHTRED
-                                    -16181,         // 5|PINK
-                                    -3211314,       // 6|JOGAMERGE
-                                    -16181,         // 7|MUHURTAMERGE
-                                    -16776961,      // 8|SELECTRECTANGLE
-                                    -4587591,       // 9|SUN
-                                    -4587591,       // 10|VENUS
-                                    -4587591,       // 11|MERCURY
-                                    -4587591,       // 12|MOON
-                                    -14650,         // 13|SATURN
-                                    -4587591,       // 14|JUPITER
-                                    -14650,         // 15|MARS
-                                    -4144960        // 16|GRAY
-            };
+            
         }
 
         private void ColorSettings_Shown(object sender, EventArgs e)
@@ -67,7 +53,36 @@ namespace PAD
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            Close();
+            if (CheckColorSettingsChanges())
+            {
+                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Color settings have been changed. Do you want to apply new settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    UpdateColorSettings(_changedColorsList);
+                    CacheLoad._colorList = _changedColorsList;
+                    Close();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                Close();
+            }
+        }
+
+        private bool CheckColorSettingsChanges()
+        {
+            for (int i = 0; i < _changedColorsList.Count; i++)
+            {
+                if (_changedColorsList[i].ARGBValue != _activeColorsList[i].ARGBValue )
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void listBoxName_SelectedIndexChanged(object sender, EventArgs e)
@@ -75,33 +90,33 @@ namespace PAD
             ShowSettingsData();
         }
 
-        private void buttonDefault_Click(object sender, EventArgs e)
-        {
-            DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to revert default settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
-            if (dialogResult == DialogResult.Yes)
-            {
-                SetDefaultSettings();
-                CacheLoad._colorList = CacheLoad.GetColorsList();
-                ShowSettingsData();
-            }
-        }
-
         private void ShowSettingsData()
         {
             KeyValueData selectedColorId = (KeyValueData)listBoxColor.SelectedItem;
-            int ColorValue = CacheLoad._colorList.Where(i => i.Id == selectedColorId.ItemId).FirstOrDefault()?.ARGBValue ?? 0;
+            int ColorValue = _changedColorsList.Where(i => i.Id == selectedColorId.ItemId).FirstOrDefault()?.ARGBValue ?? 0;
             pictureBoxColor.BackColor = Color.FromArgb(ColorValue);
         }
 
         private void buttonApply_Click(object sender, EventArgs e)
         {
-            DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to save current settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
-            if (dialogResult == DialogResult.Yes)
+            if (CheckColorSettingsChanges())
             {
-                KeyValueData selectedColorId = (KeyValueData)listBoxColor.SelectedItem;
-                UpdateColorSettings(selectedColorId.ItemId, pictureBoxColor.BackColor.ToArgb());
-                CacheLoad._colorList = CacheLoad.GetColorsList();
-                ShowSettingsData();
+                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to save current settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    UpdateColorSettings(_changedColorsList);
+                    CacheLoad._colorList = _changedColorsList;
+                    frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
+                    Close();
+                }
+                else
+                {
+                    Close();
+                }
+            }
+            else
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Nothing has been changed.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
             }
         }
 
@@ -111,32 +126,77 @@ namespace PAD
                 return;
 
             pictureBoxColor.BackColor = colorDialog.Color;
+            KeyValueData lbcSelectedItem = (KeyValueData)listBoxColor.SelectedItem;
+            int argbValue = pictureBoxColor.BackColor.ToArgb();
+            UpdateChangedColorsList(lbcSelectedItem.ItemId, argbValue);
         }
 
-        private void UpdateColorSettings(int id, int argbValue)
+        private void UpdateChangedColorsList(int colorSettingsId, int argbValue)
+        {
+            foreach (Colors c in _changedColorsList)
+            {
+                if (c.Id == colorSettingsId)
+                {
+                    c.ARGBValue = argbValue;
+                    break;
+                }
+            }
+        }
+
+        private void UpdateColorSettings(List<Colors> cList)
         {
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
-                try
+                for (int i = 0; i < cList.Count; i++)
                 {
-                    SQLiteCommand command = new SQLiteCommand("update COLOR set ARGBVALUE = @ARGBVALUE where ID = @ID", dbCon);
-                    command.Parameters.AddWithValue("@ARGBVALUE", argbValue);
-                    command.Parameters.AddWithValue("@ID", id);
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        SQLiteCommand command = new SQLiteCommand("update COLOR set ARGBVALUE = @ARGBVALUE where ID = @ID", dbCon);
+                        command.Parameters.AddWithValue("@ARGBVALUE", cList[i].ARGBValue);
+                        command.Parameters.AddWithValue("@ID", cList[i].Id);
+                        command.ExecuteNonQuery();
+                    }
+                    catch { }
                 }
-                catch {}
                 dbCon.Close();
+            }
+        }
+
+        private void buttonDefault_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Do you want to revert default settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
+            if (dialogResult == DialogResult.Yes)
+            {
+                SetDefaultSettings();
             }
         }
 
         private void SetDefaultSettings()
         {
-            for (int i = 0; i < listBoxColor.Items.Count; i++)
-            {
-                KeyValueData currentColor = (KeyValueData)listBoxColor.Items[i];
-                UpdateColorSettings(currentColor.ItemId, _colorsDefault[i]);
-            }
+            //default clolors list
+            List<Colors> defaultList = new List<Colors>();
+            defaultList.Add(new Colors { Id = 1, Code = "GREEN", ARGBValue = -13631697 });
+            defaultList.Add(new Colors { Id = 2, Code = "RED", ARGBValue = -45233 });
+            defaultList.Add(new Colors { Id = 3, Code = "LIGHTGREEN", ARGBValue = -3211314 });
+            defaultList.Add(new Colors { Id = 4, Code = "LIGHTRED", ARGBValue = -361121 });
+            defaultList.Add(new Colors { Id = 5, Code = "PINK", ARGBValue = -16181 });
+            defaultList.Add(new Colors { Id = 6, Code = "JOGAMERGE", ARGBValue = -3211314 });
+            defaultList.Add(new Colors { Id = 7, Code = "MUHURTAMERGE", ARGBValue = -16181 });
+            defaultList.Add(new Colors { Id = 8, Code = "SELECTRECTANGLE", ARGBValue = -16776961 });
+            defaultList.Add(new Colors { Id = 9, Code = "SUN", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 10, Code = "VENUS", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 11, Code = "MERCURY", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 12, Code = "MOON", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 13, Code = "SATURN", ARGBValue = -14650 });
+            defaultList.Add(new Colors { Id = 14, Code = "JUPITER", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 15, Code = "MARS", ARGBValue = -14650 });
+            defaultList.Add(new Colors { Id = 16, Code = "GRAY", ARGBValue = -4144960 });
+
+            UpdateColorSettings(defaultList);
+            CacheLoad._colorList = defaultList;
+            frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
+            Close();
         }
 
     }

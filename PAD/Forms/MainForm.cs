@@ -2520,13 +2520,13 @@ namespace PAD
 
         private void colorSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ColorSettings csForm = new ColorSettings(_activeLanguageCode);
+            ColorSettings csForm = new ColorSettings(CacheLoad._colorList.ToList(), _activeLanguageCode);
             csForm.ShowDialog(this);
         }
 
         private void fontSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            FontSettings fsForm = new FontSettings(CacheLoad._fontList, _activeLanguageCode);
+            FontSettings fsForm = new FontSettings(CacheLoad._fontList.ToList(), _activeLanguageCode);
             fsForm.ShowDialog(this);
         }
 
