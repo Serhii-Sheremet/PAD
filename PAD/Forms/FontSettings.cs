@@ -21,7 +21,6 @@ namespace PAD
             }
         }
 
-        //private bool _fontChanged = false;
         private ELanguage _activeLang;
         private List<FontList> _activeFontList;
         private List<FontList> _changedFontList;
@@ -160,7 +159,6 @@ namespace PAD
                 {
                     fl.FontId = systemFontId;
                     fl.FontStyleId = styleId;
-                    //_fontChanged = true;
                     break;
                 }
             }
@@ -209,8 +207,7 @@ namespace PAD
                 if (dialogResult == DialogResult.Yes)
                 {
                     UpdateFontsSettings(_changedFontList);
-                    CacheLoad._fontList = null;
-                    CacheLoad._fontList = CacheLoad.GetFontList();
+                    CacheLoad._fontList = _changedFontList;
                     ShowSettingsData();
                     frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
                     Close();
@@ -232,7 +229,6 @@ namespace PAD
             if (dialogResult == DialogResult.Yes)
             {
                 SetDefaultSettings();
-                CacheLoad._fontList = CacheLoad.GetFontList();
                 ShowSettingsData();
             }
         }
@@ -254,17 +250,21 @@ namespace PAD
             defaultList.Add(new FontList { Id = 11, FontId = 12, Code = "PEVTOOLTIPTEXT", FontStyleId = 3 });
 
             UpdateFontsSettings(defaultList);
-            CacheLoad._fontList = CacheLoad.GetFontList();
-            ShowSettingsData();
+            CacheLoad._fontList = defaultList;
+            //_activeFontList = defaultList.Select(item => (FontList)item.Clone()).ToList();
+            //_changedFontList = defaultList.Select(item => (FontList)item.Clone()).ToList();
+            //ShowSettingsData();
+            frmShowMessage.Show(Utility.GetLocalizedText("Changes has been applied.", _activeLang), Utility.GetLocalizedText("Information", _activeLang), enumMessageIcon.Information, enumMessageButton.OK);
+            Close();
         }
         
         private void UpdateFontsSettings(List<FontList> fList)
         {
-            for (int i = 0; i < fList.Count; i++)
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
-                using (SQLiteConnection dbCon = Utility.GetSQLConnection())
-                {
-                    dbCon.Open();
+                dbCon.Open();
+                for (int i = 0; i < fList.Count; i++)
+                { 
                     try
                     {
                         SQLiteCommand command = new SQLiteCommand("update FONTLIST set FONTID = @FONTID, FONTSTYLEID = @FONTSTYLEID where ID = @ID", dbCon);
@@ -272,10 +272,11 @@ namespace PAD
                         command.Parameters.AddWithValue("@FONTSTYLEID", fList[i].FontStyleId);
                         command.Parameters.AddWithValue("@ID", fList[i].Id);
                         command.ExecuteNonQuery();
+                        //id = (int)command.ExecuteScalar();
                     }
                     catch { }
-                    dbCon.Close();
                 }
+                dbCon.Close();
             }
         }
 
