@@ -203,7 +203,7 @@ namespace PAD
             _ketuTruePCList = ketuTruePCList;
         }
 
-        private List<Day> PrepareYearDays(int year, Profile sPerson)
+        public List<Day> PrepareYearDays(int year, Profile sPerson)
         {
             List<Day> daysList = new List<Day>();
             DateTime startDate = new DateTime(year, 1, 1);
@@ -452,7 +452,7 @@ namespace PAD
             return daysList.Where(i => i.Date.Year == year).ToList();
         }
 
-        private void YearTranzitDrawing(List<Day> dayList)
+        public void YearTranzitDrawing(List<Day> dayList)
         {
             int daysOfYear = DateTimeUtils.GetDaysInYear(dayList[0].Date);
             int dayWidth = pictureBoxYearTranzits.Width / daysOfYear;

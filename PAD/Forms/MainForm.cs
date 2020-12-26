@@ -2721,15 +2721,60 @@ namespace PAD
                 {
                     _daysOfWeek = null;
                     _daysOfWeek = PrepareDaysOfWeekArray();
-                    PrepareProfileAndTimeZoneLabels();
                     _daysList = null;
                     _daysOfMonth = null;
                     _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
                 }
 
                 //Drawing
+                PrepareProfileAndTimeZoneLabels();
                 CalendarDrawing(_daysList);
                 TranzitDrawing(_daysList);
+
+                // refresh dayView if opened and years calendar
+                if (tabControlCalendar.TabPages.Count > 2)
+                {
+                    string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
+                    string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+                    string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
+
+                    foreach (TabPage tp in tabControlCalendar.TabPages)
+                    {
+                        if (!tp.Text.Equals(calendarText) && !tp.Text.Equals(tranzitText) && !tp.Text.Contains(yearTranzitText))
+                        {
+                            // Re-generate events for tabDay refresh
+                            foreach (var control in tp.Controls)
+                            {
+                                if (control is TabDay)
+                                {
+                                    DateTime openedDate = DateTime.ParseExact(tp.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                                    Day openedDay = _daysList.Where(i => i.Date == openedDate).FirstOrDefault();
+                                    TabDay td = control as TabDay;
+                                    td.ClearAppointments(true);
+                                    td.DrawSystemAppointments(openedDay, _activeLanguageCode);
+                                    td.Refresh();
+                                }
+                            }
+                        }
+                        if (tp.Text.Contains(yearTranzitText))
+                        {
+                            // re-draw years calendar
+                            foreach (var control in tp.Controls)
+                            {
+                                int year = Convert.ToInt32(tp.Text.Substring(tp.Text.Length - 4));
+                                if (control is YearTranzits)
+                                {
+                                    YearTranzits yt = control as YearTranzits;
+                                    List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
+                                    yt.YearTranzitDrawing(daysList);
+                                    yt.Refresh();
+                                }
+                            }
+                        }
+
+                    }
+                }
+
             }
         }
 
