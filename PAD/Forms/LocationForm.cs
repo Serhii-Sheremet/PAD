@@ -320,8 +320,21 @@ namespace PAD
                     command.Parameters.AddWithValue("@STATE", textBoxState.Text);
                     command.Parameters.AddWithValue("@COUNTRY", textBoxCountry.Text);
                     command.Parameters.AddWithValue("@LANGUAGECODE", _activeLang.ToString());
-
-                    command.ExecuteNonQuery();
+                    //command.ExecuteNonQuery();
+                    var id = (int)command.ExecuteScalar();
+                    Location newLocation = new Location {
+                            Id = id,
+                            Locality = textBoxLocality.Text,
+                            Latitude = latitude,
+                            Longitude = longitude,
+                            Region = textBoxRegion.Text,
+                            State = textBoxState.Text,
+                            Country = textBoxCountry.Text,
+                            CountryCode = string.Empty,
+                            LanguageCode = _activeLang.ToString()
+                    };
+                    _lList.Add(newLocation);
+                    CacheLoad._locationList.Add(newLocation);
                 }
                 catch { }
                 dbCon.Close();
@@ -354,10 +367,45 @@ namespace PAD
                     command.Parameters.AddWithValue("@ID", locId);
 
                     command.ExecuteNonQuery();
+                    Location newLocation = new Location
+                    {
+                        Id = locId,
+                        Locality = textBoxLocality.Text,
+                        Latitude = latitude,
+                        Longitude = longitude,
+                        Region = textBoxRegion.Text,
+                        State = textBoxState.Text,
+                        Country = textBoxCountry.Text,
+                        LanguageCode = _activeLang.ToString()
+                    };
+                    UpdateCarentLocationList(newLocation);
                 }
-                catch (Exception ex) { MessageBox.Show(ex.ToString()); }
+                catch { }
                 dbCon.Close();
             }
+        }
+
+        private void UpdateCarentLocationList(Location newLocation)
+        {
+            //updating list in this form
+            Location thisListObj = _lList.Where(i => i.Id == newLocation.Id).FirstOrDefault();
+            thisListObj.Locality = newLocation.Locality;
+            thisListObj.Latitude = newLocation.Latitude;
+            thisListObj.Longitude = newLocation.Longitude;
+            thisListObj.Region = newLocation.Region;
+            thisListObj.State = newLocation.State;
+            thisListObj.Country = newLocation.Country;
+            thisListObj.LanguageCode = newLocation.LanguageCode;
+
+            //updating cached list
+            Location cachedListObj = CacheLoad._locationList.Where(i => i.Id == newLocation.Id).FirstOrDefault();
+            cachedListObj.Locality = newLocation.Locality;
+            cachedListObj.Latitude = newLocation.Latitude;
+            cachedListObj.Longitude = newLocation.Longitude;
+            cachedListObj.Region = newLocation.Region;
+            cachedListObj.State = newLocation.State;
+            cachedListObj.Country = newLocation.Country;
+            cachedListObj.LanguageCode = newLocation.LanguageCode;
         }
 
     }
