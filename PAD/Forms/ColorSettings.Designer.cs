@@ -50,16 +50,16 @@
             this.groupBoxColorExample.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxColorExample.Name = "groupBoxColorExample";
             this.groupBoxColorExample.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxColorExample.Size = new System.Drawing.Size(400, 162);
+            this.groupBoxColorExample.Size = new System.Drawing.Size(400, 248);
             this.groupBoxColorExample.TabIndex = 1;
             this.groupBoxColorExample.TabStop = false;
             this.groupBoxColorExample.Text = "Color example";
             // 
             // pictureBoxColor
             // 
-            this.pictureBoxColor.Location = new System.Drawing.Point(14, 25);
+            this.pictureBoxColor.Location = new System.Drawing.Point(14, 24);
             this.pictureBoxColor.Name = "pictureBoxColor";
-            this.pictureBoxColor.Size = new System.Drawing.Size(370, 120);
+            this.pictureBoxColor.Size = new System.Drawing.Size(370, 210);
             this.pictureBoxColor.TabIndex = 0;
             this.pictureBoxColor.TabStop = false;
             this.pictureBoxColor.Click += new System.EventHandler(this.pictureBoxColor_Click);
@@ -68,7 +68,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(417, 191);
+            this.buttonApply.Location = new System.Drawing.Point(417, 278);
             this.buttonApply.Margin = new System.Windows.Forms.Padding(4);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(100, 28);
@@ -81,7 +81,7 @@
             // 
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClose.Location = new System.Drawing.Point(525, 191);
+            this.buttonClose.Location = new System.Drawing.Point(525, 278);
             this.buttonClose.Margin = new System.Windows.Forms.Padding(4);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(100, 28);
@@ -94,7 +94,7 @@
             // 
             this.buttonDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDefault.Location = new System.Drawing.Point(15, 191);
+            this.buttonDefault.Location = new System.Drawing.Point(15, 278);
             this.buttonDefault.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDefault.Name = "buttonDefault";
             this.buttonDefault.Size = new System.Drawing.Size(200, 28);
@@ -110,7 +110,7 @@
             this.groupBoxColor.Margin = new System.Windows.Forms.Padding(4);
             this.groupBoxColor.Name = "groupBoxColor";
             this.groupBoxColor.Padding = new System.Windows.Forms.Padding(4);
-            this.groupBoxColor.Size = new System.Drawing.Size(200, 162);
+            this.groupBoxColor.Size = new System.Drawing.Size(200, 248);
             this.groupBoxColor.TabIndex = 7;
             this.groupBoxColor.TabStop = false;
             this.groupBoxColor.Text = "Settings list";
@@ -119,9 +119,9 @@
             // 
             this.listBoxColor.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.listBoxColor.FormattingEnabled = true;
-            this.listBoxColor.Location = new System.Drawing.Point(13, 25);
+            this.listBoxColor.Location = new System.Drawing.Point(13, 23);
             this.listBoxColor.Name = "listBoxColor";
-            this.listBoxColor.Size = new System.Drawing.Size(175, 121);
+            this.listBoxColor.Size = new System.Drawing.Size(175, 212);
             this.listBoxColor.TabIndex = 0;
             this.listBoxColor.SelectedIndexChanged += new System.EventHandler(this.listBoxName_SelectedIndexChanged);
             // 
@@ -130,7 +130,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(639, 231);
+            this.ClientSize = new System.Drawing.Size(639, 321);
             this.Controls.Add(this.groupBoxColor);
             this.Controls.Add(this.buttonDefault);
             this.Controls.Add(this.buttonClose);
