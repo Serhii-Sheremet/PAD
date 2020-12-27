@@ -832,18 +832,18 @@ namespace PAD
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)
         {
-            int selectedProfileId = 0;
             if (listViewProfile.SelectedIndices.Count <= 0)
             {
                 return;
             }
-            int intselectedindex = listViewProfile.SelectedIndices[0];
-            if (intselectedindex >= 0)
+            int selectedindex = listViewProfile.SelectedIndices[0];
+            if (selectedindex >= 0)
             {
+                int selectedProfileId = _proList[selectedindex].Id;
                 DeleteProfile(selectedProfileId);
 
-                CacheLoad._profileList = CacheLoad.GetProfileList();
-                _proList = CacheLoad._profileList.ToList();
+                _proList.RemoveAll(i => i.Id == selectedProfileId);
+                CacheLoad._profileList.RemoveAll(i => i.Id == selectedProfileId);
                 FillProfileListViewByData(_proList);
 
                 CleanFields();
