@@ -18,8 +18,10 @@ Confirmation|Confirmation|en
 Confirmation|Подтверждение|ru
 File|File|en
 File|Файл|ru
-Export to PDF|Export to PDF|en
-Export to PDF|Експорт в PDF|ru
+Export month to PDF|Export month to PDF|en
+Export month to PDF|Експорт месяца в PDF|ru
+Export year to PDF|Export year to PDF|en
+Export year to PDF|Експорт года в PDF|ru
 Exit|Exit|en
 Exit|Выход|ru
 Refresh|Refresh|en
@@ -206,8 +208,8 @@ till|till|en
 till|по|ru
 Moon Nakshatra|Moon Nakshatra|en
 Moon Nakshatra|Накшатра Луны|ru
-Tranzit by|Tranzit by|en
-Tranzit by|Транзит по|ru
+Tranzit|Tranzit|en
+Tranzit|Транзит|ru
 Zodiac|Zodiac|en
 Zodiac|Зодиак|ru
 Nakshatra|Nakshatra|en

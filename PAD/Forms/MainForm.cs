@@ -2548,6 +2548,11 @@ namespace PAD
             return ms;
         }
 
+        private void exportYearToPDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void exportToPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_selectedProfile != null)
@@ -3172,6 +3177,56 @@ namespace PAD
         private DataGridView PreparePlanetDataGridView(TranzitEntity tEnt, Day pDay, int width, out int height, ELanguage langCode)
         {
             height = 0;
+            int planetId = 0;
+            string planetName = string.Empty;
+            switch (tEnt)
+            {
+                
+                case TranzitEntity.TEMoon:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.MOON.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TESun:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.SUN.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TEVenus:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.VENUS.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TEJupiter:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.JUPITER.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TEMercury:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.MERCURY.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TEMars:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.MARS.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TESaturn:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.SATURN.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TERahu:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.RAHUMEAN.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+
+                case TranzitEntity.TEKetu:
+                    planetId = CacheLoad._planetList.Where(i => i.Code.Equals(EPlanet.KETUMEAN.ToString())).FirstOrDefault()?.Id ?? 0;
+                    planetName = CacheLoad._planetDescList.Where(i => i.PlanetId == planetId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault().Name.Substring(0, 2);
+                    break;
+            }
 
             //DGV build
             DataGridView dgv = new DataGridView();
@@ -3182,8 +3237,8 @@ namespace PAD
 
             DataGridViewColumn column = new DataGridViewColumn();
             column.DataPropertyName = "Tranzit";
-            column.Name = Utility.GetLocalizedText("Tranzit by", langCode);
-            column.Width = 110;
+            column.Name = Utility.GetLocalizedText("Tranzit", langCode) + " " + planetName;
+            column.Width = 120;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
@@ -3222,7 +3277,7 @@ namespace PAD
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
-            int lastColWidth = (dgv.Width - 940);
+            int lastColWidth = (dgv.Width - 950);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Description";
             column.Name = Utility.GetLocalizedText("Description", langCode);
