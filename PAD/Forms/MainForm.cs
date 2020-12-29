@@ -2532,7 +2532,16 @@ namespace PAD
 
         private void viewHelpToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string lang = _activeLanguageCode.ToString();
+            try
+            {
 
+                System.Diagnostics.Process.Start(@".\Manual\pad_help_"+ lang + ".pdf");
+            }
+            catch
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("File not found", _activeLanguageCode), Utility.GetLocalizedText("Error", _activeLanguageCode), enumMessageIcon.Error, enumMessageButton.OK);
+            }
         }
 
         private void aboutPersonalDiaryCalendarToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4500,6 +4509,10 @@ namespace PAD
                         Environment.Exit(0);
                     }
                 }
+            }
+            else
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("No updates found.", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.OK);
             }
         }
 

@@ -38,8 +38,10 @@ Russian|Russian|en
 Russian|Русский|ru
 Help|Help|en
 Help|Помощь|ru
-View Help|View Help|en
-View Help|Просмотр справки|ru
+No updates found.|No updates found.|en
+No updates found.|Апдейтов не обнаружено.|ru
+User guide|User guide|en
+User guide|Руководство пользователя|ru
 Check for Updates|Check for Updates|en
 Check for Updates|Проверить наличие обновлений|ru
 About Personal Astrological Diary|About Personal Astrological Diary|en

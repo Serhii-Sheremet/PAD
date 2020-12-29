@@ -42,6 +42,7 @@
             this.pictureBoxTranzits = new System.Windows.Forms.PictureBox();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportToPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportYearToPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,7 +64,6 @@
             this.datePicker = new CustomControls.DatePicker();
             this.labelProfile = new System.Windows.Forms.Label();
             this.labelTimeZone = new System.Windows.Forms.Label();
-            this.exportYearToPDFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.tabControlCalendar.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
@@ -170,6 +170,12 @@
             resources.ApplyResources(this.exportToPDFToolStripMenuItem, "exportToPDFToolStripMenuItem");
             this.exportToPDFToolStripMenuItem.Name = "exportToPDFToolStripMenuItem";
             this.exportToPDFToolStripMenuItem.Click += new System.EventHandler(this.exportToPDFToolStripMenuItem_Click);
+            // 
+            // exportYearToPDFToolStripMenuItem
+            // 
+            resources.ApplyResources(this.exportYearToPDFToolStripMenuItem, "exportYearToPDFToolStripMenuItem");
+            this.exportYearToPDFToolStripMenuItem.Name = "exportYearToPDFToolStripMenuItem";
+            this.exportYearToPDFToolStripMenuItem.Click += new System.EventHandler(this.exportYearToPDFToolStripMenuItem_Click);
             // 
             // toolStripSeparator4
             // 
@@ -308,12 +314,6 @@
             // 
             resources.ApplyResources(this.labelTimeZone, "labelTimeZone");
             this.labelTimeZone.Name = "labelTimeZone";
-            // 
-            // exportYearToPDFToolStripMenuItem
-            // 
-            resources.ApplyResources(this.exportYearToPDFToolStripMenuItem, "exportYearToPDFToolStripMenuItem");
-            this.exportYearToPDFToolStripMenuItem.Name = "exportYearToPDFToolStripMenuItem";
-            this.exportYearToPDFToolStripMenuItem.Click += new System.EventHandler(this.exportYearToPDFToolStripMenuItem_Click);
             // 
             // MainForm
             // 
