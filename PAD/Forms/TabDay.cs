@@ -50,7 +50,7 @@ namespace PAD
             _dvlnDescList = dvlNamesDescList;
 
             List<string> snList = new List<string>();
-            _dvlnDescList.ForEach(i => { snList.Add(i.ShortName); });
+            _dvlnDescList.ForEach(i => { snList.Add(i.Name); });
 
             dayView.StartDate = _currDay.Date;
             dayView.SunRiseDate = _currDay.SunRise;

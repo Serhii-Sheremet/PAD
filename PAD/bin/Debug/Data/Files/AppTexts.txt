@@ -19,9 +19,9 @@ Confirmation|ѕодтверждение|ru
 File|File|en
 File|‘айл|ru
 Export month to PDF|Export month to PDF|en
-Export month to PDF|≈кспорт мес€ца в PDF|ru
+Export month to PDF|Ёкспорт мес€ца в PDF|ru
 Export year to PDF|Export year to PDF|en
-Export year to PDF|≈кспорт года в PDF|ru
+Export year to PDF|Ёкспорт года в PDF|ru
 Exit|Exit|en
 Exit|¬ыход|ru
 Refresh|Refresh|en
