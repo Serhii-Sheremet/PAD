@@ -51,9 +51,9 @@
     <ApplicationIcon>Calendar.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Calendar.DayView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DayView\bin\Debug\Calendar.DayView.dll</HintPath>
+    <Reference Include="Calendar.DayView">
+      <HintPath>bin\Debug\Lib\Calendar.DayView.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="GeoTimeZone, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e20ab7d0d9479841, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
