@@ -112,6 +112,8 @@ Birth details|Birth details|en
 Birth details|Детали рождения|ru
 Pada|Pada|en
 Pada|Пада|ru
+Navamsa|Navamsa|en
+Navamsa|Навамша|ru
 Lagna|Lagna|en
 Lagna|Лагна|ru
 Make default|Make default|en

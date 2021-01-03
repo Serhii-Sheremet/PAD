@@ -1,7 +1,7 @@
 1|Dwipushkar Yoga|DPY|Favorable|en
 2|Tripushkar Yoga|TPY|Favorable|en
 3|Amrita Siddha Yoga|ASY|Favorable|en
-4|Sarvartha Siddhi Yoga|SSY|Favorable|en
+4|Sarvartha Siddha Yoga|SSY|Favorable|en
 5|Siddha Yoga|SY|Favorable|en
 6|Mrityu Yoga|MY|Unfavorable|en
 7|Adham Yoga|AY|Unfavorable|en

@@ -11,7 +11,8 @@ namespace PAD
         public int ZodiakId { get; set; }
         public int NakshatraId { get; set; }
         public int PadaNumber { get; set; }
-        public int NavamshaId { get; set; }
+        public string SpecialNavamsha { get; set; }
+        public int Navamsha { get; set; }
         public int ColorId { get; set; }
 
         /// <summary>
@@ -24,7 +25,7 @@ namespace PAD
         public Pada ParseFile(string s)
         {
             var row = s.Split(new char[] { '|' });
-            return new Pada() { Id = Convert.ToInt32(row[0]), ZodiakId = Convert.ToInt32(row[1]), NakshatraId = Convert.ToInt32(row[2]), PadaNumber = Convert.ToInt32(row[3]), NavamshaId = Convert.ToInt32(row[4]), ColorId = Convert.ToInt32(row[5]) };
+            return new Pada() { Id = Convert.ToInt32(row[0]), ZodiakId = Convert.ToInt32(row[1]), NakshatraId = Convert.ToInt32(row[2]), PadaNumber = Convert.ToInt32(row[3]), SpecialNavamsha = row[4], Navamsha = Convert.ToInt32(row[5]), ColorId = Convert.ToInt32(row[6]) };
         }
     }
 }

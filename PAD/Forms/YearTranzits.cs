@@ -1064,16 +1064,24 @@ namespace PAD
         {
             if (c.Count > 0)
             {
-                string text = c.First().GetTranzitPada();
+                List<PlanetCalendar> pcList = new List<PlanetCalendar>();
+                c.ForEach(i => pcList.Add((PlanetCalendar)i));
+
+                string text = pcList.First().GetTranzitPada();
+                if (pcList.First().PlanetCode == EPlanet.SUN || pcList.First().PlanetCode == EPlanet.VENUS || pcList.First().PlanetCode == EPlanet.MERCURY)
+                {
+                    text = text.Substring(0, 1);
+                }
+
                 Size textSize = TextRenderer.MeasureText(text, font);
                 int heightPadding = (height - textSize.Height) / 2;
-                if (c.Count == 1)
+                if (pcList.Count == 1)
                 {
                     g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
+                    int endPosX = Utility.ConvertHoursToPixels(width * pcList.Last().DateStart.Day, pcList.Last().DateStart);
                     if (textSize.Width < endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1188,6 +1196,7 @@ namespace PAD
                 cList.ForEach(i => pcList.Add((PlanetCalendar)i));
 
                 int previousPada = CacheLoad._padaList.Where(i => i.Id == pcList.First().PadaId).FirstOrDefault().PadaNumber;
+                int index = 0;
                 foreach (PlanetCalendar pc in pcList)
                 {
                     if (pc.DateStart > date)
@@ -1196,17 +1205,24 @@ namespace PAD
                         if (currentPada != previousPada)
                         {
                             int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                            
                             string text = pc.GetTranzitPada();
                             Size textSize = TextRenderer.MeasureText(text, font);
+                            if (pc.PlanetCode == EPlanet.SUN || pc.PlanetCode == EPlanet.VENUS || pc.PlanetCode == EPlanet.MERCURY)
+                            {
+                                text = text.Substring(0, 1);
+                            }
                             int heightPadding = (height - textSize.Height) / 2;
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
                             g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
                             previousPada = currentPada;
                         }
                     }
+                    index++;
                 }
             }
         }
+
 
         private void SetPlanetTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, bool isMoon)
         {

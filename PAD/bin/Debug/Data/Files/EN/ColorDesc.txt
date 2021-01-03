@@ -3,7 +3,7 @@
 3|Light green|en
 4|Light red|en
 5|Pink|en
-6|Joga merge|en
+6|Yoga merge|en
 7|Muhurta merge|en
 8|Selection rectangle|en
 9|Hora: Sun|en

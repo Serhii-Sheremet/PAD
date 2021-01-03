@@ -520,12 +520,14 @@ namespace PAD
                                 + Utility.GetLocalizedText("Moon Nakshatra", _activeLanguageCode) + " "
                                 + nakshatraName;
 
+            labelProfile.Visible = true;
             labelProfile.Text = labelText;
             labelProfile.Font = labelTitleFont;
             labelProfile.BackColor = Color.Transparent;
             Size textHSize = TextRenderer.MeasureText(labelProfile.Text, labelTitleFont);
             labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
 
+            labelTimeZone.Visible = true;
             labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
             labelTimeZone.Font = labelTZFont;
             labelTimeZone.BackColor = Color.Transparent;
@@ -1433,7 +1435,10 @@ namespace PAD
         {
             if (c.Count > 0)
             {
-                string text = c.First().GetTranzitPada();
+                List<PlanetCalendar> pList = Utility.ClonePlanetCalendarList(c);
+                string text = pList.First().GetTranzitPada();
+                if (pList.First().PlanetCode == EPlanet.MOON)
+                    text = text.Substring(0, 1);
                 Size textSize = TextRenderer.MeasureText(text, font);
                 int heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
@@ -1571,6 +1576,8 @@ namespace PAD
                         {
                             int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                             string text = pc.GetTranzitPada();
+                            if (pc.PlanetCode == EPlanet.MOON)
+                                text = text.Substring(0, 1);
                             Size textSize = TextRenderer.MeasureText(text, font);
                             int heightPadding = (height - textSize.Height) / 2;
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);

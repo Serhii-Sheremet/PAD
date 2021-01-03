@@ -223,6 +223,34 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
+
+            SpecialNavamsha sn = new SpecialNavamsha();
+            List<SpecialNavamsha> snList = new List<SpecialNavamsha>();
+            string[] tempSNList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\SpecNavamshaDesc.txt", Encoding.GetEncoding(1251));
+            for (int i = 0; i < tempSNList.Length; i++)
+            {
+                SpecialNavamsha temp = sn.ParseFile(tempSNList[i]);
+                snList.Add(temp);
+            }
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into SPECIALNAVAMSHA_DESC (SPECIALNAVAMSHAID, NAME, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, snList.Count));
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    for (int i = 0; i < snList.Count; i++)
+                    {
+                        command.Parameters.Add(new SQLiteParameter() { Value = snList[i].SpeciaNavamshaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = snList[i].Name });
+                        command.Parameters.Add(new SQLiteParameter() { Value = snList[i].LanguageCode });
+                    }
+                    command.ExecuteNonQuery();
+                }
+                catch (SQLiteException ex) { AddingExceptionLabel(ex); }
+                dbCon.Close();
+            }
             
             NakshatraDescription nd = new NakshatraDescription();
             List<NakshatraDescription> ndList = new List<NakshatraDescription>();
@@ -1358,15 +1386,16 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 5))})";
-                    string comm = "insert into PADA (ZODIAKID, NAKSHATRAID, PADANUMBER, NAVAMSHAID, COLORID) values " + String.Join(", ", Enumerable.Repeat(parameters, pList.Count));
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 6))})";
+                    string comm = "insert into PADA (ZODIAKID, NAKSHATRAID, PADANUMBER, SPECIALNAVAMSHA, NAVAMSHA, COLORID) values " + String.Join(", ", Enumerable.Repeat(parameters, pList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < pList.Count; i++)
                     {
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].ZodiakId });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].NakshatraId });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].PadaNumber });
-                        command.Parameters.Add(new SQLiteParameter() { Value = pList[i].NavamshaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = pList[i].SpecialNavamsha });
+                        command.Parameters.Add(new SQLiteParameter() { Value = pList[i].Navamsha });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].ColorId });
                     }
                     command.ExecuteNonQuery();

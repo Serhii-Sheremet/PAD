@@ -826,8 +826,11 @@ namespace PAD
         {
             LocationForm lForm = new LocationForm(CacheLoad._locationList.ToList(), _activeLang, false);
             lForm.ShowDialog(this);
-            _selectedLocation = lForm.SelectedLocation;
-            textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _selectedLocation.Id).FirstOrDefault()?.Locality ?? string.Empty;
+            if (lForm.SelectedLocation != null)
+            {
+                _selectedLocation = lForm.SelectedLocation;
+                textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _selectedLocation.Id).FirstOrDefault()?.Locality ?? string.Empty;
+            }
         }
 
         private void toolStripButtonDelete_Click(object sender, EventArgs e)

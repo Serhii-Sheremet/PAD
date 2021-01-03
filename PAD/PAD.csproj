@@ -52,8 +52,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Calendar.DayView">
-      <HintPath>bin\Debug\Lib\Calendar.DayView.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\DayView\bin\Debug\Calendar.DayView.dll</HintPath>
     </Reference>
     <Reference Include="GeoTimeZone, Version=4.0.0.0, Culture=neutral, PublicKeyToken=e20ab7d0d9479841, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -157,6 +156,7 @@
     <Compile Include="Entities\Planet.cs" />
     <Compile Include="Calendar\PlanetData.cs" />
     <Compile Include="Entities\PlanetDescription.cs" />
+    <Compile Include="Entities\SpecialNavamsha.cs" />
     <Compile Include="Entities\SystemFont.cs" />
     <Compile Include="Entities\TaraBala.cs" />
     <Compile Include="Entities\TaraBalaDescription.cs" />

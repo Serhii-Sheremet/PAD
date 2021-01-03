@@ -814,7 +814,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, ZODIAKID, NAKSHATRAID, PADANUMBER, NAVAMSHAID, COLORID from PADA order by ID";
+                    string comm = $"select ID, ZODIAKID, NAKSHATRAID, PADANUMBER, SPECIALNAVAMSHA, NAVAMSHA, COLORID from PADA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -828,8 +828,9 @@ namespace PAD
                                     ZodiakId = reader.IntValue(1),
                                     NakshatraId = reader.IntValue(2),
                                     PadaNumber = reader.IntValue(3),
-                                    NavamshaId = reader.IntValue(4),
-                                    ColorId = reader.IntValue(5)
+                                    SpecialNavamsha = reader.StringValue(4),
+                                    Navamsha = reader.IntValue(5),
+                                    ColorId = reader.IntValue(6)
                                 };
                                 entityList.Add(temp);
                             }

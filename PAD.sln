@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.28307.1062
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PAD", "PAD\PAD.csproj", "{82BF1407-BA71-484B-8B61-592448489905}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D17A4D6A-4CAA-4470-8A19-F42463C021FD} = {D17A4D6A-4CAA-4470-8A19-F42463C021FD}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DayView", "DayView\DayView.csproj", "{D17A4D6A-4CAA-4470-8A19-F42463C021FD}"
 EndProject

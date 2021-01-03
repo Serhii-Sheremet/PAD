@@ -1,0 +1,8 @@
+1|Pushkara Navamsa|en
+2|Vish Navamsa|en
+3|Gandanta|en
+4|Sarpa Drekkana|en
+5|Pasha Drekkana|en
+6|Nigada Drekkana|en
+7|Ashtamamsa|en
+8|Vargottama|en

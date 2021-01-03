@@ -178,8 +178,8 @@ namespace PAD
             List<Colors> defaultList = new List<Colors>();
             defaultList.Add(new Colors { Id = 1, Code = "GREEN", ARGBValue = -13631697 });
             defaultList.Add(new Colors { Id = 2, Code = "RED", ARGBValue = -45233 });
-            defaultList.Add(new Colors { Id = 3, Code = "LIGHTGREEN", ARGBValue = -3211314 });
-            defaultList.Add(new Colors { Id = 4, Code = "LIGHTRED", ARGBValue = -361121 });
+            defaultList.Add(new Colors { Id = 3, Code = "LIGHTGREEN", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 4, Code = "LIGHTRED", ARGBValue = -14650 });
             defaultList.Add(new Colors { Id = 5, Code = "PINK", ARGBValue = -16181 });
             defaultList.Add(new Colors { Id = 6, Code = "JOGAMERGE", ARGBValue = -3211314 });
             defaultList.Add(new Colors { Id = 7, Code = "MUHURTAMERGE", ARGBValue = -16181 });
