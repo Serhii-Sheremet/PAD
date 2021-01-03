@@ -31,6 +31,7 @@ namespace PAD
         public static List<Nakshatra> _nakshatraList;
         public static List<NakshatraDescription> _nakshatraDescList;
         public static List<Pada> _padaList;
+        public static List<SpecialNavamsha> _specNavamshaList;
         public static List<TaraBala> _taraBalaList;
         public static List<TaraBalaDescription> _taraBalaDescList;
         public static List<Tithi> _tithiList;
@@ -831,6 +832,41 @@ namespace PAD
                                     SpecialNavamsha = reader.StringValue(4),
                                     Navamsha = reader.IntValue(5),
                                     ColorId = reader.IntValue(6)
+                                };
+                                entityList.Add(temp);
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
+
+        public static List<SpecialNavamsha> GetSpecNavamshaList()
+        {
+            List<SpecialNavamsha> entityList = new List<SpecialNavamsha>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select ID, SPECIALNAVAMSHAID, NAME, LANGUAGECODE from SPECIALNAVAMSHA_DESC order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                SpecialNavamsha temp = new SpecialNavamsha
+                                {
+                                    Id = reader.IntValue(0),
+                                    SpeciaNavamshaId = reader.IntValue(1),
+                                    Name = reader.StringValue(2),
+                                    LanguageCode = reader.StringValue(3)
                                 };
                                 entityList.Add(temp);
                             }

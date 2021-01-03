@@ -289,6 +289,7 @@ namespace PAD
             CacheLoad._nakshatraList = CacheLoad.GetNakshatrasList();
             CacheLoad._nakshatraDescList = CacheLoad.GetNakshatraDescList();
             CacheLoad._padaList = CacheLoad.GetPadaList();
+            CacheLoad._specNavamshaList = CacheLoad.GetSpecNavamshaList();
             CacheLoad._taraBalaList = CacheLoad.GetTaraBalaList();
             CacheLoad._taraBalaDescList = CacheLoad.GetTaraBalaDescList();
             CacheLoad._tithiList = CacheLoad.GetTithiList();
@@ -3871,26 +3872,30 @@ namespace PAD
         {
             height = 0;
             DataGridView dgv = null;
+
+            Font headerFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+
             switch (tEnt)
             {
                 case TranzitEntity.TENakshatra:
-                    dgv = PrepareNakshatraDataGridView(cList, width, out height, langCode);
+                    dgv = PrepareNakshatraDataGridView(cList, width, out height, headerFont, textFont, langCode);
                     break;
 
                 case TranzitEntity.TETaraBala:
-                    dgv = PrepareTaraBalaDataGridView(cList, width, out height, langCode);
+                    dgv = PrepareTaraBalaDataGridView(cList, width, out height, headerFont, textFont, langCode);
                     break;
 
                 case TranzitEntity.TETithi:
-                    dgv = PrepareTithiDataGridView(cList, width, out height, langCode);
+                    dgv = PrepareTithiDataGridView(cList, width, out height, headerFont, textFont, langCode);
                     break;
 
                 case TranzitEntity.TEKarana:
-                    dgv = PrepareKaranaDataGridView(cList, width, out height, langCode);
+                    dgv = PrepareKaranaDataGridView(cList, width, out height, headerFont, textFont, langCode);
                     break;
 
                 case TranzitEntity.TENityaYoga:
-                    dgv = PrepareNityaYogaDataGridView(cList, width, out height, langCode);
+                    dgv = PrepareNityaYogaDataGridView(cList, width, out height, headerFont, textFont, langCode);
                     break;
             }
 
@@ -3901,7 +3906,7 @@ namespace PAD
             toolTip.AutoClose = true;
         }
 
-        private DataGridView PrepareNakshatraDataGridView(List<Calendar> cList, int width, out int height, ELanguage langCode)
+        private DataGridView PrepareNakshatraDataGridView(List<Calendar> cList, int width, out int height, Font headerFont, Font textFont, ELanguage langCode)
         {
             height = 0;
             DataGridView dgv = new DataGridView();
@@ -3911,8 +3916,8 @@ namespace PAD
             {
                 //DGV build
                 dgv.AutoGenerateColumns = false;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-                dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
 
                 DataGridViewColumn column = new DataGridViewColumn();
                 column.DataPropertyName = "DateStart";
@@ -3992,7 +3997,7 @@ namespace PAD
             return dgv;
         }
 
-        public DataGridView PrepareTaraBalaDataGridView(List<Calendar> cList, int width, out int height, ELanguage langCode)
+        public DataGridView PrepareTaraBalaDataGridView(List<Calendar> cList, int width, out int height, Font headerFont, Font textFont, ELanguage langCode)
         {
             height = 0;
             DataGridView dgv = new DataGridView();
@@ -4002,8 +4007,8 @@ namespace PAD
             {
                 //DGV build
                 dgv.AutoGenerateColumns = false;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-                dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
 
                 DataGridViewColumn column = new DataGridViewColumn();
                 column.DataPropertyName = "DateStart";
@@ -4067,7 +4072,7 @@ namespace PAD
             return dgv;
         }
 
-        public DataGridView PrepareTithiDataGridView(List<Calendar> cList, int width, out int height, ELanguage langCode)
+        public DataGridView PrepareTithiDataGridView(List<Calendar> cList, int width, out int height, Font headerFont, Font textFont, ELanguage langCode)
         {
             height = 0;
             DataGridView dgv = new DataGridView();
@@ -4077,8 +4082,8 @@ namespace PAD
             {
                 //DGV build
                 dgv.AutoGenerateColumns = false;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-                dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
 
                 DataGridViewColumn column = new DataGridViewColumn();
                 column.DataPropertyName = "DateStart";
@@ -4150,7 +4155,7 @@ namespace PAD
             return dgv;
         }
 
-        public DataGridView PrepareKaranaDataGridView(List<Calendar> cList, int width, out int height, ELanguage langCode)
+        public DataGridView PrepareKaranaDataGridView(List<Calendar> cList, int width, out int height, Font headerFont, Font textFont, ELanguage langCode)
         {
             height = 0;
             DataGridView dgv = new DataGridView();
@@ -4160,8 +4165,8 @@ namespace PAD
             {
                 //DGV build
                 dgv.AutoGenerateColumns = false;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-                dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
 
                 DataGridViewColumn column = new DataGridViewColumn();
                 column.DataPropertyName = "DateStart";
@@ -4225,7 +4230,7 @@ namespace PAD
             return dgv;
         }
 
-        private DataGridView PrepareNityaYogaDataGridView(List<Calendar> cList, int width, out int height, ELanguage langCode)
+        private DataGridView PrepareNityaYogaDataGridView(List<Calendar> cList, int width, out int height, Font headerFont, Font textFont, ELanguage langCode)
         {
             height = 0;
             DataGridView dgv = new DataGridView();
@@ -4235,8 +4240,8 @@ namespace PAD
             {
                 //DGV build
                 dgv.AutoGenerateColumns = false;
-                dgv.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-                dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
 
                 DataGridViewColumn column = new DataGridViewColumn();
                 column.DataPropertyName = "DateStart";

@@ -925,8 +925,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -983,7 +985,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1030,8 +1032,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1088,7 +1092,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1135,8 +1139,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1193,7 +1199,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1240,8 +1246,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1298,7 +1306,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1345,8 +1353,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1403,7 +1413,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1450,8 +1460,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1508,7 +1520,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1555,8 +1567,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1613,7 +1627,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1678,8 +1692,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1736,7 +1752,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1801,8 +1817,10 @@ namespace PAD
                         string pName = CacheLoad._planetDescList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        int padaNum = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().PadaNumber;
-                        int navamsha = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault().Navamsha;
+                        Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
+                        int padaNum = sPada.PadaNumber;
+                        int navamsha = sPada.Navamsha;
+                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1859,7 +1877,7 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
                             desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
@@ -1877,6 +1895,31 @@ namespace PAD
             return ttEList;
         }
 
+        private string GetSpecNavamsha(Pada sPada, ELanguage sLang)
+        {
+            try
+            {
+                string specNavamsha = string.Empty;
+                var row = sPada.SpecialNavamsha.Split(new char[] { ',' });
+                int[] idList = new int[row.Length];
+                for (int i = 0; i < row.Length; i++)
+                {
+                    idList[i] = Convert.ToInt32(row[i]);
+                }
+                for (int i = 0; i < idList.Length; i++)
+                {
+                    string text = CacheLoad._specNavamshaList.Where(r => r.SpeciaNavamshaId == idList[i] && r.LanguageCode.Equals(sLang.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                    specNavamsha += text + ", ";
+                }
+                specNavamsha = specNavamsha.Substring(0, specNavamsha.Length - 2);
+                return (", " + specNavamsha);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
         private void DayViewToolTipCreationSystem(EDVNames group, ELanguage lCode)
         {
             DateTime startDate = dayView.SelectedAppointment.StartDate;
@@ -1885,10 +1928,6 @@ namespace PAD
             Font titleFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTITLE)), 12, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTITLE));
             Font timeFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTIME)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTIME));
             Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
-
-            //Font titleFont = new Font("Segoe UI", 12, FontStyle.Bold);
-            //Font timeFont = new Font("Segoe UI", 10, FontStyle.Regular);
-            //Font textFont = new Font("Segoe UI", 10, FontStyle.Italic);
 
             // getting system event info
             int formWidth = 600, formHeight = 0;

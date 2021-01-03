@@ -862,7 +862,12 @@ namespace PAD
         {
             if (textBoxProfileName.Text.Equals(string.Empty))
             {
-                frmShowMessage.Show(Utility.GetLocalizedText("Enter profile name", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+                frmShowMessage.Show(Utility.GetLocalizedText("Enter profile name.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+                return;
+            }
+            if (textBoxLivingPlace.Text.Equals(string.Empty))
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Choose place of living.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
                 return;
             }
 

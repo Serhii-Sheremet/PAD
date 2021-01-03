@@ -56,6 +56,10 @@ Locations|Locations|en
 Locations|Населенные пункты|ru
 Profiles|Profiles|en
 Profiles|Профили|ru
+Enter profile name.|Enter profile name.|en
+Enter profile name.|Введите имя профиля.|ru
+Choose place of living.|Choose place of living.|en
+Choose place of living.|Выберите место проживания.|ru
 Year's tranzits|Year's tranzits|en
 Year's tranzits|Транзиты на год|ru
 Search:|Search:|en
