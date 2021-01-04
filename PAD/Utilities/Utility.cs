@@ -776,6 +776,28 @@ namespace PAD
             return newDate;
         }
 
+        public static DateTime ShiftDateBackByDaylightDelta(DateTime date, TimeZoneInfo.AdjustmentRule[] adjustmentRules)
+        {
+            DateTime newDate = date;
+            TimeZoneInfo.TransitionTime daylightStart = new TimeZoneInfo.TransitionTime(), daylightEnd = new TimeZoneInfo.TransitionTime();
+            TimeSpan daylightDelta = new TimeSpan(0);
+            foreach (var adjustmentRule in adjustmentRules)
+            {
+                if (date >= adjustmentRule.DateStart && date <= adjustmentRule.DateEnd)
+                {
+                    daylightStart = adjustmentRule.DaylightTransitionStart;
+                    daylightEnd = adjustmentRule.DaylightTransitionEnd;
+                    daylightDelta = adjustmentRule.DaylightDelta;
+                }
+            }
+            if (daylightStart.Day != 0 && daylightStart.Month != 0 && daylightStart.Week != 0)
+            {
+                if (date >= GetAdjustmentDate(daylightStart, date.Year) && date <= GetAdjustmentDate(daylightEnd, date.Year))
+                    newDate = newDate.Add(-daylightDelta);
+            }
+            return newDate;
+        }
+
         public static DateTime? CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
             DateTime? sunrise = null;

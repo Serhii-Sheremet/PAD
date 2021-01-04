@@ -298,7 +298,35 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-            
+
+            MasaDescription md = new MasaDescription();
+            List<MasaDescription> mdList = new List<MasaDescription>();
+            string[] tempMDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\MasaDesc.txt", Encoding.GetEncoding(1251));
+            for (int i = 0; i < tempMDList.Length; i++)
+            {
+                MasaDescription temp = md.ParseFile(tempMDList[i]);
+                mdList.Add(temp);
+            }
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into MASA_DESC (SHUNYAID, NAME, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, mdList.Count));
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    for (int i = 0; i < mdList.Count; i++)
+                    {
+                        command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].ShunyaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].Name });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].LanguageCode });
+                    }
+                    command.ExecuteNonQuery();
+                }
+                catch (SQLiteException ex) { AddingExceptionLabel(ex); }
+                dbCon.Close();
+            }
+
             TaraBalaDescription tbd = new TaraBalaDescription();
             List<TaraBalaDescription> tbdList = new List<TaraBalaDescription>();
             string[] tempTBDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\TarabalaDesc.txt", Encoding.GetEncoding(1251));
@@ -865,6 +893,19 @@ namespace PAD
                     lbLoad.Refresh();
                 }
             }
+            if (!CheckTableContent("SHUNYA"))
+            {
+                if (LoadShunyaIntoDB())
+                {
+                    isLoad = true;
+                    string text = "Шуньи загружены успешно.";
+                    Size tSize = TextRenderer.MeasureText(text, this.Font);
+                    if (lbWidth < tSize.Width)
+                        lbLoad.Width = tSize.Width + 10;
+                    lbLoad.Items.Add(text);
+                    lbLoad.Refresh();
+                }
+            }
             if (!CheckTableContent("TARABALA"))
             {
                 if (LoadTaraBalaIntoDB())
@@ -1406,7 +1447,42 @@ namespace PAD
             }
             return isLoaded;
         }
-        
+
+        private bool LoadShunyaIntoDB()
+        {
+            bool isLoaded = false;
+            Shunya s = new Shunya();
+            List<Shunya> sList = new List<Shunya>();
+            string[] tempSList = File.ReadAllLines(@".\Data\Files\Shunya.txt", Encoding.GetEncoding(1251));
+            for (int i = 0; i < tempSList.Length; i++)
+            {
+                Shunya temp = s.ParseFile(tempSList[i]);
+                sList.Add(temp);
+            }
+
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into SHUNYA (ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    for (int i = 0; i < sList.Count; i++)
+                    {
+                        command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ZodiakId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaNakshatra });
+                        command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaTithi });
+                    }
+                    command.ExecuteNonQuery();
+                    isLoaded = true;
+                }
+                catch (SQLiteException ex) { AddingExceptionLabel(ex); }
+                dbCon.Close();
+            }
+            return isLoaded;
+        }
+
         private bool LoadTaraBalaIntoDB()
         {
             bool isLoaded = false;

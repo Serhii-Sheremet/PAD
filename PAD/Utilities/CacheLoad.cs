@@ -32,6 +32,8 @@ namespace PAD
         public static List<NakshatraDescription> _nakshatraDescList;
         public static List<Pada> _padaList;
         public static List<SpecialNavamsha> _specNavamshaList;
+        public static List<Shunya> _shunyaList;
+        public static List<MasaDescription> _masaDescList;
         public static List<TaraBala> _taraBalaList;
         public static List<TaraBalaDescription> _taraBalaDescList;
         public static List<Tithi> _tithiList;
@@ -865,6 +867,89 @@ namespace PAD
                                 {
                                     Id = reader.IntValue(0),
                                     SpeciaNavamshaId = reader.IntValue(1),
+                                    Name = reader.StringValue(2),
+                                    LanguageCode = reader.StringValue(3)
+                                };
+                                entityList.Add(temp);
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
+
+        public static List<Shunya> GetShunyaList()
+        {
+            List<Shunya> entityList = new List<Shunya>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select ID, ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI from SHUNYA order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Shunya temp = new Shunya
+                                {
+                                    Id = reader.IntValue(0),
+                                    ZodiakId = reader.IntValue(1),
+                                    ShunyaNakshatra = reader.StringValue(2),
+                                    ShunyaTithi = reader.StringValue(3),
+                                    ShunyaNakshatraIdArray = MakeIdsArrayFromString(reader.StringValue(2)),
+                                    ShunyaTithiIdArray = MakeIdsArrayFromString(reader.StringValue(3))
+                                };
+                                entityList.Add(temp);
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
+
+        private static int[] MakeIdsArrayFromString(string str)
+        {
+            var row = str.Split(new char[] { ',' });
+            int[] array = new int[row.Length];
+            for (int i = 0; i < row.Length; i++)
+            {
+                array[i] = Convert.ToInt32(row[i]);
+            }
+            return array;
+        }
+
+        public static List<MasaDescription> GetMasaDescList()
+        {
+            List<MasaDescription> entityList = new List<MasaDescription>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select ID, SHUNYAID, NAME, LANGUAGECODE from MASA_DESC order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                MasaDescription temp = new MasaDescription
+                                {
+                                    Id = reader.IntValue(0),
+                                    ShunyaId = reader.IntValue(1),
                                     Name = reader.StringValue(2),
                                     LanguageCode = reader.StringValue(3)
                                 };

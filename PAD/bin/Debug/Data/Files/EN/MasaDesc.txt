@@ -1,0 +1,12 @@
+1|Chaitra|en
+2|Vaisakha|en
+3|Jyeshtha|en
+4|Ashadha|en
+5|Shravana|en
+6|Bhadrapada|en
+7|Ashvina|en
+8|Kartika|en
+9|Margasira|en
+10|Pushya|en
+11|Magha|en
+12|Phalguna|en

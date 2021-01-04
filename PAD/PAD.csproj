@@ -138,6 +138,7 @@
     <Compile Include="Entities\JogaDescription.cs" />
     <Compile Include="Calendar\NityaJogaData.cs" />
     <Compile Include="Entities\LanguageDescription.cs" />
+    <Compile Include="Entities\MasaDescription.cs" />
     <Compile Include="Entities\NityaJoga.cs" />
     <Compile Include="Entities\NityaJogaDescription.cs" />
     <Compile Include="Entities\Karana.cs" />
@@ -156,6 +157,7 @@
     <Compile Include="Entities\Planet.cs" />
     <Compile Include="Calendar\PlanetData.cs" />
     <Compile Include="Entities\PlanetDescription.cs" />
+    <Compile Include="Entities\Shunya.cs" />
     <Compile Include="Entities\SpecialNavamsha.cs" />
     <Compile Include="Entities\SystemFont.cs" />
     <Compile Include="Entities\TaraBala.cs" />

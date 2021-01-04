@@ -134,6 +134,16 @@ namespace PAD
             set { datePicker.Value = value; }
         }
 
+        public List<TithiCalendar> TithiCalendarList
+        {
+            get { return _tithiCalendarList.ToList(); }
+        }
+
+        public List<PlanetCalendar> MoonZodiakCalendarList
+        {
+            get { return _moonZodiakCalendarList.ToList(); }
+        }
+
         public void SetTranzitFocus()
         {
             string tabLabel = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
@@ -290,6 +300,8 @@ namespace PAD
             CacheLoad._nakshatraDescList = CacheLoad.GetNakshatraDescList();
             CacheLoad._padaList = CacheLoad.GetPadaList();
             CacheLoad._specNavamshaList = CacheLoad.GetSpecNavamshaList();
+            CacheLoad._shunyaList = CacheLoad.GetShunyaList();
+            CacheLoad._masaDescList = CacheLoad.GetMasaDescList();
             CacheLoad._taraBalaList = CacheLoad.GetTaraBalaList();
             CacheLoad._taraBalaDescList = CacheLoad.GetTaraBalaDescList();
             CacheLoad._tithiList = CacheLoad.GetTithiList();
