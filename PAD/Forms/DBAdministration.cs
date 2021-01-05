@@ -1465,12 +1465,13 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
-                    string comm = "insert into SHUNYA (ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 4))})";
+                    string comm = "insert into SHUNYA (ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < sList.Count; i++)
                     {
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ZodiakId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ColorId });
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaNakshatra });
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaTithi });
                     }

@@ -739,12 +739,8 @@ namespace PAD
                 case EDVNames.NAKSHATRA:
                     List<Calendar> ncList = _currDay.NakshatraDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
                     List<NakshatraCalendar> clonedNakshatraList = Utility.CloneNakshatraCalendarList(ncList);
-                    //List<Calendar> tmList = _currDay.TithiDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
-                    //List<TithiCalendar> clonedTithiMList = Utility.CloneTithiCalendarList(tmList);
                     foreach (NakshatraCalendar nc in clonedNakshatraList)
                     {
-                        //int tcIndex = clonedTithiMList.FindIndex(i => i.DateStart.Between(nc.DateStart, nc.DateEnd) || )
-                        //int curMasa = FindCurrentMasaFromCurrentDate(clonedTithiMList[tcIndex].DateStart);
                         NakshatraDescription nak = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)nc.NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
                         string nakshatra = (int)nc.NakshatraCode + "." + nak.Name + " (" + nak.Upravitel + ") ";
                         desc1 = Utility.GetLocalizedText("Nature", lCode) + ": " + nak.Nature;
@@ -2131,49 +2127,7 @@ namespace PAD
             toolTip = null;
         }
 
-        private int FindCurrentMasaFromCurrentDate(DateTime date)
-        {
-            int currentMasa = 0;
-            DateTime tDate = new DateTime();
-            DateTime masaDate = new DateTime();
-            double latitude, longitude;
-            string timeZone = string.Empty;
-            if (Utility.GetGeoCoordinateByLocationId(_curProfile.PlaceOfLivingId, out latitude, out longitude))
-            {
-                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
-                TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-                TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
-
-                tDate = date.Add(-currentTimeZone.BaseUtcOffset);
-                tDate = Utility.ShiftDateBackByDaylightDelta(tDate, adjustmentRules);
-            }
-
-            List<TithiCalendar> tcList =  ((MainForm)this.MFormAccess).TithiCalendarList;
-            int index = tcList.FindIndex(i => i.DateStart == tDate);
-            for (int i = index; i > 0; i--)
-            {
-                if (tcList[i].TithiId == 1)
-                {
-                    masaDate = tcList[i].DateStart;
-                    // find masa
-
-                    break;
-                }
-            }
-            if (masaDate == DateTime.Parse("01.01.0001 00:00:00"))
-            {
-                for (int i = index; i < tcList.Count; i++)
-                {
-                    if (tcList[i].TithiId == 1)
-                    {
-                        masaDate = tcList[i].DateStart;
-                        // find masa
-                        break;
-                    }
-                }
-            }
-            return currentMasa;
-        }
+        
 
     }
 }

@@ -18,6 +18,8 @@
         SATURN = 13,
         JUPITER = 14,
         MARS = 15,
-        GRAY = 16
+        MASAGREEN = 16,
+        MASARED = 17,
+        GRAY = 18
     }
 }

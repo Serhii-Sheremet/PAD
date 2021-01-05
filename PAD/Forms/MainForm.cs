@@ -49,6 +49,7 @@ namespace PAD
         private readonly List<TithiCalendar> _tithiCalendarList;
         private readonly List<KaranaCalendar> _karanaCalendarList;
         private readonly List<NityaJogaCalendar> _nityaJogaCalendarList;
+        private readonly List<MasaCalendar> _masaCalendarList;
 
         private readonly List<PlanetCalendar> _moonZodiakCalendarList;
         private readonly List<PlanetCalendar> _moonZodiakRetroCalendarList;
@@ -201,7 +202,7 @@ namespace PAD
                 _chandraBalaCalendarList = CacheLoad.CreateChandraBalaCalendarList(_moonDataList.ToList());
                 _karanaCalendarList = CacheLoad.CreateKaranaCalendarList(_tithiCalendarList.ToList());
                 _nityaJogaCalendarList = CacheLoad.CreateNityaJogaCalendarList(_nityaJogaDataList.ToList());
-
+                
                 _moonZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MOON, _moonDataList.ToList());
                 _moonZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MOON, _moonDataList.ToList());
                 _moonNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.MOON, _moonDataList.ToList());
@@ -211,6 +212,8 @@ namespace PAD
                 _sunZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.SUN, _sunDataList.ToList());
                 _sunNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.SUN, _sunDataList.ToList());
                 _sunPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.SUN, _sunDataList.ToList());
+
+                _masaCalendarList = CreateMasaCalendarList(_tithiDataList.ToList());
 
                 _mercuryZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MERCURY, _mercuryDataList.ToList());
                 _mercuryZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MERCURY, _mercuryDataList.ToList());
@@ -323,6 +326,81 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
+        }
+
+        private List<MasaCalendar> CreateMasaCalendarList(List<TithiData> tdList)
+        {
+            List<MasaCalendar> mList = new List<MasaCalendar>();
+            int index = 0;
+            DateTime startDate = new DateTime();
+            int firstTithiId = tdList.First().TithiId;
+            if (firstTithiId > 1)
+            {
+                do
+                {
+                    if (index == 0)
+                    {
+                        startDate = new DateTime(tdList.First().Date.Year, 1, 1, 0, 0, 0);
+                    }
+                    if (tdList[index].TithiId == 1)
+                    {
+                        int shunyaId = GetShunyaIdByDate(tdList[index].Date);
+                        MasaCalendar tTemp = new MasaCalendar
+                        {
+                            DateStart = startDate,
+                            DateEnd = tdList[index].Date,
+                            ColorCode = CacheLoad.GetMasaColorById(shunyaId),
+                            ShunyaId = shunyaId
+                        };
+                        mList.Add(tTemp);
+                        startDate = tdList[index].Date;
+                    }
+                }
+                while (index < tdList.Count);
+            }
+            else
+            {
+                do
+                {
+                    if (index == 0)
+                    {
+                        startDate = tdList[index].Date;
+                    }
+                    if (tdList[index].TithiId == 1 && index > 0)
+                    {
+                        int shunyaId = GetShunyaIdByDate(tdList[index].Date);
+                        MasaCalendar tTemp = new MasaCalendar
+                        {
+                            DateStart = startDate,
+                            DateEnd = tdList[index].Date,
+                            ColorCode = CacheLoad.GetMasaColorById(shunyaId),
+                            ShunyaId = shunyaId
+                        };
+                        mList.Add(tTemp);
+                        startDate = tdList[index].Date;
+                    }
+                }
+                while (index < tdList.Count);
+            }
+            if (tdList.Last().TithiId != 1 && tdList.Last().TithiId != 30)
+            {
+                int shunyaId = GetShunyaIdByDate(startDate);
+                MasaCalendar tTemp = new MasaCalendar
+                {
+                    DateStart = startDate,
+                    DateEnd = new DateTime(tdList.Last().Date.Year, 12, 31, 23, 59, 59),
+                    ColorCode = CacheLoad.GetMasaColorById(shunyaId),
+                    ShunyaId = shunyaId
+                };
+                mList.Add(tTemp);
+            }
+            return mList;
+        }
+
+        private int GetShunyaIdByDate(DateTime date)
+        {
+            int zodiakId = (int)(_sunZodiakCalendarList.Where(i => i.DateStart <= date && i.DateEnd >= date).FirstOrDefault().ZodiakCode);
+            return CacheLoad._shunyaList.Where(i => i.ZodiakId == zodiakId).FirstOrDefault()?.Id ?? 0;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)

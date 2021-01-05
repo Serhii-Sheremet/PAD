@@ -890,7 +890,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI from SHUNYA order by ID";
+                    string comm = $"select ID, ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI from SHUNYA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -902,10 +902,11 @@ namespace PAD
                                 {
                                     Id = reader.IntValue(0),
                                     ZodiakId = reader.IntValue(1),
-                                    ShunyaNakshatra = reader.StringValue(2),
-                                    ShunyaTithi = reader.StringValue(3),
-                                    ShunyaNakshatraIdArray = MakeIdsArrayFromString(reader.StringValue(2)),
-                                    ShunyaTithiIdArray = MakeIdsArrayFromString(reader.StringValue(3))
+                                    ColorId = reader.IntValue(2),
+                                    ShunyaNakshatra = reader.StringValue(3),
+                                    ShunyaTithi = reader.StringValue(4),
+                                    ShunyaNakshatraIdArray = MakeIdsArrayFromString(reader.StringValue(3)),
+                                    ShunyaTithiIdArray = MakeIdsArrayFromString(reader.StringValue(4))
                                 };
                                 entityList.Add(temp);
                             }
@@ -2033,14 +2034,19 @@ namespace PAD
             return njcList;
         }
 
+        public static EColor GetMasaColorById(int sId)
+        {
+            return (EColor)(_shunyaList.Where(i => i.Id == sId).FirstOrDefault()?.ColorId ?? 0);
+        }
+
         public static ENityaJoga GetNityaJogaCodeByNakshatraId(int nId)
         {
-            return (ENityaJoga)(CacheLoad._nityaJogaList.Where(i => i.NakshatraId == nId).FirstOrDefault()?.Id ?? 0);
+            return (ENityaJoga)(_nityaJogaList.Where(i => i.NakshatraId == nId).FirstOrDefault()?.Id ?? 0);
         }
 
         public static EColor GetNityaJogaColorById(int nId)
         {
-            return (EColor)(CacheLoad._nityaJogaList.Where(i => i.Id == nId).FirstOrDefault()?.ColorId ?? 0);
+            return (EColor)(_nityaJogaList.Where(i => i.Id == nId).FirstOrDefault()?.ColorId ?? 0);
         }
 
         public static List<PlanetCalendar> CreatePlanetZodiakCalendarList(EPlanet planetCode, List<PlanetData> pdList)

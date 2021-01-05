@@ -114,6 +114,7 @@
     <Compile Include="Calendar\HoraCalendar.cs" />
     <Compile Include="Calendar\JogaCalendar.cs" />
     <Compile Include="Calendar\JogaColoredBlock.cs" />
+    <Compile Include="Calendar\MasaCalendar.cs" />
     <Compile Include="Calendar\Muhurta30Calendar.cs" />
     <Compile Include="Calendar\MuhurtaCalendar.cs" />
     <Compile Include="Calendar\NityaJogaCalendar.cs" />
