@@ -1580,6 +1580,23 @@ namespace PAD
             return newEList;
         }
 
+        public static List<MasaCalendar> CloneMasaCalendarList(List<MasaCalendar> mList)
+        {
+            List<MasaCalendar> newEList = new List<MasaCalendar>();
+            foreach (MasaCalendar mc in mList)
+            {
+                MasaCalendar eObj = new MasaCalendar
+                {
+                    DateStart = mc.DateStart,
+                    DateEnd = mc.DateEnd,
+                    ColorCode = mc.ColorCode,
+                    MasaId = mc.MasaId
+                };
+                newEList.Add(eObj);
+            }
+            return newEList;
+        }
+
         public static List<MuhurtaCalendar> CloneMuhurtaCalendarList(List<Calendar> mList)
         {
             List<MuhurtaCalendar> newMList = new List<MuhurtaCalendar>();

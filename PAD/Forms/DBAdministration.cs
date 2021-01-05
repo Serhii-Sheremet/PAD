@@ -298,7 +298,7 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-
+            */
             MasaDescription md = new MasaDescription();
             List<MasaDescription> mdList = new List<MasaDescription>();
             string[] tempMDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\MasaDesc.txt", Encoding.GetEncoding(1251));
@@ -313,11 +313,11 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
-                    string comm = "insert into MASA_DESC (SHUNYAID, NAME, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, mdList.Count));
+                    string comm = "insert into MASA_DESC (MASAID, NAME, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, mdList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < mdList.Count; i++)
                     {
-                        command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].ShunyaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].MasaId });
                         command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].Name });
                         command.Parameters.Add(new SQLiteParameter() { Value = mdList[i].LanguageCode });
                     }
@@ -326,7 +326,7 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-
+            /*
             TaraBalaDescription tbd = new TaraBalaDescription();
             List<TaraBalaDescription> tbdList = new List<TaraBalaDescription>();
             string[] tempTBDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\TarabalaDesc.txt", Encoding.GetEncoding(1251));
@@ -895,7 +895,7 @@ namespace PAD
             }
             if (!CheckTableContent("SHUNYA"))
             {
-                if (LoadShunyaIntoDB())
+                if (LoadMasaIntoDB())
                 {
                     isLoad = true;
                     string text = "Шуньи загружены успешно.";
@@ -1448,15 +1448,15 @@ namespace PAD
             return isLoaded;
         }
 
-        private bool LoadShunyaIntoDB()
+        private bool LoadMasaIntoDB()
         {
             bool isLoaded = false;
-            Shunya s = new Shunya();
-            List<Shunya> sList = new List<Shunya>();
-            string[] tempSList = File.ReadAllLines(@".\Data\Files\Shunya.txt", Encoding.GetEncoding(1251));
+            Masa s = new Masa();
+            List<Masa> sList = new List<Masa>();
+            string[] tempSList = File.ReadAllLines(@".\Data\Files\Masa.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempSList.Length; i++)
             {
-                Shunya temp = s.ParseFile(tempSList[i]);
+                Masa temp = s.ParseFile(tempSList[i]);
                 sList.Add(temp);
             }
 
@@ -1466,7 +1466,7 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 4))})";
-                    string comm = "insert into SHUNYA (ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
+                    string comm = "insert into MASA (ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < sList.Count; i++)
                     {

@@ -13,6 +13,8 @@ namespace PAD
         public DateTime? SunRise { get; set; }
         public DateTime? SunSet { get; set; }
 
+        public List<Calendar> MasaDayList { get; set; }
+
         //Calendars from natal moon lists
         public List<Calendar> MoonZodiakDayList { get; set; }
         public List<Calendar> MoonZodiakRetroDayList { get; set; }
@@ -201,7 +203,8 @@ namespace PAD
             List<KaranaCalendar> karanaList,
             List<ChandraBalaCalendar> chandraBalaList,
             List<NityaJogaCalendar> njList,
-            List<EclipseCalendar> eList)
+            List<EclipseCalendar> eList,
+            List<MasaCalendar> mList)
         {
             Date = date;
             IsDayOfMonth = flag;
@@ -367,6 +370,7 @@ namespace PAD
             ChandraBalaDayList = PrepareChandraBalaDayList(chandraBalaList, sPerson, date);
             NityaJogaDayList = PrepareNityaJogaDayList(njList, date);
             EclipseDayList = PrepareEclipseDayList(eList, date);
+            MasaDayList = PrepareMasaDayList(mList, date);
         }
 
         // for year's tranzits
@@ -851,8 +855,18 @@ namespace PAD
             }
             return resList;
         }
-        
 
+        private List<Calendar> PrepareMasaDayList(List<MasaCalendar> mList, DateTime date)
+        {
+            List<Calendar> resList = new List<Calendar>();
+            TimeSpan dayLong = new TimeSpan(23, 59, 59);
+            List<MasaCalendar> maList = mList.Where(i => date.Between(i.DateStart, i.DateEnd) || date.Add(dayLong).Between(i.DateStart, i.DateEnd)).ToList();
+            foreach (MasaCalendar ma in maList)
+            {
+                resList.Add(ma);
+            }
+            return resList;
+        }
 
     }
 }

@@ -303,7 +303,7 @@ namespace PAD
             CacheLoad._nakshatraDescList = CacheLoad.GetNakshatraDescList();
             CacheLoad._padaList = CacheLoad.GetPadaList();
             CacheLoad._specNavamshaList = CacheLoad.GetSpecNavamshaList();
-            CacheLoad._shunyaList = CacheLoad.GetShunyaList();
+            CacheLoad._masaList = CacheLoad.GetShunyaList();
             CacheLoad._masaDescList = CacheLoad.GetMasaDescList();
             CacheLoad._taraBalaList = CacheLoad.GetTaraBalaList();
             CacheLoad._taraBalaDescList = CacheLoad.GetTaraBalaDescList();
@@ -344,17 +344,20 @@ namespace PAD
                     }
                     if (tdList[index].TithiId == 1)
                     {
-                        int shunyaId = GetShunyaIdByDate(tdList[index].Date);
+                        int masaId = GetMasaIdByDate(tdList[index].Date) - 1;
+                        if (masaId == 0)
+                            masaId = 12;
                         MasaCalendar tTemp = new MasaCalendar
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            ColorCode = CacheLoad.GetMasaColorById(shunyaId),
-                            ShunyaId = shunyaId
+                            ColorCode = CacheLoad.GetMasaColorById(masaId),
+                            MasaId = masaId
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
                     }
+                    index++;
                 }
                 while (index < tdList.Count);
             }
@@ -368,39 +371,40 @@ namespace PAD
                     }
                     if (tdList[index].TithiId == 1 && index > 0)
                     {
-                        int shunyaId = GetShunyaIdByDate(tdList[index].Date);
+                        int masaId = GetMasaIdByDate(tdList[index].Date);
                         MasaCalendar tTemp = new MasaCalendar
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            ColorCode = CacheLoad.GetMasaColorById(shunyaId),
-                            ShunyaId = shunyaId
+                            ColorCode = CacheLoad.GetMasaColorById(masaId),
+                            MasaId = masaId
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
                     }
+                    index++;
                 }
                 while (index < tdList.Count);
             }
             if (tdList.Last().TithiId != 1 && tdList.Last().TithiId != 30)
             {
-                int shunyaId = GetShunyaIdByDate(startDate);
+                int masaId = GetMasaIdByDate(startDate);
                 MasaCalendar tTemp = new MasaCalendar
                 {
                     DateStart = startDate,
                     DateEnd = new DateTime(tdList.Last().Date.Year, 12, 31, 23, 59, 59),
-                    ColorCode = CacheLoad.GetMasaColorById(shunyaId),
-                    ShunyaId = shunyaId
+                    ColorCode = CacheLoad.GetMasaColorById(masaId),
+                    MasaId = masaId
                 };
                 mList.Add(tTemp);
             }
             return mList;
         }
 
-        private int GetShunyaIdByDate(DateTime date)
+        private int GetMasaIdByDate(DateTime date)
         {
-            int zodiakId = (int)(_sunZodiakCalendarList.Where(i => i.DateStart <= date && i.DateEnd >= date).FirstOrDefault().ZodiakCode);
-            return CacheLoad._shunyaList.Where(i => i.ZodiakId == zodiakId).FirstOrDefault()?.Id ?? 0;
+            int zodiakId = (int)(_moonZodiakCalendarList.Where(i => i.DateStart <= date && i.DateEnd >= date).FirstOrDefault().ZodiakCode);
+            return CacheLoad._masaList.Where(i => i.ZodiakId == zodiakId).FirstOrDefault()?.Id ?? 0;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -883,7 +887,7 @@ namespace PAD
             int daysInMonth = DateTime.DaysInMonth(_daysOfMonth[0].Date.Year, _daysOfMonth[0].Date.Month);
 
             _dayTranzWidth = (pictureBoxTranzits.Width * 95 / 100) / daysInMonth;
-            _lineTranzHeight = pictureBoxTranzits.Height / 43 - 1;
+            _lineTranzHeight = (pictureBoxTranzits.Height - 28) / 46;
 
             int lineWidth = _dayTranzWidth * daysInMonth;
             int labelsWidth = pictureBoxTranzits.Width - _dayTranzWidth * daysInMonth - 1;
@@ -899,9 +903,10 @@ namespace PAD
             Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANZITTEXT)), _lineTranzHeight - 6, Utility.GetFontStyleBySettings(EFontList.TRANZITTEXT), GraphicsUnit.Pixel);
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-           
+
             int posX = labelsWidth, posY = 0, nextPlanetY = 0;
-            int posYPanchanga = posY + 2 * dayOfMonthHeight + 4;
+            int posYMasa = posY + 2 * dayOfMonthHeight + 4;
+            int posYPanchanga = posYMasa + _lineTranzHeight + 4;
             int posYJoga = posYPanchanga + 6 * _lineTranzHeight + 4;
             int posYTranzits = posYJoga + _lineTranzHeight + 4;
 
@@ -915,6 +920,11 @@ namespace PAD
                 int day = Utility.GetDayOfWeekNumberFromDate(d.Date, weekSetting);
                 DrawDayOfMonth(g, pen, dayOfWeekFont, textBrush, posX, posY, _dayTranzWidth, dayOfMonthHeight, Utility.GetDaysOfWeekName(day, _activeLanguageCode, weekSetting).Substring(0, 3), d.Date, _todayDate);
                 DrawDayOfMonth(g, pen, dayOfWeekFont, textBrush, posX, posY + dayOfMonthHeight, _dayTranzWidth, dayOfMonthHeight, d.Date.Day.ToString(), d.Date, _todayDate);
+
+                // Draw masa
+                posY = posYMasa;
+                DrawLineName(g, pen, textBrush, posY, labelsWidth, _lineTranzHeight, "Masa");
+                DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MasaDayList);
 
                 // Draw panchanga
                 posY = posYPanchanga;
@@ -1234,7 +1244,20 @@ namespace PAD
                 posX = posX + _dayTranzWidth;
             }
 
-            //Setting panchanga numbers
+            // Setting masa changes
+            posX = labelsWidth;
+            posY = posYMasa;
+            foreach (Day c in _daysOfMonth)
+            {
+                SetMasaName(g, pen, textFont, textBrush, posX, posY, _dayTranzWidth, _lineTranzHeight, c.MasaDayList, c.Date);
+                posX = posX + _dayTranzWidth;
+            }
+            // Setting masa current start 
+            posX = labelsWidth;
+            posY = posYMasa;
+            SetMasaStartName(g, pen, textFont, textBrush, posX, posY, _dayTranzWidth, _lineTranzHeight, _daysOfMonth.First().MasaDayList);
+
+            // Setting panchanga numbers
             posX = labelsWidth;
             posY = posYPanchanga;
             foreach (Day c in _daysOfMonth)
@@ -1443,6 +1466,11 @@ namespace PAD
                 posX = posX + _dayTranzWidth;
             }
 
+            // Drawing Masa rectangles
+            posX = labelsWidth;
+            posY = posYMasa;
+            DrawLineRectangle(g, pen, posX, posY, lineWidth, _lineTranzHeight);
+
             // Drawing Panchanga rectangles
             posX = labelsWidth;
             posY = posYPanchanga;
@@ -1467,6 +1495,28 @@ namespace PAD
 
             pictureBoxTranzits.Image = canvas;
             _currentTranzitsImage = pictureBoxTranzits.Image;
+        }
+
+        private void SetMasaStartName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
+        {
+            if (c.Count > 0)
+            {
+                string text = c.First().GetFullName(_activeLanguageCode);
+                Size textSize = TextRenderer.MeasureText(text, font);
+                int heightPadding = (height - textSize.Height) / 2;
+                if (c.Count == 1)
+                {
+                    g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                }
+                else
+                {
+                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width <= endPosX)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                }
+            }
         }
 
         private void SetLineStartZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
@@ -1727,6 +1777,22 @@ namespace PAD
                     string text = c.GetNumber(_activeLanguageCode);
                     Size textSize = TextRenderer.MeasureText(text, font);
                     int heightPadding = (height - textSize.Height) / 2;
+                    g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                }
+            }
+        }
+
+        private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        {
+            foreach (Calendar c in cList)
+            {
+                if (c.DateStart > date)
+                {
+                    int startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
+                    string text = c.GetFullName(_activeLanguageCode);
+                    Size textSize = TextRenderer.MeasureText(text, font);
+                    int heightPadding = (height - textSize.Height) / 2;
+                    g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
                     g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
                 }
             }
@@ -2201,6 +2267,10 @@ namespace PAD
                 eclipsePeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 eclipsePeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
 
+                List<MasaCalendar> masaPeriodCalendar = Utility.CloneMasaCalendarList(_masaCalendarList.ToList());
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -2264,7 +2334,8 @@ namespace PAD
                                         karanaPeriodCalendar,
                                         chandraBalaCalendar,
                                         nityaJogaCalendar,
-                                        eclipsePeriodCalendar);
+                                        eclipsePeriodCalendar,
+                                        masaPeriodCalendar);
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);                   
                 }

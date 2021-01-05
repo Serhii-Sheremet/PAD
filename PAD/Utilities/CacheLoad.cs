@@ -32,7 +32,7 @@ namespace PAD
         public static List<NakshatraDescription> _nakshatraDescList;
         public static List<Pada> _padaList;
         public static List<SpecialNavamsha> _specNavamshaList;
-        public static List<Shunya> _shunyaList;
+        public static List<Masa> _masaList;
         public static List<MasaDescription> _masaDescList;
         public static List<TaraBala> _taraBalaList;
         public static List<TaraBalaDescription> _taraBalaDescList;
@@ -882,15 +882,15 @@ namespace PAD
             return entityList;
         }
 
-        public static List<Shunya> GetShunyaList()
+        public static List<Masa> GetShunyaList()
         {
-            List<Shunya> entityList = new List<Shunya>();
+            List<Masa> entityList = new List<Masa>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI from SHUNYA order by ID";
+                    string comm = $"select ID, ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI from MASA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -898,7 +898,7 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                Shunya temp = new Shunya
+                                Masa temp = new Masa
                                 {
                                     Id = reader.IntValue(0),
                                     ZodiakId = reader.IntValue(1),
@@ -939,7 +939,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, SHUNYAID, NAME, LANGUAGECODE from MASA_DESC order by ID";
+                    string comm = $"select ID, MASAID, NAME, LANGUAGECODE from MASA_DESC order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -950,7 +950,7 @@ namespace PAD
                                 MasaDescription temp = new MasaDescription
                                 {
                                     Id = reader.IntValue(0),
-                                    ShunyaId = reader.IntValue(1),
+                                    MasaId = reader.IntValue(1),
                                     Name = reader.StringValue(2),
                                     LanguageCode = reader.StringValue(3)
                                 };
@@ -2036,7 +2036,7 @@ namespace PAD
 
         public static EColor GetMasaColorById(int sId)
         {
-            return (EColor)(_shunyaList.Where(i => i.Id == sId).FirstOrDefault()?.ColorId ?? 0);
+            return (EColor)(_masaList.Where(i => i.Id == sId).FirstOrDefault()?.ColorId ?? 0);
         }
 
         public static ENityaJoga GetNityaJogaCodeByNakshatraId(int nId)
