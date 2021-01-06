@@ -191,7 +191,22 @@ namespace PAD
             defaultList.Add(new Colors { Id = 13, Code = "SATURN", ARGBValue = -14650 });
             defaultList.Add(new Colors { Id = 14, Code = "JUPITER", ARGBValue = -4587591 });
             defaultList.Add(new Colors { Id = 15, Code = "MARS", ARGBValue = -14650 });
-            defaultList.Add(new Colors { Id = 16, Code = "GRAY", ARGBValue = -4144960 });
+            defaultList.Add(new Colors { Id = 16, Code = "MASA1", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 17, Code = "MASA2", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 18, Code = "MASA3", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 19, Code = "MASA4", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 20, Code = "MASA5", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 21, Code = "MASA6", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 22, Code = "MASA7", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 23, Code = "MASA8", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 24, Code = "MASA9", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 25, Code = "MASA10", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 26, Code = "MASA11", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 27, Code = "MASA12", ARGBValue = -4587591 });
+            defaultList.Add(new Colors { Id = 28, Code = "SHUNYANAKSHATRA", ARGBValue = -16181 });
+            defaultList.Add(new Colors { Id = 29, Code = "SHUNIATITHI", ARGBValue = -16181 });
+            defaultList.Add(new Colors { Id = 30, Code = "SHUNYAMERGE", ARGBValue = -16181 });
+            defaultList.Add(new Colors { Id = 31, Code = "GRAY", ARGBValue = -4144960 });
 
             UpdateColorSettings(defaultList);
             CacheLoad._colorList = defaultList;

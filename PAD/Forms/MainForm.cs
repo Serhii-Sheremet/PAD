@@ -303,7 +303,7 @@ namespace PAD
             CacheLoad._nakshatraDescList = CacheLoad.GetNakshatraDescList();
             CacheLoad._padaList = CacheLoad.GetPadaList();
             CacheLoad._specNavamshaList = CacheLoad.GetSpecNavamshaList();
-            CacheLoad._masaList = CacheLoad.GetShunyaList();
+            CacheLoad._masaList = CacheLoad.GetMasaList();
             CacheLoad._masaDescList = CacheLoad.GetMasaDescList();
             CacheLoad._taraBalaList = CacheLoad.GetTaraBalaList();
             CacheLoad._taraBalaDescList = CacheLoad.GetTaraBalaDescList();
@@ -351,7 +351,6 @@ namespace PAD
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            ColorCode = CacheLoad.GetMasaColorById(masaId),
                             MasaId = masaId
                         };
                         mList.Add(tTemp);
@@ -376,7 +375,6 @@ namespace PAD
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            ColorCode = CacheLoad.GetMasaColorById(masaId),
                             MasaId = masaId
                         };
                         mList.Add(tTemp);
@@ -393,7 +391,6 @@ namespace PAD
                 {
                     DateStart = startDate,
                     DateEnd = new DateTime(tdList.Last().Date.Year, 12, 31, 23, 59, 59),
-                    ColorCode = CacheLoad.GetMasaColorById(masaId),
                     MasaId = masaId
                 };
                 mList.Add(tTemp);
@@ -1784,6 +1781,7 @@ namespace PAD
 
         private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
         {
+            string curMasa = cList.First().GetFullName(_activeLanguageCode);
             foreach (Calendar c in cList)
             {
                 if (c.DateStart > date)
@@ -1792,8 +1790,12 @@ namespace PAD
                     string text = c.GetFullName(_activeLanguageCode);
                     Size textSize = TextRenderer.MeasureText(text, font);
                     int heightPadding = (height - textSize.Height) / 2;
-                    g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
-                    g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                    if (!text.Equals(curMasa))
+                    {
+                        g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                        g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                        curMasa = text;
+                    }
                 }
             }
         }
@@ -2268,8 +2270,8 @@ namespace PAD
                 eclipsePeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<MasaCalendar> masaPeriodCalendar = Utility.CloneMasaCalendarList(_masaCalendarList.ToList());
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
@@ -3215,7 +3217,8 @@ namespace PAD
                 pictureBoxTranzits.Image = canvas;
 
                 // Finding line by position
-                int posYPanchanga = posY + 2 * _lineTranzHeight + 4;
+                int posYMasa = posY + 2 * _lineTranzHeight + 4;
+                int posYPanchanga = posYMasa + _lineTranzHeight + 4;
                 int posYYoga = posYPanchanga + 6 * _lineTranzHeight + 4;
                 int posYMoon = posYYoga + _lineTranzHeight + 4;
                 int posYSun = posYMoon + 4 * _lineTranzHeight + 4;

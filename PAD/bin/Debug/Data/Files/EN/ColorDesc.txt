@@ -13,4 +13,19 @@
 13|Hora: Saturn|en
 14|Hora: Jupiter|en
 15|Hora: Mars|en
-16|Gray|en
+16|Masa: Chaitra|en
+17|Masa: Vaisakha|en
+18|Masa: Jyeshtha|en
+19|Masa: Ashadha|en
+20|Masa: Shravana|en
+21|Masa: Bhadrapada|en
+22|Masa: Ashvina|en
+23|Masa: Kartika|en
+24|Masa: Margasira|en
+25|Masa: Pushya|en
+26|Masa: Magha|en
+27|Masa: Phalguna|en
+28|Shunya: Nakshatra|en
+29|Shunya: Tithi|en
+30|Shunya: Nakshatra+Tithi|en
+31|Gray|en

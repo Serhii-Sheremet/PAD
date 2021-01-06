@@ -18,8 +18,21 @@
         SATURN = 13,
         JUPITER = 14,
         MARS = 15,
-        MASAGREEN = 16,
-        MASARED = 17,
-        GRAY = 18
+        MASA1 = 16,
+        MASA2 = 17,
+        MASA3 = 18,
+        MASA4 = 19,
+        MASA5 = 20,
+        MASA6 = 21,
+        MASA7 = 22,
+        MASA8 = 23,
+        MASA9 = 24,
+        MASA10 = 25,
+        MASA11 = 26,
+        MASA12 = 27,
+        SHUNYANAKSHATRA = 28,
+        SHUNIATITHI = 29,
+        SHUNYAMERGE = 30,
+        GRAY = 31
     }
 }

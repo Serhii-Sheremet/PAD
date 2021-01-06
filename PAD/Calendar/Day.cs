@@ -370,7 +370,7 @@ namespace PAD
             ChandraBalaDayList = PrepareChandraBalaDayList(chandraBalaList, sPerson, date);
             NityaJogaDayList = PrepareNityaJogaDayList(njList, date);
             EclipseDayList = PrepareEclipseDayList(eList, date);
-            MasaDayList = PrepareMasaDayList(mList, date);
+            MasaDayList = PrepareMasaDayList(mList, NakshatraDayList.ToList(), TithiDayList.ToList(), date);
         }
 
         // for year's tranzits
@@ -856,17 +856,157 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PrepareMasaDayList(List<MasaCalendar> mList, DateTime date)
+        private List<Calendar> PrepareMasaDayList(List<MasaCalendar> mList, List<Calendar> nList, List<Calendar> tList, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
             TimeSpan dayLong = new TimeSpan(23, 59, 59);
             List<MasaCalendar> maList = mList.Where(i => date.Between(i.DateStart, i.DateEnd) || date.Add(dayLong).Between(i.DateStart, i.DateEnd)).ToList();
-            foreach (MasaCalendar ma in maList)
+            List<MasaCalendar> maClonedList = Utility.CloneMasaCalendarList(maList);
+            List<NakshatraCalendar> nClonedList = Utility.CloneNakshatraCalendarList(nList);
+            List<TithiCalendar> tClonedList = Utility.CloneTithiCalendarList(tList);
+            foreach (MasaCalendar ma in maClonedList)
             {
-                resList.Add(ma);
+                //mega logic for making masa color
+                ma.ColorCode = Utility.GetMasaColorById(ma.MasaId);
+                foreach (NakshatraCalendar nc in nClonedList)
+                {
+                    if (ma.MasaId == 1 && (nc.NakshatraCode == ENakshatra.ASHWINI || nc.NakshatraCode == ENakshatra.ROHINI))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 2 && (nc.NakshatraCode == ENakshatra.CHITRA || nc.NakshatraCode == ENakshatra.SWATI))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 3 && (nc.NakshatraCode == ENakshatra.PUNARVASU || nc.NakshatraCode == ENakshatra.PUSHYA || nc.NakshatraCode == ENakshatra.UTTARAASHADHA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 4 && (nc.NakshatraCode == ENakshatra.PURVAPHALGUNI || nc.NakshatraCode == ENakshatra.DHANISHTA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 5 && (nc.NakshatraCode == ENakshatra.PURVAASHADHA || nc.NakshatraCode == ENakshatra.UTTARAASHADHA || nc.NakshatraCode == ENakshatra.SHRAVANA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 6 && (nc.NakshatraCode == ENakshatra.SHATABHISHA || nc.NakshatraCode == ENakshatra.REVATI))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 7 && nc.NakshatraCode == ENakshatra.PURVABHADRAPADA)
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 8 && (nc.NakshatraCode == ENakshatra.KRITTIKA || nc.NakshatraCode == ENakshatra.MRIGASHIRA || nc.NakshatraCode == ENakshatra.PUSHYA || nc.NakshatraCode == ENakshatra.MAGHA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 9 && (nc.NakshatraCode == ENakshatra.CHITRA || nc.NakshatraCode == ENakshatra.VISAKHA || nc.NakshatraCode == ENakshatra.ANURADHA || nc.NakshatraCode == ENakshatra.UTTARABHADRAPADA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 10 && (nc.NakshatraCode == ENakshatra.ASHWINI || nc.NakshatraCode == ENakshatra.ARDRA || nc.NakshatraCode == ENakshatra.ASHLESHA || nc.NakshatraCode == ENakshatra.HASTA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 11 && (nc.NakshatraCode == ENakshatra.MULA || nc.NakshatraCode == ENakshatra.SHRAVANA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else if (ma.MasaId == 12 && (nc.NakshatraCode == ENakshatra.BHARANI || nc.NakshatraCode == ENakshatra.JYESHTHA))
+                    {
+                        resList = ReorganizeMasaDayList(resList, ma, nc, date);
+                    }
+                    else
+                    {
+                        resList.Add(ma);
+                    }
+                }
+                
             }
             return resList;
         }
+
+        private List<Calendar> ReorganizeMasaDayList(List<Calendar> curMasaList, MasaCalendar cMObj, NakshatraCalendar cNObj, DateTime date)
+        {
+            TimeSpan dayLong = new TimeSpan(23, 59, 59);
+            List<Calendar> resList = curMasaList;
+            DateTime newDateStart = new DateTime();
+            DateTime newDateEnd = new DateTime();
+            if (cMObj.DateStart <= date && cMObj.DateEnd >= date.Add(dayLong))
+            {
+                if (cNObj.DateStart >= cMObj.DateStart && cNObj.DateStart <= date)
+                {
+                    newDateStart = date;
+                }
+                if (cNObj.DateStart > cMObj.DateStart && cNObj.DateStart > date)
+                {
+                    newDateStart = cNObj.DateStart;
+                }
+            }
+            if (cMObj.DateStart <= date && cMObj.DateEnd > date)
+            {
+                if (cNObj.DateStart >= cMObj.DateStart)
+                {
+                    newDateStart = cNObj.DateStart;
+                }
+                if (cNObj.DateStart <= cMObj.DateStart)
+                {
+                    newDateStart = date;
+                }
+            }
+            if (cMObj.DateStart > date && cMObj.DateEnd >= date.Add(dayLong))
+            {
+                if (cNObj.DateStart >= cMObj.DateStart)
+                {
+                    newDateStart = cNObj.DateStart;
+                }
+                if (cNObj.DateStart <= cMObj.DateStart)
+                {
+                    newDateStart = date;
+                }
+            }
+            if (cMObj.DateEnd >= date.Add(dayLong))
+            {
+                if (cNObj.DateEnd >= date.Add(dayLong))
+                {
+                    newDateEnd = date.Add(dayLong);
+                }
+                if (cNObj.DateEnd <= cMObj.DateEnd)
+                {
+                    newDateEnd = cNObj.DateEnd;
+                }
+            }
+            if (cMObj.DateEnd <= date.Add(dayLong))
+            {
+                if (cNObj.DateEnd >= cMObj.DateEnd)
+                {
+                    newDateEnd = cMObj.DateEnd;
+                }
+                if (cNObj.DateEnd <= cMObj.DateEnd)
+                {
+                    newDateEnd = cNObj.DateEnd;
+                }
+            }
+            MasaCalendar mTemp = new MasaCalendar
+            {
+                DateStart = newDateStart,
+                DateEnd = newDateEnd,
+                ColorCode = EColor.SHUNYANAKSHATRA,
+                MasaId = cMObj.MasaId
+            };
+            if (resList.Count > 0)
+            {
+                if (resList.Last().DateEnd > mTemp.DateStart)
+                {
+                    resList.Last().DateEnd = mTemp.DateStart;
+                }
+            }
+            resList.Add(mTemp);
+            return resList;
+        }
+
 
     }
 }

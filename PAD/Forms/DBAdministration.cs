@@ -298,7 +298,7 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-            */
+            
             MasaDescription md = new MasaDescription();
             List<MasaDescription> mdList = new List<MasaDescription>();
             string[] tempMDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\MasaDesc.txt", Encoding.GetEncoding(1251));
@@ -326,7 +326,7 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-            /*
+            
             TaraBalaDescription tbd = new TaraBalaDescription();
             List<TaraBalaDescription> tbdList = new List<TaraBalaDescription>();
             string[] tempTBDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\TarabalaDesc.txt", Encoding.GetEncoding(1251));
@@ -893,12 +893,12 @@ namespace PAD
                     lbLoad.Refresh();
                 }
             }
-            if (!CheckTableContent("SHUNYA"))
+            if (!CheckTableContent("MASA"))
             {
                 if (LoadMasaIntoDB())
                 {
                     isLoad = true;
-                    string text = "Шуньи загружены успешно.";
+                    string text = "Маса загружены успешно.";
                     Size tSize = TextRenderer.MeasureText(text, this.Font);
                     if (lbWidth < tSize.Width)
                         lbLoad.Width = tSize.Width + 10;
@@ -1465,13 +1465,12 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 4))})";
-                    string comm = "insert into MASA (ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into MASA (ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI) values " + String.Join(", ", Enumerable.Repeat(parameters, sList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < sList.Count; i++)
                     {
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ZodiakId });
-                        command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ColorId });
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaNakshatra });
                         command.Parameters.Add(new SQLiteParameter() { Value = sList[i].ShunyaTithi });
                     }

@@ -882,7 +882,7 @@ namespace PAD
             return entityList;
         }
 
-        public static List<Masa> GetShunyaList()
+        public static List<Masa> GetMasaList()
         {
             List<Masa> entityList = new List<Masa>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -890,7 +890,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, ZODIAKID, COLORID, SHUNYANAKSHATRA, SHUNYATITHI from MASA order by ID";
+                    string comm = $"select ID, ZODIAKID, SHUNYANAKSHATRA, SHUNYATITHI from MASA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -902,11 +902,10 @@ namespace PAD
                                 {
                                     Id = reader.IntValue(0),
                                     ZodiakId = reader.IntValue(1),
-                                    ColorId = reader.IntValue(2),
-                                    ShunyaNakshatra = reader.StringValue(3),
-                                    ShunyaTithi = reader.StringValue(4),
-                                    ShunyaNakshatraIdArray = MakeIdsArrayFromString(reader.StringValue(3)),
-                                    ShunyaTithiIdArray = MakeIdsArrayFromString(reader.StringValue(4))
+                                    ShunyaNakshatra = reader.StringValue(2),
+                                    ShunyaTithi = reader.StringValue(3),
+                                    ShunyaNakshatraIdArray = MakeIdsArrayFromString(reader.StringValue(2)),
+                                    ShunyaTithiIdArray = MakeIdsArrayFromString(reader.StringValue(3))
                                 };
                                 entityList.Add(temp);
                             }
@@ -2032,11 +2031,6 @@ namespace PAD
                 index++;
             }
             return njcList;
-        }
-
-        public static EColor GetMasaColorById(int sId)
-        {
-            return (EColor)(_masaList.Where(i => i.Id == sId).FirstOrDefault()?.ColorId ?? 0);
         }
 
         public static ENityaJoga GetNityaJogaCodeByNakshatraId(int nId)

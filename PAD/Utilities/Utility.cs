@@ -1690,6 +1690,38 @@ namespace PAD
             return FontStyle.Regular;
         }
 
+        public static EColor GetMasaColorById(int id)
+        {
+            switch (id)
+            {
+                case 1:
+                    return EColor.MASA1;
+                case 2:
+                    return EColor.MASA2;
+                case 3:
+                    return EColor.MASA3;
+                case 4:
+                    return EColor.MASA4;
+                case 5:
+                    return EColor.MASA5;
+                case 6:
+                    return EColor.MASA6;
+                case 7:
+                    return EColor.MASA7;
+                case 8:
+                    return EColor.MASA8;
+                case 9:
+                    return EColor.MASA9;
+                case 10:
+                    return EColor.MASA10;
+                case 11:
+                    return EColor.MASA11;
+                case 12:
+                    return EColor.MASA12;
+            }
+            return EColor.MASA1;
+        }
+
         public static int CalculateRectangleHeightWithTextWrapping(string wholeText, Font font, int width)
         {
             Rectangle descrRect = new Rectangle();
