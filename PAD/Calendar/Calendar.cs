@@ -58,5 +58,10 @@ namespace PAD
             return string.Empty;
         }
 
+        public virtual EShunya GetShunyaCode()
+        {
+            return EShunya.NOSHUNYA;
+        }
+
     }
 }

@@ -50,6 +50,8 @@ namespace PAD
         private readonly List<KaranaCalendar> _karanaCalendarList;
         private readonly List<NityaJogaCalendar> _nityaJogaCalendarList;
         private readonly List<MasaCalendar> _masaCalendarList;
+        private readonly List<ShunyaNakshatraCalendar> _shunyaNakshatraCalendarList;
+        private readonly List<ShunyaTithiCalendar> _shunyaTithiCalendarList;
 
         private readonly List<PlanetCalendar> _moonZodiakCalendarList;
         private readonly List<PlanetCalendar> _moonZodiakRetroCalendarList;
@@ -214,6 +216,8 @@ namespace PAD
                 _sunPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.SUN, _sunDataList.ToList());
 
                 _masaCalendarList = CreateMasaCalendarList(_tithiDataList.ToList());
+                _shunyaNakshatraCalendarList = CreateShunyaNakshatraCalendarList(_masaCalendarList.ToList(), _nakshatraCalendarList.ToList());
+                _shunyaTithiCalendarList = CreateShunyaTithiCalendarList(_masaCalendarList.ToList(), _tithiCalendarList.ToList());
 
                 _mercuryZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MERCURY, _mercuryDataList.ToList());
                 _mercuryZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MERCURY, _mercuryDataList.ToList());
@@ -328,6 +332,176 @@ namespace PAD
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
         }
 
+        private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)
+        {
+            List<ShunyaTithiCalendar> stcList = new List<ShunyaTithiCalendar>();
+            List<MasaCalendar> mcClonedList = Utility.CloneMasaCalendarList(mcList);
+            List<TithiCalendar> tcClonedList = Utility.CloneTithiCalendarList(tcList);
+            foreach (MasaCalendar mc in mcClonedList)
+            {
+                foreach (TithiCalendar tc in tcClonedList)
+                {
+                    if (mc.MasaId == 1 && (tc.TithiId == 8 || tc.TithiId == 9 || tc.TithiId == 11 || tc.TithiId == 23 || tc.TithiId == 24 || tc.TithiId == 26) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 2 && (tc.TithiId == 12 || tc.TithiId == 27) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 3 && (tc.TithiId == 13 || tc.TithiId == 28 || tc.TithiId == 29) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 4 && (tc.TithiId == 6 || tc.TithiId == 7 || tc.TithiId == 21) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 5 && (tc.TithiId == 2 || tc.TithiId == 3 || tc.TithiId == 15 || tc.TithiId == 17 || tc.TithiId == 18 || tc.TithiId == 30) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 6 && (tc.TithiId == 1 || tc.TithiId == 2 || tc.TithiId == 7 || tc.TithiId == 16 || tc.TithiId == 17 || tc.TithiId == 22) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 7 && (tc.TithiId == 9 || tc.TithiId == 10 || tc.TithiId == 11 || tc.TithiId == 24 || tc.TithiId == 25 || tc.TithiId == 26) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 8 && (tc.TithiId == 5 || tc.TithiId == 14 || tc.TithiId == 20) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 9 && (tc.TithiId == 2 || tc.TithiId == 7 || tc.TithiId == 8 || tc.TithiId == 9 || tc.TithiId == 17 || tc.TithiId == 22 || tc.TithiId == 23 || tc.TithiId == 24) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 10 && (tc.TithiId == 1 || tc.TithiId == 4 || tc.TithiId == 5 || tc.TithiId == 16 || tc.TithiId == 19 || tc.TithiId == 20) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 11 && (tc.TithiId == 4 || tc.TithiId == 6 || tc.TithiId == 10 || tc.TithiId == 19 || tc.TithiId == 20 || tc.TithiId == 25) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                    if (mc.MasaId == 12 && (tc.TithiId == 3 || tc.TithiId == 14 || tc.TithiId == 19 || tc.TithiId == 29) && (tc.DateStart.Between(mc.DateStart, mc.DateEnd) || tc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        stcList.Add(CreateShunyaTithiPeriod(mc, tc));
+                    }
+                }
+            }
+            return stcList;
+        }
+
+        private List<ShunyaNakshatraCalendar> CreateShunyaNakshatraCalendarList(List<MasaCalendar> mcList, List<NakshatraCalendar> ncList)
+        {
+            List<ShunyaNakshatraCalendar> sncList = new List<ShunyaNakshatraCalendar>();
+            List<MasaCalendar> mcClonedList = Utility.CloneMasaCalendarList(mcList);
+            List<NakshatraCalendar> ncClonedList = Utility.CloneNakshatraCalendarList(ncList);
+            foreach (MasaCalendar mc in mcClonedList)
+            {
+                foreach (NakshatraCalendar nc in ncClonedList)
+                {
+                    if (mc.MasaId == 1 && (nc.NakshatraCode == ENakshatra.ASHWINI || nc.NakshatraCode == ENakshatra.ROHINI) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 2 && (nc.NakshatraCode == ENakshatra.CHITRA || nc.NakshatraCode == ENakshatra.SWATI) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 3 && (nc.NakshatraCode == ENakshatra.PUNARVASU || nc.NakshatraCode == ENakshatra.PUSHYA || nc.NakshatraCode == ENakshatra.UTTARAASHADHA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 4 && (nc.NakshatraCode == ENakshatra.PURVAPHALGUNI || nc.NakshatraCode == ENakshatra.DHANISHTA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 5 && (nc.NakshatraCode == ENakshatra.PURVAASHADHA || nc.NakshatraCode == ENakshatra.UTTARAASHADHA || nc.NakshatraCode == ENakshatra.SHRAVANA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 6 && (nc.NakshatraCode == ENakshatra.SHATABHISHA || nc.NakshatraCode == ENakshatra.REVATI) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 7 && nc.NakshatraCode == ENakshatra.PURVABHADRAPADA && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 8 && (nc.NakshatraCode == ENakshatra.KRITTIKA || nc.NakshatraCode == ENakshatra.MRIGASHIRA || nc.NakshatraCode == ENakshatra.PUSHYA || nc.NakshatraCode == ENakshatra.MAGHA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 9 && (nc.NakshatraCode == ENakshatra.CHITRA || nc.NakshatraCode == ENakshatra.VISAKHA || nc.NakshatraCode == ENakshatra.ANURADHA || nc.NakshatraCode == ENakshatra.UTTARABHADRAPADA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 10 && (nc.NakshatraCode == ENakshatra.ASHWINI || nc.NakshatraCode == ENakshatra.ARDRA || nc.NakshatraCode == ENakshatra.ASHLESHA || nc.NakshatraCode == ENakshatra.HASTA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 11 && (nc.NakshatraCode == ENakshatra.MULA || nc.NakshatraCode == ENakshatra.SHRAVANA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                    else if (mc.MasaId == 12 && (nc.NakshatraCode == ENakshatra.BHARANI || nc.NakshatraCode == ENakshatra.JYESHTHA) && (nc.DateStart.Between(mc.DateStart, mc.DateEnd) || nc.DateEnd.Between(mc.DateStart, mc.DateEnd)))
+                    {
+                        sncList.Add(CreateShunyaNakshatraPeriod(mc, nc));
+                    }
+                }
+            }
+            return sncList;
+        }
+
+        private ShunyaTithiCalendar CreateShunyaTithiPeriod(MasaCalendar mc, TithiCalendar tc)
+        {
+            DateTime newDateStart = new DateTime();
+            DateTime newDateEnd = new DateTime();
+            if (tc.DateStart <= mc.DateStart)
+            {
+                newDateStart = mc.DateStart;
+            }
+            if (tc.DateStart > mc.DateStart)
+            {
+                newDateStart = tc.DateStart;
+            }
+            if (tc.DateEnd >= mc.DateEnd)
+            {
+                newDateEnd = mc.DateEnd;
+            }
+            if (tc.DateEnd < mc.DateEnd)
+            {
+                newDateEnd = tc.DateEnd;
+            }
+            return new ShunyaTithiCalendar { DateStart = newDateStart, DateEnd = newDateEnd, ColorCode = EColor.SHUNIATITHI, MasaId = mc.MasaId, TithiId = tc.TithiId, ShunyaCode = EShunya.SHUNYATITHI };
+        }
+
+        private ShunyaNakshatraCalendar CreateShunyaNakshatraPeriod(MasaCalendar mc, NakshatraCalendar nc)
+        {
+            DateTime newDateStart = new DateTime();
+            DateTime newDateEnd = new DateTime();
+            if (nc.DateStart <= mc.DateStart)
+            {
+                newDateStart = mc.DateStart;
+            }
+            if(nc.DateStart > mc.DateStart)
+            {
+                newDateStart = nc.DateStart;
+            }
+            if (nc.DateEnd >= mc.DateEnd)
+            {
+                newDateEnd = mc.DateEnd;
+            }
+            if (nc.DateEnd < mc.DateEnd)
+            {
+                newDateEnd = nc.DateEnd;
+            }
+            return new ShunyaNakshatraCalendar { DateStart = newDateStart, DateEnd = newDateEnd, ColorCode = EColor.SHUNYANAKSHATRA, MasaId = mc.MasaId, NakshatraCode = nc.NakshatraCode, ShunyaCode = EShunya.SHUNYANAKSHATRA };
+        }
+
         private List<MasaCalendar> CreateMasaCalendarList(List<TithiData> tdList)
         {
             List<MasaCalendar> mList = new List<MasaCalendar>();
@@ -346,12 +520,14 @@ namespace PAD
                     {
                         int masaId = GetMasaIdByDate(tdList[index].Date) - 1;
                         if (masaId == 0)
+                        {
                             masaId = 12;
+                        }
                         MasaCalendar tTemp = new MasaCalendar
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            MasaId = masaId
+                            MasaId = masaId,
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
@@ -375,7 +551,7 @@ namespace PAD
                         {
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
-                            MasaId = masaId
+                            MasaId = masaId,
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
@@ -391,7 +567,7 @@ namespace PAD
                 {
                     DateStart = startDate,
                     DateEnd = new DateTime(tdList.Last().Date.Year, 12, 31, 23, 59, 59),
-                    MasaId = masaId
+                    MasaId = masaId,
                 };
                 mList.Add(tTemp);
             }
@@ -545,14 +721,6 @@ namespace PAD
                 {
                     wForm.ShowDialog(this);
                 }
-
-                
-               /*
-                _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
-
-                //Drawing
-                CalendarDrawing(_daysList);
-                TranzitDrawing(_daysList);*/
             }
         }
 
@@ -640,18 +808,6 @@ namespace PAD
                 {
                     wForm.ShowDialog(this);
                 }
-                /*
-                // Redrawing calendar for a new selected month
-                _selectedDate = datePicker.Value.Date;
-                _daysList = null;
-                _daysOfMonth = null;
-                _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Date.Month, 1), _selectedProfile);
-
-                //Drawing
-                CalendarDrawing(_daysList);
-                TranzitDrawing(_daysList);
-
-                Cursor.Current = Cursors.Default;*/
             }
         }
 
@@ -836,6 +992,44 @@ namespace PAD
             return pName;
         }
 
+        private void DrawShunyaColoredLine(Graphics g, Pen pen, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        {
+            if (cList.Count > 0)
+            {
+                Rectangle rect = new Rectangle();
+                int startPosX = 0, endPosX = 0;
+                foreach (Calendar c in cList)
+                {
+                    if (c.DateStart <= date)
+                    {
+                        startPosX = 0;
+                        if (c.DateEnd <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, c.DateEnd);
+                        else
+                            endPosX = width;
+                    }
+                    if (c.DateStart > date)
+                    {
+                        startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
+                        if (c.DateEnd <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, c.DateEnd);
+                        else
+                            endPosX = width;
+                    }
+                    if (c.GetShunyaCode() == EShunya.SHUNYANAKSHATRA)
+                    {
+                        rect = new Rectangle(posX + startPosX, posY, endPosX - startPosX, height / 2);
+                    }
+                    if (c.GetShunyaCode() == EShunya.SHUNYATITHI)
+                    {
+                        rect = new Rectangle(posX + startPosX, posY + height / 2, endPosX - startPosX, height - height / 2);
+                    }
+                    SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(c.ColorCode));
+                    g.FillRectangle(brush, rect);
+                }
+            }
+        }
+
         private void DrawJogaColoredLine(Graphics g, Pen pen, int posX, int posY, int width, int height, Day dayObj)
         {
             //Make list of dates for all jogas in day
@@ -920,8 +1114,16 @@ namespace PAD
 
                 // Draw masa
                 posY = posYMasa;
-                DrawLineName(g, pen, textBrush, posY, labelsWidth, _lineTranzHeight, "Masa");
+                DrawLineName(g, pen, textBrush, posY, labelsWidth, _lineTranzHeight, "Masa/Shunya");
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MasaDayList);
+
+                //Fill masa line by shunya nakshatra
+                posY = posYMasa;
+                DrawShunyaColoredLine(g, pen, posX, posY, _dayTranzWidth, _lineTranzHeight, d.ShunyaNakshatraDayList, d.Date);
+
+                //Fill masa line by shunya tithi
+                posY = posYMasa;
+                DrawShunyaColoredLine(g, pen, posX, posY, _dayTranzWidth, _lineTranzHeight, d.ShunyaTithiDayList, d.Date);
 
                 // Draw panchanga
                 posY = posYPanchanga;
@@ -2273,6 +2475,14 @@ namespace PAD
                 masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
+                List<ShunyaNakshatraCalendar> shunyaNakshatraPeriodCalendar = Utility.CloneShunyaNakshatraCalendarList(_shunyaNakshatraCalendarList.ToList());
+                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
+                List<ShunyaTithiCalendar> shunyaTithiPeriodCalendar = Utility.CloneShunyaTithiCalendarList(_shunyaTithiCalendarList.ToList());
+                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -2337,7 +2547,9 @@ namespace PAD
                                         chandraBalaCalendar,
                                         nityaJogaCalendar,
                                         eclipsePeriodCalendar,
-                                        masaPeriodCalendar);
+                                        masaPeriodCalendar,
+                                        shunyaNakshatraPeriodCalendar,
+                                        shunyaTithiPeriodCalendar);
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);                   
                 }
@@ -3191,7 +3403,7 @@ namespace PAD
             OpenDayTab(selectedDayIndex);
         }
 
-        private enum TranzitEntity { TEEmpty, TENakshatra, TETaraBala, TETithi, TEKarana, TENityaYoga, TEYoga, TEMoon, TESun, TEVenus, TEJupiter, TEMercury, TEMars, TESaturn, TERahu, TEKetu }
+        private enum TranzitEntity { TEEmpty, TEMasa, TENakshatra, TETaraBala, TETithi, TEKarana, TENityaYoga, TEYoga, TEMoon, TESun, TEVenus, TEJupiter, TEMercury, TEMars, TESaturn, TERahu, TEKetu }
 
         private void pictureBoxTranzits_MouseClick(object sender, MouseEventArgs e)
         {
@@ -3202,19 +3414,8 @@ namespace PAD
             {
                 int labelsWidth = pictureBoxTranzits.Width - _dayTranzWidth * _daysOfMonth.Count - 1;
                 int posX = labelsWidth, posY = 0;
-                int dayHeight = pictureBoxTranzits.Height - 1;
 
                 int day = (e.X - labelsWidth) / _dayTranzWidth;
-                //DateTime currentDate = _daysOfMonth[day].Date;
-
-                // Draw blue rectangle for selected day through all lines
-                pictureBoxTranzits.Image = _currentTranzitsImage;
-                Bitmap canvas = new Bitmap(pictureBoxTranzits.Image);
-                Graphics g = Graphics.FromImage(canvas);
-                Rectangle selectRectangle = new Rectangle(posX + day * _dayTranzWidth, posY, _dayTranzWidth, dayHeight);
-                Pen pen = new Pen(Color.FromArgb(CacheLoad._colorList.Where(i => i.Code.Equals(EColor.SELECTRECTANGLE.ToString())).FirstOrDefault().ARGBValue), 1);
-                g.DrawRectangle(pen, selectRectangle);
-                pictureBoxTranzits.Image = canvas;
 
                 // Finding line by position
                 int posYMasa = posY + 2 * _lineTranzHeight + 4;
@@ -3230,7 +3431,20 @@ namespace PAD
                 int posYRahu = posYSaturn + 4 * _lineTranzHeight + 4;
                 int posYKetu = posYRahu + 4 * _lineTranzHeight + 4;
 
+                int dayHeight = posYKetu + 4 *_lineTranzHeight + 1;
+
+                // Draw blue rectangle for selected day through all lines
+                pictureBoxTranzits.Image = _currentTranzitsImage;
+                Bitmap canvas = new Bitmap(pictureBoxTranzits.Image);
+                Graphics g = Graphics.FromImage(canvas);
+                Rectangle selectRectangle = new Rectangle(posX + day * _dayTranzWidth, posY, _dayTranzWidth, dayHeight);
+                Pen pen = new Pen(Color.FromArgb(CacheLoad._colorList.Where(i => i.Code.Equals(EColor.SELECTRECTANGLE.ToString())).FirstOrDefault().ARGBValue), 1);
+                g.DrawRectangle(pen, selectRectangle);
+                pictureBoxTranzits.Image = canvas;
+
                 TranzitEntity trEnt = TranzitEntity.TEEmpty;
+                if (e.Y > posYMasa && e.Y < posYMasa + _lineTranzHeight)
+                    trEnt = TranzitEntity.TEMasa;
                 if (e.Y > posYPanchanga && e.Y < posYPanchanga + _lineTranzHeight)
                     trEnt = TranzitEntity.TENakshatra;
                 if (e.Y > posYPanchanga + _lineTranzHeight && e.Y < posYPanchanga + 2 * _lineTranzHeight)
@@ -3267,6 +3481,10 @@ namespace PAD
                 int formWidth = pictureBoxTranzits.Width;
                 switch (trEnt)
                 {
+                    case TranzitEntity.TEMasa:
+                        toolTip = null;
+                        break;
+
                     case TranzitEntity.TENakshatra:
                         TranzitsTooltipCreation(_daysOfMonth[day].NakshatraDayList.ToList(), formWidth, out height, TranzitEntity.TENakshatra, _activeLanguageCode);
                         break;

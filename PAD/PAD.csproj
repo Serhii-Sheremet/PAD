@@ -121,6 +121,8 @@
     <Compile Include="Calendar\KaranaCalendar.cs" />
     <Compile Include="Calendar\NakshatraCalendar.cs" />
     <Compile Include="Calendar\PlanetCalendar.cs" />
+    <Compile Include="Calendar\ShunyaNakshatraCalendar.cs" />
+    <Compile Include="Calendar\ShunyaTithiCalendar.cs" />
     <Compile Include="Calendar\TaraBalaCalendar.cs" />
     <Compile Include="Calendar\TithiCalendar.cs" />
     <Compile Include="Entities\AppSettingDescList.cs" />
@@ -188,6 +190,7 @@
     <Compile Include="Enums\ENakshatra.cs" />
     <Compile Include="Enums\ENityaJoga.cs" />
     <Compile Include="Enums\EPlanet.cs" />
+    <Compile Include="Enums\EShunya.cs" />
     <Compile Include="Enums\ESun.cs" />
     <Compile Include="Enums\EZodiak.cs" />
     <Compile Include="Forms\About.cs">

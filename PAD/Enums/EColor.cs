@@ -32,7 +32,6 @@
         MASA12 = 27,
         SHUNYANAKSHATRA = 28,
         SHUNIATITHI = 29,
-        SHUNYAMERGE = 30,
-        GRAY = 31
+        GRAY = 30
     }
 }

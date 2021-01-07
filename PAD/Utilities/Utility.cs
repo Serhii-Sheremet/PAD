@@ -1597,6 +1597,44 @@ namespace PAD
             return newEList;
         }
 
+        public static List<ShunyaNakshatraCalendar> CloneShunyaNakshatraCalendarList(List<ShunyaNakshatraCalendar> snList)
+        {
+            List<ShunyaNakshatraCalendar> newEList = new List<ShunyaNakshatraCalendar>();
+            foreach (ShunyaNakshatraCalendar mc in snList)
+            {
+                ShunyaNakshatraCalendar eObj = new ShunyaNakshatraCalendar
+                {
+                    DateStart = mc.DateStart,
+                    DateEnd = mc.DateEnd,
+                    ColorCode = mc.ColorCode,
+                    MasaId = mc.MasaId,
+                    NakshatraCode = mc.NakshatraCode,
+                    ShunyaCode = mc.ShunyaCode
+                };
+                newEList.Add(eObj);
+            }
+            return newEList;
+        }
+
+        public static List<ShunyaTithiCalendar> CloneShunyaTithiCalendarList(List<ShunyaTithiCalendar> stList)
+        {
+            List<ShunyaTithiCalendar> newEList = new List<ShunyaTithiCalendar>();
+            foreach (ShunyaTithiCalendar mc in stList)
+            {
+                ShunyaTithiCalendar eObj = new ShunyaTithiCalendar
+                {
+                    DateStart = mc.DateStart,
+                    DateEnd = mc.DateEnd,
+                    ColorCode = mc.ColorCode,
+                    MasaId = mc.MasaId,
+                    TithiId = mc.TithiId,
+                    ShunyaCode = mc.ShunyaCode
+                };
+                newEList.Add(eObj);
+            }
+            return newEList;
+        }
+
         public static List<MuhurtaCalendar> CloneMuhurtaCalendarList(List<Calendar> mList)
         {
             List<MuhurtaCalendar> newMList = new List<MuhurtaCalendar>();

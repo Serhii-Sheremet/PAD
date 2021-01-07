@@ -224,8 +224,8 @@ Nakshatra|Nakshatra|en
 Nakshatra|Накшатра|ru
 Tara Bala|Tara Bala|en
 Tara Bala|Тара Бала|ru
-Masa|Masa|en
-Masa|Маса|ru
+Masa/Shunya|Masa/Shunya|en
+Masa/Shunya|Маса/Шунья|ru
 Tithi|Tithi|en
 Tithi|Титхи|ru
 Karana|Karana|en
