@@ -1590,7 +1590,26 @@ namespace PAD
                     DateStart = mc.DateStart,
                     DateEnd = mc.DateEnd,
                     ColorCode = mc.ColorCode,
-                    MasaId = mc.MasaId
+                    MasaId = mc.MasaId,
+                    FullMoonDate = mc.FullMoonDate
+                };
+                newEList.Add(eObj);
+            }
+            return newEList;
+        }
+
+        public static List<MasaCalendar> CloneMasaCalendarList(List<Calendar> mList)
+        {
+            List<MasaCalendar> newEList = new List<MasaCalendar>();
+            foreach (MasaCalendar mc in mList)
+            {
+                MasaCalendar eObj = new MasaCalendar
+                {
+                    DateStart = mc.DateStart,
+                    DateEnd = mc.DateEnd,
+                    ColorCode = mc.ColorCode,
+                    MasaId = mc.MasaId,
+                    FullMoonDate = mc.FullMoonDate
                 };
                 newEList.Add(eObj);
             }
@@ -1796,6 +1815,38 @@ namespace PAD
                     return EColor.MASA12;
             }
             return EColor.MASA1;
+        }
+
+        public static int GetNakshatraFullMoonId(MasaCalendar mc, List<PlanetCalendar> pList, Profile person)
+        {
+            int nId = 0;
+            double latitude, longitude;
+            string timeZone = string.Empty;
+            if (Utility.GetGeoCoordinateByLocationId(person.PlaceOfLivingId, out latitude, out longitude))
+            {
+                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+                TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
+
+                List<PlanetCalendar> mnPeriodCalendar = ClonePlanetCalendarList(pList.Where(i => mc.FullMoonDate.Between(i.DateStart.AddDays(-2), i.DateEnd.AddDays(+2))).ToList());
+                mnPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                mnPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
+                nId = (int)(mnPeriodCalendar.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).FirstOrDefault().NakshatraCode);
+            }
+            return nId;
+        }
+
+        public static string GetNakshatraUprvitel(int nakId, ELanguage lCode)
+        {
+            string upravitel = string.Empty;
+            string fullUpravitel = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == nakId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Upravitel ?? string.Empty;
+            if (!fullUpravitel.Equals(string.Empty))
+            {
+                var row = fullUpravitel.Split(new char[] { ',' });
+                upravitel = row[0];
+            }
+            return upravitel;
         }
 
         public static int CalculateRectangleHeightWithTextWrapping(string wholeText, Font font, int width)

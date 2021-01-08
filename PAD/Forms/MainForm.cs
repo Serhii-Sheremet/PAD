@@ -507,6 +507,7 @@ namespace PAD
             List<MasaCalendar> mList = new List<MasaCalendar>();
             int index = 0;
             DateTime startDate = new DateTime();
+            DateTime fullMoonDate = new DateTime();
             int firstTithiId = tdList.First().TithiId;
             if (firstTithiId > 1)
             {
@@ -515,6 +516,10 @@ namespace PAD
                     if (index == 0)
                     {
                         startDate = new DateTime(tdList.First().Date.Year, 1, 1, 0, 0, 0);
+                    }
+                    if (tdList[index].TithiId == 16)
+                    {
+                        fullMoonDate = tdList[index].Date;
                     }
                     if (tdList[index].TithiId == 1)
                     {
@@ -528,6 +533,7 @@ namespace PAD
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
                             MasaId = masaId,
+                            FullMoonDate = fullMoonDate
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
@@ -544,6 +550,10 @@ namespace PAD
                     {
                         startDate = tdList[index].Date;
                     }
+                    if (tdList[index].TithiId == 16)
+                    {
+                        fullMoonDate = tdList[index].Date;
+                    }
                     if (tdList[index].TithiId == 1 && index > 0)
                     {
                         int masaId = GetMasaIdByDate(tdList[index].Date);
@@ -552,6 +562,7 @@ namespace PAD
                             DateStart = startDate,
                             DateEnd = tdList[index].Date,
                             MasaId = masaId,
+                            FullMoonDate = fullMoonDate
                         };
                         mList.Add(tTemp);
                         startDate = tdList[index].Date;
@@ -568,6 +579,7 @@ namespace PAD
                     DateStart = startDate,
                     DateEnd = new DateTime(tdList.Last().Date.Year, 12, 31, 23, 59, 59),
                     MasaId = masaId,
+                    FullMoonDate = fullMoonDate
                 };
                 mList.Add(tTemp);
             }
@@ -1700,7 +1712,7 @@ namespace PAD
         {
             if (c.Count > 0)
             {
-                string text = c.First().GetFullName(_activeLanguageCode);
+                string text = c.First().GetMasaFullName(_moonNakshatraCalendarList.ToList(), _selectedProfile, _activeLanguageCode); ;
                 Size textSize = TextRenderer.MeasureText(text, font);
                 int heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
@@ -1983,13 +1995,13 @@ namespace PAD
 
         private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
         {
-            string curMasa = cList.First().GetFullName(_activeLanguageCode);
+            string curMasa = cList.First().GetMasaFullName(_moonNakshatraCalendarList.ToList(), _selectedProfile, _activeLanguageCode);
             foreach (Calendar c in cList)
             {
                 if (c.DateStart > date)
                 {
                     int startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
-                    string text = c.GetFullName(_activeLanguageCode);
+                    string text = c.GetMasaFullName(_moonNakshatraCalendarList.ToList(), _selectedProfile, _activeLanguageCode); ;
                     Size textSize = TextRenderer.MeasureText(text, font);
                     int heightPadding = (height - textSize.Height) / 2;
                     if (!text.Equals(curMasa))
@@ -2472,8 +2484,8 @@ namespace PAD
                 eclipsePeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<MasaCalendar> masaPeriodCalendar = Utility.CloneMasaCalendarList(_masaCalendarList.ToList());
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.FullMoonDate = i.FullMoonDate.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); i.FullMoonDate = i.FullMoonDate.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<ShunyaNakshatraCalendar> shunyaNakshatraPeriodCalendar = Utility.CloneShunyaNakshatraCalendarList(_shunyaNakshatraCalendarList.ToList());
                 shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
@@ -3482,7 +3494,7 @@ namespace PAD
                 switch (trEnt)
                 {
                     case TranzitEntity.TEMasa:
-                        toolTip = null;
+                        MasaTranzitsTooltipCreation(_daysOfMonth[day].MasaDayList.ToList(), _daysOfMonth[day].ShunyaNakshatraDayList.ToList(), _daysOfMonth[day].ShunyaTithiDayList.ToList(), formWidth, out height, TranzitEntity.TEMasa, _activeLanguageCode);
                         break;
 
                     case TranzitEntity.TENakshatra:
@@ -4248,6 +4260,157 @@ namespace PAD
             toolTip.FocusOnOpen = false;
             toolTip.ShowingAnimation = toolTip.HidingAnimation = PopupAnimations.Blend;
             toolTip.AutoClose = true;
+        }
+
+        private void MasaTranzitsTooltipCreation(List<Calendar> mcList, List<Calendar> sncList, List<Calendar> stcList, int width, out int height, TranzitEntity tEnt, ELanguage langCode)
+        {
+            height = 0;
+            DataGridView dgv = PrepareMasaDataGridView(mcList, sncList, stcList, width, out height, langCode);
+            if (dgv != null)
+            {
+                toolTip = new Popup(tranzitsToolTip = new TranzitsToolTip(dgv, width, (height + 5)));
+                toolTip.AutoClose = false;
+                toolTip.FocusOnOpen = false;
+                toolTip.ShowingAnimation = toolTip.HidingAnimation = PopupAnimations.Blend;
+                toolTip.AutoClose = true;
+            }
+        }
+
+        private DataGridView PrepareMasaDataGridView(List<Calendar> mcList, List<Calendar> sncList, List<Calendar> stcList, int width, out int height, ELanguage langCode)
+        {
+            height = 0;
+            DataGridView dgv = new DataGridView();
+            dgv.Width = width;
+
+            Font headerFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
+
+            if (mcList != null)
+            {
+                //DGV build
+                dgv.AutoGenerateColumns = false;
+                dgv.ColumnHeadersDefaultCellStyle.Font = headerFont;
+                dgv.DefaultCellStyle.Font = textFont;
+
+                DataGridViewColumn column = new DataGridViewColumn();
+                column.DataPropertyName = "Masa_Shunya";
+                column.Name = Utility.GetLocalizedText("Masa/Shunya", langCode);
+                column.Width = 200;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                column = new DataGridViewColumn();
+                column.DataPropertyName = "Names";
+                column.Name = Utility.GetLocalizedText("Names", langCode);
+                column.Width = 250;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                column = new DataGridViewColumn();
+                column.DataPropertyName = "DateStart";
+                column.Name = Utility.GetLocalizedText("Start", langCode);
+                column.Width = 150;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                column = new DataGridViewColumn();
+                column.DataPropertyName = "DateEnd";
+                column.Name = Utility.GetLocalizedText("End", langCode);
+                column.Width = 150;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                column = new DataGridViewColumn();
+                column.DataPropertyName = "FullMoon";
+                column.Name = Utility.GetLocalizedText("Full Moon Nakshatra", langCode);
+                column.Width = 250;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                column = new DataGridViewColumn();
+                column.DataPropertyName = "Description";
+                column.Name = ""; //Utility.GetLocalizedText("", langCode);
+                column.Width = dgv.Width - 1000;
+                column.CellTemplate = new DataGridViewTextBoxCell();
+                dgv.Columns.Add(column);
+
+                List<MasaCalendar> clonedMCList = Utility.CloneMasaCalendarList(mcList);
+                List<ShunyaNakshatraCalendar> clonedSNCList = Utility.CloneShunyaNakshatraCalendarList(sncList);
+                List<ShunyaTithiCalendar> clonedSTCList = Utility.CloneShunyaTithiCalendarList(stcList);
+
+                foreach (MasaCalendar mc in clonedMCList)
+                {
+                    string masaName = CacheLoad._masaDescList.Where(i => i.MasaId == mc.MasaId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                    int nakFullMoonId = Utility.GetNakshatraFullMoonId(mc, _moonNakshatraCalendarList.ToList(), _selectedProfile);
+                    string upravitel = Utility.GetNakshatraUprvitel(nakFullMoonId, langCode);
+                    string nakFullMoon = nakFullMoonId + "." + GetNakshatraFullMoon(nakFullMoonId, langCode);
+                    string[] row = new string[] {
+                        Utility.GetLocalizedText("Masa", langCode),
+                        masaName + " (" + upravitel + ")",
+                        mc.DateStart.ToString("dd.MM.yyyy HH:mm:ss"),
+                        mc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
+                        nakFullMoon + " (" + upravitel + ")",
+                        string.Empty
+                    };
+                    dgv.Rows.Add(row);
+                }
+
+                foreach (ShunyaNakshatraCalendar snc in clonedSNCList)
+                {
+                    string nakName = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)snc.NakshatraCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                    string upravitel = Utility.GetNakshatraUprvitel((int)snc.NakshatraCode, langCode);
+                    string[] row = new string[] {
+                        Utility.GetLocalizedText("Shunya Nakshatra", langCode),
+                        (int)snc.NakshatraCode + "." + nakName + " (" + upravitel + ")",
+                        snc.DateStart.ToString("dd.MM.yyyy HH:mm:ss"),
+                        snc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
+                        string.Empty,
+                        string.Empty
+                    };
+                    dgv.Rows.Add(row);
+                }
+
+                foreach (ShunyaTithiCalendar stc in clonedSTCList)
+                {
+                    string tiName = CacheLoad._tithiDescList.Where(i => i.TithiId == stc.TithiId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                    string upravitel = GetTithiUprvitel(stc.TithiId, langCode);
+                    string[] row = new string[] {
+                        Utility.GetLocalizedText("Shunya Tithi", langCode),
+                        stc.TithiId + "." + tiName + " (" + upravitel + ")",
+                        stc.DateStart.ToString("dd.MM.yyyy HH:mm:ss"),
+                        stc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
+                        string.Empty,
+                        string.Empty
+                    };
+                    dgv.Rows.Add(row);
+                }
+
+                dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+                dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+                for (int i = 0; i < dgv.RowCount; i++)
+                {
+                    int rowHeight = dgv.Rows[i].GetPreferredHeight(i, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true);
+                    height += rowHeight;
+                }
+            }
+            return dgv;
+        }
+
+        private string GetNakshatraFullMoon(int nId, ELanguage lCode)
+        {
+            return CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == nId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+        }
+
+        private string GetTithiUprvitel(int tId, ELanguage lCode)
+        {
+            string upravitel = string.Empty;
+            string fullUpravitel = CacheLoad._tithiDescList.Where(i => i.TithiId == tId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Upravitel ?? string.Empty;
+            if (!fullUpravitel.Equals(string.Empty))
+            {
+                var row = fullUpravitel.Split(new char[] { ',' });
+                upravitel = row[0];
+            }
+            return upravitel;
         }
 
         private void TranzitsTooltipCreation(List<Calendar> cList, int width, out int height, TranzitEntity tEnt, ELanguage langCode)

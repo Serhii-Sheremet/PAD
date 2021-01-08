@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PAD
 {
@@ -54,6 +55,11 @@ namespace PAD
         }
 
         public virtual string GetTranzitTaraBala(ELanguage langCode)
+        {
+            return string.Empty;
+        }
+
+        public virtual string GetMasaFullName(List<PlanetCalendar> pList, Profile person, ELanguage langCode)
         {
             return string.Empty;
         }
