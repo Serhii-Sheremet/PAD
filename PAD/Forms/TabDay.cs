@@ -691,14 +691,14 @@ namespace PAD
             List<PlanetCalendar> clonedZList = null;
             List<PlanetCalendar> clonedPList = null;
 
-            string desc1 = string.Empty, desc2 = string.Empty, desc3 = string.Empty, desc4 = string.Empty;
+            string desc1 = string.Empty, desc2 = string.Empty, desc3 = string.Empty, desc4 = string.Empty, desc5 = string.Empty;
             switch (group)
             {
                 case EDVNames.USER:
                     string title = Utility.GetLocalizedText("Title", lCode) + ": " + dayView.SelectedAppointment.Title;
                     string tPeriod = Utility.GetLocalizedText("Time period", _langCode) + ": " + startDate.ToString("dd.MM.yyyy HH:mm:ss") + " - " + endDate.ToString("dd.MM.yyyy HH:mm:ss");
-                    desc1 = Utility.GetLocalizedText("Description", lCode) + ": " + _pevList.Where(i => i.Name.Equals(dayView.SelectedAppointment.Title)).FirstOrDefault().Message;
-                    ttEList.Add(new ToolTipEntity { Code = EDVNames.USER, Title = title, Period = tPeriod, Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                    desc2 = Utility.GetLocalizedText("Description", lCode) + ": " + _pevList.Where(i => i.Name.Equals(dayView.SelectedAppointment.Title)).FirstOrDefault().Message;
+                    ttEList.Add(new ToolTipEntity { Code = EDVNames.USER, Title = title, Period = tPeriod, Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     break;
 
                 case EDVNames.MUHURTA:
@@ -707,7 +707,7 @@ namespace PAD
                     foreach (MuhurtaCalendar mc in clonedMCList)
                     {
                         string mName = CacheLoad._muhurtaDescList.Where(i => i.MuhurtaId == (int)mc.MuhurtaCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MUHURTA, Title = mName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + mc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MUHURTA, Title = mName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + mc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -731,29 +731,39 @@ namespace PAD
                         {
                             tithi = Utility.GetLocalizedText("Tithi", lCode) + ": " + jc.TithiId + "." + tName + "; ";
                         }
-                        desc1 = Utility.GetLocalizedText("Vara", lCode) + ": " + vara + "; " + nakshatra + tithi + yDesc;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.YOGA, Title = yName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + jc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + jc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc2 = Utility.GetLocalizedText("Vara", lCode) + ": " + vara + "; " + nakshatra + tithi + yDesc;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.YOGA, Title = yName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + jc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + jc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
                 case EDVNames.NAKSHATRA:
                     List<Calendar> ncList = _currDay.NakshatraDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
                     List<NakshatraCalendar> clonedNakshatraList = Utility.CloneNakshatraCalendarList(ncList);
+                    List<Calendar> sncList = _currDay.ShunyaNakshatraDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
+                    List<ShunyaNakshatraCalendar> clonedSNCList = Utility.CloneShunyaNakshatraCalendarList(sncList);
                     foreach (NakshatraCalendar nc in clonedNakshatraList)
                     {
                         NakshatraDescription nak = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)nc.NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
                         string nakshatra = (int)nc.NakshatraCode + "." + nak.Name + " (" + nak.Upravitel + ") ";
-                        desc1 = Utility.GetLocalizedText("Nature", lCode) + ": " + nak.Nature;
-                        desc2 = Utility.GetLocalizedText("Description", lCode) + ": " + nak.Description;
+                        foreach (ShunyaNakshatraCalendar snc in clonedSNCList)
+                        {
+                            if(snc.DateStart >= nc.DateStart || snc.DateEnd <= nc.DateEnd)
+                            {
+                                desc1 = Utility.GetLocalizedText("Shunya Nakshatra", lCode) + ": " + snc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + snc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss");
+                            }
+                        }
+
+                        desc2 = Utility.GetLocalizedText("Nature", lCode) + ": " + nak.Nature;
+                        desc3 = Utility.GetLocalizedText("Description", lCode) + ": " + nak.Description;
                         if (!nak.GoodFor.Equals(string.Empty))
                         {
-                            desc3 = Utility.GetLocalizedText("Good for", lCode) + ": " + nak.GoodFor;
+                            desc4 = Utility.GetLocalizedText("Good for", lCode) + ": " + nak.GoodFor;
                         }
                         if (!nak.BadFor.Equals(string.Empty))
                         {
-                            desc4 = Utility.GetLocalizedText("Bad for", lCode) + ": " + nak.BadFor;
+                            desc5 = Utility.GetLocalizedText("Bad for", lCode) + ": " + nak.BadFor;
                         }
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.NAKSHATRA, Title = nakshatra, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + nc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + nc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.NAKSHATRA, Title = nakshatra, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + nc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + nc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -763,27 +773,37 @@ namespace PAD
                     foreach (TaraBalaCalendar tbc in clonedTaraBalaList)
                     {
                         TaraBalaDescription tb = CacheLoad._taraBalaDescList.Where(i => i.TaraBalaId == tbc.TaraBalaId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
-                        desc1 = Utility.GetLocalizedText("Description", lCode) + ": " + tb.Description;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.TARABALA, Title = tbc.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + tbc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + tbc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc2 = Utility.GetLocalizedText("Description", lCode) + ": " + tb.Description;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.TARABALA, Title = tbc.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + tbc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + tbc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
                 case EDVNames.TITHI:
                     List<Calendar> tList = _currDay.TithiDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
                     List<TithiCalendar> clonedTithiList = Utility.CloneTithiCalendarList(tList);
+                    List<Calendar> stcList = _currDay.ShunyaTithiDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
+                    List<ShunyaTithiCalendar> clonedSTCList = Utility.CloneShunyaTithiCalendarList(stcList);
                     foreach (TithiCalendar tc in clonedTithiList)
                     {
+                        foreach (ShunyaTithiCalendar stc in clonedSTCList)
+                        {
+                            if (stc.DateStart >= tc.DateStart || stc.DateEnd <= tc.DateEnd)
+                            {
+                                desc1 = Utility.GetLocalizedText("Shunya Tithi", lCode) + ": " + stc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + stc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss");
+                            }
+                        }
+
                         TithiDescription th = CacheLoad._tithiDescList.Where(i => i.TithiId == tc.TithiId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
-                        desc1 = Utility.GetLocalizedText("Type", lCode) + ": " + th.Type;
+                        desc2 = Utility.GetLocalizedText("Type", lCode) + ": " + th.Type;
                         if (!th.GoodFor.Equals(string.Empty))
                         {
-                            desc2 = Utility.GetLocalizedText("Good for", lCode) + ": " + th.GoodFor;
+                            desc3 = Utility.GetLocalizedText("Good for", lCode) + ": " + th.GoodFor;
                         }
                         if (!th.BadFor.Equals(string.Empty))
                         {
-                            desc3 = Utility.GetLocalizedText("Bad for", lCode) + ": " + th.BadFor;
+                            desc4 = Utility.GetLocalizedText("Bad for", lCode) + ": " + th.BadFor;
                         }
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.TITHI, Title = tc.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + tc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + tc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.TITHI, Title = tc.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + tc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + tc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -796,13 +816,13 @@ namespace PAD
                         string kName = kar.Name + " (" + kar.Upravitel + ")";
                         if(!kar.GoodFor.Equals(string.Empty))
                         {
-                            desc1 = Utility.GetLocalizedText("Good for", lCode) + ": " + kar.GoodFor;
+                            desc2 = Utility.GetLocalizedText("Good for", lCode) + ": " + kar.GoodFor;
                         }
                         if (!kar.BadFor.Equals(string.Empty))
                         {
-                            desc2 = Utility.GetLocalizedText("Bad for", lCode) + ": " + kar.BadFor;
+                            desc3 = Utility.GetLocalizedText("Bad for", lCode) + ": " + kar.BadFor;
                         }
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KARANA, Title = kName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + kc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + kc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KARANA, Title = kName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + kc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + kc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -816,10 +836,10 @@ namespace PAD
                         string upravitel = CacheLoad._planetDescList.Where(i => i.PlanetId == yogaPlanetId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string name = njc.GetShortName(lCode) + " (" + upravitel + ", " + njd.Deity + ")";
                         string nakshatra = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == njc.NakshatraId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        desc1 = Utility.GetLocalizedText("Nakshatra", lCode) + ": " + njc.NakshatraId + "." + nakshatra;
-                        desc2 = Utility.GetLocalizedText("Meaning", lCode) + ": " + njd.Meaning;
-                        desc3 = Utility.GetLocalizedText("Description", lCode) + ": " + njd.Description;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.NITYAYOGA, Title = name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + njc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + njc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc2 = Utility.GetLocalizedText("Nakshatra", lCode) + ": " + njc.NakshatraId + "." + nakshatra;
+                        desc3 = Utility.GetLocalizedText("Meaning", lCode) + ": " + njd.Meaning;
+                        desc4 = Utility.GetLocalizedText("Description", lCode) + ": " + njd.Description;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.NITYAYOGA, Title = name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + njc.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + njc.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -828,7 +848,7 @@ namespace PAD
                     List<ChandraBalaCalendar> clonedCBList = Utility.CloneChandraBalaCalendarList(cbList);
                     foreach (ChandraBalaCalendar cb in clonedCBList)
                     {
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.CHANDRABALA, Title = cb.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + cb.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + cb.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.CHANDRABALA, Title = cb.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + cb.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + cb.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -849,7 +869,7 @@ namespace PAD
                     List<HoraCalendar> clonedHList = Utility.CloneHoraCalendarList(hList);
                     foreach (HoraCalendar h in clonedHList)
                     {
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.HORA, Title = h.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + h.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + h.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.HORA, Title = h.GetShortName(lCode), Period = Utility.GetLocalizedText("Time period", lCode) + ": " + h.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + h.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -871,8 +891,8 @@ namespace PAD
                     foreach (Muhurta30Calendar m30 in clonedM30List)
                     {
                         Muhurta30Description m30Desc = CacheLoad._muhurta30DescList.Where(i => i.Muhurta30Id == (int)m30.Muhurta30Code && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
-                        desc1 = Utility.GetLocalizedText("Description", lCode) + ": " + m30Desc.Description;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MUHURTA30, Title = m30Desc.Name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + m30.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + m30.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc2 = Utility.GetLocalizedText("Description", lCode) + ": " + m30Desc.Description;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MUHURTA30, Title = m30Desc.Name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + m30.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + m30.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -894,8 +914,8 @@ namespace PAD
                     foreach (Ghati60Calendar g60 in clonedG60List)
                     {
                         Ghati60Description g60Desc = CacheLoad._ghati60DescList.Where(i => i.Ghati60Id == (int)g60.Ghati60Code && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
-                        desc1 = Utility.GetLocalizedText("Description", lCode) + ": " + g60Desc.Description;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.GHTATI60, Title = g60Desc.Name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + g60.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + g60.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc2 = Utility.GetLocalizedText("Description", lCode) + ": " + g60Desc.Description;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.GHTATI60, Title = g60Desc.Name, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + g60.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + g60.DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
                     
@@ -992,17 +1012,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MOONPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MOONPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1099,17 +1119,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.SUNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.SUNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1206,17 +1226,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
                         desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.VENUSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.VENUSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1313,17 +1333,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.JUPITERPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.JUPITERPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1420,17 +1440,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MERCURYPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MERCURYPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1527,17 +1547,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MARSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.MARSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1634,17 +1654,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.SATURNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.SATURNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1759,17 +1779,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.RAHUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.RAHUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
 
@@ -1884,17 +1904,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc1 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc2 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc2 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
-                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KETUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4 });
+                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        ttEList.Add(new ToolTipEntity { Code = EDVNames.KETUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
             }
@@ -1960,16 +1980,21 @@ namespace PAD
                     if (!tte.Description2.Equals(string.Empty))
                     {
                         formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8);
-                        formHeight += 12;
+                        formHeight += 8;
                     }
                     if (!tte.Description3.Equals(string.Empty))
                     {
                         formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, textFont, formWidth - 8);
-                        formHeight += 30;
+                        formHeight += 12;
                     }
                     if (!tte.Description4.Equals(string.Empty))
                     {
                         formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, textFont, formWidth - 8);
+                        formHeight += 30;
+                    }
+                    if (!tte.Description5.Equals(string.Empty))
+                    {
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, textFont, formWidth - 8);
                         formHeight += 8;
                     }
                 }
