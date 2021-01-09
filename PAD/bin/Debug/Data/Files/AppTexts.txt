@@ -278,8 +278,10 @@ Meaning|Meaning|en
 Meaning|Значение|ru
 Description|Description|en
 Description|Описание|ru
-House transit Description|House transit description|en
-House transit description|Описание транзита по дому|ru
+Navamsha from Natal Moon|th Navamsha from Natal Moon|en
+Navamsha from Natal Moon|-я Навамша от Натальной Луны|ru
+Navamsha from Lagna|th Navamsha from Lagna|en
+Navamsha from Lagna|-я Навамша от Лагны|ru
 Nature|Nature|en
 Nature|Природа|ru
 Good for|Good for|en

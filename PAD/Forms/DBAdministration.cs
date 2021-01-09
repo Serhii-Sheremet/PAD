@@ -1427,14 +1427,15 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 6))})";
-                    string comm = "insert into PADA (ZODIAKID, NAKSHATRAID, PADANUMBER, SPECIALNAVAMSHA, NAVAMSHA, COLORID) values " + String.Join(", ", Enumerable.Repeat(parameters, pList.Count));
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 7))})";
+                    string comm = "insert into PADA (ZODIAKID, NAKSHATRAID, PADANUMBER, DREKKANA, SPECIALNAVAMSHA, NAVAMSHA, COLORID) values " + String.Join(", ", Enumerable.Repeat(parameters, pList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < pList.Count; i++)
                     {
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].ZodiakId });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].NakshatraId });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].PadaNumber });
+                        command.Parameters.Add(new SQLiteParameter() { Value = pList[i].Drekkana });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].SpecialNavamsha });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].Navamsha });
                         command.Parameters.Add(new SQLiteParameter() { Value = pList[i].ColorId });

@@ -54,6 +54,11 @@ namespace PAD
             return string.Empty;
         }
 
+        public virtual string GetNavamshaExaltation()
+        {
+            return string.Empty;
+        }
+
         public virtual string GetTranzitTaraBala(ELanguage langCode)
         {
             return string.Empty;

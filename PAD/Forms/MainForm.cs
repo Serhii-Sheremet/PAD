@@ -330,6 +330,7 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
+            CacheLoad._badNavamsha = new int[] { 36, 55, 64, 72, 81, 88, 96 };
         }
 
         private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)
@@ -3682,23 +3683,31 @@ namespace PAD
             dgv.Columns.Add(column);
 
             column = new DataGridViewColumn();
+            column.DataPropertyName = "Pada";
+            column.Name = Utility.GetLocalizedText("Pada", langCode);
+            column.Width = 80;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dgv.Columns.Add(column);
+
+            int lastColWidth = (dgv.Width - 1030);
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Description";
+            column.Name = Utility.GetLocalizedText("Description", langCode);
+            column.Width = lastColWidth;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewColumn();
             column.DataPropertyName = "Vedha";
             column.Name = Utility.GetLocalizedText("Vedha from", langCode);
             column.Width = 330;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
-            int lastColWidth = (dgv.Width - 950);
-            column = new DataGridViewColumn();
-            column.DataPropertyName = "Description";
-            column.Name = Utility.GetLocalizedText("House transit description", langCode);
-            column.Width = lastColWidth;
-            column.CellTemplate = new DataGridViewTextBoxCell();
-            dgv.Columns.Add(column);
-
             List<PlanetCalendar> clonedZodiakCal = null;
             List<PlanetCalendar> clonedZodiakRetroCal = null;
             List<PlanetCalendar> clonedNakshatraCal = null;
+            List<PlanetCalendar> clonedPadaCal = null;
 
             EAppSetting tranzitSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.TRANZIT.ToString()) && i.Active == 1).FirstOrDefault().Id;
             EAppSetting nodeSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
@@ -3722,6 +3731,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.MoonNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.MoonPadaDayList);
                     break;
 
                 case TranzitEntity.TESun:
@@ -3741,6 +3751,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.SunNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.SunPadaDayList);
                     break;
 
                 case TranzitEntity.TEVenus:
@@ -3760,6 +3771,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.VenusNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.VenusPadaDayList);
                     break;
 
                 case TranzitEntity.TEJupiter:
@@ -3779,6 +3791,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.JupiterNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.JupiterPadaDayList);
                     break;
 
                 case TranzitEntity.TEMercury:
@@ -3798,6 +3811,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.MercuryNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.MercuryPadaDayList);
                     break;
 
                 case TranzitEntity.TEMars:
@@ -3817,6 +3831,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.MarsNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.MarsPadaDayList);
                     break;
 
                 case TranzitEntity.TESaturn:
@@ -3836,6 +3851,7 @@ namespace PAD
                             break;
                     }
                     clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.SaturnNakshatraDayList);
+                    clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.SaturnPadaDayList);
                     break;
 
                 case TranzitEntity.TERahu:
@@ -3858,6 +3874,7 @@ namespace PAD
                                     break;
                             }
                             clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.RahuMeanNakshatraDayList);
+                            clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.RahuMeanPadaDayList);
                             break;
 
                         case EAppSetting.NODETRUE:
@@ -3877,6 +3894,7 @@ namespace PAD
                                     break;
                             }
                             clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.RahuTrueNakshatraDayList);
+                            clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.RahuTruePadaDayList);
                             break;
                     }
                     break;
@@ -3901,6 +3919,7 @@ namespace PAD
                                     break;
                             }
                             clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.KetuMeanNakshatraDayList);
+                            clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.KetuMeanPadaDayList);
                             break;
 
                         case EAppSetting.NODETRUE:
@@ -3920,12 +3939,13 @@ namespace PAD
                                     break;
                             }
                             clonedNakshatraCal = Utility.ClonePlanetCalendarList(pDay.KetuTrueNakshatraDayList);
+                            clonedPadaCal = Utility.ClonePlanetCalendarList(pDay.KetuTruePadaDayList);
                             break;
                     }
                     break;
             }
 
-            dgv = PlanetTranzitDataGridViewFillByRow(dgv, pDay, clonedZodiakCal, clonedZodiakRetroCal, clonedNakshatraCal, tranzitSetting, nodeSettings, langCode);
+            dgv = PlanetTranzitDataGridViewFillByRow(dgv, pDay, clonedZodiakCal, clonedZodiakRetroCal, clonedNakshatraCal, clonedPadaCal, tranzitSetting, nodeSettings, langCode);
             dgv.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dgv.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
 
@@ -3946,11 +3966,12 @@ namespace PAD
             public DateTime DateEnd { get; set; }
             public string Zodiac { get; set; }
             public string Nakshatra { get; set; }
-            public string Vedha { get; set; }
+            public string Pada { get; set; }
             public string Description { get; set; }
+            public string Vedha { get; set; }
         }
 
-        private DataGridView PlanetTranzitDataGridViewFillByRow(DataGridView dgv, Day pDay, List<PlanetCalendar> pzList, List<PlanetCalendar> pzrList, List<PlanetCalendar> pnList, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage langCode)
+        private DataGridView PlanetTranzitDataGridViewFillByRow(DataGridView dgv, Day pDay, List<PlanetCalendar> pzList, List<PlanetCalendar> pzrList, List<PlanetCalendar> pnList, List<PlanetCalendar> ppList, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage langCode)
         {
             List<dgvRowObj> rowList = new List<dgvRowObj>();
             foreach (PlanetCalendar pc in pzrList)
@@ -3965,8 +3986,9 @@ namespace PAD
                     DateEnd = pc.DateEnd,
                     Zodiac = zodiak,
                     Nakshatra = string.Empty,
-                    Vedha = vedha,
-                    Description = trDesc
+                    Pada = string.Empty,
+                    Description = trDesc,
+                    Vedha = vedha
                 };
                 rowList.Add(rowTemp);
             }
@@ -3981,8 +4003,52 @@ namespace PAD
                     DateEnd = pc.DateEnd,
                     Zodiac = zodiak,
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
-                    Vedha = string.Empty,
-                    Description = string.Empty
+                    Pada = string.Empty,
+                    Description = string.Empty,
+                    Vedha = string.Empty
+                };
+                rowList.Add(rowTemp);
+            }
+            foreach (PlanetCalendar pc in ppList)
+            {
+                string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                string nakshatra = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)pc.NakshatraCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                Pada pada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault();
+                string specNavamsha = Utility.GetSpecNavamsha(pada, langCode);
+                string badNavamsha = string.Empty;
+                List<Pada> swappedPadaByMoonList = Utility.SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), _selectedProfile, false);
+                List<Pada> swappedPadaByLagnaList = Utility.SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), _selectedProfile, true);
+
+                int indexMoon = 0, indexLagna = 0;
+                for (int i = 0; i < CacheLoad._badNavamsha.Length; i++)
+                {
+                    indexMoon = swappedPadaByMoonList.FindIndex(l => l.Id == pc.PadaId);
+                    indexLagna = swappedPadaByLagnaList.FindIndex(l => l.Id == pc.PadaId);
+                    if ((indexMoon + 1) == CacheLoad._badNavamsha[i])
+                    {
+                        badNavamsha = CacheLoad._badNavamsha[i] + " " + Utility.GetLocalizedText("Navamsha from Natal Moon", langCode) + ", ";
+                    }
+                    if ((indexLagna + 1) == CacheLoad._badNavamsha[i])
+                    {
+                        badNavamsha = CacheLoad._badNavamsha[i] + " " + Utility.GetLocalizedText("Navamsha from Lagna", langCode) + ", ";
+                    }
+                }
+
+                if (badNavamsha.Length > 0)
+                {
+                    badNavamsha = ";  " +  badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                }
+
+                dgvRowObj rowTemp = new dgvRowObj
+                {
+                    Entity = Utility.GetLocalizedText("Pada", langCode),
+                    DateStart = pc.DateStart,
+                    DateEnd = pc.DateEnd,
+                    Zodiac = zodiak,
+                    Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
+                    Pada = pada.PadaNumber.ToString(),
+                    Description = Utility.GetLocalizedText("Navamsa", langCode) + ": " + pada.Navamsha + pc.GetNavamshaExaltation() + " " + specNavamsha + badNavamsha,
+                    Vedha = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
@@ -3995,8 +4061,9 @@ namespace PAD
                         rowListSorted[i].DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
                         rowListSorted[i].Zodiac,
                         rowListSorted[i].Nakshatra,
-                        rowListSorted[i].Vedha,
-                        rowListSorted[i].Description
+                        rowListSorted[i].Pada,
+                        rowListSorted[i].Description,
+                        rowListSorted[i].Vedha
                     };
                 dgv.Rows.Add(row);
             }

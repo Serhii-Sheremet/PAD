@@ -111,7 +111,13 @@ namespace PAD
         public override string GetTranzitPada()
         {
             Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
-            return pada.PadaNumber + "-" + pada.Navamsha + GetNavamshaExaltation(PlanetCode, pada.Navamsha);
+            return pada.PadaNumber + "-" + pada.Navamsha + Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha);
+        }
+
+        public override string GetNavamshaExaltation()
+        {
+            Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
+            return Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha);
         }
 
         public override string GetTranzitTaraBala(ELanguage langCode)
@@ -119,90 +125,7 @@ namespace PAD
             return TaraBalaId + "." + (CacheLoad._taraBalaDescList.Where(i => i.TaraBalaId == TaraBalaId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.ShortName ?? string.Empty) + " " + TaraBalaPercent + "%"; 
         }
 
-        private string GetNavamshaExaltation(EPlanet pCode, int navamsha)
-        {
-            string exaltaton = string.Empty;
-            switch (pCode)
-            {
-                case EPlanet.MOON:
-                    if (navamsha == 2)
-                        exaltaton = "↑";
-                    if (navamsha == 8)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.SUN:
-                    if (navamsha == 1)
-                        exaltaton = "↑";
-                    if (navamsha == 7)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.VENUS:
-                    if (navamsha == 12)
-                        exaltaton = "↑";
-                    if (navamsha == 6)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.JUPITER:
-                    if (navamsha == 4)
-                        exaltaton = "↑";
-                    if (navamsha == 10)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.MERCURY:
-                    if (navamsha == 6)
-                        exaltaton = "↑";
-                    if (navamsha == 12)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.MARS:
-                    if (navamsha == 10)
-                        exaltaton = "↑";
-                    if (navamsha == 4)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.SATURN:
-                    if (navamsha == 7)
-                        exaltaton = "↑";
-                    if (navamsha == 1)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.RAHUMEAN:
-                    if (navamsha == 2)
-                        exaltaton = "↑";
-                    if (navamsha == 8)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.KETUMEAN:
-                    if (navamsha == 8)
-                        exaltaton = "↑";
-                    if (navamsha == 2)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.RAHUTRUE:
-                    if (navamsha == 2)
-                        exaltaton = "↑";
-                    if (navamsha == 8)
-                        exaltaton = "↓";
-                    break;
-
-                case EPlanet.KETUTRUE:
-                    if (navamsha == 8)
-                        exaltaton = "↑";
-                    if (navamsha == 2)
-                        exaltaton = "↓";
-                    break;
-            }
-            return exaltaton;
-        }
+        
 
     }
 }

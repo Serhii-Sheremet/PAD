@@ -70,7 +70,7 @@ namespace PAD
                     rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, _textFont, this.Width - 8);
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description2, _textFont, drawRect, Color.Black, flags);
-                    posY += drawRect.Height + 8;
+                    posY += drawRect.Height + 12;
                 }
                 if (!tte.Description3.Equals(string.Empty))
                 {

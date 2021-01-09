@@ -56,6 +56,8 @@ namespace PAD
         public static List<Ghati60Description> _ghati60DescList;
         public static List<HoraPlanet> _horaPlanetList;
 
+        public static int[] _badNavamsha;
+
         public static List<DVLineNames> GetDVLineNamesList()
         {
             List<DVLineNames> entityList = new List<DVLineNames>();
@@ -817,7 +819,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, ZODIAKID, NAKSHATRAID, PADANUMBER, SPECIALNAVAMSHA, NAVAMSHA, COLORID from PADA order by ID";
+                    string comm = $"select ID, ZODIAKID, NAKSHATRAID, PADANUMBER, DREKKANA, SPECIALNAVAMSHA, NAVAMSHA, COLORID from PADA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -831,9 +833,10 @@ namespace PAD
                                     ZodiakId = reader.IntValue(1),
                                     NakshatraId = reader.IntValue(2),
                                     PadaNumber = reader.IntValue(3),
-                                    SpecialNavamsha = reader.StringValue(4),
-                                    Navamsha = reader.IntValue(5),
-                                    ColorId = reader.IntValue(6)
+                                    Drekkana = reader.IntValue(4),
+                                    SpecialNavamsha = reader.StringValue(5),
+                                    Navamsha = reader.IntValue(6),
+                                    ColorId = reader.IntValue(7)
                                 };
                                 entityList.Add(temp);
                             }

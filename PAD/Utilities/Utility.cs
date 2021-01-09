@@ -2006,6 +2006,135 @@ namespace PAD
             return CacheLoad._padaList.Where(i => i.NakshatraId == nakshatraId && i.PadaNumber == padaNumber).FirstOrDefault().ZodiakId;
         }
 
+        public static string GetSpecNavamsha(Pada sPada, ELanguage sLang)
+        {
+            try
+            {
+                string specNavamsha = string.Empty;
+                var row = sPada.SpecialNavamsha.Split(new char[] { ',' });
+                int[] idList = new int[row.Length];
+                for (int i = 0; i < row.Length; i++)
+                {
+                    idList[i] = Convert.ToInt32(row[i]);
+                }
+                for (int i = 0; i < idList.Length; i++)
+                {
+                    string text = CacheLoad._specNavamshaList.Where(r => r.SpeciaNavamshaId == idList[i] && r.LanguageCode.Equals(sLang.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                    specNavamsha += text + ", ";
+                }
+                specNavamsha = specNavamsha.Substring(0, specNavamsha.Length - 2);
+                return (", " + specNavamsha);
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        public static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile person, bool isLagna)
+        {
+            List<Pada> newList = new List<Pada>();
+            int pId = 0;
+            if (isLagna)
+            {
+                pId = pList.Where(i => i.NakshatraId == person.NakshatraLagnaId && i.PadaNumber == person.PadaLagna).FirstOrDefault()?.Id ?? 0;
+                newList.AddRange(pList.Where(s => s.Id >= pId).ToList());
+                newList.AddRange(pList.Where(s => s.Id < pId).ToList());
+            }
+            else
+            {
+                pId = pList.Where(i => i.NakshatraId == person.NakshatraMoonId && i.PadaNumber == person.PadaMoon).FirstOrDefault()?.Id ?? 0;
+                newList.AddRange(pList.Where(s => s.Id >= pId).ToList());
+                newList.AddRange(pList.Where(s => s.Id < pId).ToList());
+            }
+            return newList;
+        }
+
+        public static string GetNavamshaExaltation(EPlanet pCode, int navamsha)
+        {
+            string exaltaton = string.Empty;
+            switch (pCode)
+            {
+                case EPlanet.MOON:
+                    if (navamsha == 2)
+                        exaltaton = "↑";
+                    if (navamsha == 8)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.SUN:
+                    if (navamsha == 1)
+                        exaltaton = "↑";
+                    if (navamsha == 7)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.VENUS:
+                    if (navamsha == 12)
+                        exaltaton = "↑";
+                    if (navamsha == 6)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.JUPITER:
+                    if (navamsha == 4)
+                        exaltaton = "↑";
+                    if (navamsha == 10)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.MERCURY:
+                    if (navamsha == 6)
+                        exaltaton = "↑";
+                    if (navamsha == 12)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.MARS:
+                    if (navamsha == 10)
+                        exaltaton = "↑";
+                    if (navamsha == 4)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.SATURN:
+                    if (navamsha == 7)
+                        exaltaton = "↑";
+                    if (navamsha == 1)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.RAHUMEAN:
+                    if (navamsha == 2)
+                        exaltaton = "↑";
+                    if (navamsha == 8)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.KETUMEAN:
+                    if (navamsha == 8)
+                        exaltaton = "↑";
+                    if (navamsha == 2)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.RAHUTRUE:
+                    if (navamsha == 2)
+                        exaltaton = "↑";
+                    if (navamsha == 8)
+                        exaltaton = "↓";
+                    break;
+
+                case EPlanet.KETUTRUE:
+                    if (navamsha == 8)
+                        exaltaton = "↑";
+                    if (navamsha == 2)
+                        exaltaton = "↓";
+                    break;
+            }
+            return exaltaton;
+        }
+
         public static string GetLocalizedPlanetNameByCode(EPlanet planetCode, ELanguage langCode)
         {
             return CacheLoad._planetDescList.Where(i => i.PlanetId == (int)planetCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;

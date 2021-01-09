@@ -954,8 +954,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1061,8 +1061,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1168,8 +1168,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1275,8 +1275,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1382,8 +1382,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1489,8 +1489,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1596,8 +1596,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1721,8 +1721,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1846,8 +1846,8 @@ namespace PAD
                         string nakshatra = (int)clonedPList.First().NakshatraCode + "." + CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)clonedPList.First().NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         Pada sPada = CacheLoad._padaList.Where(i => i.Id == clonedPList.First().PadaId).FirstOrDefault();
                         int padaNum = sPada.PadaNumber;
-                        int navamsha = sPada.Navamsha;
-                        string specNavamsha = GetSpecNavamsha(sPada, lCode);
+                        string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
+                        string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1922,31 +1922,6 @@ namespace PAD
             return ttEList;
         }
 
-        private string GetSpecNavamsha(Pada sPada, ELanguage sLang)
-        {
-            try
-            {
-                string specNavamsha = string.Empty;
-                var row = sPada.SpecialNavamsha.Split(new char[] { ',' });
-                int[] idList = new int[row.Length];
-                for (int i = 0; i < row.Length; i++)
-                {
-                    idList[i] = Convert.ToInt32(row[i]);
-                }
-                for (int i = 0; i < idList.Length; i++)
-                {
-                    string text = CacheLoad._specNavamshaList.Where(r => r.SpeciaNavamshaId == idList[i] && r.LanguageCode.Equals(sLang.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                    specNavamsha += text + ", ";
-                }
-                specNavamsha = specNavamsha.Substring(0, specNavamsha.Length - 2);
-                return (", " + specNavamsha);
-            }
-            catch
-            {
-                return string.Empty;
-            }
-        }
-
         private void DayViewToolTipCreationSystem(EDVNames group, ELanguage lCode)
         {
             DateTime startDate = dayView.SelectedAppointment.StartDate;
@@ -1974,13 +1949,13 @@ namespace PAD
                     formHeight += 8;
                     if (!tte.Description1.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, textFont, formWidth - 8);
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, timeFont, formWidth - 8);
                         formHeight += 8;
                     }
                     if (!tte.Description2.Equals(string.Empty))
                     {
                         formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8);
-                        formHeight += 8;
+                        formHeight += 12;
                     }
                     if (!tte.Description3.Equals(string.Empty))
                     {
