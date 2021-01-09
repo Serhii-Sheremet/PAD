@@ -221,7 +221,7 @@ namespace PAD
                     endDate = dayEndDate;
                 if (c.OverlapedMuhurtaCode == EMuhurta.NOMUHURTA && previousMuhurta.OverlapedMuhurtaCode == EMuhurta.NOMUHURTA)
                 {
-                    setAppointments(startDate, endDate, c.GetShortName(lang), Utility.GetColorByColorCode(c.ColorCode), true, group, true);
+                    setAppointments(startDate, endDate, c.GetFullName(lang), Utility.GetColorByColorCode(c.ColorCode), true, group, true);
                 }
                 else if (c.OverlapedMuhurtaCode == EMuhurta.NOMUHURTA && previousMuhurta.OverlapedMuhurtaCode != EMuhurta.NOMUHURTA)
                 {

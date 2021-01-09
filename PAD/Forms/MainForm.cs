@@ -2001,7 +2001,7 @@ namespace PAD
                 if (c.DateStart > date)
                 {
                     int startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
-                    string text = c.GetMasaFullName(_moonNakshatraCalendarList.ToList(), _selectedProfile, _activeLanguageCode); ;
+                    string text = c.GetMasaFullName(_moonNakshatraCalendarList.ToList(), _selectedProfile, _activeLanguageCode); 
                     Size textSize = TextRenderer.MeasureText(text, font);
                     int heightPadding = (height - textSize.Height) / 2;
                     if (!text.Equals(curMasa))
@@ -3691,7 +3691,7 @@ namespace PAD
             int lastColWidth = (dgv.Width - 950);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Description";
-            column.Name = Utility.GetLocalizedText("Description", langCode);
+            column.Name = Utility.GetLocalizedText("House transit description", langCode);
             column.Width = lastColWidth;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
@@ -5027,7 +5027,9 @@ namespace PAD
                                 _ketuTrueZodiakRetroCalendarList.ToList(),
                                 _ketuTrueNakshatraCalendarList.ToList(),
                                 _ketuTruePadaCalendarList.ToList(),
-                                _eclipseCalendarList.ToList()
+                                _masaCalendarList.ToList(),
+                                _shunyaNakshatraCalendarList.ToList(),
+                                _shunyaTithiCalendarList.ToList()
                             );
                         tabForm.MFormAccess = this;
                         tabForm.TopLevel = false;

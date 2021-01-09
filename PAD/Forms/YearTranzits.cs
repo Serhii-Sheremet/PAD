@@ -23,6 +23,11 @@ namespace PAD
         private int _sYear;
         private List<Day> dayList;
 
+        //Calendars
+        private List<MasaCalendar> _mCList;
+        private List<ShunyaNakshatraCalendar> _sNCList;
+        private List<ShunyaTithiCalendar> _sTCList;
+
         private List<PlanetCalendar> _moonZCList;
         private List<PlanetCalendar> _moonZRCList;
         private List<PlanetCalendar> _moonNCList;
@@ -149,7 +154,9 @@ namespace PAD
             List<PlanetCalendar> ketuTrueZRCList,
             List<PlanetCalendar> ketuTrueNCList,
             List<PlanetCalendar> ketuTruePCList,
-            List<EclipseCalendar> eclipseCList
+            List<MasaCalendar> masaCList,
+            List<ShunyaNakshatraCalendar> shuNCList,
+            List<ShunyaTithiCalendar> shuTCList
         )
         {
             InitializeComponent();
@@ -201,6 +208,9 @@ namespace PAD
             _ketuTrueZRCList = ketuTrueZRCList;
             _ketuTrueNCList = ketuTrueNCList;
             _ketuTruePCList = ketuTruePCList;
+            _mCList = masaCList;
+            _sNCList = shuNCList;
+            _sTCList = shuTCList;
         }
 
         public List<Day> PrepareYearDays(int year, Profile sPerson)
@@ -393,6 +403,18 @@ namespace PAD
                 ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
+                List<MasaCalendar> masaPeriodCalendar = Utility.CloneMasaCalendarList(_mCList.ToList());
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.FullMoonDate = i.FullMoonDate.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); i.FullMoonDate = i.FullMoonDate.ShiftByDaylightDelta(adjustmentRules); });
+
+                List<ShunyaNakshatraCalendar> shunyaNakshatraPeriodCalendar = Utility.CloneShunyaNakshatraCalendarList(_sNCList.ToList());
+                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
+                List<ShunyaTithiCalendar> shunyaTithiPeriodCalendar = Utility.CloneShunyaTithiCalendarList(_sTCList.ToList());
+                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -444,7 +466,10 @@ namespace PAD
                                         ketuTrueZodiakPeriodCalendar,
                                         ketuTrueZodiakRetroPeriodCalendar,
                                         ketuTrueNakshatraPeriodCalendar,
-                                        ketuTruePadaPeriodCalendar);
+                                        ketuTruePadaPeriodCalendar,
+                                        masaPeriodCalendar,
+                                        shunyaNakshatraPeriodCalendar,
+                                        shunyaTithiPeriodCalendar);
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);
                 }
@@ -471,7 +496,8 @@ namespace PAD
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
             int posX = labelsWidth, posY = 4, nextPlanetY = 0;
-            int posYTranzits = posY + monthLabelHeight + 4;
+            int posYMasa = posY + monthLabelHeight + 4;
+            int posYTranzits = posYMasa + lineHeight + 4;
 
             EAppSetting tranzitSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.TRANZIT.ToString()) && i.Active == 1).FirstOrDefault().Id;
             EAppSetting nodeSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
@@ -496,6 +522,19 @@ namespace PAD
             posX = labelsWidth;
             foreach (Day d in dayList)
             {
+                //Drawing masa
+                posY = posYMasa;
+                DrawLineName(g, pen, textBrush, posY, labelsWidth, lineHeight, "Masa/Shunya");
+                DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.MasaDayList);
+
+                //Fill masa line by shunya nakshatra
+                posY = posYMasa;
+                DrawShunyaColoredLine(g, pen, posX, posY, dayWidth, lineHeight, d.ShunyaNakshatraDayList, d.Date);
+
+                //Fill masa line by shunya tithi
+                posY = posYMasa;
+                DrawShunyaColoredLine(g, pen, posX, posY, dayWidth, lineHeight, d.ShunyaTithiDayList, d.Date);
+
                 //Drawing Moon
                 nextPlanetY = posYTranzits;
                 posY = nextPlanetY;
@@ -790,6 +829,11 @@ namespace PAD
             // Setting current start zodiak 
             posX = labelsWidth;
 
+            // Setting masa current start 
+            posX = labelsWidth;
+            posY = posYMasa;
+            SetMasaStartName(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, dayList.First().MasaDayList, _langCode);
+
             // Moon
             nextPlanetY = posYTranzits;
             posY = nextPlanetY;
@@ -880,6 +924,15 @@ namespace PAD
                 SetLineStartNakshatra(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, dayList.First().KetuTrueNakshatraDayList, false);
                 SetLineStartPada(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, dayList.First().KetuTruePadaDayList);
                 SetLineStartTaraBala(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, dayList.First().KetuTrueTaraBalaDayList, false);
+            }
+
+            // Setting masa changes
+            posX = labelsWidth;
+            posY = posYMasa;
+            foreach (Day d in dayList)
+            {
+                SetMasaName(g, pen, textFont, textBrush, posX, posY, dayWidth, lineHeight, d.MasaDayList, d.Date, _langCode);
+                posX = posX + dayWidth;
             }
 
             //Drawing zodiac, nakshatra and pada changes
@@ -979,6 +1032,15 @@ namespace PAD
                 }
 
                 posX = posX + dayWidth;
+            }
+
+            // Drawing Masa rectangles
+            posX = labelsWidth;
+            posY = posYMasa;
+            for (int month = 0; month < monthWidthArray.Length; month++)
+            {
+                DrawLineRectangle(g, pen, posX, posY, monthWidthArray[month], lineHeight);
+                posX += monthWidthArray[month];
             }
 
             //Drawing Tranzits rectangles
@@ -1313,7 +1375,7 @@ namespace PAD
                 int dayWidth = pictureBoxYearTranzits.Width / daysOfYear;
                 int labelsWidth = pictureBoxYearTranzits.Width - dayWidth * daysOfYear - 2;
                 int posX = labelsWidth, posY = 3;
-                int height = monthLabelHeight +((lineHeight * 4) + 4) * 9 + 2;
+                int height = monthLabelHeight + lineHeight + 4 +((lineHeight * 4) + 4) * 9 + 2;
 
                 int[] monthWidthArray = new int[12];
                 for (int i = 0; i < 12; i++)
@@ -1343,6 +1405,87 @@ namespace PAD
                 Pen pen = new Pen(Color.FromArgb(CacheLoad._colorList.Where(i => i.Code.Equals(EColor.SELECTRECTANGLE.ToString())).FirstOrDefault().ARGBValue), 1);
                 g.DrawRectangle(pen, selectRectangle);
                 pictureBoxYearTranzits.Image = canvas;
+            }
+        }
+
+        private void DrawShunyaColoredLine(Graphics g, Pen pen, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        {
+            if (cList.Count > 0)
+            {
+                Rectangle rect = new Rectangle();
+                int startPosX = 0, endPosX = 0;
+                foreach (Calendar c in cList)
+                {
+                    if (c.DateStart <= date)
+                    {
+                        startPosX = 0;
+                        if (c.DateEnd <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, c.DateEnd);
+                        else
+                            endPosX = width;
+                    }
+                    if (c.DateStart > date)
+                    {
+                        startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
+                        if (c.DateEnd <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, c.DateEnd);
+                        else
+                            endPosX = width;
+                    }
+                    if (c.GetShunyaCode() == EShunya.SHUNYANAKSHATRA)
+                    {
+                        rect = new Rectangle(posX + startPosX, posY, endPosX - startPosX, height / 2);
+                    }
+                    if (c.GetShunyaCode() == EShunya.SHUNYATITHI)
+                    {
+                        rect = new Rectangle(posX + startPosX, posY + height / 2, endPosX - startPosX, height - height / 2);
+                    }
+                    SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(c.ColorCode));
+                    g.FillRectangle(brush, rect);
+                }
+            }
+        }
+
+        private void SetMasaStartName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, ELanguage lCode)
+        {
+            if (c.Count > 0)
+            {
+                string text = c.First().GetMasaName(lCode); 
+                Size textSize = TextRenderer.MeasureText(text, font);
+                int heightPadding = (height - textSize.Height) / 2;
+                if (c.Count == 1)
+                {
+                    g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                }
+                else
+                {
+                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    if (textSize.Width <= endPosX)
+                    {
+                        g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
+                    }
+                }
+            }
+        }
+
+        private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, ELanguage lCode)
+        {
+            string curMasa = cList.First().GetMasaName(lCode);
+            foreach (Calendar c in cList)
+            {
+                if (c.DateStart > date)
+                {
+                    int startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
+                    string text = c.GetMasaName(lCode); 
+                    Size textSize = TextRenderer.MeasureText(text, font);
+                    int heightPadding = (height - textSize.Height) / 2;
+                    if (!text.Equals(curMasa))
+                    {
+                        g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
+                        g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
+                        curMasa = text;
+                    }
+                }
             }
         }
 

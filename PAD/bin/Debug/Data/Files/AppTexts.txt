@@ -278,6 +278,8 @@ Meaning|Meaning|en
 Meaning|Значение|ru
 Description|Description|en
 Description|Описание|ru
+House transit Description|House transit description|en
+House transit description|Описание транзита по дому|ru
 Nature|Nature|en
 Nature|Природа|ru
 Good for|Good for|en

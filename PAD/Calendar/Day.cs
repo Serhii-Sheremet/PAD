@@ -427,7 +427,11 @@ namespace PAD
             List<PlanetCalendar> ketuTrueZodiakList,
             List<PlanetCalendar> ketuTrueZodiakRetroList,
             List<PlanetCalendar> ketuTrueNakshatraList,
-            List<PlanetCalendar> ketuTruePadaList)
+            List<PlanetCalendar> ketuTruePadaList,
+            List<MasaCalendar> masaList,
+            List<ShunyaNakshatraCalendar> shuNakList,
+            List<ShunyaTithiCalendar> shuTiList
+            )
         {
             Date = date;
 
@@ -573,6 +577,10 @@ namespace PAD
 
             KetuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuTrueLagnaList, sPerson, date, true);
             KetuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuTrueRetroLagnaList, sPerson, date, true);
+
+            MasaDayList = PrepareMasaDayList(masaList, date);
+            ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(shuNakList, date);
+            ShunyaTithiDayList = PrepareShunyaTithiDayList(shuTiList, date);
         }
 
 

@@ -30,6 +30,11 @@ namespace PAD
 
         public override string GetShortName(ELanguage langCode)
         {
+            return CacheLoad._muhurtaDescList.Where(i => i.MuhurtaId == (int)MuhurtaCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.ShortName ?? string.Empty;
+        }
+
+        public override string GetFullName(ELanguage langCode)
+        {
             return CacheLoad._muhurtaDescList.Where(i => i.MuhurtaId == (int)MuhurtaCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
         }
 

@@ -59,6 +59,11 @@ namespace PAD
             return string.Empty;
         }
 
+        public virtual string GetMasaName(ELanguage langCode)
+        {
+            return string.Empty;
+        }
+
         public virtual string GetMasaFullName(List<PlanetCalendar> pList, Profile person, ELanguage langCode)
         {
             return string.Empty;
