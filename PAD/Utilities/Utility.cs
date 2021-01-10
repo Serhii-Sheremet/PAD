@@ -2055,6 +2055,30 @@ namespace PAD
             return badNavamsha;
         }
 
+        public static List<BadNavamshaEntity> GetBadNavamshaNumbersList(Profile person, int pId, ELanguage lCode)
+        {
+            List<BadNavamshaEntity> badNavamshaList = new List<BadNavamshaEntity>();
+            int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+
+            int indexMoon = 0, indexLagna = 0;
+            for (int i = 0; i < badNavamshaArray.Length; i++)
+            {
+                indexMoon = swappedPadaByMoonList.FindIndex(l => l.Id == pId);
+                indexLagna = swappedPadaByLagnaList.FindIndex(l => l.Id == pId);
+                if ((indexMoon + 1) == badNavamshaArray[i])
+                {
+                    badNavamshaList.Add(new BadNavamshaEntity { Navamsha = badNavamshaArray[i], IsLagna = false });
+                }
+                if ((indexLagna + 1) == badNavamshaArray[i])
+                {
+                    badNavamshaList.Add(new BadNavamshaEntity { Navamsha = badNavamshaArray[i], IsLagna = true });
+                }
+            }
+            return badNavamshaList;
+        }
+
         public static List<DrekkanaEntity> GetBadDrekkanaList(Profile person, int padaId)
         {
             List<DrekkanaEntity> drekkanaList = new List<DrekkanaEntity>();

@@ -288,6 +288,10 @@ Drekkana from Natal Moon|th Drekkana from Natal Moon|en
 Drekkana from Natal Moon|-я Дреккана от Натальной Луны|ru
 Drekkana from Lagna|th Drekkana from Lagna|en
 Drekkana from Lagna|-я Дреккана от Лагны|ru
+Mo|Mo|en
+Mo|Лу|ru
+Lg|Lg|en
+Lg|Лг|ru
 Nature|Nature|en
 Nature|Природа|ru
 Good for|Good for|en

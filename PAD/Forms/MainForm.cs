@@ -1788,7 +1788,7 @@ namespace PAD
             if (c.Count > 0)
             {
                 List<PlanetCalendar> pList = Utility.ClonePlanetCalendarList(c);
-                string text = pList.First().GetTranzitPada();
+                string text = pList.First().GetTranzitPada(_selectedProfile, _activeLanguageCode);
                 if (pList.First().PlanetCode == EPlanet.MOON)
                     text = text.Substring(0, 1);
                 Size textSize = TextRenderer.MeasureText(text, font);
@@ -1927,7 +1927,7 @@ namespace PAD
                         if (currentPada != previousPada)
                         {
                             int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
-                            string text = pc.GetTranzitPada();
+                            string text = pc.GetTranzitPada(_selectedProfile, _activeLanguageCode);
                             if (pc.PlanetCode == EPlanet.MOON)
                                 text = text.Substring(0, 1);
                             Size textSize = TextRenderer.MeasureText(text, font);

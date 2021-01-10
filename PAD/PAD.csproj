@@ -127,6 +127,7 @@
     <Compile Include="Calendar\TithiCalendar.cs" />
     <Compile Include="Entities\AppSettingDescList.cs" />
     <Compile Include="Entities\AppSettingList.cs" />
+    <Compile Include="Entities\BadNavamshaEntity.cs" />
     <Compile Include="Entities\ColorDescription.cs" />
     <Compile Include="Entities\DateTimeInterval.cs" />
     <Compile Include="Entities\DomPlanet.cs" />

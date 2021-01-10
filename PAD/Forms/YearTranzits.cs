@@ -1129,7 +1129,7 @@ namespace PAD
                 List<PlanetCalendar> pcList = new List<PlanetCalendar>();
                 c.ForEach(i => pcList.Add((PlanetCalendar)i));
 
-                string text = pcList.First().GetTranzitPada();
+                string text = pcList.First().GetTranzitPada(_sProfile, _langCode);
                 if (pcList.First().PlanetCode == EPlanet.SUN || pcList.First().PlanetCode == EPlanet.VENUS || pcList.First().PlanetCode == EPlanet.MERCURY)
                 {
                     text = text.Substring(0, 1);
@@ -1268,7 +1268,7 @@ namespace PAD
                         {
                             int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                             
-                            string text = pc.GetTranzitPada();
+                            string text = pc.GetTranzitPada(_sProfile, _langCode);
                             Size textSize = TextRenderer.MeasureText(text, font);
                             if (pc.PlanetCode == EPlanet.SUN || pc.PlanetCode == EPlanet.VENUS || pc.PlanetCode == EPlanet.MERCURY)
                             {

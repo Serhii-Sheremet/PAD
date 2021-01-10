@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace PAD
 {
@@ -108,10 +109,47 @@ namespace PAD
             return (int)NakshatraCode;
         }
 
-        public override string GetTranzitPada()
+        public override string GetTranzitPada(Profile profile, ELanguage lCode)
         {
             Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
-            return pada.PadaNumber + "-" + pada.Navamsha + Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha);
+            List<BadNavamshaEntity> bneList = Utility.GetBadNavamshaNumbersList(profile, pada.Id, lCode);
+            string badNavamsha = string.Empty;
+            if (bneList.Count > 0)
+            {
+                for (int i = 0; i < bneList.Count; i++)
+                {
+                    if (bneList[i].Navamsha == 64)
+                    {
+                        if (!bneList[i].IsLagna)
+                        {
+                            badNavamsha += " " + bneList[i].Navamsha + "/" + Utility.GetLocalizedText("Mo", lCode) + " ";
+                        }
+                        else
+                        {
+                            badNavamsha += " " + bneList[i].Navamsha + "/" + Utility.GetLocalizedText("Lg", lCode) + " ";
+                        }
+                    }
+                }
+            }
+            List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(profile, pada.Id);
+            string drekkana = string.Empty;
+            {
+                if (deList.Count > 0)
+                {
+                    for (int i = 0; i < deList.Count; i++)
+                    {
+                        if (!deList[i].IsLagna)
+                        {
+                            drekkana += " " + deList[i].Drekkana + "/" + Utility.GetLocalizedText("Mo", lCode) + " ";
+                        }
+                        else
+                        {
+                            drekkana += " " + deList[i].Drekkana + "/" + Utility.GetLocalizedText("Lg", lCode) + " ";
+                        }
+                    }
+                }
+            }
+            return pada.PadaNumber + "-" + pada.Navamsha + Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha) + badNavamsha + drekkana;
         }
 
         public override string GetNavamshaExaltation()

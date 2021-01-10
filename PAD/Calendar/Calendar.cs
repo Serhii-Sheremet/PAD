@@ -49,7 +49,7 @@ namespace PAD
             return 0;
         }
 
-        public virtual string GetTranzitPada()
+        public virtual string GetTranzitPada(Profile profile, ELanguage langCode)
         {
             return string.Empty;
         }
