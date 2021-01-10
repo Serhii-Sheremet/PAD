@@ -56,8 +56,6 @@ namespace PAD
         public static List<Ghati60Description> _ghati60DescList;
         public static List<HoraPlanet> _horaPlanetList;
 
-        public static int[] _badNavamsha;
-
         public static List<DVLineNames> GetDVLineNamesList()
         {
             List<DVLineNames> entityList = new List<DVLineNames>();

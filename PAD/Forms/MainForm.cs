@@ -330,7 +330,6 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
-            CacheLoad._badNavamsha = new int[] { 36, 55, 64, 72, 81, 88, 96 };
         }
 
         private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)
@@ -3981,7 +3980,7 @@ namespace PAD
                 string trDesc = CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                 string vedha = GetVedhaList(pDay, pc, tr, tranzitSetting, nodeSettings, langCode, false);
                 dgvRowObj rowTemp = new dgvRowObj {
-                    Entity = Utility.GetLocalizedText("Zodiac", langCode),
+                    Entity = Utility.GetLocalizedText("Zodiac Sign", langCode),
                     DateStart = pc.DateStart,
                     DateEnd = pc.DateEnd,
                     Zodiac = zodiak,
@@ -4015,28 +4014,30 @@ namespace PAD
                 string nakshatra = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)pc.NakshatraCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                 Pada pada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault();
                 string specNavamsha = Utility.GetSpecNavamsha(pada, langCode);
-                string badNavamsha = string.Empty;
-                List<Pada> swappedPadaByMoonList = Utility.SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), _selectedProfile, false);
-                List<Pada> swappedPadaByLagnaList = Utility.SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), _selectedProfile, true);
-
-                int indexMoon = 0, indexLagna = 0;
-                for (int i = 0; i < CacheLoad._badNavamsha.Length; i++)
-                {
-                    indexMoon = swappedPadaByMoonList.FindIndex(l => l.Id == pc.PadaId);
-                    indexLagna = swappedPadaByLagnaList.FindIndex(l => l.Id == pc.PadaId);
-                    if ((indexMoon + 1) == CacheLoad._badNavamsha[i])
-                    {
-                        badNavamsha = CacheLoad._badNavamsha[i] + " " + Utility.GetLocalizedText("Navamsha from Natal Moon", langCode) + ", ";
-                    }
-                    if ((indexLagna + 1) == CacheLoad._badNavamsha[i])
-                    {
-                        badNavamsha = CacheLoad._badNavamsha[i] + " " + Utility.GetLocalizedText("Navamsha from Lagna", langCode) + ", ";
-                    }
-                }
-
+                string badNavamsha = Utility.GetBadNavamsha(_selectedProfile, pada.Id, langCode);
                 if (badNavamsha.Length > 0)
                 {
                     badNavamsha = ";  " +  badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                }
+                string drekkana = string.Empty;
+                List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_selectedProfile, pada.Id);
+                if (deList.Count > 0)
+                {
+                    for (int i = 0; i < deList.Count; i++)
+                    {
+                        if (!deList[i].IsLagna)
+                        {
+                            drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", langCode) + ", ";
+                        }
+                        else
+                        {
+                            drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", langCode) + ", ";
+                        }
+                    }
+                }
+                if (drekkana.Length > 0)
+                {
+                    drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
                 }
 
                 dgvRowObj rowTemp = new dgvRowObj
@@ -4047,12 +4048,13 @@ namespace PAD
                     Zodiac = zodiak,
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
                     Pada = pada.PadaNumber.ToString(),
-                    Description = Utility.GetLocalizedText("Navamsa", langCode) + ": " + pada.Navamsha + pc.GetNavamshaExaltation() + " " + specNavamsha + badNavamsha,
+                    Description = Utility.GetLocalizedText("Navamsa", langCode) + ": " + pada.Navamsha + pc.GetNavamshaExaltation() + " " + specNavamsha + badNavamsha + drekkana,
                     Vedha = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
-            List<dgvRowObj> rowListSorted = rowList.OrderBy(i => i.DateStart).ToList();
+            
+            /*List<dgvRowObj> rowListSorted = rowList.OrderBy(i => i.DateStart).ToList();
             for (int i = 0; i < rowListSorted.Count; i++)
             {
                 string[] row = new string[] {
@@ -4064,6 +4066,20 @@ namespace PAD
                         rowListSorted[i].Pada,
                         rowListSorted[i].Description,
                         rowListSorted[i].Vedha
+                    };
+                dgv.Rows.Add(row);
+            }*/
+            for (int i = 0; i < rowList.Count; i++)
+            {
+                string[] row = new string[] {
+                        rowList[i].Entity,
+                        rowList[i].DateStart.ToString("dd.MM.yyyy HH:mm:ss"),
+                        rowList[i].DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
+                        rowList[i].Zodiac,
+                        rowList[i].Nakshatra,
+                        rowList[i].Pada,
+                        rowList[i].Description,
+                        rowList[i].Vedha
                     };
                 dgv.Rows.Add(row);
             }

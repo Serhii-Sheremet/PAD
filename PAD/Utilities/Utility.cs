@@ -2031,7 +2031,91 @@ namespace PAD
             }
         }
 
-        public static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile person, bool isLagna)
+        public static string GetBadNavamsha(Profile person, int pId, ELanguage lCode)
+        {
+            string badNavamsha = string.Empty;
+            int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+
+            int indexMoon = 0, indexLagna = 0;
+            for (int i = 0; i < badNavamshaArray.Length; i++)
+            {
+                indexMoon = swappedPadaByMoonList.FindIndex(l => l.Id == pId);
+                indexLagna = swappedPadaByLagnaList.FindIndex(l => l.Id == pId);
+                if ((indexMoon + 1) == badNavamshaArray[i])
+                {
+                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsha from Natal Moon", lCode) + ", ";
+                }
+                if ((indexLagna + 1) == badNavamshaArray[i])
+                {
+                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsha from Lagna", lCode) + ", ";
+                }
+            }
+            return badNavamsha;
+        }
+
+        public static List<DrekkanaEntity> GetBadDrekkanaList(Profile person, int padaId)
+        {
+            List<DrekkanaEntity> drekkanaList = new List<DrekkanaEntity>();
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+            int birthMoonDrekkana = swappedPadaByMoonList.First().Drekkana;
+            int birthLagnaDrekkana = swappedPadaByLagnaList.First().Drekkana;
+            for (int i = 0; i < swappedPadaByMoonList.Count; i++)
+            {
+                if (swappedPadaByMoonList[i].Drekkana == (birthMoonDrekkana + 15) && swappedPadaByMoonList[i].Id == padaId)
+                {
+                    DrekkanaEntity deTemp = new DrekkanaEntity
+                    {
+                        Drekkana = 16,
+                        NakshatraId = swappedPadaByMoonList[i].NakshatraId,
+                        PadaId = swappedPadaByMoonList[i].Id,
+                        IsLagna = false
+                    };
+                    drekkanaList.Add(deTemp);
+                }
+                if (swappedPadaByMoonList[i].Drekkana == (birthMoonDrekkana + 21) && swappedPadaByMoonList[i].Id == padaId)
+                {
+                    DrekkanaEntity deTemp = new DrekkanaEntity
+                    {
+                        Drekkana = 22,
+                        NakshatraId = swappedPadaByMoonList[i].NakshatraId,
+                        PadaId = swappedPadaByMoonList[i].Id,
+                        IsLagna = false
+                    };
+                    drekkanaList.Add(deTemp);
+                }
+            }
+            for (int i = 0; i < swappedPadaByLagnaList.Count; i++)
+            {
+                if (swappedPadaByLagnaList[i].Drekkana == (birthLagnaDrekkana + 15) && swappedPadaByLagnaList[i].Id == padaId)
+                {
+                    DrekkanaEntity deTemp = new DrekkanaEntity
+                    {
+                        Drekkana = 16,
+                        NakshatraId = swappedPadaByLagnaList[i].NakshatraId,
+                        PadaId = swappedPadaByLagnaList[i].Id,
+                        IsLagna = true
+                    };
+                    drekkanaList.Add(deTemp);
+                }
+                if (swappedPadaByLagnaList[i].Drekkana == (birthLagnaDrekkana + 21) && swappedPadaByLagnaList[i].Id == padaId)
+                {
+                    DrekkanaEntity deTemp = new DrekkanaEntity
+                    {
+                        Drekkana = 22,
+                        NakshatraId = swappedPadaByLagnaList[i].NakshatraId,
+                        PadaId = swappedPadaByLagnaList[i].Id,
+                        IsLagna = true
+                    };
+                    drekkanaList.Add(deTemp);
+                }
+            }
+            return drekkanaList;
+        }
+
+        private static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile person, bool isLagna)
         {
             List<Pada> newList = new List<Pada>();
             int pId = 0;

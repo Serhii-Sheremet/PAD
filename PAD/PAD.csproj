@@ -130,6 +130,7 @@
     <Compile Include="Entities\ColorDescription.cs" />
     <Compile Include="Entities\DateTimeInterval.cs" />
     <Compile Include="Entities\DomPlanet.cs" />
+    <Compile Include="Entities\DrekkanaEntity.cs" />
     <Compile Include="Entities\DVLineNameDescription.cs" />
     <Compile Include="Entities\DVLineNames.cs" />
     <Compile Include="Entities\FontList.cs" />

@@ -956,6 +956,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
 
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
@@ -1012,16 +1049,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MOONPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1063,7 +1101,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1119,16 +1193,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.SUNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1170,7 +1245,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1226,16 +1337,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc3 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.VENUSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1277,7 +1389,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1333,16 +1481,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.JUPITERPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1384,7 +1533,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1440,16 +1625,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MERCURYPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1491,7 +1677,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1547,16 +1769,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MARSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1598,7 +1821,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1654,16 +1913,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.SATURNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1723,7 +1983,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1779,16 +2075,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.RAHUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1848,7 +2145,43 @@ namespace PAD
                         int padaNum = sPada.PadaNumber;
                         string navamsha = sPada.Navamsha + Utility.GetNavamshaExaltation(pc.PlanetCode, sPada.Navamsha);
                         string specNavamsha = Utility.GetSpecNavamsha(sPada, lCode);
-
+                        if (specNavamsha.Length > 0)
+                        {
+                            specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
+                        }
+                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
+                        {
+                            badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        else if (badNavamsha.Length > 0 && specNavamsha.Equals(string.Empty))
+                        {
+                            badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
+                        }
+                        string drekkana = string.Empty;
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        if (deList.Count > 0)
+                        {
+                            for (int i = 0; i < deList.Count; i++)
+                            {
+                                if (!deList[i].IsLagna)
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Natal Moon", lCode) + ", ";
+                                }
+                                else
+                                {
+                                    drekkana += deList[i].Drekkana + Utility.GetLocalizedText("Drekkana from Lagna", lCode) + ", ";
+                                }
+                            }
+                        }
+                        if ((badNavamsha.Length > 0 || specNavamsha.Length > 0) && drekkana.Length > 0)
+                        {
+                            drekkana = ";  " + drekkana.Substring(0, (drekkana.Length - 2));
+                        }
+                        else if (badNavamsha.Equals(string.Empty) && specNavamsha.Equals(string.Empty) && drekkana.Length > 0)
+                        {
+                            drekkana = drekkana.Substring(0, (drekkana.Length - 2));
+                        }
                         string vedha = string.Empty;
                         if (!tr.Vedha.Equals(string.Empty))
                         {
@@ -1904,16 +2237,17 @@ namespace PAD
                                 }
                             }
                         }
-                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha + specNavamsha;
+                        desc2 = zodiak + ", " + nakshatra + ", " + Utility.GetLocalizedText("Pada", lCode) + ": " + padaNum + ", " + Utility.GetLocalizedText("Navamsa", lCode) + ": " + navamsha;
+                        desc3 = specNavamsha + badNavamsha + drekkana;
                         if (tranzitSetting == EAppSetting.TRANZITMOON || tranzitSetting == EAppSetting.TRANZITMOONANDLAGNA)
                         {
-                            desc3 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Moon", lCode) + ": " + dom + vedha;
                         }
                         else
                         {
-                            desc3 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
+                            desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc4 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.KETUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1970,10 +2304,10 @@ namespace PAD
                     if (!tte.Description5.Equals(string.Empty))
                     {
                         formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, textFont, formWidth - 8);
-                        formHeight += 8;
+                        formHeight += 30;
                     }
                 }
-                formHeight += 16;
+                formHeight += 8;
 
                 toolTip = new Popup(dayViewToolTip = new DayViewToolTip(ttEList, formWidth, formHeight, titleFont, timeFont, textFont));
                 toolTip.AutoClose = false;

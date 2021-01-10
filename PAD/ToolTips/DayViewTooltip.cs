@@ -90,9 +90,11 @@ namespace PAD
                 if (!tte.Description5.Equals(string.Empty))
                 {
                     rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, _textFont, this.Width - 8);
+                    rectHeight += 22;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description5, _textFont, drawRect, Color.Black, flags);
                     posY += drawRect.Height;
+
                 }
                 posY += 8;
             }
