@@ -1996,7 +1996,7 @@ namespace PAD
             return UTF8Encoding.UTF8.GetString(resultArray);
         }
 
-        public static int ConvertHoursToPixels(int width, DateTime date)
+        public static float ConvertHoursToPixels(float width, DateTime date)
         {
             return (date.Hour * 60 + date.Minute) * width / 1440;
         }

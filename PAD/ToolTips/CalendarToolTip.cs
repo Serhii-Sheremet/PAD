@@ -176,7 +176,7 @@ namespace PAD
         
         private void DrawMuhurtaColoredLine(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> mList, DateTime date)
         {
-            int start = 0, end = 0, drawWidth = 0;
+            float start = 0, end = 0, drawWidth = 0;
             Size textSize;
             int heightPadding = 0;
             Rectangle emptyRect;
@@ -214,14 +214,13 @@ namespace PAD
             }
         }
 
-        private void DrawMuhurtaColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int dayWidth, int width, int height, Calendar c, DateTime date)
+        private void DrawMuhurtaColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, float posX, int posY, float dayWidth, float width, int height, Calendar c, DateTime date)
         {
             int heightPadding = 0;
             string text = string.Empty;
             Size textSize;
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(c.ColorCode)), rect);
-            e.Graphics.DrawRectangle(pen, rect);
+            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(c.ColorCode)), posX, posY, width, height);
+            e.Graphics.DrawRectangle(pen, posX, posY, width, height);
 
             if (c.DateStart > date)
                 text = c.DateStart.ToString("HH:mm");
@@ -237,9 +236,9 @@ namespace PAD
                 e.Graphics.DrawString(text, font, textBrush, posX + width + 1, posY + heightPadding);
         }
         
-        private void DrawColoredLine(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        private void DrawColoredLine(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, float posX, int posY, float width, int height, List<Calendar> cList, DateTime date)
         {
-            int drawWidth = 0, usedWidth = 0;
+            float drawWidth = 0, usedWidth = 0;
             foreach (Calendar c in cList)
             {
                 if (c == cList[cList.Count - 1])
@@ -256,13 +255,12 @@ namespace PAD
             }
         }
 
-        private void DrawColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, Calendar c, DateTime date)
+        private void DrawColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, float posX, int posY, float width, int height, Calendar c, DateTime date)
         {
             string text = string.Empty;
             Size textSize;
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(c.ColorCode)), rect);
-            e.Graphics.DrawRectangle(pen, rect);
+            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(c.ColorCode)), posX, posY, width, height);
+            e.Graphics.DrawRectangle(pen, posX, posY, width, height);
 
             if (c.DateStart > date)
             {
@@ -275,7 +273,7 @@ namespace PAD
 
             textSize = TextRenderer.MeasureText(text, font);
             int heightPadding = (height - textSize.Height) / 2;
-            if (textSize.Width + 1 <= rect.Width)
+            if (textSize.Width + 1 <= width)
             {
                 e.Graphics.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
             }
@@ -285,7 +283,7 @@ namespace PAD
                 {
                     text = c.DateStart.ToString("HH:mm");
                     textSize = TextRenderer.MeasureText(text, font);
-                    if (textSize.Width + 1 <= rect.Width)
+                    if (textSize.Width + 1 <= width)
                         e.Graphics.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                 }
             }
@@ -456,12 +454,11 @@ namespace PAD
             }
         }
 
-        private void DrawColoredJogaLine(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> jogaList, DateTime date)
+        private void DrawColoredJogaLine(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, float posX, int posY, float width, int height, List<Calendar> jogaList, DateTime date)
         {
-            int start = 0, end = 0, drawWidth = 0;
+            float start = 0, end = 0, drawWidth = 0;
 
-            Rectangle emptyRect = new Rectangle(posX, posY, width, height);
-            e.Graphics.DrawRectangle(pen, emptyRect);
+            e.Graphics.DrawRectangle(pen, posX, posY, width, height);
 
             foreach (Calendar c in jogaList)
             {
@@ -494,20 +491,19 @@ namespace PAD
             e.Graphics.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
         }
 
-        private void DrawJogaColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int dayWidth, int width, int height, Calendar yoga, DateTime date)
+        private void DrawJogaColoredRectangle(PaintEventArgs e, Pen pen, Font font, SolidBrush textBrush, float posX, int posY, float dayWidth, float width, int height, Calendar yoga, DateTime date)
         {
             int heightPadding = 0;
             string text = string.Empty;
             Size textSize;
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(yoga.ColorCode)), rect);
-            e.Graphics.DrawRectangle(pen, rect);
+            e.Graphics.FillRectangle(new SolidBrush(Utility.GetColorByColorCode(yoga.ColorCode)), posX, posY, width, height);
+            e.Graphics.DrawRectangle(pen, posX, posY, width, height);
 
             if (yoga.DateStart > date)
                 text = yoga.DateStart.ToString("HH:mm");
             textSize = TextRenderer.MeasureText(text, font);
             heightPadding = (height - textSize.Height) / 2;
-            if (textSize.Width + 1 <= rect.Width)
+            if (textSize.Width + 1 <= width)
                 e.Graphics.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
 
             if (yoga.DateEnd < date.AddDays(+1))

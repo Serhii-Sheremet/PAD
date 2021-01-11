@@ -83,9 +83,13 @@ namespace PAD
         private List<PlanetCalendar> _ketuTrueNCList;
         private List<PlanetCalendar> _ketuTruePCList;
 
-        int lineHeight;
-        int monthLabelHeight;
+        private float lineHeight;
+        int labelsWidth;
+        float dayWidth;
+        private float monthLabelHeight;
         private Image _currentImage;
+        private float[] monthWidthArray;
+
 
         public YearTranzits()
         {
@@ -211,6 +215,7 @@ namespace PAD
             _mCList = masaCList;
             _sNCList = shuNCList;
             _sTCList = shuTCList;
+            monthWidthArray = new float[12];
         }
 
         public List<Day> PrepareYearDays(int year, Profile sPerson)
@@ -479,11 +484,15 @@ namespace PAD
 
         public void YearTranzitDrawing(List<Day> dayList)
         {
-            int daysOfYear = DateTimeUtils.GetDaysInYear(dayList[0].Date);
-            int dayWidth = pictureBoxYearTranzits.Width / daysOfYear;
-            lineHeight = pictureBoxYearTranzits.Height / 50;
-            monthLabelHeight = lineHeight + 4;
-            int labelsWidth = pictureBoxYearTranzits.Width - dayWidth * daysOfYear - 2;
+            float daysOfYear = DateTimeUtils.GetDaysInYear(dayList[0].Date);
+
+            Font textFontPoint = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANZITTEXT)), 8, Utility.GetFontStyleBySettings(EFontList.TRANZITTEXT), GraphicsUnit.Point);
+            Size textSizelabel = TextRenderer.MeasureText(Utility.GetLocalizedText("Masa/Shunya", _langCode), textFontPoint);
+
+            labelsWidth = textSizelabel.Width;
+            dayWidth = (pictureBoxYearTranzits.Width - labelsWidth - 1) / daysOfYear;
+            lineHeight = (pictureBoxYearTranzits.Height - 42 - 1) / 38;
+            monthLabelHeight = lineHeight;
 
             Bitmap canvas = new Bitmap(pictureBoxYearTranzits.Width, pictureBoxYearTranzits.Height);
             Graphics g = Graphics.FromImage(canvas);
@@ -491,30 +500,39 @@ namespace PAD
 
             Pen pen = new Pen(Color.Black, 1);
             SolidBrush textBrush = new SolidBrush(Color.Black);
-            Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANZITTEXT)), lineHeight - 6, Utility.GetFontStyleBySettings(EFontList.TRANZITTEXT), GraphicsUnit.Pixel);
+
+            Font textFont;
+            Font textFontPixel = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANZITTEXT)), lineHeight - 4, Utility.GetFontStyleBySettings(EFontList.TRANZITTEXT), GraphicsUnit.Pixel);
+            if ((lineHeight - 2) >= (textSizelabel.Height + textSizelabel.Height / 2))
+            {
+                textFont = textFontPixel;
+            }
+            {
+                textFont = textFontPoint;
+            }
 
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
 
-            int posX = labelsWidth, posY = 4, nextPlanetY = 0;
-            int posYMasa = posY + monthLabelHeight + 4;
-            int posYTranzits = posYMasa + lineHeight + 4;
+            float posX = labelsWidth; 
+            float posY = 2, nextPlanetY = 0;
+            float posYMasa = posY + monthLabelHeight + 4;
+            float posYTranzits = posYMasa + lineHeight + 4;
 
             EAppSetting tranzitSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.TRANZIT.ToString()) && i.Active == 1).FirstOrDefault().Id;
             EAppSetting nodeSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
             string culture = CacheLoad._languageList.Where(i => i.LanguageCode.Equals(_langCode.ToString())).FirstOrDefault().CultureCode;
 
             int year = dayList[0].Date.Year;
-            int[] monthWidthArray = new int[12];
             for (int i = 0; i < 12; i++)
             {
-                int monthWidth = dayWidth * DateTime.DaysInMonth(year, i + 1);
+                float monthWidth = dayWidth * DateTime.DaysInMonth(year, i + 1);
                 monthWidthArray[i] = monthWidth;
                 string monthName = CultureInfo.GetCultureInfo(culture).DateTimeFormat.MonthNames[i];
                 Size textSize = TextRenderer.MeasureText(monthName, textFont);
-                int heightPadding = (monthLabelHeight - textSize.Height) / 2;
+                float heightPadding = (monthLabelHeight - textSize.Height) / 2;
                 g.DrawString(monthName, textFont, textBrush, (posX + (monthWidth / 2 - textSize.Width / 2)), posY + heightPadding);
-                Rectangle rec = new Rectangle(posX, posY, monthWidth, monthLabelHeight);
-                g.DrawRectangle(pen, rec);
+                //RectangleF rec = new RectangleF(posX, posY, monthWidth, monthLabelHeight);
+                g.DrawRectangle(pen, posX, posY, monthWidth, monthLabelHeight);
                 posX += monthWidth;
             }
 
@@ -550,8 +568,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.MoonZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.MoonZodiakRetroLagnaDayList);
                         break;
@@ -576,8 +594,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.SunZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.SunZodiakRetroLagnaDayList);
                         break;
@@ -601,8 +619,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.VenusZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.VenusZodiakRetroLagnaDayList);
                         break;
@@ -626,8 +644,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.JupiterZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.JupiterZodiakRetroLagnaDayList);
                         break;
@@ -651,8 +669,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.MercuryZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.MercuryZodiakRetroLagnaDayList);
                         break;
@@ -676,8 +694,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.MarsZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.MarsZodiakRetroLagnaDayList);
                         break;
@@ -701,8 +719,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.SaturnZodiakRetroDayList);
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.SaturnZodiakRetroLagnaDayList);
                         break;
@@ -740,8 +758,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         if (nodeSettings == EAppSetting.NODEMEAN)
                         {
                             DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.RahuMeanZodiakRetroDayList);
@@ -796,8 +814,8 @@ namespace PAD
                         break;
 
                     case EAppSetting.TRANZITMOONANDLAGNA:
-                        int height = lineHeight / 2;
-                        int posYHalf = posY + height;
+                        float height = lineHeight / 2;
+                        float posYHalf = posY + height;
                         if (nodeSettings == EAppSetting.NODEMEAN)
                         {
                             DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY, dayWidth, height, d.KetuMeanZodiakRetroDayList);
@@ -1063,15 +1081,14 @@ namespace PAD
             _currentImage = pictureBoxYearTranzits.Image;
         }
 
-        private void SetLineStartZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
+        private void SetLineStartZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c)
         {
             if (c.Count > 0)
             {
-                int endPosX = 0;
+                float endPosX = 0;
                 string text = c.First().GetNumberForYear();
                 Size textSize = TextRenderer.MeasureText(text, font);
-                int heightPadding = (height - textSize.Height) / 2;
-                
+                float heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
                 {
                     endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
@@ -1091,20 +1108,20 @@ namespace PAD
             }
         }
 
-        private void SetLineStartNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, bool isMoon)
+        private void SetLineStartNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c, bool isMoon)
         {
             if (c.Count > 0)
             {
                 string text = c.First().GetTranzitNakshatraForYear().ToString();
                 Size textSize = TextRenderer.MeasureText(text, font);
-                int heightPadding = (height - textSize.Height) / 2;
+                float heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
                 {
                     g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
+                    float endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width < endPosX && !isMoon)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1122,7 +1139,7 @@ namespace PAD
             }
         }
 
-        private void SetLineStartPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c)
+        private void SetLineStartPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c)
         {
             if (c.Count > 0)
             {
@@ -1136,14 +1153,14 @@ namespace PAD
                 }
 
                 Size textSize = TextRenderer.MeasureText(text, font);
-                int heightPadding = (height - textSize.Height) / 2;
+                float heightPadding = (height - textSize.Height) / 2;
                 if (pcList.Count == 1)
                 {
                     g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width * pcList.Last().DateStart.Day, pcList.Last().DateStart);
+                    float endPosX = Utility.ConvertHoursToPixels(width * pcList.Last().DateStart.Day, pcList.Last().DateStart);
                     if (textSize.Width < endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1152,21 +1169,21 @@ namespace PAD
             }
         }
 
-        private void SetLineStartTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, bool isMoon)
+        private void SetLineStartTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c, bool isMoon)
         {
             if (c.Count > 0)
             {
                 string text = c.First().GetTranzitTaraBala(_langCode);
                 var newText = text.Split('.');
                 Size textSize = TextRenderer.MeasureText(newText[0], font);
-                int heightPadding = (height - textSize.Height) / 2;
+                float heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
                 {
                     g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
+                    float endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
                     if (textSize.Width < endPosX)
                     {
                         if (textSize.Width <= endPosX)
@@ -1178,7 +1195,7 @@ namespace PAD
             }
         }
 
-        private void SetPlanetZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        private void SetPlanetZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date)
         {
             if (cList.Count > 0)
             {
@@ -1190,10 +1207,10 @@ namespace PAD
                 {
                     if (pc.DateStart > date)
                     {
-                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        float startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                         string text = pc.GetNumberForYear();
                         Size textSize = TextRenderer.MeasureText(text, font);
-                        int heightPadding = (height - textSize.Height) / 2;
+                        float heightPadding = (height - textSize.Height) / 2;
                         if (pc.PlanetCode != EPlanet.RAHUMEAN && pc.PlanetCode != EPlanet.KETUMEAN && pc.PlanetCode != EPlanet.RAHUTRUE && pc.PlanetCode != EPlanet.KETUTRUE)
                         {
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
@@ -1213,7 +1230,7 @@ namespace PAD
             }
         }
 
-        private void SetPlanetNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, bool isMoon)
+        private void SetPlanetNakshatra(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date, bool isMoon)
         {
             if (cList.Count > 0)
             {
@@ -1225,10 +1242,10 @@ namespace PAD
                 {
                     if (pc.DateStart > date)
                     {
-                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        float startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                         string text = pc.GetTranzitNakshatraForYear().ToString();
                         Size textSize = TextRenderer.MeasureText(text, font);
-                        int heightPadding = (height - textSize.Height) / 2;
+                        float heightPadding = (height - textSize.Height) / 2;
                         if (pc.NakshatraCode != previousNakshatra)
                         {
                             if (!isMoon)
@@ -1250,7 +1267,7 @@ namespace PAD
             }
         }
 
-        private void SetPlanetPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        private void SetPlanetPada(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date)
         {
             if (cList.Count > 0)
             {
@@ -1266,7 +1283,7 @@ namespace PAD
                         int currentPada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault().PadaNumber;
                         if (currentPada != previousPada)
                         {
-                            int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                            float startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                             
                             string text = pc.GetTranzitPada(_sProfile, _langCode);
                             Size textSize = TextRenderer.MeasureText(text, font);
@@ -1274,7 +1291,7 @@ namespace PAD
                             {
                                 text = text.Substring(0, 1);
                             }
-                            int heightPadding = (height - textSize.Height) / 2;
+                            float heightPadding = (height - textSize.Height) / 2;
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
                             g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);
                             previousPada = currentPada;
@@ -1286,7 +1303,7 @@ namespace PAD
         }
 
 
-        private void SetPlanetTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, bool isMoon)
+        private void SetPlanetTaraBala(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date, bool isMoon)
         {
             if (cList.Count > 0)
             {
@@ -1298,10 +1315,10 @@ namespace PAD
                 {
                     if (pc.DateStart > date)
                     {
-                        int startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
+                        float startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
                         string text = pc.GetTranzitTaraBala(_langCode);
                         Size textSize = TextRenderer.MeasureText(text, font);
-                        int heightPadding = (height - textSize.Height) / 2;
+                        float heightPadding = (height - textSize.Height) / 2;
                         if (pc.TaraBalaId != previousTaraBala)
                         {
                             var newText = text.Split('.');
@@ -1315,7 +1332,7 @@ namespace PAD
             }
         }
 
-        private void DrawPlanetBlockRectangles(Graphics g, Pen pen, int posX, int posY, int width, int height)
+        private void DrawPlanetBlockRectangles(Graphics g, Pen pen, float posX, float posY, float width, float height)
         {
             for (int i = 0; i < 4; i++)
             {
@@ -1323,25 +1340,24 @@ namespace PAD
             }
         }
 
-        private void DrawLineRectangle(Graphics g, Pen pen, int posX, int posY, int width, int height)
+        private void DrawLineRectangle(Graphics g, Pen pen, float posX, float posY, float width, float height)
         {
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-            g.DrawRectangle(pen, rect);
+            g.DrawRectangle(pen, posX, posY, width, height);
         }
 
-        private void DrawLineName(Graphics g, Pen pen, SolidBrush textBrush, int posY, int labelsWidth, int height, string text)
+        private void DrawLineName(Graphics g, Pen pen, SolidBrush textBrush, float posY, float labelsWidth, float height, string text)
         {
             string localText = Utility.GetLocalizedText(text, _langCode);
             Font textFont = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular, GraphicsUnit.Point);
             Size textSize = TextRenderer.MeasureText(localText, textFont);
-            int posX = labelsWidth - (textSize.Width + 2);
-            int heightPadding = (height - textSize.Height) / 2;
+            float posX = labelsWidth - (textSize.Width + 2);
+            float heightPadding = (height - textSize.Height) / 2;
             g.DrawString(localText, textFont, textBrush, posX, posY + heightPadding);
         }
 
-        private void DrawTranzitColoredLine(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList)
+        private void DrawTranzitColoredLine(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList)
         {
-            int drawWidth = 0, usedWidth = 0;
+            float drawWidth = 0, usedWidth = 0;
             foreach (Calendar c in cList)
             {
                 if (c == cList.Last())
@@ -1358,13 +1374,11 @@ namespace PAD
             }
         }
 
-        private void DrawTranzitColoredRectangle(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, Calendar cObj)
+        private void DrawTranzitColoredRectangle(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, Calendar cObj)
         {
             SolidBrush brush = new SolidBrush(Color.White);
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-
             brush = new SolidBrush(Utility.GetColorByColorCode(cObj.ColorCode));
-            g.FillRectangle(brush, rect);
+            g.FillRectangle(brush, posX, posY, width, height);
         }
 
         private void pictureBoxYearTranzits_MouseClick(object sender, MouseEventArgs e)
@@ -1372,20 +1386,12 @@ namespace PAD
             if (e.Button == MouseButtons.Right)
             {
                 int daysOfYear = DateTimeUtils.GetDaysInYear(dayList[0].Date);
-                int dayWidth = pictureBoxYearTranzits.Width / daysOfYear;
-                int labelsWidth = pictureBoxYearTranzits.Width - dayWidth * daysOfYear - 2;
-                int posX = labelsWidth, posY = 3;
-                int height = monthLabelHeight + lineHeight + 4 +((lineHeight * 4) + 4) * 9 + 2;
+                float posX = labelsWidth, posY = 1;
+                float height = monthLabelHeight + lineHeight + 4 +((lineHeight * 4) + 4) * 9 + 2;
 
-                int[] monthWidthArray = new int[12];
-                for (int i = 0; i < 12; i++)
-                {
-                    int monthWidth = dayWidth * DateTime.DaysInMonth(_sYear, i + 1);
-                    monthWidthArray[i] = monthWidth;
-                }
-
-                int monthPos = e.X - labelsWidth;
-                int curX = 0, month = 0;
+                float monthPos = e.X - labelsWidth;
+                float curX = 0; 
+                int month = 0;
                 for (int i = 0; i < 12; i++)
                 {
                     curX += monthWidthArray[i];
@@ -1401,21 +1407,20 @@ namespace PAD
                 pictureBoxYearTranzits.Image = _currentImage;
                 Bitmap canvas = new Bitmap(pictureBoxYearTranzits.Image);
                 Graphics g = Graphics.FromImage(canvas);
-                Rectangle selectRectangle = new Rectangle(posX, posY, monthWidthArray[month - 1], height);
                 Pen pen = new Pen(Color.FromArgb(CacheLoad._colorList.Where(i => i.Code.Equals(EColor.SELECTRECTANGLE.ToString())).FirstOrDefault().ARGBValue), 1);
-                g.DrawRectangle(pen, selectRectangle);
+                g.DrawRectangle(pen, posX, posY, monthWidthArray[month - 1], height);
                 pictureBoxYearTranzits.Image = canvas;
             }
         }
 
-        private void DrawShunyaColoredLine(Graphics g, Pen pen, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date)
+        private void DrawShunyaColoredLine(Graphics g, Pen pen, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date)
         {
             if (cList.Count > 0)
             {
-                Rectangle rect = new Rectangle();
-                int startPosX = 0, endPosX = 0;
+                float startPosX = 0, endPosX = 0;
                 foreach (Calendar c in cList)
                 {
+                    SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(c.ColorCode));
                     if (c.DateStart <= date)
                     {
                         startPosX = 0;
@@ -1434,32 +1439,30 @@ namespace PAD
                     }
                     if (c.GetShunyaCode() == EShunya.SHUNYANAKSHATRA)
                     {
-                        rect = new Rectangle(posX + startPosX, posY, endPosX - startPosX, height / 2);
+                        g.FillRectangle(brush, posX + startPosX, posY, endPosX - startPosX, height / 2);
                     }
                     if (c.GetShunyaCode() == EShunya.SHUNYATITHI)
                     {
-                        rect = new Rectangle(posX + startPosX, posY + height / 2, endPosX - startPosX, height - height / 2);
+                        g.FillRectangle(brush, posX + startPosX, posY + height / 2, endPosX - startPosX, height - height / 2);
                     }
-                    SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(c.ColorCode));
-                    g.FillRectangle(brush, rect);
                 }
             }
         }
 
-        private void SetMasaStartName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> c, ELanguage lCode)
+        private void SetMasaStartName(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c, ELanguage lCode)
         {
             if (c.Count > 0)
             {
                 string text = c.First().GetMasaName(lCode); 
                 Size textSize = TextRenderer.MeasureText(text, font);
-                int heightPadding = (height - textSize.Height) / 2;
+                float heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
                 {
                     g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                 }
                 else
                 {
-                    int endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
+                    float endPosX = Utility.ConvertHoursToPixels(width, c.Last().DateStart);
                     if (textSize.Width <= endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
@@ -1468,17 +1471,17 @@ namespace PAD
             }
         }
 
-        private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, int posX, int posY, int width, int height, List<Calendar> cList, DateTime date, ELanguage lCode)
+        private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date, ELanguage lCode)
         {
             string curMasa = cList.First().GetMasaName(lCode);
             foreach (Calendar c in cList)
             {
                 if (c.DateStart > date)
                 {
-                    int startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
+                    float startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
                     string text = c.GetMasaName(lCode); 
                     Size textSize = TextRenderer.MeasureText(text, font);
-                    int heightPadding = (height - textSize.Height) / 2;
+                    float heightPadding = (height - textSize.Height) / 2;
                     if (!text.Equals(curMasa))
                     {
                         g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
