@@ -1079,6 +1079,7 @@ namespace PAD
             }
             pictureBoxYearTranzits.Image = canvas;
             _currentImage = pictureBoxYearTranzits.Image;
+            //((MainForm)this.MFormAccess).CurrentYearTranzitImage = _currentImage;
         }
 
         private void SetLineStartZodiak(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> c)
@@ -1146,12 +1147,19 @@ namespace PAD
                 List<PlanetCalendar> pcList = new List<PlanetCalendar>();
                 c.ForEach(i => pcList.Add((PlanetCalendar)i));
 
-                string text = pcList.First().GetTranzitPada(_sProfile, _langCode);
-                if (pcList.First().PlanetCode == EPlanet.SUN || pcList.First().PlanetCode == EPlanet.VENUS || pcList.First().PlanetCode == EPlanet.MERCURY)
+                string text = string.Empty; 
+                if (pcList.First().PlanetCode == EPlanet.JUPITER || pcList.First().PlanetCode == EPlanet.MARS)
                 {
-                    text = text.Substring(0, 1);
+                    text = pcList.First().GetTranzitPadaWithoutBadNavamshaAndDreakkana();
                 }
-
+                else
+                {
+                    text = pcList.First().GetTranzitPada(_sProfile, _langCode);
+                    if (pcList.First().PlanetCode == EPlanet.SUN || pcList.First().PlanetCode == EPlanet.VENUS || pcList.First().PlanetCode == EPlanet.MERCURY)
+                    {
+                        text = text.Substring(0, 1);
+                    }
+                }
                 Size textSize = TextRenderer.MeasureText(text, font);
                 float heightPadding = (height - textSize.Height) / 2;
                 if (pcList.Count == 1)
@@ -1280,17 +1288,24 @@ namespace PAD
                 {
                     if (pc.DateStart > date)
                     {
+                        string text = string.Empty;
                         int currentPada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault().PadaNumber;
                         if (currentPada != previousPada)
                         {
                             float startPosX = Utility.ConvertHoursToPixels(width, pc.DateStart);
-                            
-                            string text = pc.GetTranzitPada(_sProfile, _langCode);
-                            Size textSize = TextRenderer.MeasureText(text, font);
-                            if (pc.PlanetCode == EPlanet.SUN || pc.PlanetCode == EPlanet.VENUS || pc.PlanetCode == EPlanet.MERCURY)
+                            if (pc.PlanetCode == EPlanet.JUPITER || pc.PlanetCode == EPlanet.MARS)
                             {
-                                text = text.Substring(0, 1);
+                                text = pc.GetTranzitPadaWithoutBadNavamshaAndDreakkana();
                             }
+                            else
+                            {
+                                text = pc.GetTranzitPada(_sProfile, _langCode);
+                                if (pc.PlanetCode == EPlanet.SUN || pc.PlanetCode == EPlanet.VENUS || pc.PlanetCode == EPlanet.MERCURY)
+                                {
+                                    text = text.Substring(0, 1);
+                                }
+                            }
+                            Size textSize = TextRenderer.MeasureText(text, font);
                             float heightPadding = (height - textSize.Height) / 2;
                             g.DrawLine(pen, posX + startPosX, posY, posX + startPosX, posY + height);
                             g.DrawString(text, font, textBrush, posX + startPosX + 1, posY + heightPadding);

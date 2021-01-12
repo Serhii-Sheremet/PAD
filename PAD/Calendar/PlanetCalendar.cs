@@ -152,6 +152,12 @@ namespace PAD
             return pada.PadaNumber + "-" + pada.Navamsha + Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha) + badNavamsha + drekkana;
         }
 
+        public override string GetTranzitPadaWithoutBadNavamshaAndDreakkana()
+        {
+            Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
+            return pada.PadaNumber + "-" + pada.Navamsha + Utility.GetNavamshaExaltation(PlanetCode, pada.Navamsha);
+        }
+
         public override string GetNavamshaExaltation()
         {
             Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
