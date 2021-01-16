@@ -339,7 +339,7 @@ To|По|ru
 At least title have to be present.|At least title have to be present.|en
 At least title have to be present.|Хотя бы название должно присутствовать.|ru
 Please select a time period.|Please select a time period.|en
-Please select a time period.|Пожалуйста выберете временной отрезок.|ru
+Please select a time period.|Необходимо выбрать временной отрезок.|ru
 Do you want to remove this appointment?|Do you want to remove this appointment?|en
 Do you want to remove this appointment?|Вы хотите удалить эту запись?|ru
 Concept: Halyna Sheremet|Concept: Halyna Sheremet|en

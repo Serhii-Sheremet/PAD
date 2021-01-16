@@ -1,5 +1,4 @@
 0|Arial
-0|Berlin Sans FB
 0|Book Antiqua
 0|Calibri
 0|Cambria

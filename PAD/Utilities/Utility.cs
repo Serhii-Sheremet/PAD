@@ -2086,9 +2086,10 @@ namespace PAD
             List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
             int birthMoonDrekkana = swappedPadaByMoonList.First().Drekkana;
             int birthLagnaDrekkana = swappedPadaByLagnaList.First().Drekkana;
+            int currentMoonDrekkana = 0, currentLagnaDrekkana = 0;
             for (int i = 0; i < swappedPadaByMoonList.Count; i++)
             {
-                if (swappedPadaByMoonList[i].Drekkana == (birthMoonDrekkana + 15) && swappedPadaByMoonList[i].Id == padaId)
+                if ((currentMoonDrekkana + swappedPadaByMoonList[i].Drekkana) == (birthMoonDrekkana + 15) && swappedPadaByMoonList[i].Id == padaId)
                 {
                     DrekkanaEntity deTemp = new DrekkanaEntity
                     {
@@ -2099,7 +2100,7 @@ namespace PAD
                     };
                     drekkanaList.Add(deTemp);
                 }
-                if (swappedPadaByMoonList[i].Drekkana == (birthMoonDrekkana + 21) && swappedPadaByMoonList[i].Id == padaId)
+                if ((currentMoonDrekkana + swappedPadaByMoonList[i].Drekkana) == (birthMoonDrekkana + 21) && swappedPadaByMoonList[i].Id == padaId)
                 {
                     DrekkanaEntity deTemp = new DrekkanaEntity
                     {
@@ -2109,11 +2110,15 @@ namespace PAD
                         IsLagna = false
                     };
                     drekkanaList.Add(deTemp);
+                }
+                if(i > 2 && swappedPadaByMoonList[i - 2].Drekkana == 36)
+                {
+                    currentMoonDrekkana = 36;
                 }
             }
             for (int i = 0; i < swappedPadaByLagnaList.Count; i++)
             {
-                if (swappedPadaByLagnaList[i].Drekkana == (birthLagnaDrekkana + 15) && swappedPadaByLagnaList[i].Id == padaId)
+                if ((currentLagnaDrekkana + swappedPadaByLagnaList[i].Drekkana) == (birthLagnaDrekkana + 15) && swappedPadaByLagnaList[i].Id == padaId)
                 {
                     DrekkanaEntity deTemp = new DrekkanaEntity
                     {
@@ -2124,7 +2129,7 @@ namespace PAD
                     };
                     drekkanaList.Add(deTemp);
                 }
-                if (swappedPadaByLagnaList[i].Drekkana == (birthLagnaDrekkana + 21) && swappedPadaByLagnaList[i].Id == padaId)
+                if ((currentLagnaDrekkana + swappedPadaByLagnaList[i].Drekkana) == (birthLagnaDrekkana + 21) && swappedPadaByLagnaList[i].Id == padaId)
                 {
                     DrekkanaEntity deTemp = new DrekkanaEntity
                     {
@@ -2134,6 +2139,10 @@ namespace PAD
                         IsLagna = true
                     };
                     drekkanaList.Add(deTemp);
+                }
+                if (i > 2 && swappedPadaByLagnaList[i - 2].Drekkana == 36)
+                {
+                    currentLagnaDrekkana = 36;
                 }
             }
             return drekkanaList;
