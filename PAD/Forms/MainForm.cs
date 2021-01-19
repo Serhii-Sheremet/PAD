@@ -3525,7 +3525,7 @@ namespace PAD
 
         private void pictureBoxCalendar_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null || e.Y < _daysOfWeekHeight || e.Y > (_daysOfWeekHeight + 6 * _dayHeight) - 1)
+            if (_selectedProfile == null || e.Y < _daysOfWeekHeight || (e.Y >= (_daysOfWeekHeight + 6 * _dayHeight) - 1) || e.X < 0 || e.X >= 7 * _dayWidth)
                 return;
 
             int colNumber = e.X / Convert.ToInt32(_dayWidth);
