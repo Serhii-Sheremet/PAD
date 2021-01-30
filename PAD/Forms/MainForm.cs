@@ -3532,6 +3532,9 @@ namespace PAD
             int rowNumber = (e.Y - Convert.ToInt32(_daysOfWeekHeight)) / Convert.ToInt32(_dayHeight);
             int selectedDayIndex = rowNumber * 7 + colNumber;
 
+            if (selectedDayIndex < 0 || selectedDayIndex >= 42)
+                return;
+
             DateTime date = _daysList[selectedDayIndex].Date;
             List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.GUID, date);
             if (peDayList.Count > 0)
@@ -3640,6 +3643,7 @@ namespace PAD
                     trEnt = TranzitEntity.TEKetu;
 
                 // Show info for selected tranzit line
+                toolTip = null;
                 int ttposX = 0, ttposY = 0, height = 0;
                 int formWidth = pictureBoxTranzits.Width;
                 switch (trEnt)
