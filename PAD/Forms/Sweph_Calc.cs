@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace PAD
@@ -13,12 +12,12 @@ namespace PAD
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SwephCalculation swCalc = new SwephCalculation();
+            EpheCalculation eCalc = new EpheCalculation();
 
             double[] calcRes = new double[6];
-            double longitude = -0.1257400, latitude = 51.5085300, altitude = 0;
+            double longitude = -0.17, latitude = 51.5, altitude = 0;
 
-            calcRes = swCalc.SWE_Calculation(EpheConstants.SE_SUN, DateTime.Now, longitude, latitude, altitude);
+            calcRes = eCalc.SWE_Calculation(EpheConstants.SE_SUN, DateTime.Now, longitude, latitude, altitude);
 
         }
     }

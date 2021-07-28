@@ -3,14 +3,14 @@ using System.Runtime.InteropServices;
 
 namespace PAD
 {
-    public class SwephCalculation
+    public class EpheCalculation
     {
         private const Int64 SEFLG_EPHMASK = (EpheConstants.SEFLG_JPLEPH | EpheConstants.SEFLG_SWIEPH | EpheConstants.SEFLG_MOSEPH);
         private Int64 iflag;
         private Int64 whicheph;
         private int gregflag;
 
-        public SwephCalculation()
+        public EpheCalculation()
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
             iflag = 0;
