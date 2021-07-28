@@ -198,6 +198,7 @@
     <Compile Include="Enums\EZodiak.cs" />
     <Compile Include="Ephe\EpheConstants.cs" />
     <Compile Include="Ephe\EpheFunctions.cs" />
+    <Compile Include="Ephe\SwephCalculation.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -263,6 +264,12 @@
     </Compile>
     <Compile Include="Forms\FontSettings.Designer.cs">
       <DependentUpon>FontSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Sweph_Calc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Sweph_Calc.Designer.cs">
+      <DependentUpon>Sweph_Calc.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\TabDay.cs">
       <SubType>Form</SubType>
@@ -377,6 +384,9 @@
     <EmbeddedResource Include="Forms\FontSettings.resx">
       <DependentUpon>FontSettings.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Sweph_Calc.resx">
+      <DependentUpon>Sweph_Calc.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\TabDay.resx">
       <DependentUpon>TabDay.cs</DependentUpon>
     </EmbeddedResource>
@@ -454,6 +464,9 @@
     <None Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="swedll32.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="bin\Debug\Images\green-check_32.png" />
     <None Include="bin\Debug\Images\Moon_Eclipse_alpha.png" />
     <None Include="bin\Debug\Images\Sun_Eclipse_alpha.png" />

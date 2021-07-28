@@ -64,6 +64,7 @@
             this.datePicker = new CustomControls.DatePicker();
             this.labelProfile = new System.Windows.Forms.Label();
             this.labelTimeZone = new System.Windows.Forms.Label();
+            this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.tabControlCalendar.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
@@ -227,7 +228,8 @@
             this.profileToolStripMenuItem,
             this.locationToolStripMenuItem,
             this.toolStripSeparator1,
-            this.yearsTranzitsToolStripMenuItem});
+            this.yearsTranzitsToolStripMenuItem,
+            this.swephCalcToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             resources.ApplyResources(this.toolsToolStripMenuItem, "toolsToolStripMenuItem");
             // 
@@ -315,6 +317,12 @@
             resources.ApplyResources(this.labelTimeZone, "labelTimeZone");
             this.labelTimeZone.Name = "labelTimeZone";
             // 
+            // swephCalcToolStripMenuItem
+            // 
+            this.swephCalcToolStripMenuItem.Name = "swephCalcToolStripMenuItem";
+            resources.ApplyResources(this.swephCalcToolStripMenuItem, "swephCalcToolStripMenuItem");
+            this.swephCalcToolStripMenuItem.Click += new System.EventHandler(this.swephCalcToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -381,5 +389,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
         private System.Windows.Forms.ToolStripMenuItem yearsTranzitsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportYearToPDFToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem swephCalcToolStripMenuItem;
     }
 }

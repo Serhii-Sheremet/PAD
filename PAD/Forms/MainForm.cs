@@ -5339,6 +5339,10 @@ namespace PAD
                 File.Delete(filesList[i]);
         }
 
-        
+        private void swephCalcToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Sweph_Calc scForm = new Sweph_Calc();
+            scForm.ShowDialog(this);
+        }
     }
 }
