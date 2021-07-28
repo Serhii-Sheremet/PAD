@@ -196,6 +196,8 @@
     <Compile Include="Enums\EShunya.cs" />
     <Compile Include="Enums\ESun.cs" />
     <Compile Include="Enums\EZodiak.cs" />
+    <Compile Include="Ephe\EpheConstants.cs" />
+    <Compile Include="Ephe\EpheFunctions.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
