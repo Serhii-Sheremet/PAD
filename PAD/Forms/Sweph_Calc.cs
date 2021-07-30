@@ -28,59 +28,49 @@ namespace PAD
             string currentRetro = string.Empty;
             
             List<PlanetData> planetDataList = new List<PlanetData>();
-            int cZnak = 0, cNakshatra = 0, cPada = 0;
-            string cRetro = string.Empty;
             DateTime dateChange;
 
             while (curDate.Year < yearTo)
             {
                 TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
                 dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-                if (dateChange.Month != curDate.Month)
+
+                curDate = new DateTime(dateChange.Year, dateChange.AddMonths(-1).Month, curDate.Day, curDate.Hour, curDate.Minute, curDate.Second);
+                tsStep = curDate.AddDays(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.AddDays(-1).Day, curDate.Hour, curDate.Minute, curDate.Second);
+                tsStep = curDate.AddHours(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.AddHours(-1).Hour, curDate.Minute, curDate.Second);
+                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.Hour, dateChange.AddMinutes(-1).Minute, curDate.Second);
+                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange;
+                currentZnak = GetCurrentZnak(calcRes[0]);
+                currentNakshatra = GetCurrentNakshatra(calcRes[0]);
+                currentPada = GetCurrentPada(calcRes[0]);
+                currentRetro = string.Empty;
+
+                PlanetData pdTemp = new PlanetData
                 {
-                    tsStep = curDate.AddDays(+1).Subtract(curDate);
-                    dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-                    if (dateChange.Day != curDate.Day)
-                    {
-                        curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.AddDays(-1).Day, curDate.Hour, curDate.Minute, curDate.Second);
-                        tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                    Date = curDate,
+                    Longitude = calcRes[0],
+                    Latitude = calcRes[1],
+                    SpeedInLongitude = calcRes[3],
+                    SpedInLatitude = calcRes[4],
+                    Retro = currentRetro,
+                    ZodiakId = currentZnak,
+                    NakshatraId = currentNakshatra,
+                    PadaId = currentPada
+                };
+                planetDataList.Add(pdTemp);
 
-                        if (dateChange.Hour != curDate.Hour)
-                        {
-                            curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.AddHours(-1).Hour, curDate.Minute, curDate.Second);
-                            tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                            dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                            if (dateChange.Minute != curDate.Minute)
-                            {
-                                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.Hour, dateChange.AddMinutes(-1).Minute, curDate.Second);
-                                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                                curDate = dateChange;
-                                currentZnak = GetCurrentZnak(calcRes[0]);
-                                currentNakshatra = GetCurrentNakshatra(calcRes[0]);
-                                currentPada = GetCurrentPada(calcRes[0]);
-                                currentRetro = cRetro;
-
-                                PlanetData pdTemp = new PlanetData
-                                {
-                                    Date = curDate,
-                                    Longitude = calcRes[0],
-                                    Latitude = calcRes[1],
-                                    SpeedInLongitude = calcRes[3],
-                                    SpedInLatitude = calcRes[4],
-                                    Retro = cRetro,
-                                    ZodiakId = cZnak,
-                                    NakshatraId = cNakshatra,
-                                    PadaId = cPada
-                                };
-                                planetDataList.Add(pdTemp);
-                            }
-                        }
-                    }
-                }
                 curDate = curDate.AddSeconds(+1);
             }
             label1.Text = "Count in a list: " + planetDataList.Count;
@@ -102,6 +92,16 @@ namespace PAD
                 cRetro = string.Empty;
 
                 if (cZnak != currentZnak)
+                {
+                    return date;
+                }
+
+                if (cNakshatra != currentNakshatra)
+                {
+                    return date;
+                }
+
+                if (cPada != currentPada)
                 {
                     return date;
                 }
