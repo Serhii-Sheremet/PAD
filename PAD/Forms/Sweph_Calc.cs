@@ -17,12 +17,11 @@ namespace PAD
 
             double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0;
-            int planetConstant = EpheConstants.SE_MOON;
-
+            int planetConstant = EpheConstants.SE_SUN;
             int year = 2021, yearTo = year + 1;
             DateTime curDate = new DateTime(year, 1, 1, 0, 0, 0);
 
-            calcRes = eCalc.SWE_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            calcRes = eCalc.SWE_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude);
             int currentZnak = GetCurrentZnak(calcRes[0]);
             int currentNakshatra = GetCurrentNakshatra(calcRes[0]);
             int currentPada = GetCurrentPada(calcRes[0]);
@@ -74,6 +73,9 @@ namespace PAD
 
                 curDate = curDate.AddSeconds(+1);
             }
+
+            //List<PlanetData> planetDataListTZShifted = 
+
             label1.Text = "Count in a list: " + planetDataList.Count;
         }
 

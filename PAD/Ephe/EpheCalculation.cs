@@ -34,14 +34,46 @@ namespace PAD
             double[] calcRes = new double[6];
 
             int jday = calcDate.Day;
-            int jmon = calcDate.Month;
+            int jmonth = calcDate.Month;
             int jyear = calcDate.Year;
             int jhour = calcDate.Hour;
             int jmin = calcDate.Minute;
             int jsec = calcDate.Second;
 
+            /*
+            int iyear = 0;
+            int imonth = 0;
+            int iday = 0;
+            int ihour = 0;
+            int imin = 0;
+            int isec = 0;
+
+            IntPtr iyear_out = Marshal.AllocHGlobal(Marshal.SizeOf(iyear));
+            IntPtr imonth_out = Marshal.AllocHGlobal(Marshal.SizeOf(imonth));
+            IntPtr iday_out = Marshal.AllocHGlobal(Marshal.SizeOf(iday));
+            IntPtr ihour_out = Marshal.AllocHGlobal(Marshal.SizeOf(ihour));
+            IntPtr imin_out = Marshal.AllocHGlobal(Marshal.SizeOf(imin));
+            IntPtr isec_out = Marshal.AllocHGlobal(Marshal.SizeOf(isec));
+
+            EpheFunctions.swe_utc_time_zone(jyear, jmon, jday, jhour, jmin, jsec, tzone, iyear_out, imonth_out, iday_out, ihour_out, imin_out, isec_out);
+
+            iyear = Marshal.ReadInt32(iyear_out);
+            imonth = Marshal.ReadInt32(imonth_out);
+            iday = Marshal.ReadInt32(iday_out);
+            ihour = Marshal.ReadInt32(ihour_out);
+            imin = Marshal.ReadInt32(imin_out);
+            isec = Marshal.ReadInt32(isec_out);
+
+            Marshal.FreeHGlobal(iyear_out);
+            Marshal.FreeHGlobal(imonth_out);
+            Marshal.FreeHGlobal(iday_out);
+            Marshal.FreeHGlobal(ihour_out);
+            Marshal.FreeHGlobal(imin_out);
+            Marshal.FreeHGlobal(isec_out);
+            */
+
             jut = jhour + jmin / 60.0 + jsec / 3600.0;
-            tjd_ut = EpheFunctions.swe_julday(jyear, jmon, jday, jut, gregflag);
+            tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
 
             IntPtr ptrXDouble = Marshal.AllocHGlobal(Marshal.SizeOf(calcRes[0]) * calcRes.Length);
             Marshal.Copy(calcRes, 0, ptrXDouble, 6);
