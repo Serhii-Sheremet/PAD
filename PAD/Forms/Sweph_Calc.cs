@@ -17,6 +17,7 @@ namespace PAD
 
             double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0;
+            int planetConstant = EpheConstants.SE_MOON;
 
             int year = 2021, yearTo = year + 1;
             DateTime curDate = new DateTime(year, 1, 1, 0, 0, 0);
@@ -33,23 +34,23 @@ namespace PAD
             while (curDate.Year < yearTo)
             {
                 TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                dateChange = CheckChangeInTimePeriod(eCalc, planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
 
-                curDate = new DateTime(dateChange.Year, dateChange.AddMonths(-1).Month, curDate.Day, curDate.Hour, curDate.Minute, curDate.Second);
+                curDate = dateChange.Add(-tsStep); 
                 tsStep = curDate.AddDays(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                dateChange = CheckChangeInTimePeriod(eCalc, planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
 
-                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.AddDays(-1).Day, curDate.Hour, curDate.Minute, curDate.Second);
+                curDate = dateChange.Add(-tsStep); 
                 tsStep = curDate.AddHours(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                dateChange = CheckChangeInTimePeriod(eCalc, planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
 
-                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.AddHours(-1).Hour, curDate.Minute, curDate.Second);
+                curDate = dateChange.Add(-tsStep); 
                 tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                dateChange = CheckChangeInTimePeriod(eCalc, planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
 
-                curDate = new DateTime(dateChange.Year, dateChange.Month, dateChange.Day, dateChange.Hour, dateChange.AddMinutes(-1).Minute, curDate.Second);
+                curDate = dateChange.Add(-tsStep); 
                 tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(eCalc, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                dateChange = CheckChangeInTimePeriod(eCalc, planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
 
                 curDate = dateChange;
                 currentZnak = GetCurrentZnak(calcRes[0]);
@@ -76,7 +77,7 @@ namespace PAD
             label1.Text = "Count in a list: " + planetDataList.Count;
         }
 
-        private DateTime CheckChangeInTimePeriod(EpheCalculation eCalc, double longitude, double latitude, double altitude, int currentZnak, int currentNakshatra, int currentPada, string currentRetro, DateTime curDate, TimeSpan tsStep, out double[] calcRes)
+        private DateTime CheckChangeInTimePeriod(EpheCalculation eCalc, int planetConst, double longitude, double latitude, double altitude, int currentZnak, int currentNakshatra, int currentPada, string currentRetro, DateTime curDate, TimeSpan tsStep, out double[] calcRes)
         {
             int cZnak = 0, cNakshatra = 0, cPada = 0;
             string cRetro = string.Empty;
@@ -84,28 +85,28 @@ namespace PAD
 
             for (DateTime date = curDate; date < curDate.AddYears(+1);)
             {
-                calcRes = eCalc.SWE_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
+                calcRes = eCalc.SWE_Calculation(planetConst, date, longitude, latitude, altitude);
 
                 cZnak = GetCurrentZnak(calcRes[0]);
                 cNakshatra = GetCurrentNakshatra(calcRes[0]);
                 cPada = GetCurrentPada(calcRes[0]);
                 cRetro = string.Empty;
-
+                
                 if (cZnak != currentZnak)
                 {
                     return date;
                 }
-
+                
                 if (cNakshatra != currentNakshatra)
                 {
                     return date;
                 }
-
+                
                 if (cPada != currentPada)
                 {
                     return date;
                 }
-
+                
                 date = date.Add(tsStep);
             }
             return curDate;
