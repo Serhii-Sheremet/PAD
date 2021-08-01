@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
 namespace PAD
@@ -10,16 +11,11 @@ namespace PAD
         private Int64 whicheph;
         private int gregflag;
 
-        public EpheCalculation()
+        private double[] SWEPH_Calculation(int planetConst, DateTime calcDate, double lon, double lat, double alt)
         {
-            EpheFunctions.swe_set_ephe_path(@".\ephe");
             iflag = 0;
             whicheph = EpheConstants.SEFLG_SWIEPH;
             gregflag = EpheConstants.SE_GREG_CAL;
-        }
-
-        public double[] SWE_Calculation(int planetConst, DateTime calcDate, double lon, double lat, double alt)
-        {
             iflag |= EpheConstants.SEFLG_SIDEREAL;
             EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
             EpheFunctions.swe_set_topo(lon, lat, alt);
@@ -90,6 +86,188 @@ namespace PAD
 
             return calcRes;
         }
+
+        public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double[] calcRes = new double[6];
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            DateTime curDate = fromDate;
+            DateTime dateChange;
+
+            calcRes = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            int currentZnak = GetCurrentZnak(calcRes[0]);
+            int currentNakshatra = GetCurrentNakshatra(calcRes[0]);
+            int currentPada = GetCurrentPada(calcRes[0]);
+            string currentRetro = string.Empty;
+            if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
+            {
+                currentRetro = GetRetroInfo(calcRes[3]);
+            }
+
+            List<PlanetData> planetDataList = new List<PlanetData>();
+            while (curDate < toDate.AddSeconds(+1))
+            {
+                TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddDays(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddHours(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                curDate = dateChange;
+                currentZnak = GetCurrentZnak(calcRes[0]);
+                currentNakshatra = GetCurrentNakshatra(calcRes[0]);
+                currentPada = GetCurrentPada(calcRes[0]);
+                currentRetro = string.Empty;
+                if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
+                {
+                    currentRetro = GetRetroInfo(calcRes[3]);
+                }
+
+                PlanetData pdTemp = new PlanetData
+                {
+                    Date = curDate,
+                    Longitude = calcRes[0],
+                    Latitude = calcRes[1],
+                    SpeedInLongitude = calcRes[3],
+                    SpedInLatitude = calcRes[4],
+                    Retro = currentRetro,
+                    ZodiakId = currentZnak,
+                    NakshatraId = currentNakshatra,
+                    PadaId = currentPada
+                };
+                planetDataList.Add(pdTemp);
+
+                curDate = curDate.AddSeconds(+1);
+            }
+
+            return planetDataList;
+        }
+
+        private DateTime CheckChangeInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZnak, int currentNakshatra, int currentPada, string currentRetro, DateTime curDate, TimeSpan tsStep, out double[] calcRes)
+        {
+            int cZnak = 0, cNakshatra = 0, cPada = 0;
+            string cRetro = string.Empty;
+            calcRes = new double[6];
+
+            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            {
+                calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
+
+                cZnak = GetCurrentZnak(calcRes[0]);
+                cNakshatra = GetCurrentNakshatra(calcRes[0]);
+                cPada = GetCurrentPada(calcRes[0]);
+                cRetro = string.Empty;
+                if (planetConst != EpheConstants.SE_SUN && planetConst != EpheConstants.SE_MOON)
+                {
+                    cRetro = GetRetroInfo(calcRes[3]);
+                }
+
+                if (cZnak != currentZnak)
+                {
+                    return date;
+                }
+
+                if (cNakshatra != currentNakshatra)
+                {
+                    return date;
+                }
+
+                if (cPada != currentPada)
+                {
+                    return date;
+                }
+
+                if (!cRetro.Equals(currentRetro))
+                {
+                    return date;
+                }
+
+                date = date.Add(tsStep);
+            }
+            return curDate;
+        }
+
+        private int GetCurrentZnak(double longitude)
+        {
+            double znakPart = 360.0000 / 12;
+
+            double currentDZnak = longitude / znakPart;
+            double intDZnak = (int)currentDZnak;
+
+            int currentZnak = 0;
+            if (currentDZnak > intDZnak)
+            {
+                currentZnak = Convert.ToInt32(intDZnak) + 1;
+            }
+            else if (currentDZnak == intDZnak)
+            {
+                currentZnak = Convert.ToInt32(intDZnak);
+            }
+            return currentZnak;
+        }
+
+        private int GetCurrentNakshatra(double longitude)
+        {
+            double nakshatraPart = 360.0000 / 27;
+
+            double currentDNakshatra = longitude / nakshatraPart;
+            double intDNakshatra = (int)currentDNakshatra;
+
+            int currentNakshatra = 0;
+            if (currentDNakshatra > intDNakshatra)
+            {
+                currentNakshatra = Convert.ToInt32(intDNakshatra) + 1;
+            }
+            else if (currentDNakshatra == intDNakshatra)
+            {
+                currentNakshatra = Convert.ToInt32(intDNakshatra);
+            }
+            return currentNakshatra;
+        }
+
+        private int GetCurrentPada(double longitude)
+        {
+            double padaPart = 360.0000 / 108;
+
+            double currentDPada = longitude / padaPart;
+            double intDPada = (int)currentDPada;
+
+            int currentPada = 0;
+            if (currentDPada > intDPada)
+            {
+                currentPada = Convert.ToInt32(intDPada) + 1;
+            }
+            else if (currentDPada == intDPada)
+            {
+                currentPada = Convert.ToInt32(intDPada);
+            }
+            return currentPada;
+        }
+
+        private string GetRetroInfo(double speed)
+        {
+            string retro = string.Empty;
+            if (speed < 0)
+                retro = "R";
+            else if (speed > 0)
+                retro = "D";
+            return retro;
+        }
+
 
 
     }
