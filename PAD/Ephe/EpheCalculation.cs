@@ -87,6 +87,103 @@ namespace PAD
             return calcRes;
         }
 
+        public List<TithiData> CalculateTithiDataList_London(DateTime fromDate, DateTime toDate)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double[] sunRes = new double[6];
+            double[] moonRes = new double[6];
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            DateTime curDate = fromDate;
+            DateTime dateChange;
+
+            double moonSunDifference = 0;
+            sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            if ((moonRes[0] - sunRes[0]) < 0)
+            {
+                moonSunDifference = (moonRes[0] + 360.0000) - sunRes[0];
+            }
+            else
+            {
+                moonSunDifference = moonRes[0] - sunRes[0];
+            }
+            int currentTithi = GetCurrentTithi(moonSunDifference);
+
+            List<TithiData> tithiDataList = new List<TithiData>();
+            while (curDate < toDate.AddSeconds(+1))
+            {
+                // For tithi step by month is not working as it might overlap due to the tithi count of 30 - starting from day timespan
+                /*TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
+                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);*/
+                TimeSpan tsStep = curDate.AddDays(+1).Subtract(curDate);
+                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddHours(+1).Subtract(curDate);
+                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange;
+                if ((moonRes[0] - sunRes[0]) < 0)
+                {
+                    moonSunDifference = (moonRes[0] + 360.0000) - sunRes[0];
+                }
+                else
+                {
+                    moonSunDifference = moonRes[0] - sunRes[0];
+                }
+                currentTithi = GetCurrentTithi(moonSunDifference);
+                TithiData tTemp = new TithiData
+                {
+                    Date = curDate,
+                    MoonSunDifference = moonSunDifference,
+                    TithiId = currentTithi
+                };
+                tithiDataList.Add(tTemp);
+
+                curDate = curDate.AddSeconds(+1);
+            }
+
+            return tithiDataList;
+        }
+
+        private DateTime CheckTithiChangeInTimePeriod(double longitude, double latitude, double altitude, int currentTithi, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
+        {
+            double msDifference = 0;
+            sunRes = new double[6];
+            moonRes = new double[6];
+            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            {
+                sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
+                moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, date, longitude, latitude, altitude);
+                if ((moonRes[0] - sunRes[0]) < 0)
+                {
+                    msDifference = (moonRes[0] + 360.0000) - sunRes[0];
+                }
+                else
+                {
+                    msDifference = moonRes[0] - sunRes[0];
+                }
+                int cTithi = GetCurrentTithi(msDifference);
+
+                if (cTithi != currentTithi)
+                {
+                    return date;
+                }
+                date = date.Add(tsStep);
+            }
+            return curDate;
+        }
+
         public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
@@ -268,7 +365,72 @@ namespace PAD
             return retro;
         }
 
+        private int GetCurrentTithi(double msDifference)
+        {
+            double tithiPart = 360.0000 / 30;
 
+            double currentDTithi = msDifference / tithiPart;
+            double intDTithi = (int)currentDTithi;
+
+            int currentTithi = 0;
+            if (currentDTithi > intDTithi)
+            {
+                currentTithi = Convert.ToInt32(intDTithi) + 1;
+            }
+            else if (currentDTithi == intDTithi)
+            {
+                currentTithi = Convert.ToInt32(intDTithi);
+            }
+            return currentTithi;
+        }
+
+        public List<PlanetData> PrepareKetuList(List<PlanetData> rahuList)
+        {
+            List<PlanetData> ketuList = new List<PlanetData>();
+            foreach (PlanetData pd in rahuList)
+            {
+                double kLongitude = GetKetuLongitude(pd.Longitude);
+                PlanetData pdTemp = new PlanetData
+                {
+                    Date = pd.Date,
+                    Longitude = kLongitude,
+                    Latitude = pd.Latitude,
+                    SpeedInLongitude = pd.SpeedInLongitude,
+                    SpedInLatitude = pd.SpedInLatitude,
+                    Retro = pd.Retro,
+                    ZodiakId = GetCurrentZnak(kLongitude),
+                    NakshatraId = GetCurrentNakshatra(kLongitude),
+                    PadaId = GetCurrentPada(kLongitude)
+                };
+                ketuList.Add(pdTemp);
+            }
+            return ketuList;
+        }
+
+        private double GetKetuLongitude(double rLat)
+        {
+            double kLat = rLat + 180.0000;
+            if (kLat > 360.0000)
+            {
+                kLat -= 360.0000;
+            }
+            return kLat;
+        }
+
+        private double GetJoga360Longitude(double longitude)
+        {
+            double calcLongitude = 0;
+            double count = (int)longitude / 360;
+            if (count == 0)
+            {
+                calcLongitude = longitude;
+            }
+            else
+            {
+                calcLongitude = longitude - (count * 360);
+            }
+            return calcLongitude;
+        }
 
     }
 }
