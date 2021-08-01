@@ -87,6 +87,82 @@ namespace PAD
             return calcRes;
         }
 
+        public List<NityaJogaData> CalculateNityaJogaDataList_London(DateTime fromDate, DateTime toDate)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double[] sunRes = new double[6];
+            double[] moonRes = new double[6];
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            double nakshatraPart = 360.0000 / 27;
+            DateTime curDate = fromDate;
+            DateTime dateChange;
+
+            sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude);
+            double jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+            int currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+
+            List<NityaJogaData> njDataList = new List<NityaJogaData>();
+            while (curDate < toDate.AddSeconds(+1))
+            {
+                TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
+                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddDays(+1).Subtract(curDate);
+                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddHours(+1).Subtract(curDate);
+                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange.Add(-tsStep);
+                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+
+                curDate = dateChange;
+                jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+
+                NityaJogaData njTemp = new NityaJogaData
+                {
+                    Date = curDate,
+                    Longitude = jogaLongitude,
+                    NakshatraId = currentJogaNakshatra
+                };
+                njDataList.Add(njTemp);
+
+                curDate = curDate.AddSeconds(+1);
+            }
+
+            return njDataList;
+        }
+
+        private DateTime CheckJogaNakshatraChangeInTimePeriod(double longitude, double latitude, double altitude, int currentJogaNakshatra, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
+        {
+            sunRes = new double[6];
+            moonRes = new double[6];
+            double nakshatraPart = 360.0000 / 27;
+            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            {
+                sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
+                moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, date, longitude, latitude, altitude);
+                double jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                int cJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+
+                if (cJogaNakshatra != currentJogaNakshatra)
+                {
+                    return date;
+                }
+                date = date.Add(tsStep);
+            }
+            return curDate;
+        }
+
         public List<TithiData> CalculateTithiDataList_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
