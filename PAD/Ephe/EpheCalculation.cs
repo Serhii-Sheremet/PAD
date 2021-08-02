@@ -11,6 +11,107 @@ namespace PAD
         private Int64 whicheph;
         private int gregflag;
 
+        public DateTime CalculateSolarEclipse_London(DateTime fromDate, DateTime toDate)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double[] calcRes = new double[6];
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            DateTime curDate = fromDate;
+            DateTime dateChange;
+
+            dateChange = SWEPH_SolarEclipse_Calculation(curDate, longitude, latitude, altitude);
+
+            return dateChange;
+        }
+
+        private DateTime SWEPH_SolarEclipse_Calculation(DateTime calcDate, double lon, double lat, double alt)
+        {
+            iflag = 0;
+            whicheph = EpheConstants.SEFLG_SWIEPH;
+            gregflag = EpheConstants.SE_GREG_CAL;
+            iflag |= EpheConstants.SEFLG_SIDEREAL;
+            EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
+            EpheFunctions.swe_set_topo(lon, lat, alt);
+
+            iflag = (iflag & ~SEFLG_EPHMASK) | whicheph;
+            iflag |= EpheConstants.SEFLG_SPEED;
+
+            Int64 iflgret;
+            double jut = 0.0;
+            double tjd_ut = 2415020.5;
+            int jday = calcDate.Day;
+            int jmonth = calcDate.Month;
+            int jyear = calcDate.Year;
+            int jhour = calcDate.Hour;
+            int jmin = calcDate.Minute;
+            int jsec = calcDate.Second;
+
+            //int iyear = 0;
+            //int imonth = 0;
+            //int iday = 0;
+            //int ihour = 0;
+            //int imin = 0;
+            //double[] isec = new double[1];
+
+            jut = jhour + jmin / 60.0 + jsec / 3600.0;
+            tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
+
+            double[] geopos = new double[3];
+            geopos[0] = lon;
+            geopos[1] = lat;
+            geopos[2] = alt; // height above sea level in meters;
+            double[] tret = new double[10];
+            double[] attr = new double[20];
+
+            IntPtr ptrGeoDouble = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
+            Marshal.Copy(geopos, 0, ptrGeoDouble, 3);
+
+            IntPtr ptrTretDouble = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]) * tret.Length);
+            Marshal.Copy(tret, 0, ptrTretDouble, 10);
+
+            IntPtr ptrAttrDouble = Marshal.AllocHGlobal(Marshal.SizeOf(attr[0]) * attr.Length);
+            Marshal.Copy(attr, 0, ptrAttrDouble, 20);
+
+            string serr = new string('*', 256);
+            IntPtr ptrErr = (IntPtr)Marshal.StringToHGlobalAnsi(serr);
+
+            iflgret = EpheFunctions.swe_sol_eclipse_when_loc(tjd_ut, (int)iflag, ptrGeoDouble, ptrTretDouble, ptrAttrDouble, false, ptrErr);
+            Marshal.Copy(ptrTretDouble, tret, 0, 10);
+            Marshal.Copy(ptrAttrDouble, attr, 0, 20);
+
+            //IntPtr iyear_out = Marshal.AllocHGlobal(Marshal.SizeOf(iyear));
+            //IntPtr imonth_out = Marshal.AllocHGlobal(Marshal.SizeOf(imonth));
+            //IntPtr iday_out = Marshal.AllocHGlobal(Marshal.SizeOf(iday));
+            //IntPtr ihour_out = Marshal.AllocHGlobal(Marshal.SizeOf(ihour));
+            //IntPtr imin_out = Marshal.AllocHGlobal(Marshal.SizeOf(imin));
+            //IntPtr isec_out = Marshal.AllocHGlobal(Marshal.SizeOf(isec[0]) * isec.Length);
+
+            //EpheFunctions.swe_jdet_to_utc(tret[0], gregflag, iyear_out, imonth_out, iday_out, ihour_out, imin_out, isec_out);
+
+            //iyear = Marshal.ReadInt32(iyear_out);
+            //imonth = Marshal.ReadInt32(imonth_out);
+            //iday = Marshal.ReadInt32(iday_out);
+            //ihour = Marshal.ReadInt32(ihour_out);
+            //imin = Marshal.ReadInt32(imin_out);
+            //Marshal.Copy(isec_out, isec, 0, 1);
+
+            Marshal.FreeHGlobal(ptrGeoDouble);
+            Marshal.FreeHGlobal(ptrTretDouble);
+            Marshal.FreeHGlobal(ptrAttrDouble);
+            Marshal.FreeHGlobal(ptrErr);
+            //Marshal.FreeHGlobal(iyear_out);
+            //Marshal.FreeHGlobal(imonth_out);
+            //Marshal.FreeHGlobal(iday_out);
+            //Marshal.FreeHGlobal(ihour_out);
+            //Marshal.FreeHGlobal(imin_out);
+            //Marshal.FreeHGlobal(isec_out);
+
+
+            //DateTime date1 = new DateTime(iyear, imonth, iday, ihour, imin, (int)isec[0]);
+            DateTime date2 = DateTime.FromOADate(tret[0] - 2415018.5);
+            return date2;
+        }
+
         private double[] SWEPH_Calculation(int planetConst, DateTime calcDate, double lon, double lat, double alt)  // without TZ shift
         {
             iflag = 0;
@@ -126,11 +227,6 @@ namespace PAD
             Marshal.FreeHGlobal(ptrErr);
 
             return calcRes;
-        }
-
-        private void SWEPH_EclipseCalculation(DateTime calcDate, double lon, double lat, double alt)
-        {
-
         }
 
         public List<NityaJogaData> CalculateNityaJogaDataList_London(DateTime fromDate, DateTime toDate)
@@ -553,6 +649,77 @@ namespace PAD
             }
             return calcLongitude;
         }
+
+
+
+        //char serr[AS_MAXCH];
+        //double epheflag = SEFLG_SWIEPH;
+        //int gregflag = SE_GREG_CAL;
+        //int year = 2017;
+        //int month = 4;
+        //int day = 12;
+        //int geo_longitude = 76.5; // positive for east, negative for west of Greenwich
+        //int geo_latitude = 30.0;
+        //int geo_altitude = 0.0;
+        //double hour;
+        //// array for atmospheric conditions
+        //double datm[2];
+        //datm[0] = 1013.25; // atmospheric pressure;
+        //// irrelevant with Hindu method, can be set to 0
+        //datm[1] = 15; // atmospheric temperature;
+        //// irrelevant with Hindu method, can be set to 0
+        //// array for geographic position
+        //double geopos[3];
+        //        geopos[0] = geo_longitude;
+        //geopos[1] = geo_latitude;
+        //geopos[2] = geo_altitude; // height above sea level in meters;
+        //// irrelevant with Hindu method, can be set to 0
+        //swe_set_topo(geopos[0], geopos[1], geopos[2]);
+        //int ipl = SE_SUN; // object whose rising is wanted
+        //char starname[255]; // name of star, if a star's rising is wanted
+        //                    // is "" or NULL, if Sun, Moon, or planet is calculated
+        //double trise; // for rising time
+        //double tset; // for setting time
+        //             // calculate the Julian day number of the date at 0:00 UT:
+        //double tjd = swe_julday(year, month, day, 0, gregflag);
+        //// convert geographic longitude to time (day fraction) and subtract it from tjd
+        //// this method should be good for all geographic latitudes except near in
+        //// polar regions
+        //double dt = geo_longitude / 360.0;
+        //tjd = tjd - dt;
+        //// calculation flag for Hindu risings/settings
+        //int rsmi = SE_CALC_RISE | SE_BIT_HINDU_RISING;
+        //// or SE_CALC_RISE + SE_BIT_HINDU_RISING;
+        //// or SE_CALC_RISE | SE_BIT_DISC_CENTER | SE_BIT_NO_REFRACTION | SE_BIT_GEOCTR_NO_ECL_LAT;
+        //int return_code = swe_rise_trans(tjd, ipl, starname, epheflag, rsmi, geopos, datm[0], datm[1], &trise, serr);
+        //if (return_code == ERR) {
+        //// error action
+        //printf("%s\n", serr);
+        //}
+        //// conversion to local time zone must be made by the user. The Swiss Ephemeris
+        //// does not have a function for that.
+        //// After that, the Julian day number of the rising time can be converted into
+        //// date and time:
+        //swe_revjul(trise, gregflag, &year, &month, &day, &hour);
+        //printf("sunrise: date=%d/%d/%d, hour=%.6f UT\n", year, month, day, hour);
+        //// To calculate the time of the sunset, you can either use the same
+        //// tjd increased or trise as start date for the search.
+        //rsmi = SE_CALC_SET | SE_BIT_DISC_CENTER | SE_BIT_NO_REFRACTION;
+        //return_code = swe_rise_trans(tjd, ipl, starname, epheflag, rsmi, geopos, datm[0], datm[1], &tset, serr);
+        //if (return_code == ERR) {
+        //// error action
+        //printf("%s\n", serr);
+        //}
+        //printf("sunset : date=%d/%d/%d, hour=%.6f UT\n", year, month, day, hour);
+        //}
+
+        //It says(given in Red & Blue colour fonts) "/ convert geographic longitude to time (day fraction) and subtract it from tjd
+        //// this method should be good for all geographic latitudes except near in
+        //// polar regions
+        //double dt = geo_longitude / 360.0;
+        //tjd = tjd - dt; ".
+
+
 
     }
 }

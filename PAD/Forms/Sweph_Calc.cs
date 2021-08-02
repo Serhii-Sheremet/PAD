@@ -17,9 +17,10 @@ namespace PAD
             DateTime fromDate = new DateTime(2021, 1, 1), toDate = new DateTime(2022, 1, 1);
             //List<PlanetData> planetDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, fromDate, toDate);
             //List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(fromDate, toDate);
-            List<NityaJogaData> njDataList = eCalc.CalculateNityaJogaDataList_London(fromDate, toDate);
+            //List<NityaJogaData> njDataList = eCalc.CalculateNityaJogaDataList_London(fromDate, toDate);
+            DateTime date = eCalc.CalculateSolarEclipse_London(fromDate, toDate);
 
-            label1.Text = "Count in a list: " + njDataList.Count;
+            label1.Text = "Date: " + date.ToString();
         }
 
         
