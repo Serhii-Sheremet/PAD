@@ -18,9 +18,9 @@ namespace PAD
             //List<PlanetData> planetDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, fromDate, toDate);
             //List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(fromDate, toDate);
             //List<NityaJogaData> njDataList = eCalc.CalculateNityaJogaDataList_London(fromDate, toDate);
-            DateTime date = eCalc.CalculateSolarEclipse_London(fromDate, toDate);
+            List<EclipseData> ecDataList = eCalc.CalculateSolarEclipse_London(fromDate, toDate);
 
-            label1.Text = "Date: " + date.ToString();
+            label1.Text = "Count: " + ecDataList.Count;
         }
 
         

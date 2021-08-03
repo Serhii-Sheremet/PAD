@@ -39,7 +39,7 @@ namespace PAD
         public static extern double swe_deltat(double tjd);
 
         [DllImport("swedll32.dll")]
-        public static extern void swe_get_planet_name(int ipl, IntPtr spname);
+        public static extern IntPtr swe_get_planet_name(int ipl, IntPtr spname);
 
         //double tjd_ut, /* Julian day number, UT */
         //double geolat, /* geographic latitude, in degrees */
@@ -195,6 +195,33 @@ namespace PAD
         //char* serr); /* return error string */
         [DllImport("swedll32.dll")]
         public static extern int swe_lun_eclipse_when_loc(double tjd_start, int ifl, IntPtr geopos, IntPtr tret, IntPtr attr, bool backward, IntPtr serr);
+
+        //double tjd_start, /* start date for search, Jul. day UT */
+        //int32 ipl, /* planet number */
+        //char* starname, /* star name, must be NULL or ”” if not a star */
+        //int32 ifl, /* ephemeris flag */  ifl |= SE_ECL_ONE_TRY.
+        //double* geopos, /* 3 doubles for geogr. longitude, latitude, height above sea.
+        //* eastern longitude is positive,
+        //* western longitude is negative,
+        //* northern latitude is positive,
+        //* southern latitude is negative */
+        //double* tret, /* return array, 10 doubles, see below */
+        //double* attr, /* return array, 20 doubles, see below */
+        //AS_BOOL backward, /* TRUE, if backward search */
+        //char* serr); /* return error string */
+        [DllImport("swedll32.dll")]
+        public static extern int swe_lun_occult_when_loc(double tjd_start, int planetConst, IntPtr starname, int ifl, IntPtr geopos, IntPtr tret, IntPtr attr, bool backward, IntPtr serr);
+
+        //double tjd_start, /* start date for search, Jul. day UT */
+        //int32 ipl, /* planet number */
+        //char* starname, /* star name, must be NULL or ”” if not a star */
+        //int32 ifl, /* ephemeris flag */ ifl |= SE_ECL_ONE_TRY.
+        //int32 ifltype, /* eclipse type wanted */    SE_ECL_TOTAL or SE_ECL_ANNULAR or SE_ECL_PARTIAL or SE_ECL_ANNULAR_TOTAL    SE_ECL_CENTRAL SE_ECL_NONCENTRAL
+        //double* tret, /* return array, 10 doubles, see below */
+        //AS_BOOL backward, /* TRUE, if backward search */
+        //char* serr); /* return error string */
+        [DllImport("swedll32.dll")]
+        public static extern int swe_lun_occult_when_glob(double tjd_start, int planetConst, IntPtr starname, int ifl, int ifltype, IntPtr tret, bool backward, IntPtr serr);
 
         //This function can be used to specify the mode for sidereal computations.
         //swe_calc() or swe_fixstar() has then to be called with the bit SEFLG_SIDEREAL.
