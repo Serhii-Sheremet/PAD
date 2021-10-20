@@ -2299,7 +2299,7 @@ namespace PAD
                     }
                     if (!tte.Description4.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, textFont, formWidth - 8) + 8;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, textFont, formWidth - 8) + 4;
                         formHeight += 8;
                     }
                     if (!tte.Description5.Equals(string.Empty))
