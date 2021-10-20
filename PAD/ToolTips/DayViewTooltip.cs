@@ -12,12 +12,12 @@ namespace PAD
         private Font _timeFont;
         private Font _textFont;
 
-        public DayViewToolTip(List<ToolTipEntity> tteList, int width, int height, Font titleFont, Font timeFont, Font textFont)
+        public DayViewToolTip(List<ToolTipEntity> tteList, int width, float height, Font titleFont, Font timeFont, Font textFont)
         {
             InitializeComponent();
 
             this.Width = width;
-            this.Height = height;
+            this.Height = (int)height;
             _ttEList = tteList;
             _titleFont = titleFont;
             _timeFont = timeFont;
@@ -43,56 +43,56 @@ namespace PAD
         public void DrawToolTip(PaintEventArgs e)
         {
             e.Graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-            TextFormatFlags flags = TextFormatFlags.WordBreak;
+            SolidBrush textBrush = new SolidBrush(Color.Black);
 
-            int posX = 2, posY = 4, rectHeight = 0;
+            int posX = 2;
+            float posY = 4, rectHeight = 0;
             foreach (ToolTipEntity tte in _ttEList)
             {
                 rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Title, _titleFont, this.Width - 8) + 4;
-                Rectangle drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                TextRenderer.DrawText(e.Graphics, tte.Title, _titleFont, drawRect, Color.Black, flags);
+                RectangleF drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                e.Graphics.DrawString(tte.Title, _titleFont, textBrush, drawRect, StringFormat.GenericDefault);
                 posY += drawRect.Height + 8;
 
                 rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Period, _timeFont, this.Width - 8) + 4;
-                drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                TextRenderer.DrawText(e.Graphics, tte.Period, _timeFont, drawRect, Color.Black, flags);
+                drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                e.Graphics.DrawString(tte.Period, _timeFont, textBrush, drawRect, StringFormat.GenericDefault);
                 posY += drawRect.Height + 8;
 
                 if (!tte.Description1.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, _timeFont, this.Width - 8) + 4;
-                    drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                    TextRenderer.DrawText(e.Graphics, tte.Description1, _timeFont, drawRect, Color.Black, flags);
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, _textFont, this.Width - 8) + 4;
+                    drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                    e.Graphics.DrawString(tte.Description1, _textFont, textBrush, drawRect, StringFormat.GenericDefault);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description2.Equals(string.Empty))
                 {
                     rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, _textFont, this.Width - 8) + 4;
-                    drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                    TextRenderer.DrawText(e.Graphics, tte.Description2, _textFont, drawRect, Color.Black, flags);
+                    drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                    e.Graphics.DrawString(tte.Description2, _textFont, textBrush, drawRect, StringFormat.GenericDefault);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description3.Equals(string.Empty))
                 {
                     rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, _textFont, this.Width - 8) + 4;
-                    drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                    TextRenderer.DrawText(e.Graphics, tte.Description3, _textFont, drawRect, Color.Black, flags);
+                    drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                    e.Graphics.DrawString(tte.Description3, _textFont, textBrush, drawRect, StringFormat.GenericDefault);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description4.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, _textFont, this.Width - 8) + 8;
-                    drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                    TextRenderer.DrawText(e.Graphics, tte.Description4, _textFont, drawRect, Color.Black, flags);
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, _textFont, this.Width - 8) + 4;
+                    drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                    e.Graphics.DrawString(tte.Description4, _textFont, textBrush, drawRect, StringFormat.GenericDefault);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description5.Equals(string.Empty))
                 {
                     rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, _textFont, this.Width - 8) + 4;
-                    drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
-                    TextRenderer.DrawText(e.Graphics, tte.Description5, _textFont, drawRect, Color.Black, flags);
+                    drawRect = new RectangleF(posX, posY, this.Width - 4, rectHeight);
+                    e.Graphics.DrawString(tte.Description5, _textFont, textBrush, drawRect, StringFormat.GenericDefault);
                     posY += drawRect.Height;
-
                 }
                 posY += 8;
             }

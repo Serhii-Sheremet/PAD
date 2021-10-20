@@ -1849,9 +1849,9 @@ namespace PAD
             return upravitel;
         }
 
-        public static int CalculateRectangleHeightWithTextWrapping(string wholeText, Font font, int width)
+        public static float CalculateRectangleHeightWithTextWrapping(string wholeText, Font font, int width)
         {
-            Rectangle descrRect = new Rectangle();
+            RectangleF descrRect = new RectangleF();
             Graphics grfx = Graphics.FromImage(new Bitmap(1, 1));
             descrRect.Size = new Size(width, ((int)grfx.MeasureString(wholeText, font, width, StringFormat.GenericDefault).Height));
             return descrRect.Height;

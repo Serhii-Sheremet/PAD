@@ -2264,9 +2264,10 @@ namespace PAD
             Font titleFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTITLE)), 12, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTITLE));
             Font timeFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTIME)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTIME));
             Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
-            
+
             // getting system event info
-            int formWidth = 600, formHeight = 0;
+            int formWidth = 600;
+            float formHeight = 0;
             List<ToolTipEntity> ttEList = GetToolTipEntitiesList(group, startDate, endDate, lCode);
             if (ttEList.Count > 0)
             {
