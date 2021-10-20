@@ -48,49 +48,47 @@ namespace PAD
             int posX = 2, posY = 4, rectHeight = 0;
             foreach (ToolTipEntity tte in _ttEList)
             {
-                rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Title, _titleFont, this.Width - 8);
+                rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Title, _titleFont, this.Width - 8) + 4;
                 Rectangle drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                 TextRenderer.DrawText(e.Graphics, tte.Title, _titleFont, drawRect, Color.Black, flags);
                 posY += drawRect.Height + 8;
 
-                rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Period, _timeFont, this.Width - 8);
+                rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Period, _timeFont, this.Width - 8) + 4;
                 drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                 TextRenderer.DrawText(e.Graphics, tte.Period, _timeFont, drawRect, Color.Black, flags);
                 posY += drawRect.Height + 8;
 
                 if (!tte.Description1.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, _timeFont, this.Width - 8);
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, _timeFont, this.Width - 8) + 4;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description1, _timeFont, drawRect, Color.Black, flags);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description2.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, _textFont, this.Width - 8);
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, _textFont, this.Width - 8) + 4;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description2, _textFont, drawRect, Color.Black, flags);
-                    posY += drawRect.Height + 12;
+                    posY += drawRect.Height + 8;
                 }
                 if (!tte.Description3.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, _textFont, this.Width - 8);
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, _textFont, this.Width - 8) + 4;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description3, _textFont, drawRect, Color.Black, flags);
-                    posY += drawRect.Height + 12;
+                    posY += drawRect.Height + 8;
                 }
                 if (!tte.Description4.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, _textFont, this.Width - 8);
-                    rectHeight += 22;
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, _textFont, this.Width - 8) + 8;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description4, _textFont, drawRect, Color.Black, flags);
                     posY += drawRect.Height + 8;
                 }
                 if (!tte.Description5.Equals(string.Empty))
                 {
-                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, _textFont, this.Width - 8);
-                    rectHeight += 22;
+                    rectHeight = Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, _textFont, this.Width - 8) + 4;
                     drawRect = new Rectangle(posX, posY, this.Width - 4, rectHeight);
                     TextRenderer.DrawText(e.Graphics, tte.Description5, _textFont, drawRect, Color.Black, flags);
                     posY += drawRect.Height;

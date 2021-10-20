@@ -2264,7 +2264,7 @@ namespace PAD
             Font titleFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTITLE)), 12, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTITLE));
             Font timeFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTIME)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTIME));
             Font textFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 10, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
-
+            
             // getting system event info
             int formWidth = 600, formHeight = 0;
             List<ToolTipEntity> ttEList = GetToolTipEntitiesList(group, startDate, endDate, lCode);
@@ -2277,37 +2277,37 @@ namespace PAD
                 }
                 foreach (ToolTipEntity tte in ttEList)
                 {
-                    formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Title, titleFont, formWidth - 8);
+                    formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Title, titleFont, formWidth - 8) + 4;
                     formHeight += 8;
                     formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Period, timeFont, formWidth - 8);
                     formHeight += 8;
                     if (!tte.Description1.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, timeFont, formWidth - 8);
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description1, timeFont, formWidth - 8) + 4;
                         formHeight += 8;
                     }
                     if (!tte.Description2.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8);
-                        formHeight += 12;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8) + 4;
+                        formHeight += 8;
                     }
                     if (!tte.Description3.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, textFont, formWidth - 8);
-                        formHeight += 12;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, textFont, formWidth - 8) + 4;
+                        formHeight += 8;
                     }
                     if (!tte.Description4.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, textFont, formWidth - 8);
-                        formHeight += 30;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description4, textFont, formWidth - 8) + 4;
+                        formHeight += 8;
                     }
                     if (!tte.Description5.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, textFont, formWidth - 8);
-                        formHeight += 30;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description5, textFont, formWidth - 8) + 4;
+                        formHeight += 8;
                     }
                 }
-                formHeight += 8;
+                formHeight += 12;
 
                 toolTip = new Popup(dayViewToolTip = new DayViewToolTip(ttEList, formWidth, formHeight, titleFont, timeFont, textFont));
                 toolTip.AutoClose = false;
