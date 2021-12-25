@@ -1775,7 +1775,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select DATECHANGE, LONGITUDE, NAKSHATRAID from JNDATA";
+                    string comm = $"select DATECHANGE, LONGITUDE, NAKSHATRAID from NYDATA";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {

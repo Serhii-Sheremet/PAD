@@ -983,9 +983,16 @@ namespace PAD
             {
                 pName = Utility.GetLocalizedPlanetNameByCode(planet, _activeLanguageCode).Substring(0, 2) + "." + type;
             }
-            else if (type.Equals("R") && prevZnak != znak && planet != EPlanet.RAHUMEAN && planet != EPlanet.KETUMEAN && planet != EPlanet.RAHUTRUE && planet != EPlanet.KETUTRUE)
+            else if (type.Equals("R") && prevZnak != znak) // && planet != EPlanet.RAHUMEAN && planet != EPlanet.KETUMEAN && planet != EPlanet.RAHUTRUE && planet != EPlanet.KETUTRUE)
             {
-                pName = Utility.GetLocalizedPlanetNameByCode(planet, _activeLanguageCode).Substring(0, 2) + "." + type + "→";
+                if (planet != EPlanet.RAHUMEAN && planet != EPlanet.KETUMEAN && planet != EPlanet.RAHUTRUE && planet != EPlanet.KETUTRUE)
+                {
+                    pName = Utility.GetLocalizedPlanetNameByCode(planet, _activeLanguageCode).Substring(0, 2) + "." + type + "→";
+                }
+                else
+                {
+                    pName = Utility.GetLocalizedPlanetNameByCode(planet, _activeLanguageCode).Substring(0, 2) + "→";
+                }
             }
             else
             {
@@ -4128,10 +4135,20 @@ namespace PAD
         private DataGridView PlanetTranzitDataGridViewFillByRow(DataGridView dgv, Day pDay, List<PlanetCalendar> pzList, List<PlanetCalendar> pzrList, List<PlanetCalendar> pnList, List<PlanetCalendar> ppList, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage langCode)
         {
             List<dgvRowObj> rowList = new List<dgvRowObj>();
+            int planetId = 0;
             foreach (PlanetCalendar pc in pzrList)
             {
+                planetId = (int)pc.PlanetCode;
+                if (planetId == 10)
+                {
+                    planetId = 8;
+                }
+                if (planetId == 11)
+                {
+                    planetId = 9;
+                }
                 string zodiak = CacheLoad._zodiakDescList.Where(i => i.ZodiakId == (int)pc.ZodiakCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                Tranzit tr = CacheLoad._tranzitList.Where(i => i.PlanetId == (int)pc.PlanetCode && i.Dom == pc.Dom).FirstOrDefault();
+                Tranzit tr = CacheLoad._tranzitList.Where(i => i.PlanetId == planetId && i.Dom == pc.Dom).FirstOrDefault();
                 string trDesc = CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                 string vedha = GetVedhaList(pDay, pc, tr, tranzitSetting, nodeSettings, langCode, false);
                 dgvRowObj rowTemp = new dgvRowObj {

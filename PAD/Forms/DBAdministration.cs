@@ -2383,7 +2383,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select DATECHANGE, LONGITUDE, NAKSHATRAID from JNDATA order by DATECHANGE";
+                    string comm = $"select DATECHANGE, LONGITUDE, NAKSHATRAID from NYDATA order by DATECHANGE";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -2731,7 +2731,7 @@ namespace PAD
                                 command.ExecuteNonQuery();
                             }
                             int count = (jnList.Count - i) > 100 ? 100 : jnList.Count - i;
-                            comm = $"insert into JNDATA (DATECHANGE, LONGITUDE, NAKSHATRAID) values " + String.Join(", ", Enumerable.Repeat(parameters, count));
+                            comm = $"insert into NYDATA (DATECHANGE, LONGITUDE, NAKSHATRAID) values " + String.Join(", ", Enumerable.Repeat(parameters, count));
                             command = new SQLiteCommand(comm, dbCon);
                         }
 

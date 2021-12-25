@@ -85,6 +85,8 @@ namespace PAD
             Font sunFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular, GraphicsUnit.Point);
             Font lineFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANZITTEXT)), 10, Utility.GetFontStyleBySettings(EFontList.TRANZITTEXT));
 
+            EAppSetting nodeSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
             // Day
             string dayText = currDay.Date.Day.ToString();
             Size dayTextSize = TextRenderer.MeasureText(dayText, dayFont);
@@ -160,9 +162,19 @@ namespace PAD
             DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 4 * lineHeight), this.Width - 8, lineHeight, currDay.MercuryZodiakRetroDayList, currDay.Date);
             DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 5 * lineHeight), this.Width - 8, lineHeight, currDay.MarsZodiakRetroDayList, currDay.Date);
             DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 6 * lineHeight), this.Width - 8, lineHeight, currDay.SaturnZodiakRetroDayList, currDay.Date);
-            DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 7 * lineHeight), this.Width - 8, lineHeight, currDay.RahuMeanZodiakRetroDayList, currDay.Date);
-            DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 8 * lineHeight), this.Width - 8, lineHeight, currDay.KetuMeanZodiakRetroDayList, currDay.Date);
 
+            switch (nodeSettings)
+            {
+                case EAppSetting.NODEMEAN:
+                    DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 7 * lineHeight), this.Width - 8, lineHeight, currDay.RahuMeanZodiakRetroDayList, currDay.Date);
+                    DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 8 * lineHeight), this.Width - 8, lineHeight, currDay.KetuMeanZodiakRetroDayList, currDay.Date);
+                    break;
+
+                case EAppSetting.NODETRUE:
+                    DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 7 * lineHeight), this.Width - 8, lineHeight, currDay.RahuTrueZodiakRetroDayList, currDay.Date);
+                    DrawColoredLine(e, pen, lineFont, textBrush, posX, (posYForTransits + 8 * lineHeight), this.Width - 8, lineHeight, currDay.KetuTrueZodiakRetroDayList, currDay.Date);
+                    break;
+            }
             
             // Muhurta
             int posYForMuhurta = posYForTransits + 9 * lineHeight + 4;
