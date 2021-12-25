@@ -983,13 +983,26 @@ namespace PAD
                     lbLoad.Items.Add(text);
                     lbLoad.Refresh();
                 }
-            }
+            }          
             if (!CheckTableContent("TRANZIT"))
             {
                 if (LoadTranzityIntoDB())
                 {
                     isLoad = true;
                     string text = "Транзиты планет загружены успешно.";
+                    Size tSize = TextRenderer.MeasureText(text, this.Font);
+                    if (lbWidth < tSize.Width)
+                        lbLoad.Width = tSize.Width + 10;
+                    lbLoad.Items.Add(text);
+                    lbLoad.Refresh();
+                }
+            }
+            if (!CheckTableContent("MRITJUBHAGA"))
+            {
+                if (LoadMritjuBhagaIntoDB())
+                {
+                    isLoad = true;
+                    string text = "Градусы Мритью Бхага загружены успешно.";
                     Size tSize = TextRenderer.MeasureText(text, this.Font);
                     if (lbWidth < tSize.Width)
                         lbLoad.Width = tSize.Width + 10;
@@ -1711,6 +1724,41 @@ namespace PAD
                         command.Parameters.Add(new SQLiteParameter() { Value = trList[i].Dom });
                         command.Parameters.Add(new SQLiteParameter() { Value = trList[i].ColorId });
                         command.Parameters.Add(new SQLiteParameter() { Value = trList[i].Vedha });
+                    }
+                    command.ExecuteNonQuery();
+                    isLoaded = true;
+                }
+                catch (SQLiteException ex) { AddingExceptionLabel(ex); }
+                dbCon.Close();
+            }
+            return isLoaded;
+        }
+
+        private bool LoadMritjuBhagaIntoDB()
+        {
+            bool isLoaded = false;
+            MritjuBhaga mb = new MritjuBhaga();
+            List<MritjuBhaga> mbList = new List<MritjuBhaga>();
+            string[] tempFList = File.ReadAllLines(@".\Data\Files\MritjuBhaga.txt", Encoding.GetEncoding(1251));
+            for (int i = 0; i < tempFList.Length; i++)
+            {
+                MritjuBhaga temp = mb.ParseFile(tempFList[i]);
+                mbList.Add(temp);
+            }
+
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into MRITJUBHAGA (PLANETID, ZODIAKID, DEGREE) values " + String.Join(", ", Enumerable.Repeat(parameters, mbList.Count));
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    for (int i = 0; i < mbList.Count; i++)
+                    {
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].PlanetId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].ZodiakId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].Degree });
                     }
                     command.ExecuteNonQuery();
                     isLoaded = true;

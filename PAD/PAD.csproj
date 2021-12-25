@@ -145,6 +145,7 @@
     <Compile Include="Calendar\NityaJogaData.cs" />
     <Compile Include="Entities\LanguageDescription.cs" />
     <Compile Include="Entities\MasaDescription.cs" />
+    <Compile Include="Entities\MritjuBhaga.cs" />
     <Compile Include="Entities\NityaJoga.cs" />
     <Compile Include="Entities\NityaJogaDescription.cs" />
     <Compile Include="Entities\Karana.cs" />
