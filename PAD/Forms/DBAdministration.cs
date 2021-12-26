@@ -997,9 +997,9 @@ namespace PAD
                     lbLoad.Refresh();
                 }
             }
-            if (!CheckTableContent("MRITJUBHAGA"))
+            if (!CheckTableContent("MRITYUBHAGA"))
             {
-                if (LoadMritjuBhagaIntoDB())
+                if (LoadMrityuBhagaIntoDB())
                 {
                     isLoad = true;
                     string text = "Градусы Мритью Бхага загружены успешно.";
@@ -1734,15 +1734,15 @@ namespace PAD
             return isLoaded;
         }
 
-        private bool LoadMritjuBhagaIntoDB()
+        private bool LoadMrityuBhagaIntoDB()
         {
             bool isLoaded = false;
-            MritjuBhaga mb = new MritjuBhaga();
-            List<MritjuBhaga> mbList = new List<MritjuBhaga>();
-            string[] tempFList = File.ReadAllLines(@".\Data\Files\MritjuBhaga.txt", Encoding.GetEncoding(1251));
+            MrityuBhaga mb = new MrityuBhaga();
+            List<MrityuBhaga> mbList = new List<MrityuBhaga>();
+            string[] tempFList = File.ReadAllLines(@".\Data\Files\MrityuBhaga.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempFList.Length; i++)
             {
-                MritjuBhaga temp = mb.ParseFile(tempFList[i]);
+                MrityuBhaga temp = mb.ParseFile(tempFList[i]);
                 mbList.Add(temp);
             }
 
@@ -1752,7 +1752,7 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
-                    string comm = "insert into MRITJUBHAGA (PLANETID, ZODIAKID, DEGREE) values " + String.Join(", ", Enumerable.Repeat(parameters, mbList.Count));
+                    string comm = "insert into MRITYUBHAGA (PLANETID, ZODIAKID, DEGREE) values " + String.Join(", ", Enumerable.Repeat(parameters, mbList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < mbList.Count; i++)
                     {

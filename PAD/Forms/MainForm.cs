@@ -42,6 +42,7 @@ namespace PAD
         private readonly List<TithiData> _tithiDataList;
         private readonly List<NityaJogaData> _nityaJogaDataList;
         private readonly List<EclipseData> _eclipseDataList;
+        private readonly List<MrityuBhagaData> _mrityuBhagaDataList;
 
         //Calendars
         private readonly List<NakshatraCalendar> _nakshatraCalendarList;
@@ -206,6 +207,7 @@ namespace PAD
                 _tithiDataList = CacheLoad.GetTithiData();
                 _nityaJogaDataList = CacheLoad.GetNityaJogaData();
                 _eclipseDataList = CacheLoad.GetEclipseData();
+                //_mrityuBhagaDataList = CacheLoad.PrepareMrityuBhagaData();
 
                 //prepare static Calendars
                 _nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(_moonDataList.ToList());
@@ -339,6 +341,7 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
+            //CacheLoad._mrityuBhagaList = CacheLoad.GetMrityuBhagaList();
         }
 
         private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)

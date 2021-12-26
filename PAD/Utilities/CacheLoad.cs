@@ -55,6 +55,7 @@ namespace PAD
         public static List<Ghati60> _ghati60List;
         public static List<Ghati60Description> _ghati60DescList;
         public static List<HoraPlanet> _horaPlanetList;
+        public static List<MrityuBhaga> _mrityuBhagaList;
 
         public static List<DVLineNames> GetDVLineNamesList()
         {
@@ -2243,6 +2244,152 @@ namespace PAD
             return hpList;
         }
         
+        public static List<MrityuBhaga> GetMrityuBhagaList()
+        {
+            List<MrityuBhaga> entityList = new List<MrityuBhaga>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select ID, PLANETID, ZODIAKID, DEGREE from MRITYUBHAGA order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                MrityuBhaga temp = new MrityuBhaga
+                                {
+                                    Id = reader.IntValue(0),
+                                    PlanetId = reader.IntValue(1),
+                                    ZodiakId = reader.IntValue(2),
+                                    Degree = reader.IntValue(3)
+                                };
+                                entityList.Add(temp);
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
 
+        public static List<MrityuBhagaData> PrepareMrityuBhagaData()
+        {
+            List<MrityuBhagaData> mbdList = new List<MrityuBhagaData>();
+            List<MrityuBhaga> entityList = GetMrityuBhagaList();
+            foreach (MrityuBhaga mb in entityList)
+            {
+                MrityuBhagaData tempMBD = new MrityuBhagaData
+                {
+                    PlanetId = mb.PlanetId,
+                    ZodiakId = mb.ZodiakId,
+                    Degree = mb.Degree,
+                    MrityuBhagaSetting = EAppSetting.MRITYUBHAGANEQUAL,
+                    LongitudeFrom = mb.Degree - 0.5,
+                    LongitudeTo = mb.Degree + 0.5
+                };
+                mbdList.Add(tempMBD);
+                tempMBD = new MrityuBhagaData
+                {
+                    PlanetId = mb.PlanetId,
+                    ZodiakId = mb.ZodiakId,
+                    Degree = mb.Degree,
+                    MrityuBhagaSetting = EAppSetting.MRITYUBHAGANLESS,
+                    LongitudeFrom = mb.Degree - 1,
+                    LongitudeTo = mb.Degree
+                };
+                mbdList.Add(tempMBD);
+                tempMBD = new MrityuBhagaData
+                {
+                    PlanetId = mb.PlanetId,
+                    ZodiakId = mb.ZodiakId,
+                    Degree = mb.Degree,
+                    MrityuBhagaSetting = EAppSetting.MRITYUBHAGANMORE,
+                    LongitudeFrom = mb.Degree,
+                    LongitudeTo = mb.Degree + 1
+                };
+                mbdList.Add(tempMBD);
+            }
+            foreach (MrityuBhaga mb in entityList)
+            {
+                if (mb.PlanetId == 8)
+                {
+                    MrityuBhagaData tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 10,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANEQUAL,
+                        LongitudeFrom = mb.Degree - 0.5,
+                        LongitudeTo = mb.Degree + 0.5
+                    };
+                    mbdList.Add(tempMBD);
+                    tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 10,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANLESS,
+                        LongitudeFrom = mb.Degree - 1,
+                        LongitudeTo = mb.Degree
+                    };
+                    mbdList.Add(tempMBD);
+                    tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 10,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANMORE,
+                        LongitudeFrom = mb.Degree,
+                        LongitudeTo = mb.Degree + 1
+                    };
+                    mbdList.Add(tempMBD);
+                }
+            }
+            foreach (MrityuBhaga mb in entityList)
+            {
+                if (mb.PlanetId == 9)
+                {
+                    MrityuBhagaData tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 11,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANEQUAL,
+                        LongitudeFrom = mb.Degree - 0.5,
+                        LongitudeTo = mb.Degree + 0.5
+                    };
+                    mbdList.Add(tempMBD);
+                    tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 11,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANLESS,
+                        LongitudeFrom = mb.Degree - 1,
+                        LongitudeTo = mb.Degree
+                    };
+                    mbdList.Add(tempMBD);
+                    tempMBD = new MrityuBhagaData
+                    {
+                        PlanetId = 11,
+                        ZodiakId = mb.ZodiakId,
+                        Degree = mb.Degree,
+                        MrityuBhagaSetting = EAppSetting.MRITYUBHAGANMORE,
+                        LongitudeFrom = mb.Degree,
+                        LongitudeTo = mb.Degree + 1
+                    };
+                    mbdList.Add(tempMBD);
+                }
+            }
+            return mbdList;
+        }
+       
     }
 }

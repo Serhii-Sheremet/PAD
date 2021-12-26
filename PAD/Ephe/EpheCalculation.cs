@@ -12,6 +12,124 @@ namespace PAD
         private Int64 whicheph;
         private int gregflag;
 
+        public List<MrityuBhagaData> CalculateMrityuBhagaDataList(DateTime fromDate, DateTime toDate)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double[] calcRes = new double[6];
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            DateTime curDate = fromDate;
+            DateTime dateChange;
+
+            int planetConstant = 0;
+
+            List<MrityuBhagaData> mbDataList = CacheLoad.PrepareMrityuBhagaData();
+            foreach (MrityuBhagaData mbd in mbDataList)
+            {
+               /* if (mbd.PlanetId != 9 && mbd.PlanetId != 11)
+                {
+                    planetConstant = GetPlanetConstByPlanetId(mbd.PlanetId);
+                }
+
+                    calcRes = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude);
+                    int currentZnak = GetCurrentZnak(calcRes[0]);
+
+                while (curDate < toDate.AddSeconds(+1))
+                {
+                    TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
+                    dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                    curDate = dateChange.Add(-tsStep);
+                    tsStep = curDate.AddDays(+1).Subtract(curDate);
+                    dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                    curDate = dateChange.Add(-tsStep);
+                    tsStep = curDate.AddHours(+1).Subtract(curDate);
+                    dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                    curDate = dateChange.Add(-tsStep);
+                    tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                    dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                    curDate = dateChange.Add(-tsStep);
+                    tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                    dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+
+                    curDate = dateChange;
+                    currentZnak = GetCurrentZnak(calcRes[0]);
+                    currentNakshatra = GetCurrentNakshatra(calcRes[0]);
+                    currentPada = GetCurrentPada(calcRes[0]);
+                    currentRetro = string.Empty;
+                    if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
+                    {
+                        currentRetro = GetRetroInfo(calcRes[3]);
+                    }
+
+                    PlanetData pdTemp = new PlanetData
+                    {
+                        Date = curDate,
+                        Longitude = calcRes[0],
+                        Latitude = calcRes[1],
+                        SpeedInLongitude = calcRes[3],
+                        SpedInLatitude = calcRes[4],
+                        Retro = currentRetro,
+                        ZodiakId = currentZnak,
+                        NakshatraId = currentNakshatra,
+                        PadaId = currentPada
+                    };
+                    planetDataList.Add(pdTemp);
+
+                    curDate = curDate.AddSeconds(+1);
+                }*/
+            }
+
+            return mbDataList;
+        }
+
+
+        private int GetPlanetConstByPlanetId(int planetId)
+        {
+            switch(planetId)
+            {
+                case 1:
+                    return EpheConstants.SE_MOON;
+
+                case 2:
+                    return EpheConstants.SE_SUN;
+
+                case 3:
+                    return EpheConstants.SE_VENUS;
+
+                case 4:
+                    return EpheConstants.SE_JUPITER;
+
+                case 5:
+                    return EpheConstants.SE_MERCURY;
+
+                case 6:
+                    return EpheConstants.SE_MARS;
+
+                case 7:
+                    return EpheConstants.SE_SATURN;
+
+                case 8:
+                    return EpheConstants.SE_MEAN_NODE;
+
+                case 10:
+                    return EpheConstants.SE_TRUE_NODE;
+
+                default:
+                    return -1;
+            }
+        }
+
+        private double CalculateKetuDegree(double rahuDegree)
+        {
+            double ketuDegree = rahuDegree + 180;
+            if (ketuDegree > 360)
+                ketuDegree = ketuDegree - 360;
+            return ketuDegree;
+        }
+
         public List<EclipseData> CalculateSolarEclipse_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
