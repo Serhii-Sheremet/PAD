@@ -6,9 +6,13 @@ namespace PAD
 {
     public partial class Sweph_Calc : Form
     {
-        public Sweph_Calc()
+        private List<MrityuBhaga> _mbList;
+
+        public Sweph_Calc(List<MrityuBhaga> mbList)
         {
             InitializeComponent();
+
+            _mbList = mbList;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -19,7 +23,7 @@ namespace PAD
             //List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(fromDate, toDate);
             //List<NityaJogaData> njDataList = eCalc.CalculateNityaJogaDataList_London(fromDate, toDate);
             //List<EclipseData> ecDataList = eCalc.CalculateSolarEclipse_London(fromDate, toDate);
-            List<MrityuBhagaData> mbDataList = eCalc.CalculateMrityuBhagaDataList(fromDate, toDate);
+            List<MrityuBhagaData> mbDataList = eCalc.CalculateMrityuBhagaDataList(_mbList, EPlanet.MOON, fromDate, toDate);
 
             label1.Text = "Count: " + mbDataList.Count;
         }

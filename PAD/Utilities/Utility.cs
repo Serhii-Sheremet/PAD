@@ -2252,6 +2252,42 @@ namespace PAD
             return exaltaton;
         }
 
+        public static int GetPlanetSWEConstByPlanetId(int planetId)
+        {
+            switch (planetId)
+            {
+                case 1:
+                    return EpheConstants.SE_MOON;
+
+                case 2:
+                    return EpheConstants.SE_SUN;
+
+                case 3:
+                    return EpheConstants.SE_VENUS;
+
+                case 4:
+                    return EpheConstants.SE_JUPITER;
+
+                case 5:
+                    return EpheConstants.SE_MERCURY;
+
+                case 6:
+                    return EpheConstants.SE_MARS;
+
+                case 7:
+                    return EpheConstants.SE_SATURN;
+
+                case 8:
+                    return EpheConstants.SE_MEAN_NODE;
+
+                case 10:
+                    return EpheConstants.SE_TRUE_NODE;
+
+                default:
+                    return -1;
+            }
+        }
+
         public static string GetLocalizedPlanetNameByCode(EPlanet planetCode, ELanguage langCode)
         {
             return CacheLoad._planetDescList.Where(i => i.PlanetId == (int)planetCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;

@@ -207,7 +207,6 @@ namespace PAD
                 _tithiDataList = CacheLoad.GetTithiData();
                 _nityaJogaDataList = CacheLoad.GetNityaJogaData();
                 _eclipseDataList = CacheLoad.GetEclipseData();
-                //_mrityuBhagaDataList = CacheLoad.PrepareMrityuBhagaData();
 
                 //prepare static Calendars
                 _nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(_moonDataList.ToList());
@@ -341,7 +340,7 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
-            //CacheLoad._mrityuBhagaList = CacheLoad.GetMrityuBhagaList();
+            CacheLoad._mrityuBhagaList = CacheLoad.GetMrityuBhagaList();
         }
 
         private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)
@@ -5361,7 +5360,7 @@ namespace PAD
 
         private void swephCalcToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Sweph_Calc scForm = new Sweph_Calc();
+            Sweph_Calc scForm = new Sweph_Calc(CacheLoad._mrityuBhagaList.ToList());
             scForm.ShowDialog(this);
         }
     }
