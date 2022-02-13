@@ -10,7 +10,7 @@ namespace PAD
         public EAppSetting MrityuBhagaSetting { get; set; }
         public double LongitudeFrom { get; set; }
         public double LongitudeTo { get; set; }
-        public DateTime Datefrom { get; set; }
+        public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
 
     }
