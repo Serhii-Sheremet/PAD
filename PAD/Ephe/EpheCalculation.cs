@@ -173,7 +173,6 @@ namespace PAD
                         curDate = dateChange;
                         dateFrom = curDate;
                         curDate = curDate.AddSeconds(+1);
-
                     }
                 }
             }
