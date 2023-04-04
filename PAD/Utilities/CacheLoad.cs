@@ -40,12 +40,12 @@ namespace PAD
         public static List<TithiDescription> _tithiDescList;
         public static List<Karana> _karanaList;
         public static List<KaranaDescription> _karanaDescList;
-        public static List<NityaJoga> _nityaJogaList;
-        public static List<NityaJogaDescription> _nityaJogaDescList;
+        public static List<NityaYoga> _nityaYogaList;
+        public static List<NityaYogaDescription> _nityaYogaDescList;
         public static List<Muhurta> _muhurtaList;
         public static List<MuhurtaDescription> _muhurtaDescList;
-        public static List<Joga> _jogaList;
-        public static List<JogaDescription> _jogaDescList;
+        public static List<Yoga> _yogaList;
+        public static List<YogaDescription> _yogaDescList;
         public static List<Eclipse> _eclipseList;
         public static List<EclipseDescription> _eclipseDescList;
         public static List<Tranzit> _tranzitList;
@@ -1183,9 +1183,9 @@ namespace PAD
             return entityList;
         }
 
-        public static List<NityaJoga> GetNityaJogaList()
+        public static List<NityaYoga> GetNityaYogaList()
         {
-            List<NityaJoga> entityList = new List<NityaJoga>();
+            List<NityaYoga> entityList = new List<NityaYoga>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -1199,14 +1199,14 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                NityaJoga temp = new NityaJoga
+                                NityaYoga temp = new NityaYoga
                                 {
                                     Id = reader.IntValue(0),
                                     Code = reader.StringValue(1),
                                     ColorId = reader.IntValue(2),
                                     NakshatraId = reader.IntValue(3),
-                                    JogiPlanetId = reader.IntValue(4),
-                                    AvaJogiPlanetId = reader.IntValue(5)
+                                    YogiPlanetId = reader.IntValue(4),
+                                    AvaYogiPlanetId = reader.IntValue(5)
                                 };
                                 entityList.Add(temp);
                             }
@@ -1220,9 +1220,9 @@ namespace PAD
             return entityList;
         }
 
-        public static List<NityaJogaDescription> GetNityaJogaDescList()
+        public static List<NityaYogaDescription> GetNityaYogaDescList()
         {
-            List<NityaJogaDescription> entityList = new List<NityaJogaDescription>();
+            List<NityaYogaDescription> entityList = new List<NityaYogaDescription>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -1236,10 +1236,10 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                NityaJogaDescription temp = new NityaJogaDescription
+                                NityaYogaDescription temp = new NityaYogaDescription
                                 {
                                     Id = reader.IntValue(0),
-                                    NityaJogaId = reader.IntValue(1),
+                                    NityaYogaId = reader.IntValue(1),
                                     Name = reader.StringValue(2),
                                     Deity = reader.StringValue(3),
                                     Meaning = reader.StringValue(4),
@@ -1328,9 +1328,9 @@ namespace PAD
             return entityList;
         }
 
-        public static List<Joga> GetJogaList()
+        public static List<Yoga> GetYogaList()
         {
-            List<Joga> entityList = new List<Joga>();
+            List<Yoga> entityList = new List<Yoga>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -1344,7 +1344,7 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                Joga temp = new Joga
+                                Yoga temp = new Yoga
                                 {
                                     Id = reader.IntValue(0),
                                     ColorId = reader.IntValue(1),
@@ -1362,9 +1362,9 @@ namespace PAD
             return entityList;
         }
 
-        public static List<JogaDescription> GetJogaDescList()
+        public static List<YogaDescription> GetYogaDescList()
         {
-            List<JogaDescription> entityList = new List<JogaDescription>();
+            List<YogaDescription> entityList = new List<YogaDescription>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -1378,10 +1378,10 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                JogaDescription temp = new JogaDescription
+                                YogaDescription temp = new YogaDescription
                                 {
                                     Id = reader.IntValue(0),
-                                    JogaId = reader.IntValue(1),
+                                    YogaId = reader.IntValue(1),
                                     Name = reader.StringValue(2),
                                     ShortName = reader.StringValue(3),
                                     Description = reader.StringValue(4),
@@ -1767,10 +1767,10 @@ namespace PAD
             return tdList;
         }
 
-        public static List<NityaJogaData> GetNityaJogaData()
+        public static List<NityaYogaData> GetNityaYogaData()
         {
             double longitude;
-            List<NityaJogaData> jnList = new List<NityaJogaData>();
+            List<NityaYogaData> jnList = new List<NityaYogaData>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -1786,7 +1786,7 @@ namespace PAD
                             {
                                 if (double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out longitude))
                                 {
-                                    NityaJogaData temp = new NityaJogaData
+                                    NityaYogaData temp = new NityaYogaData
                                     {
                                         Date = DateTime.ParseExact(reader.StringValue(0), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                                         Longitude = longitude,
@@ -1998,21 +1998,21 @@ namespace PAD
             return (EColor)(CacheLoad._karanaList.Where(i => i.Id == kId).FirstOrDefault()?.ColorId ?? 0);
         }
 
-        public static List<NityaJogaCalendar> CreateNityaJogaCalendarList(List<NityaJogaData> njdList)
+        public static List<NityaYogaCalendar> CreateNityaYogaCalendarList(List<NityaYogaData> njdList)
         {
-            List<NityaJogaCalendar> njcList = new List<NityaJogaCalendar>();
+            List<NityaYogaCalendar> njcList = new List<NityaYogaCalendar>();
             int index = 0, max = njdList.Count;
-            foreach (NityaJogaData td in njdList)
+            foreach (NityaYogaData td in njdList)
             {
-                ENityaJoga nj = GetNityaJogaCodeByNakshatraId(td.NakshatraId);
+                ENityaYoga nj = GetNityaJogaCodeByNakshatraId(td.NakshatraId);
                 if (index != (max - 1))
                 {
-                    NityaJogaCalendar jnTemp = new NityaJogaCalendar
+                    NityaYogaCalendar jnTemp = new NityaYogaCalendar
                     {
                         DateStart = td.Date,
                         DateEnd = njdList[index + 1].Date,
                         ColorCode = GetNityaJogaColorById((int)nj),
-                        NJCode = nj,
+                        NYCode = nj,
                         NakshatraId = td.NakshatraId
                     };
                     njcList.Add(jnTemp);
@@ -2020,12 +2020,12 @@ namespace PAD
                 else if (index == (max - 1))
                 {
                     DateTime endDate = new DateTime(td.Date.Year, td.Date.Month, td.Date.Day, 23, 59, 59);
-                    NityaJogaCalendar jnTemp = new NityaJogaCalendar
+                    NityaYogaCalendar jnTemp = new NityaYogaCalendar
                     {
                         DateStart = td.Date,
                         DateEnd = endDate,
                         ColorCode = GetNityaJogaColorById((int)nj),
-                        NJCode = nj,
+                        NYCode = nj,
                         NakshatraId = td.NakshatraId
                     };
                     njcList.Add(jnTemp);
@@ -2035,14 +2035,14 @@ namespace PAD
             return njcList;
         }
 
-        public static ENityaJoga GetNityaJogaCodeByNakshatraId(int nId)
+        public static ENityaYoga GetNityaJogaCodeByNakshatraId(int nId)
         {
-            return (ENityaJoga)(_nityaJogaList.Where(i => i.NakshatraId == nId).FirstOrDefault()?.Id ?? 0);
+            return (ENityaYoga)(_nityaYogaList.Where(i => i.NakshatraId == nId).FirstOrDefault()?.Id ?? 0);
         }
 
         public static EColor GetNityaJogaColorById(int nId)
         {
-            return (EColor)(_nityaJogaList.Where(i => i.Id == nId).FirstOrDefault()?.ColorId ?? 0);
+            return (EColor)(_nityaYogaList.Where(i => i.Id == nId).FirstOrDefault()?.ColorId ?? 0);
         }
 
         public static List<PlanetCalendar> CreatePlanetZodiakCalendarList(EPlanet planetCode, List<PlanetData> pdList)

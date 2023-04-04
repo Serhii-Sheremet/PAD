@@ -16,9 +16,13 @@ namespace PAD
 
         public override string GetMasaFullName(List<PlanetCalendar> pList, Profile person, ELanguage langCode)
         {
+            /*
             string masaName = CacheLoad._masaDescList.Where(i => i.MasaId == MasaId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-            int nakId = Utility.GetNakshatraFullMoonId(this, pList, person);
+            int nakId = Utility.GetNakshatraFullMoonId(this, pList);
             return masaName + " (" + Utility.GetNakshatraUprvitel(nakId, langCode) + ")";
+            */
+
+            return string.Empty;
         }
     }
 }

@@ -205,7 +205,7 @@ namespace PAD
             List<TithiCalendar> tithiList,
             List<KaranaCalendar> karanaList,
             List<ChandraBalaCalendar> chandraBalaList,
-            List<NityaJogaCalendar> njList,
+            List<NityaYogaCalendar> njList,
             List<EclipseCalendar> eList,
             List<MasaCalendar> mList,
             List<ShunyaNakshatraCalendar> snList,
@@ -373,7 +373,7 @@ namespace PAD
             TithiDayList = PrepareTithiDayList(tithiList, date);
             KaranaDayList = PrepareKaranaDayList(karanaList, date);
             ChandraBalaDayList = PrepareChandraBalaDayList(chandraBalaList, sPerson, date);
-            NityaJogaDayList = PrepareNityaJogaDayList(njList, date);
+            NityaJogaDayList = PrepareNityaYogaDayList(njList, date);
             EclipseDayList = PrepareEclipseDayList(eList, date);
             MasaDayList = PrepareMasaDayList(mList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(snList, date);
@@ -849,11 +849,11 @@ namespace PAD
             return dom;
         }
 
-        private List<Calendar> PrepareNityaJogaDayList(List<NityaJogaCalendar> njcList, DateTime date)
+        private List<Calendar> PrepareNityaYogaDayList(List<NityaYogaCalendar> njcList, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
-            List<NityaJogaCalendar> niList = njcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
-            foreach (NityaJogaCalendar nc in niList)
+            List<NityaYogaCalendar> niList = njcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
+            foreach (NityaYogaCalendar nc in niList)
             {
                 resList.Add(nc);
             }

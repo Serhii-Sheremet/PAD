@@ -145,7 +145,7 @@ namespace PAD
         private static List<DateTime> GetDatesFromJogaList(List<Calendar> jcList, DateTime currentDate)
         {
             List<DateTime> dateList = new List<DateTime>();
-            foreach (JogaCalendar jc in jcList)
+            foreach (YogaCalendar jc in jcList)
             {
                 if (jc.DateStart < currentDate)
                     dateList.Add(currentDate);
@@ -159,12 +159,12 @@ namespace PAD
             return dateList;
         }
 
-        public static List<JogaColoredBlock> GetJogaColoredBlockListForDay(Day dayObj)
+        public static List<YogaColoredBlock> GetYogaColoredBlockListForDay(Day dayObj)
         {
             List<DateTime> djDateList = new List<DateTime>();
             if (dayObj.DwipushkarJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.DwipushkarJogaDayList)
+                foreach (YogaCalendar jc in dayObj.DwipushkarJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.DwipushkarJogaDayList, dayObj.Date));
@@ -172,7 +172,7 @@ namespace PAD
             }
             if (dayObj.TripushkarJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.TripushkarJogaDayList)
+                foreach (YogaCalendar jc in dayObj.TripushkarJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.TripushkarJogaDayList, dayObj.Date));
@@ -180,7 +180,7 @@ namespace PAD
             }
             if (dayObj.AmritaSiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.AmritaSiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.AmritaSiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.AmritaSiddhaJogaDayList, dayObj.Date));
@@ -188,7 +188,7 @@ namespace PAD
             }
             if (dayObj.SarvarthaSiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.SarvarthaSiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.SarvarthaSiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.SarvarthaSiddhaJogaDayList, dayObj.Date));
@@ -196,7 +196,7 @@ namespace PAD
             }
             if (dayObj.SiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.SiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.SiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.SiddhaJogaDayList, dayObj.Date));
@@ -204,7 +204,7 @@ namespace PAD
             }
             if (dayObj.MrityuJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.MrityuJogaDayList)
+                foreach (YogaCalendar jc in dayObj.MrityuJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.MrityuJogaDayList, dayObj.Date));
@@ -212,7 +212,7 @@ namespace PAD
             }
             if (dayObj.AdhamJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.AdhamJogaDayList)
+                foreach (YogaCalendar jc in dayObj.AdhamJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.AdhamJogaDayList, dayObj.Date));
@@ -220,7 +220,7 @@ namespace PAD
             }
             if (dayObj.YamaghataJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.YamaghataJogaDayList)
+                foreach (YogaCalendar jc in dayObj.YamaghataJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.YamaghataJogaDayList, dayObj.Date));
@@ -228,7 +228,7 @@ namespace PAD
             }
             if (dayObj.DagdhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.DagdhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.DagdhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.DagdhaJogaDayList, dayObj.Date));
@@ -236,14 +236,14 @@ namespace PAD
             }
             if (dayObj.UnfarobaleJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.UnfarobaleJogaDayList)
+                foreach (YogaCalendar jc in dayObj.UnfarobaleJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         djDateList.AddRange(GetDatesFromJogaList(dayObj.UnfarobaleJogaDayList, dayObj.Date));
                 }
             }
 
-            List<JogaColoredBlock> jcbList = new List<JogaColoredBlock>();
+            List<YogaColoredBlock> jcbList = new List<YogaColoredBlock>();
             if (djDateList.Count > 0)
             {
                 List<DateTime> djDateListUnique = djDateList.Distinct().ToList();
@@ -252,7 +252,7 @@ namespace PAD
                 {
                     if (i < djDateListUnique.Count - 1)
                     {
-                        JogaColoredBlock temp = new JogaColoredBlock
+                        YogaColoredBlock temp = new YogaColoredBlock
                         {
                             Date = dayObj.Date,
                             DateStart = djDateListUnique[i],
@@ -335,7 +335,7 @@ namespace PAD
             EColor color = EColor.NOCOLOR;
             if (dayObj.DwipushkarJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.DwipushkarJogaDayList)
+                foreach (YogaCalendar jc in dayObj.DwipushkarJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.DwipushkarJogaDayList, color);
@@ -343,7 +343,7 @@ namespace PAD
             }
             if (dayObj.TripushkarJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.TripushkarJogaDayList)
+                foreach (YogaCalendar jc in dayObj.TripushkarJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.TripushkarJogaDayList, color);
@@ -351,7 +351,7 @@ namespace PAD
             }
             if (dayObj.AmritaSiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.AmritaSiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.AmritaSiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.AmritaSiddhaJogaDayList, color);
@@ -359,7 +359,7 @@ namespace PAD
             }
             if (dayObj.SarvarthaSiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.SarvarthaSiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.SarvarthaSiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.SarvarthaSiddhaJogaDayList, color);
@@ -367,7 +367,7 @@ namespace PAD
             }
             if (dayObj.SiddhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.SiddhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.SiddhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.SiddhaJogaDayList, color);
@@ -375,7 +375,7 @@ namespace PAD
             }
             if (dayObj.MrityuJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.MrityuJogaDayList)
+                foreach (YogaCalendar jc in dayObj.MrityuJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.MrityuJogaDayList, color);
@@ -383,7 +383,7 @@ namespace PAD
             }
             if (dayObj.AdhamJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.AdhamJogaDayList)
+                foreach (YogaCalendar jc in dayObj.AdhamJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.AdhamJogaDayList, color);
@@ -391,7 +391,7 @@ namespace PAD
             }
             if (dayObj.YamaghataJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.YamaghataJogaDayList)
+                foreach (YogaCalendar jc in dayObj.YamaghataJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.YamaghataJogaDayList, color);
@@ -399,7 +399,7 @@ namespace PAD
             }
             if (dayObj.DagdhaJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.DagdhaJogaDayList)
+                foreach (YogaCalendar jc in dayObj.DagdhaJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.DagdhaJogaDayList, color);
@@ -407,7 +407,7 @@ namespace PAD
             }
             if (dayObj.UnfarobaleJogaDayList.Count > 0)
             {
-                foreach (JogaCalendar jc in dayObj.UnfarobaleJogaDayList)
+                foreach (YogaCalendar jc in dayObj.UnfarobaleJogaDayList)
                 {
                     if (jc.DateStart.Between(dayObj.Date, dayObj.Date.AddDays(+1)) || jc.DateEnd.Between(dayObj.Date, dayObj.Date.AddDays(+1)))
                         color = GetJogaColorCode(startDate, endDate, dayObj.UnfarobaleJogaDayList, color);
@@ -431,71 +431,71 @@ namespace PAD
             return currentColor;
         }
 
-        public static List<JogaCalendar> GetYogasListForTimePeriod(Day dayObj, DateTime startDate, DateTime endDate)
+        public static List<YogaCalendar> GetYogasListForTimePeriod(Day dayObj, DateTime startDate, DateTime endDate)
         {
-            List<JogaCalendar> composedList = new List<JogaCalendar>();
+            List<YogaCalendar> composedList = new List<YogaCalendar>();
 
             if (dayObj.DwipushkarJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.DwipushkarJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.TripushkarJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.TripushkarJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.AmritaSiddhaJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.AmritaSiddhaJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.SarvarthaSiddhaJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.SarvarthaSiddhaJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.SiddhaJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.SiddhaJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.MrityuJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.MrityuJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.AdhamJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.AdhamJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.YamaghataJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.YamaghataJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.DagdhaJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.DagdhaJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
             if (dayObj.UnfarobaleJogaDayList.Count > 0)
             {
                 List<Calendar> selList = dayObj.UnfarobaleJogaDayList.Where(i => i.DateStart <= startDate && i.DateEnd >= endDate).ToList();
-                List<JogaCalendar> clonedList = CloneYogaCalendarList(selList);
+                List<YogaCalendar> clonedList = CloneYogaCalendarList(selList);
                 composedList.AddRange(clonedList);
             }
-            List<JogaCalendar> yogaListSorted = composedList.OrderBy(i => i.DateStart).ToList();
+            List<YogaCalendar> yogaListSorted = composedList.OrderBy(i => i.DateStart).ToList();
             return yogaListSorted;
         }
 
@@ -1435,17 +1435,17 @@ namespace PAD
             return newKList;
         }
 
-        public static List<NityaJogaCalendar> CloneNityaJogaCalendarList(List<Calendar> njList)
+        public static List<NityaYogaCalendar> CloneNityaYogaCalendarList(List<Calendar> njList)
         {
-            List<NityaJogaCalendar> newNJList = new List<NityaJogaCalendar>();
-            foreach (NityaJogaCalendar nj in njList)
+            List<NityaYogaCalendar> newNJList = new List<NityaYogaCalendar>();
+            foreach (NityaYogaCalendar nj in njList)
             {
-                NityaJogaCalendar njObj = new NityaJogaCalendar
+                NityaYogaCalendar njObj = new NityaYogaCalendar
                 {
                     DateStart = nj.DateStart,
                     DateEnd = nj.DateEnd,
                     ColorCode = nj.ColorCode,
-                    NJCode = nj.NJCode,
+                    NYCode = nj.NYCode,
                     NakshatraId = nj.NakshatraId
                 };
                 newNJList.Add(njObj);
@@ -1453,17 +1453,17 @@ namespace PAD
             return newNJList;
         }
 
-        public static List<NityaJogaCalendar> CloneNityaJogaCalendarList(List<NityaJogaCalendar> njList)
+        public static List<NityaYogaCalendar> CloneNityaJogaCalendarList(List<NityaYogaCalendar> njList)
         {
-            List<NityaJogaCalendar> newNJList = new List<NityaJogaCalendar>();
-            foreach (NityaJogaCalendar nj in njList)
+            List<NityaYogaCalendar> newNJList = new List<NityaYogaCalendar>();
+            foreach (NityaYogaCalendar nj in njList)
             {
-                NityaJogaCalendar njObj = new NityaJogaCalendar
+                NityaYogaCalendar njObj = new NityaYogaCalendar
                 {
                     DateStart = nj.DateStart,
                     DateEnd = nj.DateEnd,
                     ColorCode = nj.ColorCode,
-                    NJCode = nj.NJCode,
+                    NYCode = nj.NYCode,
                     NakshatraId = nj.NakshatraId
                 };
                 newNJList.Add(njObj);
@@ -1710,18 +1710,18 @@ namespace PAD
             return newMList;
         }
 
-        public static List<JogaCalendar> CloneYogaCalendarList(List<Calendar> yList)
+        public static List<YogaCalendar> CloneYogaCalendarList(List<Calendar> yList)
         {
-            List<JogaCalendar> newYList = new List<JogaCalendar>();
-            foreach (JogaCalendar yc in yList)
+            List<YogaCalendar> newYList = new List<YogaCalendar>();
+            foreach (YogaCalendar yc in yList)
             {
-                JogaCalendar yObj = new JogaCalendar
+                YogaCalendar yObj = new YogaCalendar
                 {
                     DateStart = yc.DateStart,
                     DateEnd = yc.DateEnd,
                     ColorCode = yc.ColorCode,
                     Type = yc.Type,
-                    JogaCode = yc.JogaCode,
+                    YogaCode = yc.YogaCode,
                     Vara = yc.Vara,
                     NakshatraCode = yc.NakshatraCode,
                     TithiId = yc.TithiId
@@ -1817,25 +1817,13 @@ namespace PAD
             return EColor.MASA1;
         }
 
-        public static int GetNakshatraFullMoonId(MasaCalendar mc, List<PlanetCalendar> pList, Profile person)
+        
+        public static int GetNakshatraFullMoonId(MasaCalendar mc, List<PlanetCalendar> pList)
         {
-            int nId = 0;
-            double latitude, longitude;
-            string timeZone = string.Empty;
-            if (Utility.GetGeoCoordinateByLocationId(person.PlaceOfLivingId, out latitude, out longitude))
-            {
-                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
-                TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-                TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
-
-                List<PlanetCalendar> mnPeriodCalendar = ClonePlanetCalendarList(pList.Where(i => mc.FullMoonDate.Between(i.DateStart.AddDays(-2), i.DateEnd.AddDays(+2))).ToList());
-                mnPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mnPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
-
-                nId = (int)(mnPeriodCalendar.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).FirstOrDefault().NakshatraCode);
-            }
-            return nId;
+            List<PlanetCalendar> mnPeriodCalendar = ClonePlanetCalendarList(pList.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).ToList());
+            return (int)(mnPeriodCalendar.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).FirstOrDefault().NakshatraCode);
         }
+        
 
         public static string GetNakshatraUprvitel(int nakId, ELanguage lCode)
         {

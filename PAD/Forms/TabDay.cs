@@ -156,8 +156,8 @@ namespace PAD
 
             else
             {
-                List<JogaColoredBlock> jcbList = Utility.GetJogaColoredBlockListForDay(day);
-                foreach (JogaColoredBlock jcb in jcbList)
+                List<YogaColoredBlock> jcbList = Utility.GetYogaColoredBlockListForDay(day);
+                foreach (YogaColoredBlock jcb in jcbList)
                 {
                     endDate = jcb.DateEnd;
                     if (jcb.DateStart > day.Date)
@@ -167,8 +167,8 @@ namespace PAD
                     if (jcb.ColorCode != EColor.NOCOLOR)
                     {
                         string text = string.Empty;
-                        List<JogaCalendar> jcList = Utility.GetYogasListForTimePeriod(day, startDate, endDate);
-                        foreach (JogaCalendar jc in jcList)
+                        List<YogaCalendar> jcList = Utility.GetYogasListForTimePeriod(day, startDate, endDate);
+                        foreach (YogaCalendar jc in jcList)
                         {
                             text += jc.GetShortName(lang) + " ";
                         }
@@ -712,12 +712,12 @@ namespace PAD
                     break;
                     
                 case EDVNames.YOGA:
-                    List<JogaCalendar> jogaList = Utility.GetYogasListForTimePeriod(_currDay, startDate.AddDays(-1), endDate.AddDays(-1));
+                    List<YogaCalendar> jogaList = Utility.GetYogasListForTimePeriod(_currDay, startDate.AddDays(-1), endDate.AddDays(-1));
                     EAppSetting weekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-                    foreach (JogaCalendar jc in jogaList)
+                    foreach (YogaCalendar jc in jogaList)
                     {
-                        string yName = CacheLoad._jogaDescList.Where(i => i.JogaId == (int)jc.JogaCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
-                        string yDesc = CacheLoad._jogaDescList.Where(i => i.JogaId == (int)jc.JogaCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        string yName = CacheLoad._yogaDescList.Where(i => i.YogaId == (int)jc.YogaCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+                        string yDesc = CacheLoad._yogaDescList.Where(i => i.YogaId == (int)jc.YogaCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         string nName = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)jc.NakshatraCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string tName = CacheLoad._tithiDescList.Where(i => i.TithiId == jc.TithiId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         int day = Utility.GetDayOfWeekNumberFromDate(jc.DateStart, weekSetting);
@@ -828,11 +828,11 @@ namespace PAD
                     
                 case EDVNames.NITYAYOGA:
                     List<Calendar> njList = _currDay.NityaJogaDayList.Where(i => i.DateStart <= startDate.AddDays(-1) && i.DateEnd >= endDate.AddDays(-1)).ToList();
-                    List<NityaJogaCalendar> clonedNityaJogaList = Utility.CloneNityaJogaCalendarList(njList);
-                    foreach (NityaJogaCalendar njc in clonedNityaJogaList)
+                    List<NityaYogaCalendar> clonedNityaJogaList = Utility.CloneNityaYogaCalendarList(njList);
+                    foreach (NityaYogaCalendar njc in clonedNityaJogaList)
                     {
-                        NityaJogaDescription njd = CacheLoad._nityaJogaDescList.Where(i => i.NityaJogaId == (int)njc.NJCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
-                        int yogaPlanetId = CacheLoad._nityaJogaList.Where(i => i.Id == (int)njc.NJCode).FirstOrDefault()?.JogiPlanetId ?? 0;
+                        NityaYogaDescription njd = CacheLoad._nityaYogaDescList.Where(i => i.NityaYogaId == (int)njc.NYCode && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault();
+                        int yogaPlanetId = CacheLoad._nityaYogaList.Where(i => i.Id == (int)njc.NYCode).FirstOrDefault()?.YogiPlanetId ?? 0;
                         string upravitel = CacheLoad._planetDescList.Where(i => i.PlanetId == yogaPlanetId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                         string name = njc.GetShortName(lCode) + " (" + upravitel + ", " + njd.Deity + ")";
                         string nakshatra = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == njc.NakshatraId && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;

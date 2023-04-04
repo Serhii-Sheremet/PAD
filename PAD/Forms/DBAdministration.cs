@@ -1635,12 +1635,12 @@ namespace PAD
         private bool LoadJogaIntoDB()
         {
             bool isLoaded = false;
-            Joga j = new Joga();
-            List<Joga> jList = new List<Joga>();
+            Yoga j = new Yoga();
+            List<Yoga> jList = new List<Yoga>();
             string[] tempJList = File.ReadAllLines(@".\Data\Files\Joga.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJList.Length; i++)
             {
-                Joga temp = j.ParseFile(tempJList[i]);
+                Yoga temp = j.ParseFile(tempJList[i]);
                 jList.Add(temp);
             }
 
@@ -1841,12 +1841,12 @@ namespace PAD
         private bool LoadNityaJogaIntoDB()
         {
             bool isLoaded = false;
-            NityaJoga jn = new NityaJoga();
-            List<NityaJoga> jnList = new List<NityaJoga>();
+            NityaYoga jn = new NityaYoga();
+            List<NityaYoga> jnList = new List<NityaYoga>();
             string[] tempJNList = File.ReadAllLines(@".\Data\Files\NityaJoga.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJNList.Length; i++)
             {
-                NityaJoga temp = jn.ParseFile(tempJNList[i]);
+                NityaYoga temp = jn.ParseFile(tempJNList[i]);
                 jnList.Add(temp);
             }
 
@@ -1863,8 +1863,8 @@ namespace PAD
                         command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].Code });
                         command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].ColorId });
                         command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].NakshatraId });
-                        command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].JogiPlanetId });
-                        command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].AvaJogiPlanetId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].YogiPlanetId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = jnList[i].AvaYogiPlanetId });
                     }
                     command.ExecuteNonQuery();
                     isLoaded = true;
@@ -2308,11 +2308,11 @@ namespace PAD
             }
 
             File.AppendAllText(@".\Update\" + year + ".dt", "13" + Environment.NewLine, Encoding.GetEncoding(1251));
-            List<NityaJogaData> jnList = GetNityaJogaDataForYear(year);
+            List<NityaYogaData> jnList = GetNityaYogaDataForYear(year);
             //PrepareProgressBar(jnList.Count);
             for (int i = 0; i < jnList.Count; i++)
             {
-                File.AppendAllText(@".\Update\" + year + ".dt", Utility.Encrypt(CreateNityaJogaDataRowForFile(jnList[i]), true) + Environment.NewLine);
+                File.AppendAllText(@".\Update\" + year + ".dt", Utility.Encrypt(CreateNityaYogaDataRowForFile(jnList[i]), true) + Environment.NewLine);
                 //toolStripProgressBar.Value = i;
             }
 
@@ -2422,10 +2422,10 @@ namespace PAD
             return resList;
         }
 
-        private List<NityaJogaData> GetNityaJogaDataForYear(int year)
+        private List<NityaYogaData> GetNityaYogaDataForYear(int year)
         {
             double longitude;
-            List<NityaJogaData> jnList = new List<NityaJogaData>();
+            List<NityaYogaData> jnList = new List<NityaYogaData>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
@@ -2441,7 +2441,7 @@ namespace PAD
                             {
                                 if (double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out longitude))
                                 {
-                                    NityaJogaData temp = new NityaJogaData
+                                    NityaYogaData temp = new NityaYogaData
                                     {
                                         Date = DateTime.ParseExact(reader.StringValue(0), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                                         Longitude = longitude,
@@ -2459,7 +2459,7 @@ namespace PAD
             }
             DateTime startDate = new DateTime(year, 1, 1, 0, 0, 0);
             DateTime endDate = startDate.AddYears(+1);
-            List<NityaJogaData> resList = jnList.Where(i => i.Date > startDate && i.Date < endDate).ToList();
+            List<NityaYogaData> resList = jnList.Where(i => i.Date > startDate && i.Date < endDate).ToList();
             return resList;
         }
 
@@ -2521,7 +2521,7 @@ namespace PAD
                             tdItem.TithiId);
         }
 
-        private string CreateNityaJogaDataRowForFile(NityaJogaData jnItem)
+        private string CreateNityaYogaDataRowForFile(NityaYogaData jnItem)
         {
             return String.Join("|",
                             jnItem.Date.ToString("yyyy-MM-dd HH:mm:ss"),
@@ -2660,9 +2660,9 @@ namespace PAD
                     break;
 
                 case 13:
-                    NityaJogaData jn = new NityaJogaData();
-                    List<NityaJogaData> jnList = jn.ParseUpdateFile(tempList);
-                    InsertNJResultsIntoDB(jnList);
+                    NityaYogaData jn = new NityaYogaData();
+                    List<NityaYogaData> jnList = jn.ParseUpdateFile(tempList);
+                    InsertNYResultsIntoDB(jnList);
                     break;
 
                 case 14:
@@ -2759,7 +2759,7 @@ namespace PAD
             }
         }
 
-        private void InsertNJResultsIntoDB(List<NityaJogaData> jnList)
+        private void InsertNYResultsIntoDB(List<NityaYogaData> jnList)
         {
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {

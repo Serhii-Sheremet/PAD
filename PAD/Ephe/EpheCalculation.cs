@@ -264,15 +264,16 @@ namespace PAD
             return ketuDegree;
         }
 
-        public List<EclipseData> CalculateSolarEclipse_London(DateTime fromDate, DateTime toDate)
+        public List<EclipseData> CalculateEclipse_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
             double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             DateTime curDate = fromDate;
             DateTime dateChange;
-            
+
             List<EclipseData> ecDataList = new List<EclipseData>();
+
             while (curDate < toDate.AddSeconds(+1))
             {
                 dateChange = SWEPH_SolarEclipse_Calculation(curDate, longitude, latitude, altitude);
@@ -289,7 +290,7 @@ namespace PAD
             curDate = fromDate;
             while (curDate < toDate.AddSeconds(+1))
             {
-                dateChange = SWEPH_OccultationGlobal_Calculation(curDate, EpheConstants.SE_SUN, longitude, latitude, altitude);
+                dateChange = SWEPH_OccultationGlobal_Calculation(curDate, EpheConstants.SE_SUN, EpheConstants.SE_ECL_TOTAL, longitude, latitude, altitude);
                 curDate = dateChange;
                 EclipseData ecTemp = new EclipseData
                 {
@@ -313,21 +314,6 @@ namespace PAD
                 ecDataList.Add(ecTemp);
                 curDate = curDate.AddDays(+1);
             }
-
-            //curDate = fromDate;
-            //while (curDate < toDate.AddSeconds(+1))
-            //{
-            //    dateChange = SWEPH_MoonOccultation_Calculation(curDate, longitude, latitude, altitude);
-            //    //dateChange = SWEPH_OccultationGlobal_Calculation(curDate, EpheConstants.SE_SUN, longitude, latitude, altitude);
-            //    curDate = dateChange;
-            //    EclipseData ecTemp = new EclipseData
-            //    {
-            //        Date = curDate,
-            //        EclipseId = 1
-            //    };
-            //    ecDataList.Add(ecTemp);
-            //    curDate = curDate.AddDays(+1);
-            //}
 
             ecDataList.OrderBy(i => i.Date);
             return ecDataList;
@@ -356,70 +342,27 @@ namespace PAD
             int jmin = calcDate.Minute;
             int jsec = calcDate.Second;
 
-            //int iyear = 0;
-            //int imonth = 0;
-            //int iday = 0;
-            //int ihour = 0;
-            //int imin = 0;
-            //double[] isec = new double[1];
-
             jut = jhour + jmin / 60.0 + jsec / 3600.0;
             tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
 
-            double[] geopos = new double[3];
-            geopos[0] = lon;
-            geopos[1] = lat;
-            geopos[2] = alt; // height above sea level in meters;
             double[] tret = new double[10];
-            double[] attr = new double[20];
-
-            IntPtr ptrGeoDouble = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
-            Marshal.Copy(geopos, 0, ptrGeoDouble, 3);
 
             IntPtr ptrTretDouble = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]) * tret.Length);
             Marshal.Copy(tret, 0, ptrTretDouble, 10);
 
-            IntPtr ptrAttrDouble = Marshal.AllocHGlobal(Marshal.SizeOf(attr[0]) * attr.Length);
-            Marshal.Copy(attr, 0, ptrAttrDouble, 20);
-
             string serr = new string('*', 256);
             IntPtr ptrErr = (IntPtr)Marshal.StringToHGlobalAnsi(serr);
 
-            iflgret = EpheFunctions.swe_sol_eclipse_when_loc(tjd_ut, (int)iflag, ptrGeoDouble, ptrTretDouble, ptrAttrDouble, false, ptrErr);
+            int ifltype = ~(EpheConstants.SE_ECL_TOTAL | EpheConstants.SE_ECL_PARTIAL);
+            iflgret = EpheFunctions.swe_sol_eclipse_when_glob(tjd_ut, (int)iflag, ifltype, ptrTretDouble, false, ptrErr);
+
             Marshal.Copy(ptrTretDouble, tret, 0, 10);
-            Marshal.Copy(ptrAttrDouble, attr, 0, 20);
 
-            //IntPtr iyear_out = Marshal.AllocHGlobal(Marshal.SizeOf(iyear));
-            //IntPtr imonth_out = Marshal.AllocHGlobal(Marshal.SizeOf(imonth));
-            //IntPtr iday_out = Marshal.AllocHGlobal(Marshal.SizeOf(iday));
-            //IntPtr ihour_out = Marshal.AllocHGlobal(Marshal.SizeOf(ihour));
-            //IntPtr imin_out = Marshal.AllocHGlobal(Marshal.SizeOf(imin));
-            //IntPtr isec_out = Marshal.AllocHGlobal(Marshal.SizeOf(isec[0]) * isec.Length);
-
-            //EpheFunctions.swe_jdet_to_utc(tret[0], gregflag, iyear_out, imonth_out, iday_out, ihour_out, imin_out, isec_out);
-
-            //iyear = Marshal.ReadInt32(iyear_out);
-            //imonth = Marshal.ReadInt32(imonth_out);
-            //iday = Marshal.ReadInt32(iday_out);
-            //ihour = Marshal.ReadInt32(ihour_out);
-            //imin = Marshal.ReadInt32(imin_out);
-            //Marshal.Copy(isec_out, isec, 0, 1);
-
-            Marshal.FreeHGlobal(ptrGeoDouble);
             Marshal.FreeHGlobal(ptrTretDouble);
-            Marshal.FreeHGlobal(ptrAttrDouble);
             Marshal.FreeHGlobal(ptrErr);
-            //Marshal.FreeHGlobal(iyear_out);
-            //Marshal.FreeHGlobal(imonth_out);
-            //Marshal.FreeHGlobal(iday_out);
-            //Marshal.FreeHGlobal(ihour_out);
-            //Marshal.FreeHGlobal(imin_out);
-            //Marshal.FreeHGlobal(isec_out);
 
-
-            //DateTime date1 = new DateTime(iyear, imonth, iday, ihour, imin, (int)isec[0]);
-            DateTime date2 = DateTime.FromOADate(tret[0] - 2415018.5);
-            return date2;
+            DateTime date = DateTime.FromOADate(tret[0] - 2415018.5);
+            return date;
         }
 
         private DateTime SWEPH_MoonEclipse_Calculation(DateTime calcDate, double lon, double lat, double alt)
@@ -445,73 +388,30 @@ namespace PAD
             int jmin = calcDate.Minute;
             int jsec = calcDate.Second;
 
-            //int iyear = 0;
-            //int imonth = 0;
-            //int iday = 0;
-            //int ihour = 0;
-            //int imin = 0;
-            //double[] isec = new double[1];
-
             jut = jhour + jmin / 60.0 + jsec / 3600.0;
             tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
 
-            double[] geopos = new double[3];
-            geopos[0] = lon;
-            geopos[1] = lat;
-            geopos[2] = alt; // height above sea level in meters;
             double[] tret = new double[10];
-            double[] attr = new double[20];
-
-            IntPtr ptrGeoDouble = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
-            Marshal.Copy(geopos, 0, ptrGeoDouble, 3);
 
             IntPtr ptrTretDouble = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]) * tret.Length);
             Marshal.Copy(tret, 0, ptrTretDouble, 10);
 
-            IntPtr ptrAttrDouble = Marshal.AllocHGlobal(Marshal.SizeOf(attr[0]) * attr.Length);
-            Marshal.Copy(attr, 0, ptrAttrDouble, 20);
-
             string serr = new string('*', 256);
             IntPtr ptrErr = (IntPtr)Marshal.StringToHGlobalAnsi(serr);
 
-            iflgret = EpheFunctions.swe_lun_eclipse_when_loc(tjd_ut, (int)iflag, ptrGeoDouble, ptrTretDouble, ptrAttrDouble, false, ptrErr);
+            int ifltype = ~(EpheConstants.SE_ECL_CENTRAL | EpheConstants.SE_ECL_NONCENTRAL);
+            iflgret = EpheFunctions.swe_lun_eclipse_when(tjd_ut, (int)iflag, ifltype, ptrTretDouble, false, ptrErr);
+
             Marshal.Copy(ptrTretDouble, tret, 0, 10);
-            Marshal.Copy(ptrAttrDouble, attr, 0, 20);
 
-            //IntPtr iyear_out = Marshal.AllocHGlobal(Marshal.SizeOf(iyear));
-            //IntPtr imonth_out = Marshal.AllocHGlobal(Marshal.SizeOf(imonth));
-            //IntPtr iday_out = Marshal.AllocHGlobal(Marshal.SizeOf(iday));
-            //IntPtr ihour_out = Marshal.AllocHGlobal(Marshal.SizeOf(ihour));
-            //IntPtr imin_out = Marshal.AllocHGlobal(Marshal.SizeOf(imin));
-            //IntPtr isec_out = Marshal.AllocHGlobal(Marshal.SizeOf(isec[0]) * isec.Length);
-
-            //EpheFunctions.swe_jdet_to_utc(tret[0], gregflag, iyear_out, imonth_out, iday_out, ihour_out, imin_out, isec_out);
-
-            //iyear = Marshal.ReadInt32(iyear_out);
-            //imonth = Marshal.ReadInt32(imonth_out);
-            //iday = Marshal.ReadInt32(iday_out);
-            //ihour = Marshal.ReadInt32(ihour_out);
-            //imin = Marshal.ReadInt32(imin_out);
-            //Marshal.Copy(isec_out, isec, 0, 1);
-
-            Marshal.FreeHGlobal(ptrGeoDouble);
             Marshal.FreeHGlobal(ptrTretDouble);
-            Marshal.FreeHGlobal(ptrAttrDouble);
             Marshal.FreeHGlobal(ptrErr);
-            //Marshal.FreeHGlobal(iyear_out);
-            //Marshal.FreeHGlobal(imonth_out);
-            //Marshal.FreeHGlobal(iday_out);
-            //Marshal.FreeHGlobal(ihour_out);
-            //Marshal.FreeHGlobal(imin_out);
-            //Marshal.FreeHGlobal(isec_out);
 
-
-            //DateTime date1 = new DateTime(iyear, imonth, iday, ihour, imin, (int)isec[0]);
-            DateTime date2 = DateTime.FromOADate(tret[0] - 2415018.5);
-            return date2;
+            DateTime date = DateTime.FromOADate(tret[0] - 2415018.5);
+            return date;
         }
 
-        private DateTime SWEPH_OccultationGlobal_Calculation(DateTime calcDate, int planetConst, double lon, double lat, double alt)
+        private DateTime SWEPH_OccultationGlobal_Calculation(DateTime calcDate, int planetConst, int eclipseType, double lon, double lat, double alt)
         {
             iflag = 0;
             whicheph = EpheConstants.SEFLG_SWIEPH;
@@ -537,15 +437,7 @@ namespace PAD
             jut = jhour + jmin / 60.0 + jsec / 3600.0;
             tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
 
-            double[] geopos = new double[3];
-            geopos[0] = lon;
-            geopos[1] = lat;
-            geopos[2] = alt; // height above sea level in meters;
             double[] tret = new double[10];
-            double[] attr = new double[20];
-
-            IntPtr ptrGeoDouble = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
-            Marshal.Copy(geopos, 0, ptrGeoDouble, 3);
 
             IntPtr ptrTretDouble = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]) * tret.Length);
             Marshal.Copy(tret, 0, ptrTretDouble, 10);
@@ -555,113 +447,23 @@ namespace PAD
 
             string starname = string.Empty;
             IntPtr ptrStar = (IntPtr)Marshal.StringToHGlobalAnsi(starname);
-            //EpheFunctions.swe_get_planet_name(EpheConstants.SE_SUN, ptrStar);
 
-            iflgret = EpheFunctions.swe_lun_occult_when_glob(tjd_ut, planetConst, ptrStar, (int)iflag, EpheConstants.SE_ECL_TOTAL, ptrTretDouble, false, ptrErr);
+            iflgret = EpheFunctions.swe_lun_occult_when_glob(tjd_ut, planetConst, ptrStar, (int)iflag, eclipseType, ptrTretDouble, false, ptrErr);
             Marshal.Copy(ptrTretDouble, tret, 0, 10);
 
-            Marshal.FreeHGlobal(ptrGeoDouble);
             Marshal.FreeHGlobal(ptrTretDouble);
             Marshal.FreeHGlobal(ptrErr);
             Marshal.FreeHGlobal(ptrStar);
-            
-            DateTime date2 = DateTime.FromOADate(tret[0] - 2415018.5);
-            return date2;
+
+            DateTime date = DateTime.FromOADate(tret[0] - 2415018.5);
+            return date;
         }
 
-        private DateTime SWEPH_MoonOccultation_Calculation(DateTime calcDate, double lon, double lat, double alt)
-        {
-            iflag = 0;
-            whicheph = EpheConstants.SEFLG_SWIEPH;
-            gregflag = EpheConstants.SE_GREG_CAL;
-            iflag |= EpheConstants.SEFLG_SIDEREAL;
-            EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
-            EpheFunctions.swe_set_topo(lon, lat, alt);
-
-            iflag = (iflag & ~SEFLG_EPHMASK) | whicheph;
-            iflag |= EpheConstants.SEFLG_SPEED;
-            iflag |= EpheConstants.SE_ECL_ONE_TRY;
-
-            Int64 iflgret;
-            double jut = 0.0;
-            double tjd_ut = 2415020.5;
-            int jday = calcDate.Day;
-            int jmonth = calcDate.Month;
-            int jyear = calcDate.Year;
-            int jhour = calcDate.Hour;
-            int jmin = calcDate.Minute;
-            int jsec = calcDate.Second;
-
-            //int iyear = 0;
-            //int imonth = 0;
-            //int iday = 0;
-            //int ihour = 0;
-            //int imin = 0;
-            //double[] isec = new double[1];
-
-            jut = jhour + jmin / 60.0 + jsec / 3600.0;
-            tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, gregflag);
-
-            double[] geopos = new double[3];
-            geopos[0] = lon;
-            geopos[1] = lat;
-            geopos[2] = alt; // height above sea level in meters;
-            double[] tret = new double[10];
-            double[] attr = new double[20];
-
-            IntPtr ptrGeoDouble = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
-            Marshal.Copy(geopos, 0, ptrGeoDouble, 3);
-
-            IntPtr ptrTretDouble = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]) * tret.Length);
-            Marshal.Copy(tret, 0, ptrTretDouble, 10);
-
-            IntPtr ptrAttrDouble = Marshal.AllocHGlobal(Marshal.SizeOf(attr[0]) * attr.Length);
-            Marshal.Copy(attr, 0, ptrAttrDouble, 20);
-
-            string serr = new string('*', 256);
-            IntPtr ptrErr = (IntPtr)Marshal.StringToHGlobalAnsi(serr);
-
-            string starname = string.Empty;
-            IntPtr ptrStar = (IntPtr)Marshal.StringToHGlobalAnsi(starname);
-            //EpheFunctions.swe_get_planet_name(EpheConstants.SE_SUN, ptrStar);
-
-            iflgret = EpheFunctions.swe_lun_occult_when_loc(tjd_ut, EpheConstants.SE_SUN, ptrStar, (int)iflag, ptrGeoDouble, ptrTretDouble, ptrAttrDouble, false, ptrErr);
-            Marshal.Copy(ptrTretDouble, tret, 0, 10);
-            Marshal.Copy(ptrAttrDouble, attr, 0, 20);
-
-            //IntPtr iyear_out = Marshal.AllocHGlobal(Marshal.SizeOf(iyear));
-            //IntPtr imonth_out = Marshal.AllocHGlobal(Marshal.SizeOf(imonth));
-            //IntPtr iday_out = Marshal.AllocHGlobal(Marshal.SizeOf(iday));
-            //IntPtr ihour_out = Marshal.AllocHGlobal(Marshal.SizeOf(ihour));
-            //IntPtr imin_out = Marshal.AllocHGlobal(Marshal.SizeOf(imin));
-            //IntPtr isec_out = Marshal.AllocHGlobal(Marshal.SizeOf(isec[0]) * isec.Length);
-
-            //EpheFunctions.swe_jdet_to_utc(tret[0], gregflag, iyear_out, imonth_out, iday_out, ihour_out, imin_out, isec_out);
-
-            //iyear = Marshal.ReadInt32(iyear_out);
-            //imonth = Marshal.ReadInt32(imonth_out);
-            //iday = Marshal.ReadInt32(iday_out);
-            //ihour = Marshal.ReadInt32(ihour_out);
-            //imin = Marshal.ReadInt32(imin_out);
-            //Marshal.Copy(isec_out, isec, 0, 1);
-
-            Marshal.FreeHGlobal(ptrGeoDouble);
-            Marshal.FreeHGlobal(ptrTretDouble);
-            Marshal.FreeHGlobal(ptrAttrDouble);
-            Marshal.FreeHGlobal(ptrErr);
-            Marshal.FreeHGlobal(ptrStar);
-            //Marshal.FreeHGlobal(iyear_out);
-            //Marshal.FreeHGlobal(imonth_out);
-            //Marshal.FreeHGlobal(iday_out);
-            //Marshal.FreeHGlobal(ihour_out);
-            //Marshal.FreeHGlobal(imin_out);
-            //Marshal.FreeHGlobal(isec_out);
 
 
-            //DateTime date1 = new DateTime(iyear, imonth, iday, ihour, imin, (int)isec[0]);
-            DateTime date2 = DateTime.FromOADate(tret[0] - 2415018.5);
-            return date2;
-        }
+
+
+        
 
         private double[] SWEPH_Calculation(int planetConst, DateTime calcDate, double lon, double lat, double alt)  // without TZ shift
         {
@@ -780,7 +582,7 @@ namespace PAD
             return calcRes;
         }
 
-        public List<NityaJogaData> CalculateNityaJogaDataList_London(DateTime fromDate, DateTime toDate)
+        public List<NityaYogaData> CalculateNityaYogaDataList_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
             double[] sunRes = new double[6];
@@ -795,7 +597,7 @@ namespace PAD
             double jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
             int currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
 
-            List<NityaJogaData> njDataList = new List<NityaJogaData>();
+            List<NityaYogaData> njDataList = new List<NityaYogaData>();
             while (curDate < toDate.AddSeconds(+1))
             {
                 TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
@@ -821,7 +623,7 @@ namespace PAD
                 jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
                 currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
 
-                NityaJogaData njTemp = new NityaJogaData
+                NityaYogaData njTemp = new NityaYogaData
                 {
                     Date = curDate,
                     Longitude = jogaLongitude,
