@@ -757,6 +757,8 @@ namespace PAD
 
         public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)
         {
+            List<PlanetData> planetDataList = new List<PlanetData>();
+
             EpheFunctions.swe_set_ephe_path(@".\ephe");
             double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
@@ -772,8 +774,21 @@ namespace PAD
             {
                 currentRetro = GetRetroInfo(calcRes[3]);
             }
+            
+            PlanetData pdTemp = new PlanetData
+            {
+                Date = curDate.AddSeconds(-1),
+                Longitude = calcRes[0],
+                Latitude = calcRes[1],
+                SpeedInLongitude = calcRes[3],
+                SpedInLatitude = calcRes[4],
+                Retro = currentRetro,
+                ZodiakId = currentZnak,
+                NakshatraId = currentNakshatra,
+                PadaId = currentPada
+            };
+            planetDataList.Add(pdTemp);
 
-            List<PlanetData> planetDataList = new List<PlanetData>();
             while (curDate < toDate.AddSeconds(+1))
             {
                 TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
@@ -805,7 +820,7 @@ namespace PAD
                     currentRetro = GetRetroInfo(calcRes[3]);
                 }
 
-                PlanetData pdTemp = new PlanetData
+                pdTemp = new PlanetData
                 {
                     Date = curDate,
                     Longitude = calcRes[0],

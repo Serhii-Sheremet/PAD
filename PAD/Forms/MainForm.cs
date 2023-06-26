@@ -400,7 +400,7 @@ namespace PAD
             }
             if (tdList.Last().TithiId != 1 && tdList.Last().TithiId != 30)
             {
-                int masaId = GetMasaIdByDate(moonZodiakCalendarList, startDate);
+                int masaId = GetMasaIdByDate(moonZodiakCalendarList,  startDate);
                 MasaCalendar tTemp = new MasaCalendar
                 {
                     DateStart = startDate,
@@ -1860,14 +1860,13 @@ namespace PAD
 
         private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date)
         {
-            List<PlanetCalendar> moonNakshatraCalendarList = Utility.ClonePlanetCalendarList(_daysOfMonth.First().MoonNakshatraDayList);
-            string curMasa = cList.First().GetMasaFullName(moonNakshatraCalendarList, _selectedProfile, _activeLanguageCode);
+            string curMasa = cList.First().GetMasaFullName(_moonNakshatraCalendar, _selectedProfile, _activeLanguageCode);
             foreach (Calendar c in cList)
             {
                 if (c.DateStart > date)
                 {
                     float startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
-                    string text = c.GetMasaFullName(moonNakshatraCalendarList, _selectedProfile, _activeLanguageCode); 
+                    string text = c.GetMasaFullName(_moonNakshatraCalendar, _selectedProfile, _activeLanguageCode); 
                     Size textSize = TextRenderer.MeasureText(text, font);
                     float heightPadding = (height - textSize.Height) / 2;
                     if (!text.Equals(curMasa))
@@ -2230,6 +2229,13 @@ namespace PAD
                 nityaYogaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MOON, moonDataList);
+                List<MasaCalendar> masaCalendarList = CreateMasaCalendarList(moonZodiakCalendarList, tithiDataList);
+                masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+
+                List<ShunyaNakshatraCalendar> shunyaNakshatraCalendarList = CreateShunyaNakshatraCalendarList(masaCalendarList, nakshatraCalendarList);
+                List<ShunyaTithiCalendar> shunyaTithiCalendarList = CreateShunyaTithiCalendarList(masaCalendarList, tithiCalendarList);
+
                 moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
@@ -2245,10 +2251,6 @@ namespace PAD
                 List<PlanetCalendar> moonPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.MOON, moonDataList);
                 moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
-
-                List<MasaCalendar> masaCalendarList = CreateMasaCalendarList(moonZodiakCalendarList, tithiDataList);
-                List<ShunyaNakshatraCalendar> shunyaNakshatraCalendarList = CreateShunyaNakshatraCalendarList(masaCalendarList, nakshatraCalendarList);
-                List<ShunyaTithiCalendar> shunyaTithiCalendarList = CreateShunyaTithiCalendarList(masaCalendarList, tithiCalendarList);
 
                 List<PlanetCalendar> sunZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.SUN, sunDataList);
                 sunZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
@@ -4415,7 +4417,7 @@ namespace PAD
                 List<ShunyaNakshatraCalendar> clonedSNCList = Utility.CloneShunyaNakshatraCalendarList(sncList);
                 List<ShunyaTithiCalendar> clonedSTCList = Utility.CloneShunyaTithiCalendarList(stcList);
 
-                /*
+                
                 foreach (MasaCalendar mc in clonedMCList)
                 {
                     string masaName = CacheLoad._masaDescList.Where(i => i.MasaId == mc.MasaId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
@@ -4432,7 +4434,7 @@ namespace PAD
                     };
                     dgv.Rows.Add(row);
                 }
-                */
+                
 
                 foreach (ShunyaNakshatraCalendar snc in clonedSNCList)
                 {
