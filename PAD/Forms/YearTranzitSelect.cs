@@ -20,13 +20,18 @@ namespace PAD
             InitializeComponent();
         }
 
-        public YearTranzitSelect(List<int> yList, ELanguage aLang)
+        public YearTranzitSelect(ELanguage aLang)
         {
             InitializeComponent();
 
             _activeLang = aLang;
-            _yList = yList;
             SelectedYear = 0;
+            int currYear = DateTime.Now.Year;
+            _yList = new List<int>();
+            for (int i = currYear - 2; i <= currYear + 10; i++)
+            {
+                _yList.Add(i);
+            }
         }
 
         private void YearTranzitSelect_Shown(object sender, EventArgs e)
