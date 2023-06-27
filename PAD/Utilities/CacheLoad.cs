@@ -1998,29 +1998,29 @@ namespace PAD
             return (EColor)(CacheLoad._karanaList.Where(i => i.Id == kId).FirstOrDefault()?.ColorId ?? 0);
         }
 
-        public static List<NityaYogaCalendar> CreateNityaYogaCalendarList(List<NityaYogaData> njdList)
+        public static List<NityaYogaCalendar> CreateNityaYogaCalendarList(List<NityaYogaData> nydList)
         {
-            List<NityaYogaCalendar> njcList = new List<NityaYogaCalendar>();
-            int index = 0, max = njdList.Count;
-            foreach (NityaYogaData td in njdList)
+            List<NityaYogaCalendar> nycList = new List<NityaYogaCalendar>();
+            int index = 0, max = nydList.Count;
+            foreach (NityaYogaData td in nydList)
             {
                 ENityaYoga nj = GetNityaJogaCodeByNakshatraId(td.NakshatraId);
                 if (index != (max - 1))
                 {
-                    NityaYogaCalendar jnTemp = new NityaYogaCalendar
+                    NityaYogaCalendar nyTemp = new NityaYogaCalendar
                     {
                         DateStart = td.Date,
-                        DateEnd = njdList[index + 1].Date,
+                        DateEnd = nydList[index + 1].Date,
                         ColorCode = GetNityaJogaColorById((int)nj),
                         NYCode = nj,
                         NakshatraId = td.NakshatraId
                     };
-                    njcList.Add(jnTemp);
+                    nycList.Add(nyTemp);
                 }
                 else if (index == (max - 1))
                 {
                     DateTime endDate = new DateTime(td.Date.Year, td.Date.Month, td.Date.Day, 23, 59, 59);
-                    NityaYogaCalendar jnTemp = new NityaYogaCalendar
+                    NityaYogaCalendar nyTemp = new NityaYogaCalendar
                     {
                         DateStart = td.Date,
                         DateEnd = endDate,
@@ -2028,11 +2028,11 @@ namespace PAD
                         NYCode = nj,
                         NakshatraId = td.NakshatraId
                     };
-                    njcList.Add(jnTemp);
+                    nycList.Add(nyTemp);
                 }
                 index++;
             }
-            return njcList;
+            return nycList;
         }
 
         public static ENityaYoga GetNityaJogaCodeByNakshatraId(int nId)
@@ -2156,7 +2156,7 @@ namespace PAD
                     currentNakshatraId = pd.NakshatraId;
                 }
             }
-            DateTime endDate = new DateTime(pcList.Last().DateStart.Year, 12, 31, 23, 59, 59);
+            DateTime endDate = new DateTime(pdList.Last().Date.Year, 12, 31, 23, 59, 59);
             int index = 0, max = pcList.Count;
             foreach (PlanetCalendar pc in pcList)
             {
@@ -2198,7 +2198,7 @@ namespace PAD
                     currentPadaId = pd.PadaId;
                 }
             }
-            DateTime endDate = new DateTime(pcList.Last().DateStart.Year, 12, 31, 23, 59, 59);
+            DateTime endDate = new DateTime(pdList.Last().Date.Year, 12, 31, 23, 59, 59);
             int index = 0, max = pcList.Count;
             foreach (PlanetCalendar pc in pcList)
             {

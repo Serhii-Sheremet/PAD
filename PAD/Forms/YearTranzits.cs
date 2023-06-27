@@ -1093,7 +1093,7 @@ namespace PAD
                 if (c.Count == 1)
                 {
                     endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
-                    if (textSize.Width <= endPosX)
+                    //if (textSize.Width <= endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                     }
@@ -1101,7 +1101,7 @@ namespace PAD
                 else
                 {
                     endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
-                    if (textSize.Width <= endPosX)
+                    //if (textSize.Width <= endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                     }
@@ -1123,11 +1123,11 @@ namespace PAD
                 else
                 {
                     float endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
-                    if (textSize.Width < endPosX && !isMoon)
+                    //if (textSize.Width < endPosX && !isMoon)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                     }
-                    else
+                    /*else
                     {
                         var newText = text.Split('.');
                         textSize = TextRenderer.MeasureText(newText[0], font);
@@ -1135,7 +1135,7 @@ namespace PAD
                         {
                             g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
                         }
-                    }
+                    }*/
                 }
             }
         }
@@ -1169,7 +1169,7 @@ namespace PAD
                 else
                 {
                     float endPosX = Utility.ConvertHoursToPixels(width * pcList.Last().DateStart.Day, pcList.Last().DateStart);
-                    if (textSize.Width < endPosX)
+                    //if (textSize.Width < endPosX)
                     {
                         g.DrawString(text, font, textBrush, posX + 1, posY + heightPadding);
                     }
@@ -1192,9 +1192,9 @@ namespace PAD
                 else
                 {
                     float endPosX = Utility.ConvertHoursToPixels(width * c.Last().DateStart.Day, c.Last().DateStart);
-                    if (textSize.Width < endPosX)
+                    //if (textSize.Width < endPosX)
                     {
-                        if (textSize.Width <= endPosX)
+                        //if (textSize.Width <= endPosX)
                         {
                             g.DrawString(newText[0], font, textBrush, posX + 1, posY + heightPadding);
                         }
