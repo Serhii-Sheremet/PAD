@@ -1191,7 +1191,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, NJCODE, COLORID, NAKSHATRAID, JOGIPLANETID, AVAJOGIPLANETID from NITYAJOGA order by ID";
+                    string comm = $"select ID, NYCODE, COLORID, NAKSHATRAID, YOGIPLANETID, AVAYOGIPLANETID from NITYAYOGA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -1228,7 +1228,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, NITYAJOGAID, NAME, DEITY, MEANING, DESCRIPTION, LANGUAGECODE from NITYAJOGA_DESC order by ID";
+                    string comm = $"select ID, NITYAYOGAID, NAME, DEITY, MEANING, DESCRIPTION, LANGUAGECODE from NITYAYOGA_DESC order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -1336,7 +1336,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, COLORID, JOGACODE from JOGA order by ID";
+                    string comm = $"select ID, COLORID, YOGACODE from YOGA order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -1370,7 +1370,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    string comm = $"select ID, JOGAID, NAME, SHORTNAME, DESCRIPTION, LANGUAGECODE from JOGA_DESC order by ID";
+                    string comm = $"select ID, YOGAID, NAME, SHORTNAME, DESCRIPTION, LANGUAGECODE from YOGA_DESC order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {

@@ -12,6 +12,29 @@ namespace PAD
         private Int64 whicheph;
         private int gregflag;
 
+        private void GetMrityuBhagaDegreeFromAndTo(EAppSetting mbSettings, List<MrityuBhaga> mbList, int planetId, int currentZnak, out double degreeFrom, out double degreeTo)
+        {
+            degreeFrom = 0;
+            degreeTo = 0;
+            switch (mbSettings)
+            {
+                case EAppSetting.MRITYUBHAGANEQUAL:
+                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 0.5;
+                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 0.5;
+                    break;
+
+                case EAppSetting.MRITYUBHAGANLESS:
+                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 1;
+                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
+                    break;
+
+                case EAppSetting.MRITYUBHAGANMORE:
+                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
+                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 1;
+                    break;
+            }
+        }
+
         public List<MrityuBhagaData> CalculateMrityuBhagaDataList(List<MrityuBhaga> mbList, EPlanet planetId, DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
@@ -35,24 +58,7 @@ namespace PAD
                 int currentZnak = GetCurrentZnak(calcRes[0]);
                 int newZnak = currentZnak;
                 degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-
-                switch (mbSettings)
-                {
-                    case EAppSetting.MRITYUBHAGANEQUAL:
-                        degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 0.5;
-                        degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 0.5;
-                        break;
-
-                    case EAppSetting.MRITYUBHAGANLESS:
-                        degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 1;
-                        degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                        break;
-
-                    case EAppSetting.MRITYUBHAGANMORE:
-                        degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                        degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 1;
-                        break;
-                }
+                GetMrityuBhagaDegreeFromAndTo(mbSettings, mbList, (int)planetId, currentZnak, out degreeFrom, out degreeTo);
 
                 if (calcRes[0] > degreeFrom && calcRes[0] < degreeTo)
                 {
@@ -90,24 +96,7 @@ namespace PAD
                         {
                             currentZnak = newZnak;
                             degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-
-                            switch (mbSettings)
-                            {
-                                case EAppSetting.MRITYUBHAGANEQUAL:
-                                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 0.5;
-                                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 0.5;
-                                    break;
-
-                                case EAppSetting.MRITYUBHAGANLESS:
-                                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 1;
-                                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                                    break;
-
-                                case EAppSetting.MRITYUBHAGANMORE:
-                                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 1;
-                                    break;
-                            }
+                            GetMrityuBhagaDegreeFromAndTo(mbSettings, mbList, (int)planetId, currentZnak, out degreeFrom, out degreeTo);
                         }
 
                         /* tsStep = curDate.AddMonths(+1).Subtract(curDate);

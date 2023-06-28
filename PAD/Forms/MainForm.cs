@@ -61,18 +61,6 @@ namespace PAD
             set { _currentYearTranzitsImage = value; }
         }
 
-        /*
-        public List<TithiCalendar> TithiCalendarList
-        {
-            get { return _tithiCalendarList.ToList(); }
-        }
-
-        public List<PlanetCalendar> MoonZodiakCalendarList
-        {
-            get { return _moonZodiakCalendarList.ToList(); }
-        }
-        */
-
         public void SetTranzitFocus()
         {
             string tabLabel = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);

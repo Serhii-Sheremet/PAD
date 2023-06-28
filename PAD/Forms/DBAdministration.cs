@@ -475,13 +475,13 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-
-            JogaDescription jd = new JogaDescription();
-            List<JogaDescription> jdList = new List<JogaDescription>();
-            string[] tempJDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\JogaDesc.txt", Encoding.GetEncoding(1251));
+            
+            YogaDescription jd = new YogaDescription();
+            List<YogaDescription> jdList = new List<YogaDescription>();
+            string[] tempJDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\YogaDesc.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJDList.Length; i++)
             {
-                JogaDescription temp = jd.ParseFile(tempJDList[i]);
+                YogaDescription temp = jd.ParseFile(tempJDList[i]);
                 jdList.Add(temp);
             }
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -490,11 +490,11 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 5))})";
-                    string comm = "insert into JOGA_DESC (JOGAID, NAME, SHORTNAME, DESCRIPTION, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, jdList.Count));
+                    string comm = "insert into YOGA_DESC (YOGAID, NAME, SHORTNAME, DESCRIPTION, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, jdList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < jdList.Count; i++)
                     {
-                        command.Parameters.Add(new SQLiteParameter() { Value = jdList[i].JogaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = jdList[i].YogaId });
                         command.Parameters.Add(new SQLiteParameter() { Value = jdList[i].Name });
                         command.Parameters.Add(new SQLiteParameter() { Value = jdList[i].ShortName });
                         command.Parameters.Add(new SQLiteParameter() { Value = jdList[i].Description });
@@ -660,13 +660,13 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-            
-            NityaJogaDescription jnd = new NityaJogaDescription();
-            List<NityaJogaDescription> jndList = new List<NityaJogaDescription>();
-            string[] tempJNDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\NityaJogaDesc.txt", Encoding.GetEncoding(1251));
+
+            NityaYogaDescription jnd = new NityaYogaDescription();
+            List<NityaYogaDescription> jndList = new List<NityaYogaDescription>();
+            string[] tempJNDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\NityaYogaDesc.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJNDList.Length; i++)
             {
-                NityaJogaDescription temp = jnd.ParseFile(tempJNDList[i]);
+                NityaYogaDescription temp = jnd.ParseFile(tempJNDList[i]);
                 jndList.Add(temp);
             }
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -686,10 +686,10 @@ namespace PAD
                                 command.ExecuteNonQuery();
                             }
                             int count = (jndList.Count - i) > 100 ? 100 : jndList.Count - i;
-                            comm = "insert into NITYAJOGA_DESC (NITYAJOGAID, NAME, DEITY, MEANING, DESCRIPTION, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, count));
+                            comm = "insert into NITYAYOGA_DESC (NITYAYOGAID, NAME, DEITY, MEANING, DESCRIPTION, LANGUAGECODE) values " + String.Join(", ", Enumerable.Repeat(parameters, count));
                             command = new SQLiteCommand(comm, dbCon);
                         }
-                        command.Parameters.Add(new SQLiteParameter() { Value = jndList[i].NityaJogaId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = jndList[i].NityaYogaId });
                         command.Parameters.Add(new SQLiteParameter() { Value = jndList[i].Name });
                         command.Parameters.Add(new SQLiteParameter() { Value = jndList[i].Deity });
                         command.Parameters.Add(new SQLiteParameter() { Value = jndList[i].Meaning });
@@ -958,9 +958,9 @@ namespace PAD
                     lbLoad.Refresh();
                 }
             }
-            if (!CheckTableContent("JOGA"))
+            if (!CheckTableContent("YOGA"))
             {
-                if (LoadJogaIntoDB())
+                if (LoadYogaIntoDB())
                 {
                     isLoad = true;
                     string text = "Йоги загружены успешно.";
@@ -1037,9 +1037,9 @@ namespace PAD
                 }
             }
 
-            if (!CheckTableContent("NITYAJOGA"))
+            if (!CheckTableContent("NITYAYOGA"))
             {
-                if (LoadNityaJogaIntoDB())
+                if (LoadNityaYogaIntoDB())
                 {
                     isLoad = true;
                     string text = "Нитья йоги загружены успешно.";
@@ -1632,12 +1632,12 @@ namespace PAD
             return isLoaded;
         }
 
-        private bool LoadJogaIntoDB()
+        private bool LoadYogaIntoDB()
         {
             bool isLoaded = false;
             Yoga j = new Yoga();
             List<Yoga> jList = new List<Yoga>();
-            string[] tempJList = File.ReadAllLines(@".\Data\Files\Joga.txt", Encoding.GetEncoding(1251));
+            string[] tempJList = File.ReadAllLines(@".\Data\Files\Yoga.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJList.Length; i++)
             {
                 Yoga temp = j.ParseFile(tempJList[i]);
@@ -1650,7 +1650,7 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 2))})";
-                    string comm = "insert into JOGA (COLORID, JOGACODE) values " + String.Join(", ", Enumerable.Repeat(parameters, jList.Count));
+                    string comm = "insert into YOGA (COLORID, YOGACODE) values " + String.Join(", ", Enumerable.Repeat(parameters, jList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < jList.Count; i++)
                     {
@@ -1838,12 +1838,12 @@ namespace PAD
             return isLoaded;
         }
 
-        private bool LoadNityaJogaIntoDB()
+        private bool LoadNityaYogaIntoDB()
         {
             bool isLoaded = false;
             NityaYoga jn = new NityaYoga();
             List<NityaYoga> jnList = new List<NityaYoga>();
-            string[] tempJNList = File.ReadAllLines(@".\Data\Files\NityaJoga.txt", Encoding.GetEncoding(1251));
+            string[] tempJNList = File.ReadAllLines(@".\Data\Files\NityaYoga.txt", Encoding.GetEncoding(1251));
             for (int i = 0; i < tempJNList.Length; i++)
             {
                 NityaYoga temp = jn.ParseFile(tempJNList[i]);
@@ -1856,7 +1856,7 @@ namespace PAD
                 try
                 {
                     string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 5))})";
-                    string comm = "insert into NITYAJOGA (NJCODE, COLORID, NAKSHATRAID, JOGIPLANETID, AVAJOGIPLANETID) values " + String.Join(", ", Enumerable.Repeat(parameters, jnList.Count));
+                    string comm = "insert into NITYAYOGA (NYCODE, COLORID, NAKSHATRAID, YOGIPLANETID, AVAYOGIPLANETID) values " + String.Join(", ", Enumerable.Repeat(parameters, jnList.Count));
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     for (int i = 0; i < jnList.Count; i++)
                     {
