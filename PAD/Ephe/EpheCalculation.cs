@@ -12,41 +12,20 @@ namespace PAD
         private Int64 whicheph;
         private int gregflag;
 
-        private void GetMrityuBhagaDegreeFromAndTo(EAppSetting mbSettings, List<MrityuBhaga> mbList, int planetId, int currentZnak, out double degreeFrom, out double degreeTo)
-        {
-            degreeFrom = 0;
-            degreeTo = 0;
-            switch (mbSettings)
-            {
-                case EAppSetting.MRITYUBHAGANEQUAL:
-                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 0.5;
-                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 0.5;
-                    break;
+        
 
-                case EAppSetting.MRITYUBHAGANLESS:
-                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) - 1;
-                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                    break;
-
-                case EAppSetting.MRITYUBHAGANMORE:
-                    degreeFrom = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                    degreeTo = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak) + 1;
-                    break;
-            }
-        }
-
-        public List<MrityuBhagaData> CalculateMrityuBhagaDataList(List<MrityuBhaga> mbList, EPlanet planetId, DateTime fromDate, DateTime toDate)
+        public List<MrityuBhagaData> CalculateMrityuBhagaDataList_London(List<MrityuBhaga> mbList, EPlanet planetId, DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
             double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             double longitudeFrom = 0.00, longitudeTo = 0.00;
             double degree = 0, degreeFrom = 0, degreeTo = 0;
-            DateTime periodStartDate = fromDate;
-            DateTime curDate = periodStartDate;
+            DateTime curDate = fromDate;
             DateTime dateFrom = new DateTime();
             DateTime dateTo = new DateTime();
             DateTime dateChange = new DateTime();
+            DateTime newPeriodDate = fromDate;
 
             EAppSetting mbSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault().Id;
             List<MrityuBhagaData> mbDataList = new List<MrityuBhagaData>();
@@ -54,73 +33,47 @@ namespace PAD
 
             if (planetId != EPlanet.KETUMEAN && planetId != EPlanet.KETUTRUE)
             {
-                calcRes = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude);
+                calcRes = SWEPH_Calculation(planetConstant, curDate, longitude, latitude, altitude);
                 int currentZnak = GetCurrentZnak(calcRes[0]);
                 int newZnak = currentZnak;
                 degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                GetMrityuBhagaDegreeFromAndTo(mbSettings, mbList, (int)planetId, currentZnak, out degreeFrom, out degreeTo);
+                GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
 
-                if (calcRes[0] > degreeFrom && calcRes[0] < degreeTo)
+                for (curDate = fromDate; curDate < toDate; )
                 {
-                    // Moon requires more precise calculatetion - excluding month timestamp
-                    /*TimeSpan tsStep = curDate.AddMonths(-1).Subtract(curDate);
-                    dateChange = CheckZnakChangeInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+                    if (curDate > toDate)
+                        break;
 
-                    curDate = dateChange.Add(tsStep);*/
-                    TimeSpan tsStep = curDate.AddDays(-1).Subtract(curDate);
-                    dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                    TimeSpan tsStep;
 
-                    curDate = dateChange.Add(tsStep);
-                    tsStep = curDate.AddHours(-1).Subtract(curDate);
-                    dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
-
-                    curDate = dateChange.Add(tsStep);
-                    tsStep = curDate.AddMinutes(-1).Subtract(curDate);
-                    dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
-
-                    curDate = dateChange.Add(tsStep);
-                    tsStep = curDate.AddSeconds(-1).Subtract(curDate);
-                    dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
-
-                    longitudeFrom = calcRes[0];
-                    dateFrom = curDate;
-                    curDate = periodStartDate;
-                }
-
-                if (calcRes[0] <= degreeTo)
-                {
-                    while (curDate < toDate.AddSeconds(+1))
+                    if (newZnak != currentZnak)
                     {
-                        periodStartDate = curDate;
-                        if (newZnak != currentZnak)
-                        {
-                            currentZnak = newZnak;
-                            degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                            GetMrityuBhagaDegreeFromAndTo(mbSettings, mbList, (int)planetId, currentZnak, out degreeFrom, out degreeTo);
-                        }
+                        currentZnak = newZnak;
+                        degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
+                        GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
+                    }
 
-                        /* tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                            dateChange = CheckZnakChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+                    if (calcRes[0] > degreeFrom && calcRes[0] < degreeTo)
+                    {
+                        tsStep = curDate.AddDays(-1).Subtract(curDate);
+                        dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
-                            curDate = dateChange.Add(-tsStep);*/
-                        TimeSpan tsStep = curDate.AddDays(+1).Subtract(curDate);
-                        dateChange = CheckDegreeFromInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        curDate = dateChange.Add(tsStep);
+                        tsStep = curDate.AddHours(-1).Subtract(curDate);
+                        dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
-                        curDate = dateChange.Add(-tsStep);
-                        tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        dateChange = CheckDegreeFromInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        curDate = dateChange.Add(tsStep);
+                        tsStep = curDate.AddMinutes(-1).Subtract(curDate);
+                        dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
-                        curDate = dateChange.Add(-tsStep);
-                        tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                        dateChange = CheckDegreeFromInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
-
-                        curDate = dateChange.Add(-tsStep);
-                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                        dateChange = CheckDegreeFromInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        curDate = dateChange.Add(tsStep);
+                        tsStep = curDate.AddSeconds(-1).Subtract(curDate);
+                        dateChange = CheckDegreInTimePeriodBackward(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
                         longitudeFrom = calcRes[0];
                         dateFrom = dateChange;
-                        curDate = periodStartDate;
+
+                        curDate = newPeriodDate;
 
                         tsStep = curDate.AddDays(+1).Subtract(curDate);
                         dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
@@ -144,7 +97,7 @@ namespace PAD
                         {
                             PlanetId = (int)planetId,
                             ZodiakId = currentZnak,
-                            Degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak),
+                            Degree = degree,
                             MrityuBhagaSetting = mbSettings,
                             LongitudeFrom = longitudeFrom,
                             LongitudeTo = longitudeTo,
@@ -152,38 +105,110 @@ namespace PAD
                             DateTo = dateTo
                         };
                         mbDataList.Add(mbd);
-
-                        newZnak += 1;
-                        if (newZnak == 13)
-                        {
-                            newZnak = 1;
-                        }
-
-                        curDate = dateChange;
-                        dateFrom = curDate;
-                        curDate = curDate.AddSeconds(+1);
                     }
+
+                    if (calcRes[0] < degreeFrom)
+                    {
+                        tsStep = curDate.AddDays(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddHours(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        longitudeFrom = calcRes[0];
+                        dateFrom = dateChange;
+
+                        curDate = newPeriodDate;
+
+                        tsStep = curDate.AddDays(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddHours(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        longitudeTo = calcRes[0];
+                        dateTo = dateChange;
+
+                        MrityuBhagaData mbd = new MrityuBhagaData
+                        {
+                            PlanetId = (int)planetId,
+                            ZodiakId = currentZnak,
+                            Degree = degree,
+                            MrityuBhagaSetting = mbSettings,
+                            LongitudeFrom = longitudeFrom,
+                            LongitudeTo = longitudeTo,
+                            DateFrom = dateFrom,
+                            DateTo = dateTo
+                        };
+                        mbDataList.Add(mbd);
+                    }
+
+                    tsStep = curDate.AddDays(+1).Subtract(curDate);
+                    newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+
+                    curDate = newPeriodDate.Add(-tsStep);
+                    tsStep = curDate.AddHours(+1).Subtract(curDate);
+                    newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+
+                    if (newPeriodDate < toDate)
+                    {
+                        curDate = newPeriodDate.Add(-tsStep);
+                        tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                        newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = newPeriodDate.Add(-tsStep);
+                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+                    }
+
+                    longitudeTo = calcRes[0];
+                    newPeriodDate = newPeriodDate.AddSeconds(+1);
+
+                    curDate = newPeriodDate;
                 }
             }
-
             return mbDataList;
         }
 
-        private DateTime CheckDegreeFromInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZank, double degree, double degreeFrom, DateTime curDate, TimeSpan tsStep, out int newZnak, out double[] calcRes)
+        private void GetMrityuBhagaDegreeFromAndTo(EAppSetting mbSettings, double degree, out double degreeFrom, out double degreeTo)
         {
-            newZnak = 0;
-            calcRes = new double[6];
-            for (DateTime date = curDate; date < curDate.AddYears(+2);)
+            degreeFrom = 0;
+            degreeTo = 0;
+            switch (mbSettings)
             {
-                calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
-                newZnak = GetCurrentZnak(calcRes[0]);
-                if (((calcRes[0] - degree) <= 30 && calcRes[0] >= degreeFrom) || newZnak != currentZank)
-                {
-                    return date;
-                }
-                date = date.Add(tsStep);
+                case EAppSetting.MRITYUBHAGANEQUAL:
+                    degreeFrom = degree - 0.5;
+                    degreeTo = degree + 0.5;
+                    break;
+
+                case EAppSetting.MRITYUBHAGANLESS:
+                    degreeFrom = degree - 1;
+                    degreeTo = degree;
+                    break;
+
+                case EAppSetting.MRITYUBHAGANMORE:
+                    degreeFrom = degree;
+                    degreeTo = degree + 1;
+                    break;
             }
-            return curDate;
         }
 
         private DateTime CheckDegreeToInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZnak, double degree, double degreeTo, DateTime curDate, TimeSpan tsStep, out int newZnak, out double[] calcRes)
@@ -223,15 +248,15 @@ namespace PAD
             return curDate;
         }
 
-        private DateTime CheckDegreeChangeInTimePeriod(List<MrityuBhaga> mbList, EPlanet planetId, double degree, int planetConst, double longitude, double latitude, double altitude, int currentZnak, DateTime curDate, TimeSpan tsStep, out double[] calcRes)
+        private DateTime GetDateOfNextZnak(int planetConst, double longitude, double latitude, double altitude, int currentZnak, DateTime curDate, TimeSpan tsStep, out int newZnak, out double[] calcRes)
         {
-            int cZnak = 0;
+            newZnak = 0;
             calcRes = new double[6];
             for (DateTime date = curDate; date < curDate.AddYears(+1);)
             {
                 calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
-                cZnak = GetCurrentZnak(calcRes[0]);
-                if (cZnak == currentZnak && calcRes[0] >= degree)
+                newZnak = GetCurrentZnak(calcRes[0]);
+                if (newZnak != currentZnak)
                 {
                     return date;
                 }
@@ -242,7 +267,7 @@ namespace PAD
 
         private double GetMBDegreeForPlanet_Znak(List<MrityuBhaga> mbList, int planetId, int znakId)
         {
-            return (30 * (znakId - 1)) + mbList.Where(i => i.PlanetId == planetId && i.ZodiakId == znakId).FirstOrDefault()?.Degree ?? 0;
+            return mbList.Where(i => i.PlanetId == planetId && i.ZodiakId == znakId).FirstOrDefault()?.Degree ?? 0;
         }
 
         private double CalculateKetuDegree(double rahuDegree)
