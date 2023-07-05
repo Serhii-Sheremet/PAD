@@ -76,19 +76,19 @@ namespace PAD
                         curDate = newPeriodDate;
 
                         tsStep = curDate.AddDays(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         longitudeTo = calcRes[0];
                         dateTo = dateChange;
@@ -110,39 +110,37 @@ namespace PAD
                     if (calcRes[0] < degreeFrom)
                     {
                         tsStep = curDate.AddDays(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
 
                         longitudeFrom = calcRes[0];
                         dateFrom = dateChange;
 
-                        curDate = newPeriodDate;
-
                         tsStep = curDate.AddDays(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
 
                         longitudeTo = calcRes[0];
                         dateTo = dateChange;
@@ -161,25 +159,82 @@ namespace PAD
                         mbDataList.Add(mbd);
                     }
 
-                    tsStep = curDate.AddDays(+1).Subtract(curDate);
-                    newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-
-                    curDate = newPeriodDate.Add(-tsStep);
-                    tsStep = curDate.AddHours(+1).Subtract(curDate);
-                    newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-
-                    if (newPeriodDate < toDate)
+                    if (longitudeTo <= longitudeFrom && longitudeFrom != 0 && longitudeTo != 0)
                     {
-                        curDate = newPeriodDate.Add(-tsStep);
+                        curDate = curDate.AddDays(+1);
+
+                        tsStep = curDate.AddDays(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddHours(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
                         tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeFrom, curDate, tsStep, out newZnak, out calcRes);
+
+                        longitudeFrom = calcRes[0];
+                        dateFrom = dateChange;
+
+                        tsStep = curDate.AddDays(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddHours(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        curDate = dateChange.Add(-tsStep);
+                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        dateChange = CheckDegreeToInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, degree, degreeFrom, degreeTo, curDate, tsStep, out newZnak, out calcRes);
+
+                        longitudeTo = calcRes[0];
+                        dateTo = dateChange;
+
+                        MrityuBhagaData mbd = new MrityuBhagaData
+                        {
+                            PlanetId = (int)planetId,
+                            ZodiakId = currentZnak,
+                            Degree = degree,
+                            MrityuBhagaSetting = mbSettings,
+                            LongitudeFrom = longitudeFrom,
+                            LongitudeTo = longitudeTo,
+                            DateFrom = dateFrom,
+                            DateTo = dateTo
+                        };
+                        mbDataList.Add(mbd);
+                        newPeriodDate = curDate;
+                    }
+                    else
+                    {
+                        tsStep = curDate.AddDays(+1).Subtract(curDate);
                         newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
 
                         curDate = newPeriodDate.Add(-tsStep);
-                        tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                        tsStep = curDate.AddHours(+1).Subtract(curDate);
                         newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-                    }
 
-                    longitudeTo = calcRes[0];
+                        if (newPeriodDate < toDate)
+                        {
+                            curDate = newPeriodDate.Add(-tsStep);
+                            tsStep = curDate.AddMinutes(+1).Subtract(curDate);
+                            newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+
+                            curDate = newPeriodDate.Add(-tsStep);
+                            tsStep = curDate.AddSeconds(+1).Subtract(curDate);
+                            newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
+                        }
+
+                        longitudeTo = calcRes[0];
+                    }
                     newPeriodDate = newPeriodDate.AddSeconds(+1);
 
                     curDate = newPeriodDate;
@@ -211,7 +266,7 @@ namespace PAD
             }
         }
 
-        private DateTime CheckDegreeToInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZnak, double degree, double degreeTo, DateTime curDate, TimeSpan tsStep, out int newZnak, out double[] calcRes)
+        private DateTime CheckDegreeToInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZnak, double degree, double degreeFrom, double degreeTo, DateTime curDate, TimeSpan tsStep, out int newZnak, out double[] calcRes)
         {
             newZnak = 0;
             calcRes = new double[6];
@@ -219,10 +274,18 @@ namespace PAD
             {
                 calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
                 newZnak = GetCurrentZnak(calcRes[0]);
-                if (((calcRes[0] - degree) <= 30 && calcRes[0] >= degreeTo) || newZnak != currentZnak)
+
+                if ((calcRes[0] - degree) <= 30 && calcRes[3] < 0 && calcRes[0] <= degreeFrom && degreeFrom == degreeTo)
+                {
+                    date = date.Add(tsStep);
+                    continue;
+                }
+
+                if (((calcRes[0] - degree) <= 30 && calcRes[0] >= degreeTo) || ((calcRes[0] - degree) <= 30 && calcRes[3] < 0 && calcRes[0] <= degreeFrom) || newZnak != currentZnak)
                 {
                     return date;
                 }
+                
                 date = date.Add(tsStep);
             }
             return curDate;
