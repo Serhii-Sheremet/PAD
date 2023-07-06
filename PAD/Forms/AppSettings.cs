@@ -173,6 +173,10 @@ namespace PAD
                 case EAppSetting.MRITYUBHAGANMORE:
                     checkBoxMrityuMore.Checked = true;
                     break;
+
+                case EAppSetting.MRITYUBHAGAERNST:
+                    checkBoxMrityuErnst.Checked = true;
+                    break;
             }
             switch (activeNode)
             {
@@ -341,6 +345,8 @@ namespace PAD
                 return EAppSetting.MRITYUBHAGANLESS;
             if (checkBoxMrityuMore.Checked)
                 return EAppSetting.MRITYUBHAGANMORE;
+            if (checkBoxMrityuErnst.Checked)
+                return EAppSetting.MRITYUBHAGAERNST;
 
             return EAppSetting.MRITYUBHAGANEQUAL;
         }
@@ -559,11 +565,12 @@ namespace PAD
 
         private void CheckMrityuBhagaCheckboxDefault()
         {
-            if (!checkBoxMrityuEqual.Checked && !checkBoxMrityuLess.Checked && !checkBoxMrityuMore.Checked)
+            if (!checkBoxMrityuEqual.Checked && !checkBoxMrityuLess.Checked && !checkBoxMrityuMore.Checked && !checkBoxMrityuErnst.Checked)
             {
                 checkBoxMrityuEqual.Checked = true;
                 checkBoxMrityuLess.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
         }
 
@@ -573,6 +580,7 @@ namespace PAD
             {
                 checkBoxMrityuLess.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
@@ -591,6 +599,7 @@ namespace PAD
             {
                 checkBoxMrityuEqual.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
@@ -609,12 +618,32 @@ namespace PAD
             {
                 checkBoxMrityuEqual.Checked = false;
                 checkBoxMrityuLess.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
             if (checkBoxMrityuMore.Checked)
             {
                 if (Utility.GetActiveMrityuBhagaMode(_appSetList) != EAppSetting.MRITYUBHAGANMORE)
+                {
+                    _mbChanged = true;
+                }
+            }
+        }
+
+        private void checkBoxMrityuErnst_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxMrityuErnst.Checked)
+            {
+                checkBoxMrityuEqual.Checked = false;
+                checkBoxMrityuLess.Checked = false;
+                checkBoxMrityuMore.Checked = false;
+            }
+            CheckMrityuBhagaCheckboxDefault();
+
+            if (checkBoxMrityuErnst.Checked)
+            {
+                if (Utility.GetActiveMrityuBhagaMode(_appSetList) != EAppSetting.MRITYUBHAGAERNST)
                 {
                     _mbChanged = true;
                 }
@@ -784,7 +813,6 @@ namespace PAD
                 _langChanged = false;
             }
         }
-
         
     }
 }

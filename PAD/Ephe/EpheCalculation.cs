@@ -263,6 +263,11 @@ namespace PAD
                     degreeFrom = degree;
                     degreeTo = degree + 1;
                     break;
+
+                case EAppSetting.MRITYUBHAGAERNST:
+                    degreeFrom = degree - 1;
+                    degreeTo = degree + 1;
+                    break;
             }
         }
 

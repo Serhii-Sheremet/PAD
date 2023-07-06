@@ -50,6 +50,7 @@
             this.checkBoxEnlish = new System.Windows.Forms.CheckBox();
             this.buttonDefault = new System.Windows.Forms.Button();
             this.groupBoxMrityuBhaga = new System.Windows.Forms.GroupBox();
+            this.checkBoxMrityuErnst = new System.Windows.Forms.CheckBox();
             this.labelExplanation = new System.Windows.Forms.Label();
             this.checkBoxMrityuEqual = new System.Windows.Forms.CheckBox();
             this.checkBoxMrityuMore = new System.Windows.Forms.CheckBox();
@@ -310,6 +311,7 @@
             // 
             // groupBoxMrityuBhaga
             // 
+            this.groupBoxMrityuBhaga.Controls.Add(this.checkBoxMrityuErnst);
             this.groupBoxMrityuBhaga.Controls.Add(this.labelExplanation);
             this.groupBoxMrityuBhaga.Controls.Add(this.checkBoxMrityuEqual);
             this.groupBoxMrityuBhaga.Controls.Add(this.checkBoxMrityuMore);
@@ -321,19 +323,31 @@
             this.groupBoxMrityuBhaga.TabStop = false;
             this.groupBoxMrityuBhaga.Text = "Mrityu Bhaga";
             // 
+            // checkBoxMrityuErnst
+            // 
+            this.checkBoxMrityuErnst.AutoSize = true;
+            this.checkBoxMrityuErnst.Location = new System.Drawing.Point(13, 101);
+            this.checkBoxMrityuErnst.Name = "checkBoxMrityuErnst";
+            this.checkBoxMrityuErnst.Size = new System.Drawing.Size(160, 20);
+            this.checkBoxMrityuErnst.TabIndex = 7;
+            this.checkBoxMrityuErnst.Text = "From (N - 1)° till (N + 1)°";
+            this.checkBoxMrityuErnst.UseVisualStyleBackColor = true;
+            this.checkBoxMrityuErnst.CheckedChanged += new System.EventHandler(this.checkBoxMrityuErnst_CheckedChanged);
+            // 
             // labelExplanation
             // 
             this.labelExplanation.AutoSize = true;
-            this.labelExplanation.Location = new System.Drawing.Point(13, 112);
+            this.labelExplanation.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.labelExplanation.Location = new System.Drawing.Point(62, 124);
             this.labelExplanation.Name = "labelExplanation";
-            this.labelExplanation.Size = new System.Drawing.Size(176, 16);
+            this.labelExplanation.Size = new System.Drawing.Size(144, 13);
             this.labelExplanation.TabIndex = 6;
             this.labelExplanation.Text = "Where \"N\" is a Mrityu Bhaga";
             // 
             // checkBoxMrityuEqual
             // 
             this.checkBoxMrityuEqual.AutoSize = true;
-            this.checkBoxMrityuEqual.Location = new System.Drawing.Point(13, 24);
+            this.checkBoxMrityuEqual.Location = new System.Drawing.Point(13, 23);
             this.checkBoxMrityuEqual.Name = "checkBoxMrityuEqual";
             this.checkBoxMrityuEqual.Size = new System.Drawing.Size(180, 20);
             this.checkBoxMrityuEqual.TabIndex = 2;
@@ -344,7 +358,7 @@
             // checkBoxMrityuMore
             // 
             this.checkBoxMrityuMore.AutoSize = true;
-            this.checkBoxMrityuMore.Location = new System.Drawing.Point(13, 83);
+            this.checkBoxMrityuMore.Location = new System.Drawing.Point(13, 75);
             this.checkBoxMrityuMore.Name = "checkBoxMrityuMore";
             this.checkBoxMrityuMore.Size = new System.Drawing.Size(135, 20);
             this.checkBoxMrityuMore.TabIndex = 1;
@@ -355,7 +369,7 @@
             // checkBoxMrityuLess
             // 
             this.checkBoxMrityuLess.AutoSize = true;
-            this.checkBoxMrityuLess.Location = new System.Drawing.Point(13, 54);
+            this.checkBoxMrityuLess.Location = new System.Drawing.Point(13, 49);
             this.checkBoxMrityuLess.Name = "checkBoxMrityuLess";
             this.checkBoxMrityuLess.Size = new System.Drawing.Size(132, 20);
             this.checkBoxMrityuLess.TabIndex = 0;
@@ -505,5 +519,6 @@
         private System.Windows.Forms.GroupBox groupBoxWeek;
         private System.Windows.Forms.CheckBox checkBoxWeekMonday;
         private System.Windows.Forms.CheckBox checkBoxWeekSunday;
+        private System.Windows.Forms.CheckBox checkBoxMrityuErnst;
     }
 }
