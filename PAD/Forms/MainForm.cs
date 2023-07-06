@@ -2200,6 +2200,16 @@ namespace PAD
                 List<NityaYogaData> nityaYogaDataList = eCalc.CalculateNityaYogaDataList_London(startPeriodDate, endDate);
                 List<EclipseData> eclipseDataList = eCalc.CalculateEclipse_London(startPeriodDate, endDate);
 
+                List<MrityuBhagaData> moonMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MOON, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> sunMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SUN, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> mercuryMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MERCURY, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> venusMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.VENUS, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> marsMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MARS, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> jupiterMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.JUPITER, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startPeriodDate, endPeriodDate);
+
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
                 nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
@@ -2406,6 +2416,34 @@ namespace PAD
                 eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
+                //Shifting MrityaBhaga by TimeZone
+                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -2472,7 +2510,17 @@ namespace PAD
                                         eclipseCalendarList,
                                         masaCalendarList,
                                         shunyaNakshatraCalendarList,
-                                        shunyaTithiCalendarList);
+                                        shunyaTithiCalendarList,
+                                        moonMBDataList,
+                                        sunMBDataList,
+                                        mercuryMBDataList,
+                                        venusMBDataList,
+                                        marsMBDataList,
+                                        jupiterMBDataList,
+                                        saturnMBDataList,
+                                        rahuMeanMBDataList,
+                                        rahuTrueMBDataList
+                                        );
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);                   
                 }
@@ -5062,6 +5110,16 @@ namespace PAD
                 List<PlanetData> ketuTrueDataList = eCalc.PrepareKetuList(rahuTrueDataList);
                 List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(startDate, endDate);
 
+                List<MrityuBhagaData> moonMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MOON, startDate, endDate);
+                List<MrityuBhagaData> sunMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SUN, startDate, endDate);
+                List<MrityuBhagaData> mercuryMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MERCURY, startDate, endDate);
+                List<MrityuBhagaData> venusMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.VENUS, startDate, endDate);
+                List<MrityuBhagaData> marsMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MARS, startDate, endDate);
+                List<MrityuBhagaData> jupiterMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.JUPITER, startDate, endDate);
+                List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startDate, endDate);
+                List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startDate, endDate);
+                List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startDate, endDate);
+
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
                 nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
@@ -5255,6 +5313,33 @@ namespace PAD
                 ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
+                //Shifting MrityaBhaga by TimeZone
+                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
                 int index = -1;
                 bool isPresent = false;
@@ -5329,7 +5414,16 @@ namespace PAD
                                 ketuTruePadaCalendarList,
                                 masaCalendarList,
                                 shunyaNakshatraCalendarList,
-                                shunyaTithiCalendarList
+                                shunyaTithiCalendarList,
+                                moonMBDataList,
+                                sunMBDataList,
+                                mercuryMBDataList,
+                                venusMBDataList,
+                                marsMBDataList,
+                                jupiterMBDataList,
+                                saturnMBDataList,
+                                rahuMeanMBDataList,
+                                rahuTrueMBDataList
                             );
 
                         Invoke(new Action(() =>
@@ -5344,9 +5438,6 @@ namespace PAD
                         }));
                     }
                 }
-
-
-
 
             }
         }

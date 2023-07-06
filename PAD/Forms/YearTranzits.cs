@@ -83,6 +83,17 @@ namespace PAD
         private List<PlanetCalendar> _ketuTrueNCList;
         private List<PlanetCalendar> _ketuTruePCList;
 
+        private List<MrityuBhagaData> _moonMBList;
+        private List<MrityuBhagaData> _sunMBList;
+        private List<MrityuBhagaData> _mercuryMBList;
+        private List<MrityuBhagaData> _venusMBList;
+        private List<MrityuBhagaData> _marsMBList;
+        private List<MrityuBhagaData> _jupiterMBList;
+        private List<MrityuBhagaData> _saturnMBList;
+        private List<MrityuBhagaData> _rahuMeanMBList;
+        private List<MrityuBhagaData> _rahuTrueMBList;
+
+
         private float lineHeight;
         int labelsWidth;
         float dayWidth;
@@ -160,7 +171,16 @@ namespace PAD
             List<PlanetCalendar> ketuTruePCList,
             List<MasaCalendar> masaCList,
             List<ShunyaNakshatraCalendar> shuNCList,
-            List<ShunyaTithiCalendar> shuTCList
+            List<ShunyaTithiCalendar> shuTCList,
+            List<MrityuBhagaData> moonMBList,
+            List<MrityuBhagaData> sunMBList,
+            List<MrityuBhagaData> mercuryMBList,
+            List<MrityuBhagaData> venusMBList,
+            List<MrityuBhagaData> marsMBList,
+            List<MrityuBhagaData> jupiterMBList,
+            List<MrityuBhagaData> saturnMBList,
+            List<MrityuBhagaData> rahuMeanMBList,
+            List<MrityuBhagaData> rahuTrueMBList
         )
         {
             InitializeComponent();
@@ -215,6 +235,16 @@ namespace PAD
             _mCList = masaCList;
             _sNCList = shuNCList;
             _sTCList = shuTCList;
+            _moonMBList = moonMBList;
+            _sunMBList = sunMBList;
+            _mercuryMBList = mercuryMBList;
+            _venusMBList = venusMBList;
+            _marsMBList = marsMBList;
+            _jupiterMBList = jupiterMBList;
+            _saturnMBList = saturnMBList;
+            _rahuMeanMBList = rahuMeanMBList;
+            _rahuTrueMBList = rahuTrueMBList;
+
             monthWidthArray = new float[12];
         }
 
@@ -233,192 +263,192 @@ namespace PAD
                 TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
 
                 List<PlanetCalendar> moonZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_moonZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                moonZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //moonZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_moonZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                moonZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //moonZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_moonNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                moonNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //moonNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_moonPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                moonPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //moonPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_sunZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                sunZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //sunZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_sunZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                sunZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //sunZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_sunNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                sunNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //sunNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_sunPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                sunPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //sunPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_mercuryZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                mercuryZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //mercuryZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_mercuryZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                mercuryZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //mercuryZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_mercuryNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                mercuryNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //mercuryNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_mercuryPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                mercuryPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //mercuryPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_venusZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                venusZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //venusZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_venusZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                venusZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //venusZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_venusNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                venusNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //venusNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_venusPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                venusPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //venusPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_marsZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                marsZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //marsZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_marsZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                marsZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //marsZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_marsNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                marsNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //marsNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_marsPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                marsPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //marsPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_jupiterZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                jupiterZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //jupiterZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_jupiterZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                jupiterZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //jupiterZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_jupiterNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                jupiterNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //jupiterNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_jupiterPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                jupiterPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //jupiterPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_saturnZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                saturnZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //saturnZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_saturnZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                saturnZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //saturnZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_saturnNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                saturnNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //saturnNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_saturnPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                saturnPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //saturnPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuMeanZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuMeanZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuMeanNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuMeanPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuMeanZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuMeanZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuMeanNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanPadaPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuMeanPCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanPadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuTrueZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuTrueZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuTrueNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTruePadaPeriodCalendar = Utility.ClonePlanetCalendarList(_rahuTruePCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                rahuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //rahuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueZodiakPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuTrueZCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueZodiakPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueZodiakRetroPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuTrueZRCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueZodiakRetroPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueNakshatraPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuTrueNCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTruePadaPeriodCalendar = Utility.ClonePlanetCalendarList(_ketuTruePCList.Where(i => i.DateEnd > startDate.AddDays(-1) && i.DateStart < endDate.AddDays(+1)).ToList());
-                ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTruePadaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<MasaCalendar> masaPeriodCalendar = Utility.CloneMasaCalendarList(_mCList.ToList());
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.FullMoonDate = i.FullMoonDate.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); i.FullMoonDate = i.FullMoonDate.ShiftByDaylightDelta(adjustmentRules); });
+                //masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.FullMoonDate = i.FullMoonDate.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //masaPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); i.FullMoonDate = i.FullMoonDate.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<ShunyaNakshatraCalendar> shunyaNakshatraPeriodCalendar = Utility.CloneShunyaNakshatraCalendarList(_sNCList.ToList());
-                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //shunyaNakshatraPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<ShunyaTithiCalendar> shunyaTithiPeriodCalendar = Utility.CloneShunyaTithiCalendarList(_sTCList.ToList());
-                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                //shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
@@ -474,7 +504,17 @@ namespace PAD
                                         ketuTruePadaPeriodCalendar,
                                         masaPeriodCalendar,
                                         shunyaNakshatraPeriodCalendar,
-                                        shunyaTithiPeriodCalendar);
+                                        shunyaTithiPeriodCalendar,
+                                        _moonMBList,
+                                        _sunMBList,
+                                        _mercuryMBList,
+                                        _venusMBList,
+                                        _marsMBList,
+                                        _jupiterMBList,
+                                        _saturnMBList,
+                                        _rahuMeanMBList,
+                                        _rahuTrueMBList
+                                        );
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);
                 }

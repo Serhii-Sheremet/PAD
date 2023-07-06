@@ -335,6 +335,10 @@ namespace PAD
 
         private double GetMBDegreeForPlanet_Znak(List<MrityuBhaga> mbList, int planetId, int znakId)
         {
+            if (planetId == 10)
+                planetId = 8;
+            if (planetId == 11)
+                planetId = 9;
             return mbList.Where(i => i.PlanetId == planetId && i.ZodiakId == znakId).FirstOrDefault()?.Degree ?? 0;
         }
 
@@ -344,6 +348,16 @@ namespace PAD
             if (ketuDegree > 360)
                 ketuDegree = ketuDegree - 360;
             return ketuDegree;
+        }
+
+        private int GetKetuMrityaBhagaDegree(int iDegree)
+        {
+            int kDegree = iDegree - 180;
+            if (kDegree < 0)
+            {
+                kDegree += 360;
+            }
+            return kDegree;
         }
 
         public List<EclipseData> CalculateEclipse_London(DateTime fromDate, DateTime toDate)

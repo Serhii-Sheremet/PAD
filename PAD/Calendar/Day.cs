@@ -151,6 +151,16 @@ namespace PAD
         public List<Calendar> Ghati60EqualDayList { get; set; }
         public List<Calendar> Ghati60From6DayList { get; set; }
 
+        public List<MrityuBhagaData> MoonMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> SunMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> MercuryMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> VenusMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> MarsMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> JupiterMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> SaturnMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> RahuMeanMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> RahuTrueMrityuBhagaDayList { get; set; }
+
         public Day(
             Profile sPerson,
             DateTime date,
@@ -209,7 +219,16 @@ namespace PAD
             List<EclipseCalendar> eList,
             List<MasaCalendar> mList,
             List<ShunyaNakshatraCalendar> snList,
-            List<ShunyaTithiCalendar> stList)
+            List<ShunyaTithiCalendar> stList,
+            List<MrityuBhagaData> moonMBDataList,
+            List<MrityuBhagaData> sunMBDataList,
+            List<MrityuBhagaData> mercuryMBDataList,
+            List<MrityuBhagaData> venusMBDataList,
+            List<MrityuBhagaData> marsMBDataList,
+            List<MrityuBhagaData> jupiterMBDataList,
+            List<MrityuBhagaData> saturnMBDataList,
+            List<MrityuBhagaData> rahuMeanMBDataList,
+            List<MrityuBhagaData> rahuTrueMBDataList)
         {
             Date = date;
             IsDayOfMonth = flag;
@@ -378,6 +397,18 @@ namespace PAD
             MasaDayList = PrepareMasaDayList(mList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(snList, date);
             ShunyaTithiDayList = PrepareShunyaTithiDayList(stList, date);
+
+            MoonMrityuBhagaDayList = PrepareMrityuBhagaDayList(moonMBDataList, date);
+            SunMrityuBhagaDayList = PrepareMrityuBhagaDayList(sunMBDataList, date);
+            MercuryMrityuBhagaDayList = PrepareMrityuBhagaDayList(mercuryMBDataList, date);
+            VenusMrityuBhagaDayList = PrepareMrityuBhagaDayList(venusMBDataList, date);
+            MarsMrityuBhagaDayList = PrepareMrityuBhagaDayList(marsMBDataList, date);
+            JupiterMrityuBhagaDayList = PrepareMrityuBhagaDayList(jupiterMBDataList, date);
+            SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(saturnMBDataList, date);
+            RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuMeanMBDataList, date);
+            RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuTrueMBDataList, date);
+
+
         }
 
         // for year's tranzits
@@ -430,7 +461,16 @@ namespace PAD
             List<PlanetCalendar> ketuTruePadaList,
             List<MasaCalendar> masaList,
             List<ShunyaNakshatraCalendar> shuNakList,
-            List<ShunyaTithiCalendar> shuTiList
+            List<ShunyaTithiCalendar> shuTiList,
+            List<MrityuBhagaData> moonMBDataList,
+            List<MrityuBhagaData> sunMBDataList,
+            List<MrityuBhagaData> mercuryMBDataList,
+            List<MrityuBhagaData> venusMBDataList,
+            List<MrityuBhagaData> marsMBDataList,
+            List<MrityuBhagaData> jupiterMBDataList,
+            List<MrityuBhagaData> saturnMBDataList,
+            List<MrityuBhagaData> rahuMeanMBDataList,
+            List<MrityuBhagaData> rahuTrueMBDataList
             )
         {
             Date = date;
@@ -581,8 +621,23 @@ namespace PAD
             MasaDayList = PrepareMasaDayList(masaList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(shuNakList, date);
             ShunyaTithiDayList = PrepareShunyaTithiDayList(shuTiList, date);
+
+            MoonMrityuBhagaDayList = PrepareMrityuBhagaDayList(moonMBDataList, date);
+            SunMrityuBhagaDayList = PrepareMrityuBhagaDayList(sunMBDataList, date);
+            MercuryMrityuBhagaDayList = PrepareMrityuBhagaDayList(mercuryMBDataList, date);
+            VenusMrityuBhagaDayList = PrepareMrityuBhagaDayList(venusMBDataList, date);
+            MarsMrityuBhagaDayList = PrepareMrityuBhagaDayList(marsMBDataList, date);
+            JupiterMrityuBhagaDayList = PrepareMrityuBhagaDayList(jupiterMBDataList, date);
+            SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(saturnMBDataList, date);
+            RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuMeanMBDataList, date);
+            RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuTrueMBDataList, date);
+
         }
 
+        private List<MrityuBhagaData> PrepareMrityuBhagaDayList(List<MrityuBhagaData> mbList, DateTime date)
+        {
+            return mbList.Where(i => i.DateTo >= date && i.DateFrom <= date.AddDays(+1)).ToList(); 
+        }
 
         private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, Profile sPerson, DateTime date, bool isLagna)
         {
