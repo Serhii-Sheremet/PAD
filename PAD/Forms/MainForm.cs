@@ -3754,7 +3754,7 @@ namespace PAD
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
-            int lastColWidth = (dgv.Width - 1320);
+            int lastColWidth = (dgv.Width - 1330);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Description";
             column.Name = Utility.GetLocalizedText("Description", langCode);
@@ -3772,7 +3772,7 @@ namespace PAD
             column = new DataGridViewColumn();
             column.DataPropertyName = "MrityuBhaga";
             column.Name = Utility.GetLocalizedText("Mrityu Bhaga", langCode);
-            column.Width = 250;
+            column.Width = 260;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
@@ -4206,6 +4206,30 @@ namespace PAD
                     mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
                     if (mbData != null)
                         mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.RAHUMEAN:
+                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                    break;
+
+                case EPlanet.KETUMEAN:
+                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                    break;
+
+                case EPlanet.RAHUTRUE:
+                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                    break;
+
+                case EPlanet.KETUTRUE:
+                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
                     break;
             }
             return mb;
