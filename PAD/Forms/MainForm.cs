@@ -1024,6 +1024,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MoonZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MoonMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MoonNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MoonPadaDayList);
@@ -1050,6 +1051,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.SunZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.SunMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunTaraBalaDayList);
@@ -1075,6 +1078,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.VenusZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.VenusMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusTaraBalaDayList);
@@ -1100,6 +1105,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.JupiterZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.JupiterMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterTaraBalaDayList);
@@ -1125,6 +1132,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MercuryZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MercuryMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryTaraBalaDayList);
@@ -1150,6 +1159,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MarsZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MarsMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsTaraBalaDayList);
@@ -1175,6 +1186,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.SaturnZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.SaturnMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnTaraBalaDayList);
@@ -2117,6 +2130,35 @@ namespace PAD
             }
             pictureBoxCalendar.Image = canvas;
             _currentCalendarImage = pictureBoxCalendar.Image;
+        }
+
+        private void DrawingMrityaBhaga(Graphics g, float posX, float posY, float width, float height, List<MrityuBhagaData> mbList, DateTime date)
+        {
+            if (mbList.Count > 0)
+            {
+                float startPosX = 0, endPosX = 0;
+                SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(EColor.MRITYUBHAGA));
+                foreach (MrityuBhagaData mb in mbList)
+                {
+                    if (mb.DateFrom <= date)
+                    {
+                        startPosX = 0;
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    if (mb.DateFrom > date)
+                    {
+                        startPosX = Utility.ConvertHoursToPixels(width, mb.DateFrom);
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    g.FillRectangle(brush, posX + startPosX, posY, endPosX - startPosX, height);
+                }
+            }
         }
 
         private void DrawColoredLine(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> dayList)
@@ -3712,7 +3754,7 @@ namespace PAD
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
-            int lastColWidth = (dgv.Width - 1070);
+            int lastColWidth = (dgv.Width - 1320);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Description";
             column.Name = Utility.GetLocalizedText("Description", langCode);
@@ -3724,6 +3766,13 @@ namespace PAD
             column.DataPropertyName = "Vedha";
             column.Name = Utility.GetLocalizedText("Vedha from", langCode);
             column.Width = 330;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "MrityuBhaga";
+            column.Name = Utility.GetLocalizedText("Mrityu Bhaga", langCode);
+            column.Width = 250;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
@@ -3992,6 +4041,7 @@ namespace PAD
             public string Pada { get; set; }
             public string Description { get; set; }
             public string Vedha { get; set; }
+            public string MrityuBhaga { get; set; }
         }
 
         private DataGridView PlanetTranzitDataGridViewFillByRow(DataGridView dgv, Day pDay, List<PlanetCalendar> pzList, List<PlanetCalendar> pzrList, List<PlanetCalendar> pnList, List<PlanetCalendar> ppList, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage langCode)
@@ -4013,6 +4063,7 @@ namespace PAD
                 Tranzit tr = CacheLoad._tranzitList.Where(i => i.PlanetId == planetId && i.Dom == pc.Dom).FirstOrDefault();
                 string trDesc = CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                 string vedha = GetVedhaList(pDay, pc, tr, tranzitSetting, nodeSettings, langCode, false);
+                string mrityuBhaga = GetMrityuBhaga(pDay, pc.PlanetCode, langCode);
                 dgvRowObj rowTemp = new dgvRowObj {
                     Entity = Utility.GetLocalizedText("Zodiac Sign", langCode),
                     DateStart = pc.DateStart,
@@ -4021,7 +4072,8 @@ namespace PAD
                     Nakshatra = string.Empty,
                     Pada = string.Empty,
                     Description = trDesc,
-                    Vedha = vedha
+                    Vedha = vedha,
+                    MrityuBhaga = mrityuBhaga
                 };
                 rowList.Add(rowTemp);
             }
@@ -4038,7 +4090,8 @@ namespace PAD
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
                     Pada = string.Empty,
                     Description = string.Empty,
-                    Vedha = string.Empty
+                    Vedha = string.Empty,
+                    MrityuBhaga = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
@@ -4083,26 +4136,12 @@ namespace PAD
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
                     Pada = pada.PadaNumber.ToString(),
                     Description = Utility.GetLocalizedText("Navamsa", langCode) + ": " + pada.Navamsha + pc.GetNavamshaExaltation() + " " + specNavamsha + badNavamsha + drekkana,
-                    Vedha = string.Empty
+                    Vedha = string.Empty,
+                    MrityuBhaga = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
             
-            /*List<dgvRowObj> rowListSorted = rowList.OrderBy(i => i.DateStart).ToList();
-            for (int i = 0; i < rowListSorted.Count; i++)
-            {
-                string[] row = new string[] {
-                        rowListSorted[i].Entity,
-                        rowListSorted[i].DateStart.ToString("dd.MM.yyyy HH:mm:ss"),
-                        rowListSorted[i].DateEnd.ToString("dd.MM.yyyy HH:mm:ss"),
-                        rowListSorted[i].Zodiac,
-                        rowListSorted[i].Nakshatra,
-                        rowListSorted[i].Pada,
-                        rowListSorted[i].Description,
-                        rowListSorted[i].Vedha
-                    };
-                dgv.Rows.Add(row);
-            }*/
             for (int i = 0; i < rowList.Count; i++)
             {
                 string[] row = new string[] {
@@ -4113,11 +4152,63 @@ namespace PAD
                         rowList[i].Nakshatra,
                         rowList[i].Pada,
                         rowList[i].Description,
-                        rowList[i].Vedha
+                        rowList[i].Vedha,
+                        rowList[i].MrityuBhaga
                     };
                 dgv.Rows.Add(row);
             }
             return dgv;
+        }
+
+        private string GetMrityuBhaga(Day pDay, EPlanet planetCode, ELanguage lCode)
+        {
+            string mb = string.Empty;
+            MrityuBhagaData mbData;
+            switch (planetCode)
+            {
+                case EPlanet.MOON:
+                    mbData = pDay.MoonMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.SUN:
+                    mbData = pDay.SunMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.VENUS:
+                    mbData = pDay.VenusMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.JUPITER:
+                    mbData = pDay.JupiterMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.MERCURY:
+                    mbData = pDay.MercuryMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.MARS:
+                    mbData = pDay.MarsMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.SATURN:
+                    mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+            }
+            return mb;
         }
 
         private string GetVedhaList(Day pDay, PlanetCalendar pc, Tranzit tr, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage lCode, bool isLagna)

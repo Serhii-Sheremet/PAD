@@ -32,7 +32,7 @@
         MASA12 = 27,
         SHUNYANAKSHATRA = 28,
         SHUNIATITHI = 29,
-        MRITYABHAGA = 30,
+        MRITYUBHAGA = 30,
         GRAY = 31
     }
 }

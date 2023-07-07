@@ -27,5 +27,5 @@
 27|Masa: Phalguna|en
 28|Shunya: Nakshatra|en
 29|Shunya: Tithi|en
-30|Mritya Bhaga|en
+30|Mrityu Bhaga|en
 31|Gray|en

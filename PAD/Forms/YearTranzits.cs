@@ -90,8 +90,8 @@ namespace PAD
         private List<MrityuBhagaData> _marsMBList;
         private List<MrityuBhagaData> _jupiterMBList;
         private List<MrityuBhagaData> _saturnMBList;
-        private List<MrityuBhagaData> _rahuMeanMBList;
-        private List<MrityuBhagaData> _rahuTrueMBList;
+        //private List<MrityuBhagaData> _rahuMeanMBList;
+        //private List<MrityuBhagaData> _rahuTrueMBList;
 
 
         private float lineHeight;
@@ -639,7 +639,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.SunZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.SunMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.SunMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.SunNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.SunPadaDayList);
@@ -666,7 +666,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.VenusZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.VenusMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.VenusMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.VenusNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.VenusPadaDayList);
@@ -693,7 +693,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.JupiterZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.JupiterMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.JupiterMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.JupiterNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.JupiterPadaDayList);
@@ -720,7 +720,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.MercuryZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.MercuryMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.MercuryMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.MercuryNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.MercuryPadaDayList);
@@ -747,7 +747,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.MarsZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.MarsMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.MarsMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.MarsNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.MarsPadaDayList);
@@ -774,7 +774,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, dayWidth, height, d.SaturnZodiakRetroLagnaDayList);
                         break;
                 }
-                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.SaturnMrityuBhagaDayList);
+                DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.SaturnMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.SaturnNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.SaturnPadaDayList);
@@ -1422,29 +1422,33 @@ namespace PAD
             g.DrawString(localText, textFont, textBrush, posX, posY + heightPadding);
         }
 
-        private void DrawingMrityaBhaga(Graphics g, float posX, float posY, float width, float height, List<MrityuBhagaData> mbList)
+        private void DrawingMrityaBhaga(Graphics g, float posX, float posY, float width, float height, List<MrityuBhagaData> mbList, DateTime date)
         {
-            float drawWidth = 0, usedWidth = 0;
-            foreach (MrityuBhagaData mb in mbList)
+            if (mbList.Count > 0)
             {
-                if (mb == mbList.Last())
+                float startPosX = 0, endPosX = 0;
+                SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(EColor.MRITYUBHAGA));
+                foreach (MrityuBhagaData mb in mbList)
                 {
-                    drawWidth = width - usedWidth;
-                    DrawMrityaBhagaColoredRectangle(g, (posX + usedWidth), posY, drawWidth, height);
-                }
-                else
-                {
-                    drawWidth = Utility.ConvertHoursToPixels(width, mb.DateTo) - usedWidth;
-                    DrawMrityaBhagaColoredRectangle(g, (posX + usedWidth), posY, drawWidth, height);
-                    usedWidth = usedWidth + drawWidth;
+                    if (mb.DateFrom <= date)
+                    {
+                        startPosX = 0;
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    if (mb.DateFrom > date)
+                    {
+                        startPosX = Utility.ConvertHoursToPixels(width, mb.DateFrom);
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    g.FillRectangle(brush, posX + startPosX, posY, endPosX - startPosX, height);
                 }
             }
-        }
-
-        private void DrawMrityaBhagaColoredRectangle(Graphics g, float posX, float posY, float width, float height)
-        {
-            SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(EColor.MRITYABHAGA));
-            g.FillRectangle(brush, posX, posY, width, height);
         }
 
         private void DrawTranzitColoredLine(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList)
