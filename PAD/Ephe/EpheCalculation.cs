@@ -221,21 +221,7 @@ namespace PAD
                         curDate = newPeriodDate.Add(-tsStep);
                         tsStep = curDate.AddHours(+1).Subtract(curDate);
                         newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-
-                        if (newPeriodDate < toDate)
-                        {
-                            curDate = newPeriodDate.Add(-tsStep);
-                            tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                            newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-
-                            curDate = newPeriodDate.Add(-tsStep);
-                            tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                            newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-                        }
-
-                        longitudeTo = calcRes[0];
-                    }
-                    newPeriodDate = newPeriodDate.AddSeconds(+1);
+                    }   
 
                     curDate = newPeriodDate;
                 }
@@ -286,7 +272,7 @@ namespace PAD
                     continue;
                 }
 
-                if (((calcRes[0] - degree) <= 30 && calcRes[0] >= degreeTo) || ((calcRes[0] - degree) <= 30 && calcRes[3] < 0 && calcRes[0] <= degreeFrom) || newZnak != currentZnak)
+                if (((calcRes[0] - degree) <= 30 && calcRes[0] >= degreeTo) || ((calcRes[0] - degree) <= 30 && calcRes[3] < 0 && calcRes[0] <= degreeFrom) )
                 {
                     return date;
                 }
@@ -320,7 +306,7 @@ namespace PAD
         {
             newZnak = 0;
             calcRes = new double[6];
-            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            for (DateTime date = curDate; date < curDate.AddYears(+2);)
             {
                 calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
                 newZnak = GetCurrentZnak(calcRes[0]);

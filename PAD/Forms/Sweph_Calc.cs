@@ -18,7 +18,7 @@ namespace PAD
         private void button1_Click(object sender, EventArgs e)
         {
             EpheCalculation eCalc = new EpheCalculation();
-            DateTime fromDate = new DateTime(2023, 1, 1), toDate = new DateTime(2024, 1, 1);
+            DateTime fromDate = new DateTime(2024, 1, 1), toDate = new DateTime(2025, 1, 1);
             //List<PlanetData> planetDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, fromDate, toDate);
             //List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(fromDate, toDate);
             //List<NityaYogaData> nyDataList = eCalc.CalculateNityaYogaDataList_London(fromDate, toDate);
