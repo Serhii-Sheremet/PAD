@@ -90,8 +90,8 @@ namespace PAD
         private List<MrityuBhagaData> _marsMBList;
         private List<MrityuBhagaData> _jupiterMBList;
         private List<MrityuBhagaData> _saturnMBList;
-        //private List<MrityuBhagaData> _rahuMeanMBList;
-        //private List<MrityuBhagaData> _rahuTrueMBList;
+        private List<MrityuBhagaData> _rahuMeanMBList;
+        private List<MrityuBhagaData> _rahuTrueMBList;
 
 
         private float lineHeight;
@@ -178,9 +178,9 @@ namespace PAD
             List<MrityuBhagaData> venusMBList,
             List<MrityuBhagaData> marsMBList,
             List<MrityuBhagaData> jupiterMBList,
-            List<MrityuBhagaData> saturnMBList/*,
+            List<MrityuBhagaData> saturnMBList,
             List<MrityuBhagaData> rahuMeanMBList,
-            List<MrityuBhagaData> rahuTrueMBList*/
+            List<MrityuBhagaData> rahuTrueMBList
         )
         {
             InitializeComponent();
@@ -242,8 +242,8 @@ namespace PAD
             _marsMBList = marsMBList;
             _jupiterMBList = jupiterMBList;
             _saturnMBList = saturnMBList;
-            //_rahuMeanMBList = rahuMeanMBList;
-            //_rahuTrueMBList = rahuTrueMBList;
+            _rahuMeanMBList = rahuMeanMBList;
+            _rahuTrueMBList = rahuTrueMBList;
 
             monthWidthArray = new float[12];
         }
@@ -314,9 +314,9 @@ namespace PAD
                                     _venusMBList,
                                     _marsMBList,
                                     _jupiterMBList,
-                                    _saturnMBList/*,
+                                    _saturnMBList,
                                     _rahuMeanMBList,
-                                    _rahuTrueMBList*/
+                                    _rahuTrueMBList
                                     );
                 daysList.Add(tempDay);
                 currentDay = currentDay.AddDays(+1);

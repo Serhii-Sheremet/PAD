@@ -4209,9 +4209,9 @@ namespace PAD
                     break;
 
                 case EPlanet.RAHUMEAN:
-                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
                     if (mbData != null)
-                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
                     break;
 
                 case EPlanet.KETUMEAN:
@@ -4221,9 +4221,9 @@ namespace PAD
                     break;
 
                 case EPlanet.RAHUTRUE:
-                    /*mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
                     if (mbData != null)
-                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
                     break;
 
                 case EPlanet.KETUTRUE:
@@ -5232,8 +5232,8 @@ namespace PAD
                 List<MrityuBhagaData> marsMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MARS, startDate, endDate);
                 List<MrityuBhagaData> jupiterMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.JUPITER, startDate, endDate);
                 List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startDate, endDate);
-                //List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startDate, endDate);
-                //List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startDate, endDate);
+                List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startDate, endDate);
+                List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startDate, endDate);
 
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
@@ -5449,13 +5449,13 @@ namespace PAD
 
                 saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
-                /*
+                
                 rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
-                */
+                
                 int index = -1;
                 bool isPresent = false;
                 string tabLabel = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode) + ": " + _selectedYear;
@@ -5536,9 +5536,9 @@ namespace PAD
                                 venusMBDataList,
                                 marsMBDataList,
                                 jupiterMBDataList,
-                                saturnMBDataList/*,
+                                saturnMBDataList,
                                 rahuMeanMBDataList,
-                                rahuTrueMBDataList*/
+                                rahuTrueMBDataList
                             );
 
                         Invoke(new Action(() =>

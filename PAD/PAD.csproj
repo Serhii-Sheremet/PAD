@@ -201,6 +201,8 @@
     <Compile Include="Ephe\EpheConstants.cs" />
     <Compile Include="Ephe\EpheFunctions.cs" />
     <Compile Include="Ephe\EpheCalculation.cs" />
+    <Compile Include="Ephe\MrityuBhagaCalculationParameters.cs" />
+    <Compile Include="Ephe\MrityuBhagaCalculationResults.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
