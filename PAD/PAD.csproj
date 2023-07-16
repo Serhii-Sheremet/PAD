@@ -198,11 +198,12 @@
     <Compile Include="Enums\EShunya.cs" />
     <Compile Include="Enums\ESun.cs" />
     <Compile Include="Enums\EZodiak.cs" />
+    <Compile Include="Ephe\EpheParameters.cs" />
     <Compile Include="Ephe\EpheConstants.cs" />
     <Compile Include="Ephe\EpheFunctions.cs" />
     <Compile Include="Ephe\EpheCalculation.cs" />
-    <Compile Include="Ephe\MrityuBhagaCalculationParameters.cs" />
-    <Compile Include="Ephe\MrityuBhagaCalculationResults.cs" />
+    <Compile Include="Ephe\MrityuBhagaParameters.cs" />
+    <Compile Include="Ephe\MrityuBhagaResults.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>

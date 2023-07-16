@@ -1,6 +1,6 @@
 ﻿namespace PAD
 {
-    public class MrityuBhagaCalculationResults
+    public class MrityuBhagaResults
     {
         public int Znak { get; set; }
         public double[] CalcResults { get; set; }
