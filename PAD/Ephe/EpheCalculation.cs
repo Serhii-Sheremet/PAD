@@ -788,131 +788,127 @@ namespace PAD
 
         public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)
         {
-            List<PlanetData> planetDataList = new List<PlanetData>();
-
             EpheFunctions.swe_set_ephe_path(@".\ephe");
-            double[] calcRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             DateTime curDate = fromDate;
-            DateTime dateChange;
 
-            calcRes = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            int currentZnak = GetCurrentZnak(calcRes[0]);
-            int currentNakshatra = GetCurrentNakshatra(calcRes[0]);
-            int currentPada = GetCurrentPada(calcRes[0]);
-            string currentRetro = string.Empty;
+            EpheParameters eParameters = new EpheParameters() { PlanetConst = planetConstant, Longitude = longitude, Latitude = latitude, Altitude = altitude };
+            PlanetResults pResults = new PlanetResults() { CalcResults = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude) };
+            PlanetParameters pParameters = new PlanetParameters() { CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]),
+                                                                    CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]),
+                                                                    CurrentPada = GetCurrentPada(pResults.CalcResults[0]),
+                                                                    CurrentRetro = string.Empty};
+            
+            List<PlanetData> planetDataList = new List<PlanetData>();
+
             if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
             {
-                currentRetro = GetRetroInfo(calcRes[3]);
+                pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
             }
             
             PlanetData pdTemp = new PlanetData
             {
                 Date = curDate.AddSeconds(-1),
-                Longitude = calcRes[0],
-                Latitude = calcRes[1],
-                SpeedInLongitude = calcRes[3],
-                SpedInLatitude = calcRes[4],
-                Retro = currentRetro,
-                ZodiakId = currentZnak,
-                NakshatraId = currentNakshatra,
-                PadaId = currentPada
+                Longitude = pResults.CalcResults[0],
+                Latitude = pResults.CalcResults[1],
+                SpeedInLongitude = pResults.CalcResults[3],
+                SpedInLatitude = pResults.CalcResults[4],
+                Retro = pParameters.CurrentRetro,
+                ZodiakId = pParameters.CurrentZnak,
+                NakshatraId = pParameters.CurrentNakshatra,
+                PadaId = pParameters.CurrentPada
             };
             planetDataList.Add(pdTemp);
 
             while (curDate < toDate.AddSeconds(+1))
             {
-                TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
+                pResults = GetPlanetTimeFromEpoch(curDate, eParameters, pParameters, CheckPlanetChangeInTimePeriod);
+                curDate = EPOCHToDateTime(pResults.DateInSeconds);
 
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddDays(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddHours(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                dateChange = CheckChangeInTimePeriod(planetConstant, longitude, latitude, altitude, currentZnak, currentNakshatra, currentPada, currentRetro, curDate, tsStep, out calcRes);
-
-                curDate = dateChange;
-                currentZnak = GetCurrentZnak(calcRes[0]);
-                currentNakshatra = GetCurrentNakshatra(calcRes[0]);
-                currentPada = GetCurrentPada(calcRes[0]);
-                currentRetro = string.Empty;
+                pParameters.CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]);
+                pParameters.CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]);
+                pParameters.CurrentPada = GetCurrentPada(pResults.CalcResults[0]);
+                pParameters.CurrentRetro = string.Empty;
                 if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
                 {
-                    currentRetro = GetRetroInfo(calcRes[3]);
+                    pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
                 }
 
                 pdTemp = new PlanetData
                 {
                     Date = curDate,
-                    Longitude = calcRes[0],
-                    Latitude = calcRes[1],
-                    SpeedInLongitude = calcRes[3],
-                    SpedInLatitude = calcRes[4],
-                    Retro = currentRetro,
-                    ZodiakId = currentZnak,
-                    NakshatraId = currentNakshatra,
-                    PadaId = currentPada
+                    Longitude = pResults.CalcResults[0],
+                    Latitude = pResults.CalcResults[1],
+                    SpeedInLongitude = pResults.CalcResults[3],
+                    SpedInLatitude = pResults.CalcResults[4],
+                    Retro = pParameters.CurrentRetro,
+                    ZodiakId = pParameters.CurrentZnak,
+                    NakshatraId = pParameters.CurrentNakshatra,
+                    PadaId = pParameters.CurrentPada
                 };
                 planetDataList.Add(pdTemp);
 
                 curDate = curDate.AddSeconds(+1);
             }
-
             return planetDataList;
         }
 
-        private DateTime CheckChangeInTimePeriod(int planetConst, double longitude, double latitude, double altitude, int currentZnak, int currentNakshatra, int currentPada, string currentRetro, DateTime curDate, TimeSpan tsStep, out double[] calcRes)
+        private PlanetResults GetPlanetTimeFromEpoch(DateTime curDate, EpheParameters eParameters, PlanetParameters pParameters, Func<EpheParameters, PlanetParameters, int, int, PlanetResults> calcFunc)
         {
+            PlanetResults pResults = new PlanetResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
+            int timeUnit = 100000;
+            while (timeUnit != 0)
+            {
+                pResults = calcFunc(eParameters, pParameters, pResults.DateInSeconds, timeUnit);
+                pResults.DateInSeconds -= timeUnit;
+                timeUnit = timeUnit == 1 ? 0 : timeUnit / 10;
+            }
+            return pResults;
+        }
+
+        private PlanetResults CheckPlanetChangeInTimePeriod(EpheParameters eParameters, PlanetParameters pParameters, int curDate, int tsStep)
+        {
+            PlanetResults pResults = new PlanetResults() { CalcResults = new double[6], DateInSeconds = curDate };
+
             int cZnak = 0, cNakshatra = 0, cPada = 0;
             string cRetro = string.Empty;
-            calcRes = new double[6];
 
-            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            for (int date = curDate; date < (curDate + TimeSpan.FromDays(400).TotalSeconds);)
             {
-                calcRes = SWEPH_Calculation(planetConst, date, longitude, latitude, altitude);
+                pResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
 
-                cZnak = GetCurrentZnak(calcRes[0]);
-                cNakshatra = GetCurrentNakshatra(calcRes[0]);
-                cPada = GetCurrentPada(calcRes[0]);
+                cZnak = GetCurrentZnak(pResults.CalcResults[0]);
+                cNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]);
+                cPada = GetCurrentPada(pResults.CalcResults[0]);
                 cRetro = string.Empty;
-                if (planetConst != EpheConstants.SE_SUN && planetConst != EpheConstants.SE_MOON)
+                if (eParameters.PlanetConst != EpheConstants.SE_SUN && eParameters.PlanetConst != EpheConstants.SE_MOON)
                 {
-                    cRetro = GetRetroInfo(calcRes[3]);
+                    cRetro = GetRetroInfo(pResults.CalcResults[3]);
                 }
 
-                if (cZnak != currentZnak)
+                if (cZnak != pParameters.CurrentZnak)
                 {
-                    return date;
+                    pResults.DateInSeconds = date;
+                    return pResults;
                 }
-
-                if (cNakshatra != currentNakshatra)
+                if (cNakshatra != pParameters.CurrentNakshatra)
                 {
-                    return date;
+                    pResults.DateInSeconds = date;
+                    return pResults;
                 }
-
-                if (cPada != currentPada)
+                if (cPada != pParameters.CurrentPada)
                 {
-                    return date;
+                    pResults.DateInSeconds = date;
+                    return pResults;
                 }
-
-                if (!cRetro.Equals(currentRetro))
+                if (!cRetro.Equals(pParameters.CurrentRetro))
                 {
-                    return date;
+                    pResults.DateInSeconds = date;
+                    return pResults;
                 }
-
-                date = date.Add(tsStep);
+                date += tsStep;
             }
-            return curDate;
+            return pResults;
         }
 
         private int GetCurrentZnak(double longitude)

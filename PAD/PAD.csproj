@@ -205,6 +205,8 @@
     <Compile Include="Ephe\MrityuBhagaParameters.cs" />
     <Compile Include="Ephe\MrityuBhagaResults.cs" />
     <Compile Include="Ephe\NityaYogaTithiResults.cs" />
+    <Compile Include="Ephe\PlanetParameters.cs" />
+    <Compile Include="Ephe\PlanetResults.cs" />
     <Compile Include="Forms\About.cs">
       <SubType>Form</SubType>
     </Compile>
