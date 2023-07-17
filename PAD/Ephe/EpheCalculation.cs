@@ -57,20 +57,17 @@ namespace PAD
 
             if (planetId != EPlanet.KETUMEAN && planetId != EPlanet.KETUTRUE)
             {
-                calcRes = SWEPH_Calculation(planetConstant, curDate, longitude, latitude, altitude);
-                int currentZnak = GetCurrentZnak(calcRes[0]);
+                MrityuBhagaResults mbResults = new MrityuBhagaResults() { CalcResults = SWEPH_Calculation(planetConstant, curDate, longitude, latitude, altitude) };
+                int currentZnak = GetCurrentZnak(mbResults.CalcResults[0]);
                 int newZnak = currentZnak;
                 degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
                 GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
 
                 for (curDate = fromDate; curDate < toDate; )
                 {
-                    if (curDate >= toDate)
+                    if (curDate > toDate)
                         break;
-
-                    //TimeSpan tsStep;
-                    MrityuBhagaResults mbResults;
-
+                    
                     if (newZnak != currentZnak)
                     {
                         currentZnak = newZnak;
@@ -79,7 +76,7 @@ namespace PAD
                     }
                     MrityuBhagaParameters mbParameters = new MrityuBhagaParameters() { Degree = degree, DegreeFrom = degreeFrom, DegreeTo = degreeFrom };
 
-                    if (calcRes[0] > degreeFrom && calcRes[0] < degreeTo)
+                    if (mbResults.CalcResults[0] > degreeFrom && mbResults.CalcResults[0] < degreeTo)
                     {
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreInTimePeriodBackward);
                         longitudeFrom = mbResults.CalcResults[0];
@@ -106,16 +103,18 @@ namespace PAD
                         mbDataList.Add(mbd);
                     }
                     
-                    if (calcRes[0] < degreeFrom)
+                    if (mbResults.CalcResults[0] < degreeFrom)
                     {
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeFrom = mbResults.CalcResults[0]; 
-                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds); 
+                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateFrom;
 
                         mbParameters.DegreeTo = degreeTo;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeTo = mbResults.CalcResults[0]; 
-                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds); 
+                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateTo;
 
                         MrityuBhagaData mbd = new MrityuBhagaData
                         {
@@ -138,12 +137,14 @@ namespace PAD
                         mbParameters.DegreeTo = degreeFrom;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeFrom = mbResults.CalcResults[0]; 
-                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds); 
+                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateFrom;
 
                         mbParameters.DegreeTo = degreeTo;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeTo = mbResults.CalcResults[0]; 
-                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds); 
+                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateTo;
 
                         MrityuBhagaData mbd = new MrityuBhagaData
                         {
@@ -163,17 +164,9 @@ namespace PAD
                     {
                         mbResults = GetTimeOfNextZnakFromEpoch(curDate, currentZnak, eParameters, GetTimeOfNextZnak);
                         newPeriodDate = EPOCHToDateTime(mbResults.DateInSeconds);
-
-                        /*
-                        tsStep = curDate.AddDays(+1).Subtract(curDate);
-                        newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-
-                        curDate = newPeriodDate.Add(-tsStep);
-                        tsStep = curDate.AddHours(+1).Subtract(curDate);
-                        newPeriodDate = GetDateOfNextZnak(planetConstant, longitude, latitude, altitude, currentZnak, curDate, tsStep, out newZnak, out calcRes);
-                        */
-                    }   
-
+                        newZnak = mbResults.Znak;
+                    }  
+                    
                     curDate = newPeriodDate;
                 }
             }
@@ -236,7 +229,7 @@ namespace PAD
         {
             MrityuBhagaResults mbResults = new MrityuBhagaResults() { Znak = 0, CalcResults = new double[6], DateInSeconds = curDate };
 
-            for (int date = curDate; date < (curDate + TimeSpan.FromDays(-400).TotalSeconds);)
+            for (int date = curDate; date > (curDate + TimeSpan.FromDays(-400).TotalSeconds);)
             {
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
@@ -253,11 +246,11 @@ namespace PAD
 
         private MrityuBhagaResults GetTimeOfNextZnakFromEpoch(DateTime curDate, int currentZnak, EpheParameters eParameters, Func<int, EpheParameters, int, int, MrityuBhagaResults> calcFunc)
         {
-            MrityuBhagaResults mbResults = new MrityuBhagaResults() { Znak = currentZnak, DateInSeconds = DateTimeToEPOCH(curDate) };
+            MrityuBhagaResults mbResults = new MrityuBhagaResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
             int timeUnit = 100000;
             while (timeUnit != 0)
             {
-                mbResults = calcFunc(mbResults.Znak, eParameters, mbResults.DateInSeconds, timeUnit);
+                mbResults = calcFunc(currentZnak, eParameters, mbResults.DateInSeconds, timeUnit);
                 mbResults.DateInSeconds -= timeUnit;
                 timeUnit = timeUnit == 1 ? 0 : timeUnit / 10;
             }
@@ -505,12 +498,6 @@ namespace PAD
             return date;
         }
 
-
-
-
-
-        
-
         private double[] SWEPH_Calculation(int planetConst, DateTime calcDate, double lon, double lat, double alt)  // without TZ shift
         {
             iflag = 0;
@@ -640,50 +627,50 @@ namespace PAD
 
             sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
             moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            double jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
-            int currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+            double yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+            int currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
-            List<NityaYogaData> njDataList = new List<NityaYogaData>();
+            List<NityaYogaData> nyDataList = new List<NityaYogaData>();
             while (curDate < toDate.AddSeconds(+1))
             {
                 TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
 
                 curDate = dateChange.Add(-tsStep);
                 tsStep = curDate.AddDays(+1).Subtract(curDate);
-                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
 
                 curDate = dateChange.Add(-tsStep);
                 tsStep = curDate.AddHours(+1).Subtract(curDate);
-                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
 
                 curDate = dateChange.Add(-tsStep);
                 tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
 
                 curDate = dateChange.Add(-tsStep);
                 tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                dateChange = CheckJogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentJogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
 
                 curDate = dateChange;
-                jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
-                currentJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+                yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
-                NityaYogaData njTemp = new NityaYogaData
+                NityaYogaData nyTemp = new NityaYogaData
                 {
                     Date = curDate,
-                    Longitude = jogaLongitude,
-                    NakshatraId = currentJogaNakshatra
+                    Longitude = yogaLongitude,
+                    NakshatraId = currentYogaNakshatra
                 };
-                njDataList.Add(njTemp);
+                nyDataList.Add(nyTemp);
 
                 curDate = curDate.AddSeconds(+1);
             }
 
-            return njDataList;
+            return nyDataList;
         }
 
-        private DateTime CheckJogaNakshatraChangeInTimePeriod(double longitude, double latitude, double altitude, int currentJogaNakshatra, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
+        private DateTime CheckYogaNakshatraChangeInTimePeriod(double longitude, double latitude, double altitude, int currentYogaNakshatra, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
         {
             sunRes = new double[6];
             moonRes = new double[6];
@@ -692,10 +679,10 @@ namespace PAD
             {
                 sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
                 moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, date, longitude, latitude, altitude);
-                double jogaLongitude = GetJoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
-                int cJogaNakshatra = GetCurrentNakshatra(jogaLongitude);
+                double yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                int cYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
-                if (cJogaNakshatra != currentJogaNakshatra)
+                if (cYogaNakshatra != currentYogaNakshatra)
                 {
                     return date;
                 }
@@ -1049,7 +1036,7 @@ namespace PAD
             return kLat;
         }
 
-        private double GetJoga360Longitude(double longitude)
+        private double GetYoga360Longitude(double longitude)
         {
             double calcLongitude = 0;
             double count = (int)longitude / 360;
