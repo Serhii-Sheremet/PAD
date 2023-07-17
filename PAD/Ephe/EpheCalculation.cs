@@ -615,6 +615,20 @@ namespace PAD
             return calcRes;
         }
 
+
+        private NityaYogaResults GetNityaYogaTimeFromEpoch(DateTime curDate, EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, Func<EpheParameters, EpheParameters, int, int, int, NityaYogaResults> calcFunc)
+        {
+            NityaYogaResults nyResults = new NityaYogaResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
+            int timeUnit = 100000;
+            while (timeUnit != 0)
+            {
+                nyResults = calcFunc(sunParameters, moonParameters, currentYogaNakshatra, nyResults.DateInSeconds, timeUnit);
+                nyResults.DateInSeconds -= timeUnit;
+                timeUnit = timeUnit == 1 ? 0 : timeUnit / 10;
+            }
+            return nyResults;
+        }
+
         public List<NityaYogaData> CalculateNityaYogaDataList_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
@@ -623,37 +637,23 @@ namespace PAD
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             double nakshatraPart = 360.0000 / 27;
             DateTime curDate = fromDate;
-            DateTime dateChange;
 
-            sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            double yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+            EpheParameters sunParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_SUN, Longitude = longitude, Latitude = latitude, Altitude = altitude };
+            EpheParameters moonParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_MOON, Longitude = longitude, Latitude = latitude, Altitude = altitude };
+
+            NityaYogaResults nyResults = new NityaYogaResults() { SunResults = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude),
+                                                                    MoonResults = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude)};
+
+            double yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
             int currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
             List<NityaYogaData> nyDataList = new List<NityaYogaData>();
             while (curDate < toDate.AddSeconds(+1))
             {
-                TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
+                nyResults = GetNityaYogaTimeFromEpoch(curDate, sunParameters, moonParameters, currentYogaNakshatra, CheckYogaNakshatraChangeInTimePeriod);
 
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddDays(+1).Subtract(curDate);
-                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddHours(+1).Subtract(curDate);
-                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                dateChange = CheckYogaNakshatraChangeInTimePeriod(longitude, latitude, altitude, currentYogaNakshatra, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange;
-                yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                curDate = EPOCHToDateTime(nyResults.DateInSeconds); ;
+                yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
                 currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
                 NityaYogaData nyTemp = new NityaYogaData
@@ -670,25 +670,26 @@ namespace PAD
             return nyDataList;
         }
 
-        private DateTime CheckYogaNakshatraChangeInTimePeriod(double longitude, double latitude, double altitude, int currentYogaNakshatra, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
+        private NityaYogaResults CheckYogaNakshatraChangeInTimePeriod(EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, int curDate, int tsStep)
         {
-            sunRes = new double[6];
-            moonRes = new double[6];
+            NityaYogaResults nyResults = new NityaYogaResults() {SunResults = new double[6], MoonResults = new double[6], DateInSeconds = curDate };
             double nakshatraPart = 360.0000 / 27;
-            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+
+            for (int date = curDate; date < (curDate + TimeSpan.FromDays(400).TotalSeconds);)
             {
-                sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
-                moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, date, longitude, latitude, altitude);
-                double yogaLongitude = GetYoga360Longitude(sunRes[0] + moonRes[0] + (7 * nakshatraPart));
+                nyResults.SunResults = SWEPH_Calculation(sunParameters.PlanetConst, EPOCHToDateTime(date), sunParameters.Longitude, sunParameters.Latitude, sunParameters.Altitude);
+                nyResults.MoonResults = SWEPH_Calculation(moonParameters.PlanetConst, EPOCHToDateTime(date), moonParameters.Longitude, moonParameters.Latitude, moonParameters.Altitude);
+                double yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
                 int cYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
                 if (cYogaNakshatra != currentYogaNakshatra)
                 {
-                    return date;
+                    nyResults.DateInSeconds = date;
+                    return nyResults;
                 }
-                date = date.Add(tsStep);
+                date += tsStep;
             }
-            return curDate;
+            return nyResults;
         }
 
         public List<TithiData> CalculateTithiDataList_London(DateTime fromDate, DateTime toDate)
