@@ -616,9 +616,9 @@ namespace PAD
         }
 
 
-        private NityaYogaResults GetNityaYogaTimeFromEpoch(DateTime curDate, EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, Func<EpheParameters, EpheParameters, int, int, int, NityaYogaResults> calcFunc)
+        private NityaYogaTithiResults GetNityaYogaTimeFromEpoch(DateTime curDate, EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, Func<EpheParameters, EpheParameters, int, int, int, NityaYogaTithiResults> calcFunc)
         {
-            NityaYogaResults nyResults = new NityaYogaResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
+            NityaYogaTithiResults nyResults = new NityaYogaTithiResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
             int timeUnit = 100000;
             while (timeUnit != 0)
             {
@@ -632,8 +632,6 @@ namespace PAD
         public List<NityaYogaData> CalculateNityaYogaDataList_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
-            double[] sunRes = new double[6];
-            double[] moonRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             double nakshatraPart = 360.0000 / 27;
             DateTime curDate = fromDate;
@@ -641,7 +639,7 @@ namespace PAD
             EpheParameters sunParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_SUN, Longitude = longitude, Latitude = latitude, Altitude = altitude };
             EpheParameters moonParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_MOON, Longitude = longitude, Latitude = latitude, Altitude = altitude };
 
-            NityaYogaResults nyResults = new NityaYogaResults() { SunResults = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude),
+            NityaYogaTithiResults nyResults = new NityaYogaTithiResults() { SunResults = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude),
                                                                     MoonResults = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude)};
 
             double yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
@@ -651,8 +649,7 @@ namespace PAD
             while (curDate < toDate.AddSeconds(+1))
             {
                 nyResults = GetNityaYogaTimeFromEpoch(curDate, sunParameters, moonParameters, currentYogaNakshatra, CheckYogaNakshatraChangeInTimePeriod);
-
-                curDate = EPOCHToDateTime(nyResults.DateInSeconds); ;
+                curDate = EPOCHToDateTime(nyResults.DateInSeconds);
                 yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
                 currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
 
@@ -670,9 +667,9 @@ namespace PAD
             return nyDataList;
         }
 
-        private NityaYogaResults CheckYogaNakshatraChangeInTimePeriod(EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, int curDate, int tsStep)
+        private NityaYogaTithiResults CheckYogaNakshatraChangeInTimePeriod(EpheParameters sunParameters, EpheParameters moonParameters, int currentYogaNakshatra, int curDate, int tsStep)
         {
-            NityaYogaResults nyResults = new NityaYogaResults() {SunResults = new double[6], MoonResults = new double[6], DateInSeconds = curDate };
+            NityaYogaTithiResults nyResults = new NityaYogaTithiResults() {SunResults = new double[6], MoonResults = new double[6], DateInSeconds = curDate };
             double nakshatraPart = 360.0000 / 27;
 
             for (int date = curDate; date < (curDate + TimeSpan.FromDays(400).TotalSeconds);)
@@ -695,58 +692,44 @@ namespace PAD
         public List<TithiData> CalculateTithiDataList_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
-            double[] sunRes = new double[6];
-            double[] moonRes = new double[6];
             double longitude = -0.17, latitude = 51.5, altitude = 0; // London
             DateTime curDate = fromDate;
-            DateTime dateChange;
+
+            EpheParameters sunParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_SUN, Longitude = longitude, Latitude = latitude, Altitude = altitude };
+            EpheParameters moonParameters = new EpheParameters() { PlanetConst = EpheConstants.SE_MOON, Longitude = longitude, Latitude = latitude, Altitude = altitude };
 
             double moonSunDifference = 0;
-            sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude);
-            if ((moonRes[0] - sunRes[0]) < 0)
+            NityaYogaTithiResults tResults = new NityaYogaTithiResults()
             {
-                moonSunDifference = (moonRes[0] + 360.0000) - sunRes[0];
+                SunResults = SWEPH_Calculation(EpheConstants.SE_SUN, curDate.AddSeconds(-1), longitude, latitude, altitude),
+                MoonResults = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude)
+            };
+            
+            if ((tResults.MoonResults[0] - tResults.SunResults[0]) < 0)
+            {
+                moonSunDifference = (tResults.MoonResults[0] + 360.0000) - tResults.SunResults[0];
             }
             else
             {
-                moonSunDifference = moonRes[0] - sunRes[0];
+                moonSunDifference = tResults.MoonResults[0] - tResults.SunResults[0];
             }
             int currentTithi = GetCurrentTithi(moonSunDifference);
 
             List<TithiData> tithiDataList = new List<TithiData>();
             while (curDate < toDate.AddSeconds(+1))
             {
-                // For tithi step by month is not working as it might overlap due to the tithi count of 30 - starting from day timespan
-                /*TimeSpan tsStep = curDate.AddMonths(+1).Subtract(curDate);
-                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);*/
-                TimeSpan tsStep = curDate.AddDays(+1).Subtract(curDate);
-                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddHours(+1).Subtract(curDate);
-                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddMinutes(+1).Subtract(curDate);
-                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange.Add(-tsStep);
-                tsStep = curDate.AddSeconds(+1).Subtract(curDate);
-                dateChange = CheckTithiChangeInTimePeriod(longitude, latitude, altitude, currentTithi, curDate, tsStep, out sunRes, out moonRes);
-
-                curDate = dateChange;
-                if ((moonRes[0] - sunRes[0]) < 0)
+                tResults = GetTithiTimeFromEpoch(curDate, sunParameters, moonParameters, currentTithi, CheckTithiChangeInTimePeriod);
+                curDate = EPOCHToDateTime(tResults.DateInSeconds);
+                if ((tResults.MoonResults[0] - tResults.SunResults[0]) < 0)
                 {
-                    moonSunDifference = (moonRes[0] + 360.0000) - sunRes[0];
+                    moonSunDifference = (tResults.MoonResults[0] + 360.0000) - tResults.SunResults[0];
                 }
                 else
                 {
-                    moonSunDifference = moonRes[0] - sunRes[0];
+                    moonSunDifference = tResults.MoonResults[0] - tResults.SunResults[0];
                 }
                 currentTithi = GetCurrentTithi(moonSunDifference);
+
                 TithiData tTemp = new TithiData
                 {
                     Date = curDate,
@@ -761,32 +744,46 @@ namespace PAD
             return tithiDataList;
         }
 
-        private DateTime CheckTithiChangeInTimePeriod(double longitude, double latitude, double altitude, int currentTithi, DateTime curDate, TimeSpan tsStep, out double[] sunRes, out double[] moonRes)
+        private NityaYogaTithiResults GetTithiTimeFromEpoch(DateTime curDate, EpheParameters sunParameters, EpheParameters moonParameters, int currentTithi, Func<EpheParameters, EpheParameters, int, int, int, NityaYogaTithiResults> calcFunc)
         {
-            double msDifference = 0;
-            sunRes = new double[6];
-            moonRes = new double[6];
-            for (DateTime date = curDate; date < curDate.AddYears(+1);)
+            NityaYogaTithiResults tResults = new NityaYogaTithiResults() { DateInSeconds = DateTimeToEPOCH(curDate) };
+            int timeUnit = 100000;
+            while (timeUnit != 0)
             {
-                sunRes = SWEPH_Calculation(EpheConstants.SE_SUN, date, longitude, latitude, altitude);
-                moonRes = SWEPH_Calculation(EpheConstants.SE_MOON, date, longitude, latitude, altitude);
-                if ((moonRes[0] - sunRes[0]) < 0)
+                tResults = calcFunc(sunParameters, moonParameters, currentTithi, tResults.DateInSeconds, timeUnit);
+                tResults.DateInSeconds -= timeUnit;
+                timeUnit = timeUnit == 1 ? 0 : timeUnit / 10;
+            }
+            return tResults;
+        }
+
+        private NityaYogaTithiResults CheckTithiChangeInTimePeriod(EpheParameters sunParameters, EpheParameters moonParameters, int currentTithi, int curDate, int tsStep)
+        {
+            NityaYogaTithiResults tResults = new NityaYogaTithiResults() { SunResults = new double[6], MoonResults = new double[6], DateInSeconds = curDate };
+            double msDifference = 0;
+
+            for (int date = curDate; date < (curDate + TimeSpan.FromDays(400).TotalSeconds);)
+            {
+                tResults.SunResults = SWEPH_Calculation(sunParameters.PlanetConst, EPOCHToDateTime(date), sunParameters.Longitude, sunParameters.Latitude, sunParameters.Altitude);
+                tResults.MoonResults = SWEPH_Calculation(moonParameters.PlanetConst, EPOCHToDateTime(date), moonParameters.Longitude, moonParameters.Latitude, moonParameters.Altitude);
+                if ((tResults.MoonResults[0] - tResults.SunResults[0]) < 0)
                 {
-                    msDifference = (moonRes[0] + 360.0000) - sunRes[0];
+                    msDifference = (tResults.MoonResults[0] + 360.0000) - tResults.SunResults[0];
                 }
                 else
                 {
-                    msDifference = moonRes[0] - sunRes[0];
+                    msDifference = tResults.MoonResults[0] - tResults.SunResults[0];
                 }
                 int cTithi = GetCurrentTithi(msDifference);
 
                 if (cTithi != currentTithi)
                 {
-                    return date;
+                    tResults.DateInSeconds = date;
+                    return tResults;
                 }
-                date = date.Add(tsStep);
+                date += tsStep;
             }
-            return curDate;
+            return tResults;
         }
 
         public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)

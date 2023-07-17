@@ -1,6 +1,6 @@
 ﻿namespace PAD
 {
-    public class NityaYogaResults
+    public class NityaYogaTithiResults
     {
         public double[] SunResults { get; set; }
         public double[] MoonResults { get; set; }
