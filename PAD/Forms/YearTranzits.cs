@@ -627,6 +627,15 @@ namespace PAD
                 }
                 if (nodeSettings == EAppSetting.NODEMEAN)
                 {
+                    DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.RahuMeanMrityuBhagaDayList, d.Date);
+                }
+                else
+                {
+                    DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.RahuTrueMrityuBhagaDayList, d.Date);
+                }
+
+                if (nodeSettings == EAppSetting.NODEMEAN)
+                {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.RahuMeanNakshatraDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * lineHeight, dayWidth, lineHeight, d.RahuMeanPadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * lineHeight, dayWidth, lineHeight, d.RahuMeanTaraBalaDayList);
