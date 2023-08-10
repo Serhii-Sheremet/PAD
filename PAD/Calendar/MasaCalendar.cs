@@ -18,7 +18,14 @@ namespace PAD
         {
             string masaName = CacheLoad._masaDescList.Where(i => i.MasaId == MasaId && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
             int nakId = Utility.GetNakshatraFullMoonId(this, pList);
-            return masaName + " (" + Utility.GetNakshatraUprvitel(nakId, langCode) + ")";
+            if (nakId != 0)
+            {
+                return masaName + " (" + Utility.GetNakshatraUprvitel(nakId, langCode) + ")";
+            }
+            else
+            {
+                return masaName;
+            }
         }
     }
 }

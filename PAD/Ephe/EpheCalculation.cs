@@ -80,11 +80,13 @@ namespace PAD
 
                     if (mbResults.CalcResults[0] > degreeFrom && mbResults.CalcResults[0] < degreeTo)
                     {
+                        mbParameters.IsCalcFrom = true;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreInTimePeriodBackward);
                         longitudeFrom = mbResults.CalcResults[0];
                         dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
 
                         curDate = newPeriodDate;
+                        mbParameters.IsCalcFrom = false;
 
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeTo = mbResults.CalcResults[0]; 
@@ -109,6 +111,7 @@ namespace PAD
                     {
                         mbParameters.DegreeFrom = degreeTo;
                         mbParameters.DegreeTo = degreeTo;
+                        mbParameters.IsCalcFrom = true;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreToInTimePeriodRetrograde);
 
                         if (!mbResults.DateNotFound)
@@ -121,6 +124,7 @@ namespace PAD
 
                             mbParameters.DegreeFrom = degreeFrom;
                             mbParameters.DegreeTo = degreeTo;
+                            mbParameters.IsCalcFrom = false;
                             mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                             longitudeTo = mbResults.CalcResults[0];
                             dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
@@ -143,12 +147,14 @@ namespace PAD
                     
                     if (mbResults.CalcResults[0] < degreeFrom && mbResults.CalcResults[3] > 0)
                     {
+                        mbParameters.IsCalcFrom = true;
+
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeFrom = mbResults.CalcResults[0]; 
                         dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
                         curDate = dateFrom;
 
-                        mbParameters.DegreeTo = degreeTo;
+                        mbParameters.IsCalcFrom = false;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeTo = mbResults.CalcResults[0]; 
                         dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
@@ -173,12 +179,14 @@ namespace PAD
                         curDate = curDate.AddDays(+1);
 
                         mbParameters.DegreeTo = degreeFrom;
+                        mbParameters.IsCalcFrom = true;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeFrom = mbResults.CalcResults[0]; 
                         dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
                         curDate = dateFrom;
 
                         mbParameters.DegreeTo = degreeTo;
+                        mbParameters.IsCalcFrom = false;
                         mbResults = GetMrityuBhagaTimeFromEpoch(curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
                         longitudeTo = mbResults.CalcResults[0]; 
                         dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
@@ -254,7 +262,7 @@ namespace PAD
                     date += tsStep;
                     continue;
                 }
-                if (((mbResults.CalcResults[0] - mbParameters.Degree) <= 30 && mbResults.CalcResults[0] >= mbParameters.DegreeTo) || ((mbResults.CalcResults[0] - mbParameters.Degree) <= 30 && mbResults.CalcResults[3] < 0 && mbResults.CalcResults[0] <= mbParameters.DegreeFrom) )
+                if (((mbResults.CalcResults[0] - mbParameters.Degree) <= 30 && mbResults.CalcResults[0] >= mbParameters.DegreeFrom && mbResults.CalcResults[3] > 0 && mbParameters.IsCalcFrom) || ((mbResults.CalcResults[0] - mbParameters.Degree) <= 30 && mbResults.CalcResults[0] >= mbParameters.DegreeTo) || ((mbResults.CalcResults[0] - mbParameters.Degree) <= 30 && mbResults.CalcResults[3] < 0 && mbResults.CalcResults[0] <= mbParameters.DegreeFrom) )
                 {
                     mbResults.DateInSeconds = date;
                     return mbResults;
@@ -266,10 +274,6 @@ namespace PAD
 
         private MrityuBhagaResults CheckDegreToInTimePeriodRetrograde(EpheParameters eParameters, MrityuBhagaParameters mbParameters, int curDate, int tsStep)
         {
-            double[] iResults = new double[6]; 
-            iResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(curDate), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
-            int iZnak = GetCurrentZnak(iResults[0]);
-
             MrityuBhagaResults mbResults = new MrityuBhagaResults() { Znak = 0, CalcResults = new double[6], DateInSeconds = curDate };
 
             for (int date = curDate; date < (curDate + TimeSpan.FromDays(800).TotalSeconds);)
@@ -277,10 +281,9 @@ namespace PAD
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
 
-                if (mbResults.CalcResults[3] >= 0 || iZnak != mbResults.Znak)
+                if (mbResults.CalcResults[3] >= 0 )
                 {
                     mbResults.DateNotFound = true;
-                    //mbResults.Znak = iZnak;
                     return mbResults;
                 }
 

@@ -1821,7 +1821,7 @@ namespace PAD
         public static int GetNakshatraFullMoonId(MasaCalendar mc, List<PlanetCalendar> pList)
         {
             List<PlanetCalendar> mnPeriodCalendar =pList.Where(i => mc.FullMoonDate.Between(i.DateStart.AddDays(-2), i.DateEnd.AddDays(+2))).ToList();
-            return (int)(mnPeriodCalendar.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).FirstOrDefault().NakshatraCode);
+            return (int)(mnPeriodCalendar.Where(i => mc.FullMoonDate.Between(i.DateStart, i.DateEnd)).FirstOrDefault()?.NakshatraCode ?? 0); 
         }
         
 
