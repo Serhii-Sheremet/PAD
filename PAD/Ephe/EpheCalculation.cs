@@ -383,16 +383,6 @@ namespace PAD
             return ketuDegree;
         }
 
-        private int GetKetuMrityaBhagaDegree(int iDegree)
-        {
-            int kDegree = iDegree - 180;
-            if (kDegree < 0)
-            {
-                kDegree += 360;
-            }
-            return kDegree;
-        }
-
         public List<EclipseData> CalculateEclipse_London(DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
