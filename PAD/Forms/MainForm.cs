@@ -2921,8 +2921,7 @@ namespace PAD
         private void applicationSettingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AppSettings asForm = new AppSettings(CacheLoad._appSettingList, _activeLanguageCode);
-            asForm.ShowDialog(this);
-            
+            asForm.ShowDialog(this);            
         }
 
         private void locationToolStripMenuItem_Click(object sender, EventArgs e)

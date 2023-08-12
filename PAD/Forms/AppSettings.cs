@@ -210,6 +210,7 @@ namespace PAD
                 UpdateAppSetting(EAppSettingList.MRITYUBHAGA, EAppSetting.MRITYUBHAGANEQUAL);
                 UpdateAppSetting(EAppSettingList.NODE, EAppSetting.NODEMEAN);
                 UpdateAppSetting(EAppSettingList.WEEK, EAppSetting.WEEKSUNDAY);
+                CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
 
                 DialogResult dialogRestartResultLang = frmShowMessage.Show(Utility.GetLocalizedText("In order to apply changes application has to be restarted. Do you want to restart application now?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
                 if (dialogRestartResultLang == DialogResult.Yes)
@@ -223,6 +224,7 @@ namespace PAD
         private void buttonApply_Click(object sender, EventArgs e)
         {
             ApplyingChanges();
+            CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
             if (_newSelectedLanguage != _activeLanguageSetting)
             {
                 ApllyNewLanguage();
