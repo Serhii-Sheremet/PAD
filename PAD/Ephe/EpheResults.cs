@@ -1,10 +1,11 @@
 ﻿namespace PAD
 {
-    public class MrityuBhagaResults
+    public class EpheResults
     {
-        public int Znak { get; set; }
         public double[] CalcResults { get; set; }
         public int DateInSeconds { get; set; }
+        public int Znak { get; set; }
+        public bool RetrogradeStatus { get; set; } = false;
         public bool DateNotFound { get; set; } = false;
     }
 }
