@@ -51,48 +51,101 @@ namespace PAD
             DateTime dateFrom = new DateTime();
             DateTime dateTo = new DateTime();
             DateTime newPeriodDate = fromDate;
+            int planetConstant = -1, currentZnak = 0, newZnak = 0;
+            bool currentRetrogradeStatus = false, newRetrogradeStatus = false;
 
             EAppSetting mbSettings = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault().Id;
             List<MrityuBhagaData> mbDataList = new List<MrityuBhagaData>();
-            int planetConstant = Utility.GetPlanetSWEConstByPlanetId((int)planetId);
-            EpheParameters eParameters = new EpheParameters() { PlanetConst = planetConstant, Longitude = longitude, Latitude = latitude, Altitude = altitude };
 
-            if (planetId != EPlanet.KETUMEAN && planetId != EPlanet.KETUTRUE)
+            if (planetId == EPlanet.KETUMEAN)
             {
-                EpheResults mbResults = new EpheResults() { CalcResults = SWEPH_Calculation(planetConstant, curDate, longitude, latitude, altitude) };
-                int currentZnak = GetCurrentZnak(mbResults.CalcResults[0]);
-                bool currentRetrogradeStatus = GetCurrentRetrogradeStatus(mbResults.CalcResults[3]);
-                int newZnak = currentZnak;
-                bool newRetrogradeStatus = currentRetrogradeStatus;
-                degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
+                planetConstant = EpheConstants.SE_MEAN_NODE;
+            }
+            else if (planetId == EPlanet.KETUTRUE)
+            {
+                planetConstant = EpheConstants.SE_TRUE_NODE;
+            }
+            else
+            {
+                planetConstant = Utility.GetPlanetSWEConstByPlanetId((int)planetId);
+            }
+            EpheParameters eParameters = new EpheParameters() { PalnetId = planetId, PlanetConst = planetConstant, Longitude = longitude, Latitude = latitude, Altitude = altitude };
 
-                for (curDate = fromDate; curDate < toDate; )
+            EpheResults mbResults = new EpheResults() { CalcResults = SWEPH_Calculation(planetConstant, curDate, longitude, latitude, altitude) };
+            if (eParameters.PalnetId == EPlanet.KETUMEAN || eParameters.PalnetId == EPlanet.KETUTRUE)
+            {
+                mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
+            }
+            currentZnak = GetCurrentZnak(mbResults.CalcResults[0]);
+            currentRetrogradeStatus = GetCurrentRetrogradeStatus(mbResults.CalcResults[3]);
+            newZnak = currentZnak;
+            newRetrogradeStatus = currentRetrogradeStatus;
+            degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
+            GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
+
+            for (curDate = fromDate; curDate < toDate;)
+            {
+                if (curDate > toDate)
+                    break;
+
+                if (newZnak != currentZnak || newRetrogradeStatus != currentRetrogradeStatus)
                 {
-                    if (curDate > toDate)
-                        break;
-                    
-                    if (newZnak != currentZnak || newRetrogradeStatus != currentRetrogradeStatus)
-                    {
-                        currentZnak = newZnak;
-                        currentRetrogradeStatus = newRetrogradeStatus;
-                        degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
-                        GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
-                    }
-                    MrityuBhagaParameters mbParameters = new MrityuBhagaParameters() { Degree = degree, DegreeFrom = degreeFrom, DegreeTo = degreeTo };
+                    currentZnak = newZnak;
+                    currentRetrogradeStatus = newRetrogradeStatus;
+                    degree = GetMBDegreeForPlanet_Znak(mbList, (int)planetId, currentZnak);
+                    GetMrityuBhagaDegreeFromAndTo(mbSettings, degree, out degreeFrom, out degreeTo);
+                }
+                MrityuBhagaParameters mbParameters = new MrityuBhagaParameters() { Degree = degree, DegreeFrom = degreeFrom, DegreeTo = degreeTo };
 
-                    if (mbResults.CalcResults[0] > degreeFrom && mbResults.CalcResults[0] < degreeTo)
+                if (mbResults.CalcResults[0] > degreeFrom && mbResults.CalcResults[0] < degreeTo)
+                {
+                    mbParameters.IsCalcFrom = true;
+                    mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreInTimePeriodBackward);
+                    longitudeFrom = mbResults.CalcResults[0];
+                    dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+
+                    curDate = newPeriodDate;
+                    mbParameters.IsCalcFrom = false;
+
+                    mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
+                    longitudeTo = mbResults.CalcResults[0];
+                    dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
+                    curDate = dateTo;
+
+                    MrityuBhagaData mbd = new MrityuBhagaData
                     {
-                        mbParameters.IsCalcFrom = true;
-                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreInTimePeriodBackward);
+                        PlanetId = (int)planetId,
+                        ZodiakId = currentZnak,
+                        Degree = degree,
+                        MrityuBhagaSetting = mbSettings,
+                        LongitudeFrom = longitudeFrom,
+                        LongitudeTo = longitudeTo,
+                        DateFrom = dateFrom,
+                        DateTo = dateTo
+                    };
+                    mbDataList.Add(mbd);
+                }
+
+                if (mbResults.CalcResults[0] > degreeTo && mbResults.CalcResults[3] < 0)
+                {
+                    mbParameters.DegreeFrom = degreeTo;
+                    mbParameters.DegreeTo = degreeTo;
+                    mbParameters.IsCalcFrom = true;
+                    mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreToInTimePeriodRetrograde);
+
+                    if (!mbResults.DateNotFound)
+                    {
                         longitudeFrom = mbResults.CalcResults[0];
                         dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateFrom;
 
-                        curDate = newPeriodDate;
+                        curDate = curDate.AddDays(+1);
+
+                        mbParameters.DegreeFrom = degreeFrom;
+                        mbParameters.DegreeTo = degreeTo;
                         mbParameters.IsCalcFrom = false;
-
                         mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-                        longitudeTo = mbResults.CalcResults[0]; 
+                        longitudeTo = mbResults.CalcResults[0];
                         dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
                         curDate = dateTo;
 
@@ -109,124 +162,86 @@ namespace PAD
                         };
                         mbDataList.Add(mbd);
                     }
-
-                    if (mbResults.CalcResults[0] > degreeTo && mbResults.CalcResults[3] < 0)
-                    {
-                        mbParameters.DegreeFrom = degreeTo;
-                        mbParameters.DegreeTo = degreeTo;
-                        mbParameters.IsCalcFrom = true;
-                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreToInTimePeriodRetrograde);
-
-                        if (!mbResults.DateNotFound)
-                        {
-                            longitudeFrom = mbResults.CalcResults[0];
-                            dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateFrom;
-
-                            curDate = curDate.AddDays(+1);
-
-                            mbParameters.DegreeFrom = degreeFrom;
-                            mbParameters.DegreeTo = degreeTo;
-                            mbParameters.IsCalcFrom = false;
-                            mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-                            longitudeTo = mbResults.CalcResults[0];
-                            dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateTo;
-
-                            MrityuBhagaData mbd = new MrityuBhagaData
-                            {
-                                PlanetId = (int)planetId,
-                                ZodiakId = currentZnak,
-                                Degree = degree,
-                                MrityuBhagaSetting = mbSettings,
-                                LongitudeFrom = longitudeFrom,
-                                LongitudeTo = longitudeTo,
-                                DateFrom = dateFrom,
-                                DateTo = dateTo
-                            };
-                            mbDataList.Add(mbd);
-                        }
-                    }
-                    
-                    if (mbResults.CalcResults[0] < degreeFrom && mbResults.CalcResults[3] > 0)
-                    {
-                        mbParameters.IsCalcFrom = true;
-                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-
-                        if (!mbResults.DateNotFound)
-                        {
-                            longitudeFrom = mbResults.CalcResults[0];
-                            dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateFrom;
-
-                            mbParameters.IsCalcFrom = false;
-                            mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-                            longitudeTo = mbResults.CalcResults[0];
-                            dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateTo;
-
-                            MrityuBhagaData mbd = new MrityuBhagaData
-                            {
-                                PlanetId = (int)planetId,
-                                ZodiakId = currentZnak,
-                                Degree = degree,
-                                MrityuBhagaSetting = mbSettings,
-                                LongitudeFrom = longitudeFrom,
-                                LongitudeTo = longitudeTo,
-                                DateFrom = dateFrom,
-                                DateTo = dateTo
-                            };
-                            mbDataList.Add(mbd);
-                        }
-                    }
-
-                    if (longitudeTo <= longitudeFrom && longitudeFrom != 0 && longitudeTo != 0 && mbResults.CalcResults[3] > 0)
-                    {
-                        curDate = curDate.AddDays(+1);
-
-                        mbParameters.DegreeTo = degreeFrom;
-                        mbParameters.IsCalcFrom = true;
-                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-
-                        if (!mbResults.DateNotFound)
-                        {
-                            longitudeFrom = mbResults.CalcResults[0];
-                            dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateFrom;
-
-                            mbParameters.DegreeTo = degreeTo;
-                            mbParameters.IsCalcFrom = false;
-                            mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
-                            longitudeTo = mbResults.CalcResults[0];
-                            dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
-                            curDate = dateTo;
-
-                            MrityuBhagaData mbd = new MrityuBhagaData
-                            {
-                                PlanetId = (int)planetId,
-                                ZodiakId = currentZnak,
-                                Degree = degree,
-                                MrityuBhagaSetting = mbSettings,
-                                LongitudeFrom = longitudeFrom,
-                                LongitudeTo = longitudeTo,
-                                DateFrom = dateFrom,
-                                DateTo = dateTo
-                            };
-                            mbDataList.Add(mbd);
-                            newPeriodDate = curDate;
-                        }
-                    }
-                    else
-                    {
-                        curDate = curDate.AddHours(+1);
-                        mbResults = GetTimeOfNextZnakFromEpoch(curDate, currentZnak, currentRetrogradeStatus, eParameters, GetTimeOfNextZnak);
-                        newPeriodDate = EPOCHToDateTime(mbResults.DateInSeconds);
-                        newZnak = mbResults.Znak;
-                        newRetrogradeStatus = mbResults.RetrogradeStatus;
-                    }  
-                    
-                    curDate = newPeriodDate;
                 }
+
+                if (mbResults.CalcResults[0] < degreeFrom && mbResults.CalcResults[3] > 0)
+                {
+                    mbParameters.IsCalcFrom = true;
+                    mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
+
+                    if (!mbResults.DateNotFound)
+                    {
+                        longitudeFrom = mbResults.CalcResults[0];
+                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateFrom;
+
+                        mbParameters.IsCalcFrom = false;
+                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
+                        longitudeTo = mbResults.CalcResults[0];
+                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateTo;
+
+                        MrityuBhagaData mbd = new MrityuBhagaData
+                        {
+                            PlanetId = (int)planetId,
+                            ZodiakId = currentZnak,
+                            Degree = degree,
+                            MrityuBhagaSetting = mbSettings,
+                            LongitudeFrom = longitudeFrom,
+                            LongitudeTo = longitudeTo,
+                            DateFrom = dateFrom,
+                            DateTo = dateTo
+                        };
+                        mbDataList.Add(mbd);
+                    }
+                }
+
+                if (longitudeTo <= longitudeFrom && longitudeFrom != 0 && longitudeTo != 0 && mbResults.CalcResults[3] > 0)
+                {
+                    curDate = curDate.AddDays(+1);
+
+                    mbParameters.DegreeTo = degreeFrom;
+                    mbParameters.IsCalcFrom = true;
+                    mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
+
+                    if (!mbResults.DateNotFound)
+                    {
+                        longitudeFrom = mbResults.CalcResults[0];
+                        dateFrom = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateFrom;
+
+                        mbParameters.DegreeTo = degreeTo;
+                        mbParameters.IsCalcFrom = false;
+                        mbResults = GetMrityuBhagaTimeFromEpoch(currentZnak, curDate, eParameters, mbParameters, CheckDegreeToInTimePeriod);
+                        longitudeTo = mbResults.CalcResults[0];
+                        dateTo = EPOCHToDateTime(mbResults.DateInSeconds);
+                        curDate = dateTo;
+
+                        MrityuBhagaData mbd = new MrityuBhagaData
+                        {
+                            PlanetId = (int)planetId,
+                            ZodiakId = currentZnak,
+                            Degree = degree,
+                            MrityuBhagaSetting = mbSettings,
+                            LongitudeFrom = longitudeFrom,
+                            LongitudeTo = longitudeTo,
+                            DateFrom = dateFrom,
+                            DateTo = dateTo
+                        };
+                        mbDataList.Add(mbd);
+                        newPeriodDate = curDate;
+                    }
+                }
+                else
+                {
+                    curDate = curDate.AddHours(+1);
+                    mbResults = GetTimeOfNextZnakFromEpoch(curDate, currentZnak, currentRetrogradeStatus, eParameters, GetTimeOfNextZnak);
+                    newPeriodDate = EPOCHToDateTime(mbResults.DateInSeconds);
+                    newZnak = mbResults.Znak;
+                    newRetrogradeStatus = mbResults.RetrogradeStatus;
+                }
+
+                curDate = newPeriodDate;
             }
             return mbDataList;
         }
@@ -266,6 +281,10 @@ namespace PAD
             for (int date = curDate; date < (curDate + TimeSpan.FromDays(800).TotalSeconds); )
             {
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
+                if (eParameters.PalnetId == EPlanet.KETUMEAN || eParameters.PalnetId == EPlanet.KETUTRUE)
+                {
+                    mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
+                }
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
 
                 if(mbResults.Znak != currentZnak && mbResults.CalcResults[3] < 0)
@@ -296,6 +315,10 @@ namespace PAD
             for (int date = curDate; date < (curDate + TimeSpan.FromDays(800).TotalSeconds);)
             {
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
+                if (eParameters.PalnetId == EPlanet.KETUMEAN || eParameters.PalnetId == EPlanet.KETUTRUE)
+                {
+                    mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
+                }
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
 
                 if (mbResults.CalcResults[3] >= 0 )
@@ -321,6 +344,10 @@ namespace PAD
             for (int date = curDate; date > (curDate - TimeSpan.FromDays(400).TotalSeconds);)
             {
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
+                if (eParameters.PalnetId == EPlanet.KETUMEAN || eParameters.PalnetId == EPlanet.KETUTRUE)
+                {
+                    mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
+                }
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
 
                 if ((mbParameters.Degree - mbResults.CalcResults[0]) <= 30 && (mbResults.CalcResults[0] <= mbParameters.DegreeFrom || (mbResults.CalcResults[0] >= mbParameters.DegreeTo) ))
@@ -353,6 +380,10 @@ namespace PAD
             for (int date = curDate; date < (curDate + TimeSpan.FromDays(800).TotalSeconds);)
             {
                 mbResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
+                if (eParameters.PalnetId == EPlanet.KETUMEAN || eParameters.PalnetId == EPlanet.KETUTRUE)
+                {
+                    mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
+                }
                 mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
                 mbResults.RetrogradeStatus = GetCurrentRetrogradeStatus(mbResults.CalcResults[3]);
 
@@ -1090,7 +1121,7 @@ namespace PAD
             List<PlanetData> ketuList = new List<PlanetData>();
             foreach (PlanetData pd in rahuList)
             {
-                double kLongitude = GetKetuLongitude(pd.Longitude);
+                double kLongitude = CalculateKetuDegree(pd.Longitude);
                 PlanetData pdTemp = new PlanetData
                 {
                     Date = pd.Date,
@@ -1106,16 +1137,6 @@ namespace PAD
                 ketuList.Add(pdTemp);
             }
             return ketuList;
-        }
-
-        private double GetKetuLongitude(double rLat)
-        {
-            double kLat = rLat + 180.0000;
-            if (kLat > 360.0000)
-            {
-                kLat -= 360.0000;
-            }
-            return kLat;
         }
 
         private double GetYoga360Longitude(double longitude)
