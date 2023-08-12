@@ -1298,12 +1298,15 @@ namespace PAD
                 if (nodeSettings == EAppSetting.NODEMEAN)
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.KetuMeanMrityuBhagaDayList, d.Date);
+
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanPadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanTaraBalaDayList);
                 }
                 else
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTrueNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.KetuTrueMrityuBhagaDayList, d.Date);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTruePadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTrueTaraBalaDayList);
                 }
@@ -2255,6 +2258,8 @@ namespace PAD
                 List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> ketuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUMEAN, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> ketuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUTRUE, startPeriodDate, endPeriodDate);
 
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
@@ -2489,7 +2494,13 @@ namespace PAD
 
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
-                
+
+                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -2565,7 +2576,9 @@ namespace PAD
                                         jupiterMBDataList,
                                         saturnMBDataList,
                                         rahuMeanMBDataList,
-                                        rahuTrueMBDataList
+                                        rahuTrueMBDataList,
+                                        ketuMeanMBDataList,
+                                        ketuTrueMBDataList
                                         );
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);                   
@@ -4219,9 +4232,9 @@ namespace PAD
                     break;
 
                 case EPlanet.KETUMEAN:
-                    /*mbData = pDay.Ketu.FirstOrDefault();
+                    mbData = pDay.KetuMeanMrityuBhagaDayList.FirstOrDefault();
                     if (mbData != null)
-                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
                     break;
 
                 case EPlanet.RAHUTRUE:
@@ -4231,9 +4244,9 @@ namespace PAD
                     break;
 
                 case EPlanet.KETUTRUE:
-                    /*mbData = pDay.Ketu.FirstOrDefault();
+                    mbData = pDay.KetuTrueMrityuBhagaDayList.FirstOrDefault();
                     if (mbData != null)
-                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");*/
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
                     break;
             }
             return mb;
@@ -5238,6 +5251,8 @@ namespace PAD
                 List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startDate, endDate);
                 List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startDate, endDate);
                 List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startDate, endDate);
+                List<MrityuBhagaData> ketuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUMEAN, startDate, endDate);
+                List<MrityuBhagaData> ketuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUTRUE, startDate, endDate);
 
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
@@ -5459,7 +5474,13 @@ namespace PAD
 
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
-                
+
+                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
                 int index = -1;
                 bool isPresent = false;
                 string tabLabel = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode) + ": " + _selectedYear;
@@ -5542,7 +5563,9 @@ namespace PAD
                                 jupiterMBDataList,
                                 saturnMBDataList,
                                 rahuMeanMBDataList,
-                                rahuTrueMBDataList
+                                rahuTrueMBDataList,
+                                ketuMeanMBDataList,
+                                ketuTrueMBDataList
                             );
 
                         Invoke(new Action(() =>

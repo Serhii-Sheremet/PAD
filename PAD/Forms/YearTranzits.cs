@@ -92,7 +92,8 @@ namespace PAD
         private List<MrityuBhagaData> _saturnMBList;
         private List<MrityuBhagaData> _rahuMeanMBList;
         private List<MrityuBhagaData> _rahuTrueMBList;
-
+        private List<MrityuBhagaData> _ketuMeanMBList;
+        private List<MrityuBhagaData> _ketuTrueMBList;
 
         private float lineHeight;
         int labelsWidth;
@@ -180,7 +181,9 @@ namespace PAD
             List<MrityuBhagaData> jupiterMBList,
             List<MrityuBhagaData> saturnMBList,
             List<MrityuBhagaData> rahuMeanMBList,
-            List<MrityuBhagaData> rahuTrueMBList
+            List<MrityuBhagaData> rahuTrueMBList,
+            List<MrityuBhagaData> ketuMeanMBList,
+            List<MrityuBhagaData> ketuTrueMBList
         )
         {
             InitializeComponent();
@@ -244,6 +247,8 @@ namespace PAD
             _saturnMBList = saturnMBList;
             _rahuMeanMBList = rahuMeanMBList;
             _rahuTrueMBList = rahuTrueMBList;
+            _ketuMeanMBList = ketuMeanMBList;
+            _ketuTrueMBList = ketuTrueMBList;
 
             monthWidthArray = new float[12];
         }
@@ -316,7 +321,9 @@ namespace PAD
                                     _jupiterMBList,
                                     _saturnMBList,
                                     _rahuMeanMBList,
-                                    _rahuTrueMBList
+                                    _rahuTrueMBList,
+                                    _ketuMeanMBList,
+                                    _ketuTrueMBList
                                     );
                 daysList.Add(tempDay);
                 currentDay = currentDay.AddDays(+1);
@@ -690,6 +697,16 @@ namespace PAD
                         }
                         break;
                 }
+
+                if (nodeSettings == EAppSetting.NODEMEAN)
+                {
+                    DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.KetuMeanMrityuBhagaDayList, d.Date);
+                }
+                else
+                {
+                    DrawingMrityaBhaga(g, posX, posY, dayWidth, lineHeight, d.KetuTrueMrityuBhagaDayList, d.Date);
+                }
+
                 if (nodeSettings == EAppSetting.NODEMEAN)
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + lineHeight, dayWidth, lineHeight, d.KetuMeanNakshatraDayList);

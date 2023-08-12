@@ -160,6 +160,8 @@ namespace PAD
         public List<MrityuBhagaData> SaturnMrityuBhagaDayList { get; set; }
         public List<MrityuBhagaData> RahuMeanMrityuBhagaDayList { get; set; }
         public List<MrityuBhagaData> RahuTrueMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> KetuMeanMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> KetuTrueMrityuBhagaDayList { get; set; }
 
         public Day(
             Profile sPerson,
@@ -228,7 +230,10 @@ namespace PAD
             List<MrityuBhagaData> jupiterMBDataList,
             List<MrityuBhagaData> saturnMBDataList,
             List<MrityuBhagaData> rahuMeanMBDataList,
-            List<MrityuBhagaData> rahuTrueMBDataList)
+            List<MrityuBhagaData> rahuTrueMBDataList,
+            List<MrityuBhagaData> ketuMeanMBDataList,
+            List<MrityuBhagaData> ketuTrueMBDataList
+            )
         {
             Date = date;
             IsDayOfMonth = flag;
@@ -407,8 +412,8 @@ namespace PAD
             SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(saturnMBDataList, date);
             RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuMeanMBDataList, date);
             RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuTrueMBDataList, date);
-
-
+            KetuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(ketuMeanMBDataList, date);
+            KetuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(ketuTrueMBDataList, date);
         }
 
         // for year's tranzits
@@ -470,7 +475,9 @@ namespace PAD
             List<MrityuBhagaData> jupiterMBDataList,
             List<MrityuBhagaData> saturnMBDataList,
             List<MrityuBhagaData> rahuMeanMBDataList,
-            List<MrityuBhagaData> rahuTrueMBDataList
+            List<MrityuBhagaData> rahuTrueMBDataList,
+            List<MrityuBhagaData> ketuMeanMBDataList,
+            List<MrityuBhagaData> ketuTrueMBDataList
             )
         {
             Date = date;
@@ -631,7 +638,8 @@ namespace PAD
             SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(saturnMBDataList, date);
             RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuMeanMBDataList, date);
             RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(rahuTrueMBDataList, date);
-
+            KetuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(ketuMeanMBDataList, date);
+            KetuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(ketuTrueMBDataList, date);
         }
 
         private List<MrityuBhagaData> PrepareMrityuBhagaDayList(List<MrityuBhagaData> mbList, DateTime date)
