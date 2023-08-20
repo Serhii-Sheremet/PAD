@@ -55,6 +55,7 @@
             this.locationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.yearsTranzitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdatesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,6 @@
             this.datePicker = new CustomControls.DatePicker();
             this.labelProfile = new System.Windows.Forms.Label();
             this.labelTimeZone = new System.Windows.Forms.Label();
-            this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMain.SuspendLayout();
             this.tabControlCalendar.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
@@ -256,6 +256,12 @@
             this.yearsTranzitsToolStripMenuItem.Name = "yearsTranzitsToolStripMenuItem";
             this.yearsTranzitsToolStripMenuItem.Click += new System.EventHandler(this.yearsTranzitsToolStripMenuItem_Click);
             // 
+            // swephCalcToolStripMenuItem
+            // 
+            this.swephCalcToolStripMenuItem.Name = "swephCalcToolStripMenuItem";
+            resources.ApplyResources(this.swephCalcToolStripMenuItem, "swephCalcToolStripMenuItem");
+            this.swephCalcToolStripMenuItem.Click += new System.EventHandler(this.swephCalcToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -316,12 +322,6 @@
             // 
             resources.ApplyResources(this.labelTimeZone, "labelTimeZone");
             this.labelTimeZone.Name = "labelTimeZone";
-            // 
-            // swephCalcToolStripMenuItem
-            // 
-            this.swephCalcToolStripMenuItem.Name = "swephCalcToolStripMenuItem";
-            resources.ApplyResources(this.swephCalcToolStripMenuItem, "swephCalcToolStripMenuItem");
-            this.swephCalcToolStripMenuItem.Click += new System.EventHandler(this.swephCalcToolStripMenuItem_Click);
             // 
             // MainForm
             // 

@@ -604,20 +604,23 @@ namespace PAD
                                 + Utility.GetLocalizedText("Moon Nakshatra", _activeLanguageCode) + " "
                                 + nakshatraName;
 
-            labelProfile.Visible = true;
-            labelProfile.Text = labelText;
-            labelProfile.Font = labelTitleFont;
-            labelProfile.BackColor = Color.Transparent;
-            Size textHSize = TextRenderer.MeasureText(labelProfile.Text, labelTitleFont);
-            labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
+            Invoke(new Action(() =>
+            {
+                labelProfile.Visible = true;
+                labelProfile.Text = labelText;
+                labelProfile.Font = labelTitleFont;
+                labelProfile.BackColor = Color.Transparent;
+                Size textHSize = TextRenderer.MeasureText(labelProfile.Text, labelTitleFont);
+                labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
 
-            labelTimeZone.Visible = true;
-            labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
-            labelTimeZone.Font = labelTZFont;
-            labelTimeZone.BackColor = Color.Transparent;
-            Size textTZSize = TextRenderer.MeasureText(labelTimeZone.Text, labelTZFont);
-            labelTimeZone.Left = toolStripMain.Width - textTZSize.Width - 2;
-            labelTimeZone.Top = toolStripMain.Height / 2 - textTZSize.Height / 2;
+                labelTimeZone.Visible = true;
+                labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+                labelTimeZone.Font = labelTZFont;
+                labelTimeZone.BackColor = Color.Transparent;
+                Size textTZSize = TextRenderer.MeasureText(labelTimeZone.Text, labelTZFont);
+                labelTimeZone.Left = toolStripMain.Width - textTZSize.Width - 2;
+                labelTimeZone.Top = toolStripMain.Height / 2 - textTZSize.Height / 2;
+            }));
         }
 
         private void datePicker_ValueChanged(object sender, CustomControls.CheckDateEventArgs e)
@@ -3198,73 +3201,81 @@ namespace PAD
         private void toolStripButtonRefresh_Click(object sender, EventArgs e)
         {
             if (_selectedProfile == null || _daysList == null)
-                return;
-
-            if (_selectedProfile != null && _daysList != null)
             {
-                EAppSetting currentWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-                CacheLoad._appSettingList = null;
-                CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
-                EAppSetting refreshedWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-
-                if (refreshedWeekSetting != currentWeekSetting) // Recalculation only in case when days of week view has been changed
+                return;
+            }
+            else
+            {
+                using (WaitForm wForm = new WaitForm(RefreshCalendar, _activeLanguageCode))
                 {
-                    _daysOfWeek = null;
-                    _daysOfWeek = PrepareDaysOfWeekArray();
-                    _daysList = null;
-                    _daysOfMonth = null;
-                    _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+                    wForm.ShowDialog(this);
                 }
+            }
+        }
 
-                //Drawing
-                PrepareProfileAndTimeZoneLabels();
-                CalendarDrawing(_daysList);
-                TranzitDrawing(_daysList);
+        private void RefreshCalendar()
+        {
+            EAppSetting currentWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
+            CacheLoad._appSettingList = null;
+            CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
+            EAppSetting refreshedWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
 
-                // refresh dayView if opened and years calendar
-                if (tabControlCalendar.TabPages.Count > 2)
+            if (refreshedWeekSetting != currentWeekSetting) // Recalculation only in case when days of week view has been changed
+            {
+                _daysOfWeek = null;
+                _daysOfWeek = PrepareDaysOfWeekArray();
+                _daysList = null;
+                _daysOfMonth = null;
+            }
+            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+
+            //Drawing
+            PrepareProfileAndTimeZoneLabels();
+            CalendarDrawing(_daysList);
+            TranzitDrawing(_daysList);
+
+            // refresh dayView if opened and years calendar
+            if (tabControlCalendar.TabPages.Count > 2)
+            {
+                string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
+                string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+                string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
+
+                foreach (TabPage tp in tabControlCalendar.TabPages)
                 {
-                    string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
-                    string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
-                    string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
-
-                    foreach (TabPage tp in tabControlCalendar.TabPages)
+                    if (!tp.Text.Equals(calendarText) && !tp.Text.Equals(tranzitText) && !tp.Text.Contains(yearTranzitText))
                     {
-                        if (!tp.Text.Equals(calendarText) && !tp.Text.Equals(tranzitText) && !tp.Text.Contains(yearTranzitText))
+                        // Re-generate events for tabDay refresh
+                        foreach (var control in tp.Controls)
                         {
-                            // Re-generate events for tabDay refresh
-                            foreach (var control in tp.Controls)
+                            if (control is TabDay)
                             {
-                                if (control is TabDay)
-                                {
-                                    DateTime openedDate = DateTime.ParseExact(tp.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                                    Day openedDay = _daysList.Where(i => i.Date == openedDate).FirstOrDefault();
-                                    TabDay td = control as TabDay;
-                                    td.ClearAppointments(true);
-                                    td.DrawSystemAppointments(openedDay, _activeLanguageCode);
-                                    td.Refresh();
-                                }
+                                DateTime openedDate = DateTime.ParseExact(tp.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                                Day openedDay = _daysList.Where(i => i.Date == openedDate).FirstOrDefault();
+                                TabDay td = control as TabDay;
+                                td.ClearAppointments(true);
+                                td.DrawSystemAppointments(openedDay, _activeLanguageCode);
+                                td.Refresh();
                             }
                         }
-                        if (tp.Text.Contains(yearTranzitText))
-                        {
-                            // re-draw years calendar
-                            foreach (var control in tp.Controls)
-                            {
-                                int year = Convert.ToInt32(tp.Text.Substring(tp.Text.Length - 4));
-                                if (control is YearTranzits)
-                                {
-                                    YearTranzits yt = control as YearTranzits;
-                                    List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
-                                    yt.YearTranzitDrawing(daysList);
-                                    yt.Refresh();
-                                }
-                            }
-                        }
-
                     }
-                }
+                    if (tp.Text.Contains(yearTranzitText))
+                    {
+                        // re-draw years calendar
+                        foreach (var control in tp.Controls)
+                        {
+                            int year = Convert.ToInt32(tp.Text.Substring(tp.Text.Length - 4));
+                            if (control is YearTranzits)
+                            {
+                                YearTranzits yt = control as YearTranzits;
+                                List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
+                                yt.YearTranzitDrawing(daysList);
+                                yt.Refresh();
+                            }
+                        }
+                    }
 
+                }
             }
         }
 
