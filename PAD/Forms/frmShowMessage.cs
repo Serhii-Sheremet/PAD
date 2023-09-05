@@ -221,7 +221,7 @@ namespace PAD
         /// object of this class to call this method.
         /// </summary>
         /// <param name="messageText"></param>
-        public static DialogResult Show(string messageText)
+        public static DialogResult Show(string messageText, enumMessageIcon information)
         {
             frmShowMessage frmMessage = new frmShowMessage();
             frmMessage.setMessage(messageText);

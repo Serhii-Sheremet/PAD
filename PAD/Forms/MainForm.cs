@@ -12,6 +12,7 @@ using PdfSharp.Drawing;
 using PopupControl;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Diagnostics.Eventing.Reader;
 
 namespace PAD
 {
@@ -728,8 +729,15 @@ namespace PAD
             datePicker.PickerDayTextAlignment = ContentAlignment.MiddleCenter;
             if (_yearMin != 0 && _yearMax != 0)
             {
-                datePicker.MinDate = new DateTime(_yearMin, 1, 1);
-                datePicker.MaxDate = new DateTime(_yearMax, 12, 31, 23, 59, 59);
+                if (_yearMax < DateTime.Now.Year)
+                {
+                    frmShowMessage.Show(Utility.GetLocalizedText("You need to update calendar data for next year in order to continue. Check for updates.", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.OK);
+                }
+                else
+                {
+                    datePicker.MinDate = new DateTime(_yearMin, 1, 1);
+                    datePicker.MaxDate = new DateTime(_yearMax, 12, 31, 23, 59, 59);
+                }
             }
 
             //Check if any profile is selected by default. If yes - creating calendar

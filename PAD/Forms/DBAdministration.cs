@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -997,6 +998,19 @@ namespace PAD
                     lbLoad.Refresh();
                 }
             }
+            if (!CheckTableContent("MRITYUBHAGA"))
+            {
+                if (LoadMrityuBhagaIntoDB())
+                {
+                    isLoad = true;
+                    string text = "Градусы Мритью Бхага загружены успешно.";
+                    Size tSize = TextRenderer.MeasureText(text, this.Font);
+                    if (lbWidth < tSize.Width)
+                        lbLoad.Width = tSize.Width + 10;
+                    lbLoad.Items.Add(text);
+                    lbLoad.Refresh();
+                }
+            }
             if (!CheckTableContent("MUHURTA30"))
             {
                 if (LoadMuhurta30IntoDB())
@@ -1721,6 +1735,40 @@ namespace PAD
             return isLoaded;
         }
 
+        private bool LoadMrityuBhagaIntoDB()
+        {
+            bool isLoaded = false;
+            MrityuBhaga mb = new MrityuBhaga();
+            List<MrityuBhaga> mbList = new List<MrityuBhaga>();
+            string[] tempFList = File.ReadAllLines(@".\Data\Files\MrityuBhaga.txt", Encoding.GetEncoding(1251));
+            for (int i = 0; i < tempFList.Length; i++)
+            {
+                MrityuBhaga temp = mb.ParseFile(tempFList[i]);
+                mbList.Add(temp);
+            }
+
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 3))})";
+                    string comm = "insert into MRITYUBHAGA (PLANETID, ZODIAKID, DEGREE) values " + String.Join(", ", Enumerable.Repeat(parameters, mbList.Count));
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    for (int i = 0; i < mbList.Count; i++)
+                    {
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].PlanetId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].ZodiakId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbList[i].Degree });
+                    }
+                    command.ExecuteNonQuery();
+                    isLoaded = true;
+                }
+                catch (SQLiteException ex) { AddingExceptionLabel(ex); }
+                dbCon.Close();
+            }
+            return isLoaded;
+        }
         private bool LoadMuhurta30IntoDB()
         {
             bool isLoaded = false;
@@ -2534,9 +2582,12 @@ namespace PAD
             {
                 if (rowsList[i].Length == 2 && !rowsList[i].Equals("EOF"))
                 {
-                    MakeCalendarList(tempList, Convert.ToInt32(listNum));
-                    listNum = rowsList[i];
-                    tempList.Clear();
+                    if (tempList.Count > 0)
+                    {
+                        MakeCalendarList(tempList, Convert.ToInt32(listNum));
+                        listNum = rowsList[i];
+                        tempList.Clear();
+                    }
                 }
                 if (rowsList[i].Length > 2 && !rowsList[i].Equals("EOF"))
                     tempList.Add(rowsList[i]);
@@ -2621,6 +2672,12 @@ namespace PAD
                     EclipseData ed = new EclipseData();
                     List<EclipseData> edList = ed.ParseUpdateFile(tempList);
                     InsertEclipseResultsIntoDB(edList);
+                    break;
+
+                case 15:
+                    MrityuBhagaData mb = new MrityuBhagaData();
+                    List<MrityuBhagaData> mbdList = mb.ParseUpdateFile(tempList);
+                    InsertMrityuBhagaResultsIntoDB(mbdList);
                     break;
 
                 default:
@@ -2775,6 +2832,49 @@ namespace PAD
 
                         command.Parameters.Add(new SQLiteParameter() { Value = edList[i].Date.ToString("yyyy-MM-dd HH:mm:ss") });
                         command.Parameters.Add(new SQLiteParameter() { Value = edList[i].EclipseId });
+                    }
+                    if (command != null)
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+        }
+
+        private void InsertMrityuBhagaResultsIntoDB(List<MrityuBhagaData> mbdList)
+        {
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string parameters = $"({String.Join(", ", Enumerable.Repeat("?", 8))})";
+                    string comm;
+                    SQLiteCommand command = null;
+
+                    for (int i = 0; i < mbdList.Count; i++)
+                    {
+                        if ((i % 100) == 0)
+                        {
+                            if (command != null)
+                            {
+                                command.ExecuteNonQuery();
+                            }
+                            int count = (mbdList.Count - i) > 100 ? 100 : mbdList.Count - i;
+                            comm = $"insert into MRITYUBHAGADATA (PLANETID, ZODIAKID, DEGREE, MRITYUBHAGASETTINGS, LONGITUDEFROM, LONGITUDETO, DATEFROM, DATETO) values " + String.Join(", ", Enumerable.Repeat(parameters, count));
+                            command = new SQLiteCommand(comm, dbCon);
+                        }
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].PlanetId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].ZodiakId });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].Degree });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].MrityuBhagaSetting });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].LongitudeFrom });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].LongitudeTo });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].DateFrom.ToString("yyyy-MM-dd HH:mm:ss") });
+                        command.Parameters.Add(new SQLiteParameter() { Value = mbdList[i].DateTo.ToString("yyyy-MM-dd HH:mm:ss") });
+
                     }
                     if (command != null)
                     {

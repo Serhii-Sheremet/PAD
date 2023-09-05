@@ -16,9 +16,10 @@
         MRITYUBHAGANEQUAL = 12,
         MRITYUBHAGANLESS = 13,
         MRITYUBHAGANMORE = 14,
-        NODEMEAN = 15,
-        NODETRUE = 16,
-        WEEKSUNDAY = 17,
-        WEEKMONDAY = 18
+        MRITYUBHAGAERNST = 15,
+        NODEMEAN = 16,
+        NODETRUE = 17,
+        WEEKSUNDAY = 18,
+        WEEKMONDAY = 19
     }
 }
