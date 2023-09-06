@@ -1616,6 +1616,27 @@ namespace PAD
             return newEList;
         }
 
+        public static List<MrityuBhagaData> CloneMrityuBhagaCalendarList(List<MrityuBhagaData> mbList)
+        {
+            List<MrityuBhagaData> newMBList = new List<MrityuBhagaData>();
+            foreach (MrityuBhagaData mbd in mbList)
+            {
+                MrityuBhagaData mbObj = new MrityuBhagaData
+                { 
+                    PlanetId = mbd.PlanetId,
+                    ZodiakId = mbd.ZodiakId,
+                    Degree = mbd.Degree,
+                    MrityuBhagaSetting = mbd.MrityuBhagaSetting,
+                    LongitudeFrom = mbd.LongitudeFrom,
+                    LongitudeTo = mbd.LongitudeTo,
+                    DateFrom = mbd.DateFrom,
+                    DateTo = mbd.DateTo
+                };
+                newMBList.Add(mbObj);
+            }
+            return newMBList;
+        }
+
         public static List<ShunyaNakshatraCalendar> CloneShunyaNakshatraCalendarList(List<ShunyaNakshatraCalendar> snList)
         {
             List<ShunyaNakshatraCalendar> newEList = new List<ShunyaNakshatraCalendar>();

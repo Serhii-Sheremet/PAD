@@ -12,7 +12,6 @@ using PdfSharp.Drawing;
 using PopupControl;
 using System.IO;
 using System.Drawing.Imaging;
-using System.Diagnostics.Eventing.Reader;
 
 namespace PAD
 {
@@ -43,6 +42,7 @@ namespace PAD
         private readonly List<TithiData> _tithiDataList;
         private readonly List<NityaJogaData> _nityaJogaDataList;
         private readonly List<EclipseData> _eclipseDataList;
+        private readonly List<MrityuBhagaData> _mrityuBhagaDataList;
 
         //Calendars
         private readonly List<NakshatraCalendar> _nakshatraCalendarList;
@@ -207,6 +207,7 @@ namespace PAD
                 _tithiDataList = CacheLoad.GetTithiData();
                 _nityaJogaDataList = CacheLoad.GetNityaJogaData();
                 _eclipseDataList = CacheLoad.GetEclipseData();
+                _mrityuBhagaDataList = CacheLoad.GetMrityuBhagaData();
 
                 //prepare static Calendars
                 _nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(_moonDataList.ToList());
@@ -275,6 +276,9 @@ namespace PAD
                 _ketuTruePadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.KETUTRUE, _ketuTrueDataList.ToList());
 
                 _eclipseCalendarList = CacheLoad.CreateEclipseCalendarList(_eclipseDataList.ToList());
+
+
+
             }
 
             _activeLanguageCode = (ELanguage)(Utility.GetActiveLanguageCode(CacheLoad._appSettingList));
@@ -340,6 +344,7 @@ namespace PAD
             CacheLoad._ghati60List = CacheLoad.GetGhati60List();
             CacheLoad._ghati60DescList = CacheLoad.GetGhati60DescList();
             CacheLoad._horaPlanetList = CacheLoad.MakeHoraPlanetList();
+            CacheLoad._mrityuBhagaList = CacheLoad.GetMrityuBhagaList();
         }
 
         private List<ShunyaTithiCalendar> CreateShunyaTithiCalendarList(List<MasaCalendar> mcList, List<TithiCalendar> tcList)
@@ -809,20 +814,23 @@ namespace PAD
                                 + Utility.GetLocalizedText("Moon Nakshatra", _activeLanguageCode) + " "
                                 + nakshatraName;
 
-            labelProfile.Visible = true;
-            labelProfile.Text = labelText;
-            labelProfile.Font = labelTitleFont;
-            labelProfile.BackColor = Color.Transparent;
-            Size textHSize = TextRenderer.MeasureText(labelProfile.Text, labelTitleFont);
-            labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
+            Invoke(new Action(() =>
+            {
+                labelProfile.Visible = true;
+                labelProfile.Text = labelText;
+                labelProfile.Font = labelTitleFont;
+                labelProfile.BackColor = Color.Transparent;
+                Size textHSize = TextRenderer.MeasureText(labelProfile.Text, labelTitleFont);
+                labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
 
-            labelTimeZone.Visible = true;
-            labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
-            labelTimeZone.Font = labelTZFont;
-            labelTimeZone.BackColor = Color.Transparent;
-            Size textTZSize = TextRenderer.MeasureText(labelTimeZone.Text, labelTZFont);
-            labelTimeZone.Left = toolStripMain.Width - textTZSize.Width - 2;
-            labelTimeZone.Top = toolStripMain.Height / 2 - textTZSize.Height / 2;
+                labelTimeZone.Visible = true;
+                labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+                labelTimeZone.Font = labelTZFont;
+                labelTimeZone.BackColor = Color.Transparent;
+                Size textTZSize = TextRenderer.MeasureText(labelTimeZone.Text, labelTZFont);
+                labelTimeZone.Left = toolStripMain.Width - textTZSize.Width - 2;
+                labelTimeZone.Top = toolStripMain.Height / 2 - textTZSize.Height / 2;
+            }));
         }
 
         private void datePicker_ValueChanged(object sender, CustomControls.CheckDateEventArgs e)
@@ -1231,6 +1239,7 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MoonZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MoonMrityuBhagaDayList, d.Date);
 
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MoonNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MoonPadaDayList);
@@ -1257,6 +1266,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.SunZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.SunMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SunTaraBalaDayList);
@@ -1282,6 +1293,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.VenusZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.VenusMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.VenusTaraBalaDayList);
@@ -1307,6 +1320,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.JupiterZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.JupiterMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.JupiterTaraBalaDayList);
@@ -1332,6 +1347,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MercuryZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MercuryMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MercuryTaraBalaDayList);
@@ -1357,6 +1374,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.MarsZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.MarsMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.MarsTaraBalaDayList);
@@ -1382,6 +1401,8 @@ namespace PAD
                         DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posYHalf, _dayTranzWidth, height, d.SaturnZodiakRetroLagnaDayList);
                         break;
                 }
+                DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.SaturnMrityuBhagaDayList, d.Date);
+
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnNakshatraDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnPadaDayList);
                 DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.SaturnTaraBalaDayList);
@@ -1432,12 +1453,16 @@ namespace PAD
                 if (nodeSettings == EAppSetting.NODEMEAN)
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuMeanNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.RahuMeanMrityuBhagaDayList, d.Date);
+
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuMeanPadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuMeanTaraBalaDayList);
                 }
                 else
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuTrueNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.RahuTrueMrityuBhagaDayList, d.Date);
+
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuTruePadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.RahuTrueTaraBalaDayList);
                 }
@@ -1488,12 +1513,16 @@ namespace PAD
                 if (nodeSettings == EAppSetting.NODEMEAN)
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.KetuMeanMrityuBhagaDayList, d.Date);
+
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanPadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuMeanTaraBalaDayList);
                 }
                 else
                 {
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTrueNakshatraDayList);
+                    DrawingMrityaBhaga(g, posX, posY, _dayTranzWidth, _lineTranzHeight, d.KetuTrueMrityuBhagaDayList, d.Date);
+
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 2 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTruePadaDayList);
                     DrawTranzitColoredLine(g, pen, textFont, textBrush, posX, posY + 3 * _lineTranzHeight, _dayTranzWidth, _lineTranzHeight, d.KetuTrueTaraBalaDayList);
                 }
@@ -2089,6 +2118,35 @@ namespace PAD
             g.DrawRectangle(pen, posX, posY, width, height);
         }
 
+        private void DrawingMrityaBhaga(Graphics g, float posX, float posY, float width, float height, List<MrityuBhagaData> mbList, DateTime date)
+        {
+            if (mbList.Count > 0)
+            {
+                float startPosX = 0, endPosX = 0;
+                SolidBrush brush = new SolidBrush(Utility.GetColorByColorCode(EColor.MRITYUBHAGA));
+                foreach (MrityuBhagaData mb in mbList)
+                {
+                    if (mb.DateFrom <= date)
+                    {
+                        startPosX = 0;
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    if (mb.DateFrom > date)
+                    {
+                        startPosX = Utility.ConvertHoursToPixels(width, mb.DateFrom);
+                        if (mb.DateTo <= date.AddDays(+1))
+                            endPosX = Utility.ConvertHoursToPixels(width, mb.DateTo);
+                        else
+                            endPosX = width;
+                    }
+                    g.FillRectangle(brush, posX + startPosX, posY, endPosX - startPosX, height);
+                }
+            }
+        }
+
         private void DrawTranzitColoredLine(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList)
         {
             float drawWidth = 0, usedWidth = 0;
@@ -2600,6 +2658,10 @@ namespace PAD
                 shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
                 shunyaTithiPeriodCalendar.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
+                List<MrityuBhagaData> mrityuBhagaDataPeriodCalendar = Utility.CloneMrityuBhagaCalendarList(_mrityuBhagaDataList.Where(i => i.DateTo > startDate.AddDays(-2) && i.DateFrom < endDate.AddDays(+2)).ToList());
+                mrityuBhagaDataPeriodCalendar.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                mrityuBhagaDataPeriodCalendar.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
                 Day tempDay;
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
@@ -2666,7 +2728,8 @@ namespace PAD
                                         eclipsePeriodCalendar,
                                         masaPeriodCalendar,
                                         shunyaNakshatraPeriodCalendar,
-                                        shunyaTithiPeriodCalendar);
+                                        shunyaTithiPeriodCalendar,
+                                        mrityuBhagaDataPeriodCalendar);
                     daysList.Add(tempDay);
                     currentDay = currentDay.AddDays(+1);                   
                 }
@@ -3286,73 +3349,81 @@ namespace PAD
         private void toolStripButtonRefresh_Click(object sender, EventArgs e)
         {
             if (_selectedProfile == null || _daysList == null)
-                return;
-
-            if (_selectedProfile != null && _daysList != null)
             {
-                EAppSetting currentWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-                CacheLoad._appSettingList = null;
-                CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
-                EAppSetting refreshedWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
-
-                if (refreshedWeekSetting != currentWeekSetting) // Recalculation only in case when days of week view has been changed
+                return;
+            }
+            else
+            {
+                using (WaitForm wForm = new WaitForm(RefreshCalendar, _activeLanguageCode))
                 {
-                    _daysOfWeek = null;
-                    _daysOfWeek = PrepareDaysOfWeekArray();
-                    _daysList = null;
-                    _daysOfMonth = null;
-                    _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+                    wForm.ShowDialog(this);
                 }
+            }
+        }
 
-                //Drawing
-                PrepareProfileAndTimeZoneLabels();
-                CalendarDrawing(_daysList);
-                TranzitDrawing(_daysList);
+        private void RefreshCalendar()
+        {
+            EAppSetting currentWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
+            CacheLoad._appSettingList = null;
+            CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
+            EAppSetting refreshedWeekSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault().Id;
 
-                // refresh dayView if opened and years calendar
-                if (tabControlCalendar.TabPages.Count > 2)
+            if (refreshedWeekSetting != currentWeekSetting) // Recalculation only in case when days of week view has been changed
+            {
+                _daysOfWeek = null;
+                _daysOfWeek = PrepareDaysOfWeekArray();
+                _daysList = null;
+                _daysOfMonth = null;
+            }
+            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+
+            //Drawing
+            PrepareProfileAndTimeZoneLabels();
+            CalendarDrawing(_daysList);
+            TranzitDrawing(_daysList);
+
+            // refresh dayView if opened and years calendar
+            if (tabControlCalendar.TabPages.Count > 2)
+            {
+                string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
+                string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+                string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
+
+                foreach (TabPage tp in tabControlCalendar.TabPages)
                 {
-                    string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
-                    string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
-                    string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
-
-                    foreach (TabPage tp in tabControlCalendar.TabPages)
+                    if (!tp.Text.Equals(calendarText) && !tp.Text.Equals(tranzitText) && !tp.Text.Contains(yearTranzitText))
                     {
-                        if (!tp.Text.Equals(calendarText) && !tp.Text.Equals(tranzitText) && !tp.Text.Contains(yearTranzitText))
+                        // Re-generate events for tabDay refresh
+                        foreach (var control in tp.Controls)
                         {
-                            // Re-generate events for tabDay refresh
-                            foreach (var control in tp.Controls)
+                            if (control is TabDay)
                             {
-                                if (control is TabDay)
-                                {
-                                    DateTime openedDate = DateTime.ParseExact(tp.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture);
-                                    Day openedDay = _daysList.Where(i => i.Date == openedDate).FirstOrDefault();
-                                    TabDay td = control as TabDay;
-                                    td.ClearAppointments(true);
-                                    td.DrawSystemAppointments(openedDay, _activeLanguageCode);
-                                    td.Refresh();
-                                }
+                                DateTime openedDate = DateTime.ParseExact(tp.Text, "dd.MM.yyyy", CultureInfo.InvariantCulture);
+                                Day openedDay = _daysList.Where(i => i.Date == openedDate).FirstOrDefault();
+                                TabDay td = control as TabDay;
+                                td.ClearAppointments(true);
+                                td.DrawSystemAppointments(openedDay, _activeLanguageCode);
+                                td.Refresh();
                             }
                         }
-                        if (tp.Text.Contains(yearTranzitText))
-                        {
-                            // re-draw years calendar
-                            foreach (var control in tp.Controls)
-                            {
-                                int year = Convert.ToInt32(tp.Text.Substring(tp.Text.Length - 4));
-                                if (control is YearTranzits)
-                                {
-                                    YearTranzits yt = control as YearTranzits;
-                                    List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
-                                    yt.YearTranzitDrawing(daysList);
-                                    yt.Refresh();
-                                }
-                            }
-                        }
-
                     }
-                }
+                    if (tp.Text.Contains(yearTranzitText))
+                    {
+                        // re-draw years calendar
+                        foreach (var control in tp.Controls)
+                        {
+                            int year = Convert.ToInt32(tp.Text.Substring(tp.Text.Length - 4));
+                            if (control is YearTranzits)
+                            {
+                                YearTranzits yt = control as YearTranzits;
+                                List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
+                                yt.YearTranzitDrawing(daysList);
+                                yt.Refresh();
+                            }
+                        }
+                    }
 
+                }
             }
         }
 
@@ -3858,7 +3929,7 @@ namespace PAD
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
-            int lastColWidth = (dgv.Width - 1070);
+            int lastColWidth = (dgv.Width - 1330);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Description";
             column.Name = Utility.GetLocalizedText("Description", langCode);
@@ -3870,6 +3941,13 @@ namespace PAD
             column.DataPropertyName = "Vedha";
             column.Name = Utility.GetLocalizedText("Vedha from", langCode);
             column.Width = 330;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "MrityuBhaga";
+            column.Name = Utility.GetLocalizedText("Mrityu Bhaga", langCode);
+            column.Width = 260;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
 
@@ -4138,6 +4216,7 @@ namespace PAD
             public string Pada { get; set; }
             public string Description { get; set; }
             public string Vedha { get; set; }
+            public string MrityuBhaga { get; set; }
         }
 
         private DataGridView PlanetTranzitDataGridViewFillByRow(DataGridView dgv, Day pDay, List<PlanetCalendar> pzList, List<PlanetCalendar> pzrList, List<PlanetCalendar> pnList, List<PlanetCalendar> ppList, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage langCode)
@@ -4159,6 +4238,7 @@ namespace PAD
                 Tranzit tr = CacheLoad._tranzitList.Where(i => i.PlanetId == planetId && i.Dom == pc.Dom).FirstOrDefault();
                 string trDesc = CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                 string vedha = GetVedhaList(pDay, pc, tr, tranzitSetting, nodeSettings, langCode, false);
+                string mrityuBhaga = GetMrityuBhaga(pDay, pc.PlanetCode, langCode);
                 dgvRowObj rowTemp = new dgvRowObj {
                     Entity = Utility.GetLocalizedText("Zodiac Sign", langCode),
                     DateStart = pc.DateStart,
@@ -4167,7 +4247,8 @@ namespace PAD
                     Nakshatra = string.Empty,
                     Pada = string.Empty,
                     Description = trDesc,
-                    Vedha = vedha
+                    Vedha = vedha,
+                    MrityuBhaga = mrityuBhaga
                 };
                 rowList.Add(rowTemp);
             }
@@ -4184,7 +4265,8 @@ namespace PAD
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
                     Pada = string.Empty,
                     Description = string.Empty,
-                    Vedha = string.Empty
+                    Vedha = string.Empty,
+                    MrityuBhaga = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
@@ -4229,7 +4311,8 @@ namespace PAD
                     Nakshatra = (int)pc.NakshatraCode + "." + nakshatra,
                     Pada = pada.PadaNumber.ToString(),
                     Description = Utility.GetLocalizedText("Navamsa", langCode) + ": " + pada.Navamsha + pc.GetNavamshaExaltation() + " " + specNavamsha + badNavamsha + drekkana,
-                    Vedha = string.Empty
+                    Vedha = string.Empty,
+                    MrityuBhaga = string.Empty
                 };
                 rowList.Add(rowTemp);
             }
@@ -4259,11 +4342,87 @@ namespace PAD
                         rowList[i].Nakshatra,
                         rowList[i].Pada,
                         rowList[i].Description,
-                        rowList[i].Vedha
+                        rowList[i].Vedha,
+                        rowList[i].MrityuBhaga
                     };
                 dgv.Rows.Add(row);
             }
             return dgv;
+        }
+
+        private string GetMrityuBhaga(Day pDay, EPlanet planetCode, ELanguage lCode)
+        {
+            string mb = string.Empty;
+            MrityuBhagaData mbData;
+            switch (planetCode)
+            {
+                case EPlanet.MOON:
+                    mbData = pDay.MoonMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.SUN:
+                    mbData = pDay.SunMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.VENUS:
+                    mbData = pDay.VenusMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.JUPITER:
+                    mbData = pDay.JupiterMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.MERCURY:
+                    mbData = pDay.MercuryMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.MARS:
+                    mbData = pDay.MarsMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.SATURN:
+                    mbData = pDay.SaturnMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.RAHUMEAN:
+                    mbData = pDay.RahuMeanMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.KETUMEAN:
+                    mbData = pDay.KetuMeanMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.RAHUTRUE:
+                    mbData = pDay.RahuTrueMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+
+                case EPlanet.KETUTRUE:
+                    mbData = pDay.KetuTrueMrityuBhagaDayList.FirstOrDefault();
+                    if (mbData != null)
+                        mb = mbData.DateFrom.ToString("dd.MM.yyyy HH:mm:ss") + " - " + mbData.DateTo.ToString("dd.MM.yyyy HH:mm:ss");
+                    break;
+            }
+            return mb;
         }
 
         private string GetVedhaList(Day pDay, PlanetCalendar pc, Tranzit tr, EAppSetting tranzitSetting, EAppSetting nodeSettings, ELanguage lCode, bool isLagna)
@@ -5292,7 +5451,8 @@ namespace PAD
                                 _ketuTruePadaCalendarList.ToList(),
                                 _masaCalendarList.ToList(),
                                 _shunyaNakshatraCalendarList.ToList(),
-                                _shunyaTithiCalendarList.ToList()
+                                _shunyaTithiCalendarList.ToList(),
+                                _mrityuBhagaDataList.ToList()
                             );
                         tabForm.MFormAccess = this;
                         tabForm.TopLevel = false;

@@ -55,6 +55,7 @@ namespace PAD
         public static List<Ghati60> _ghati60List;
         public static List<Ghati60Description> _ghati60DescList;
         public static List<HoraPlanet> _horaPlanetList;
+        public static List<MrityuBhaga> _mrityuBhagaList;
 
         public static List<DVLineNames> GetDVLineNamesList()
         {
@@ -1837,6 +1838,50 @@ namespace PAD
             return odList;
         }
 
+        public static List<MrityuBhagaData> GetMrityuBhagaData()
+        {
+            double longitudeFrom, longitudeTo;
+            List<MrityuBhagaData> mbList = new List<MrityuBhagaData>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select PLANETID, ZODIAKID, DEGREE, MRITYUBHAGASETTINGS, LONGITUDEFROM, LONGITUDETO, DATEFROM, DATETO from MRITYUBHAGADATA";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                if (double.TryParse(reader.StringValue(4), NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeFrom) &&
+                                    double.TryParse(reader.StringValue(5), NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeTo))
+                                {
+                                    MrityuBhagaData temp = new MrityuBhagaData
+                                    {
+                                        PlanetId = reader.IntValue(0),
+                                        ZodiakId = reader.IntValue(1),
+                                        Degree = reader.IntValue(2),
+                                        MrityuBhagaSetting = (EAppSetting)reader.IntValue(3),
+                                        LongitudeFrom = longitudeFrom,
+                                        LongitudeTo = longitudeTo,
+                                        DateFrom = DateTime.ParseExact(reader.StringValue(6), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                        DateTo = DateTime.ParseExact(reader.StringValue(7), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture)
+                                    };
+                                    mbList.Add(temp);
+                                }
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return mbList;
+        }
+
         public static List<NakshatraCalendar> CreateNakshatraCalendarList(List<PlanetData> moonList)
         {
             List<PlanetData> nOnlyList = new List<PlanetData>(); 
@@ -2229,7 +2274,12 @@ namespace PAD
             }
             return ecList;
         }
-        
+
+        public static List<MrityuBhagaData> CreateMrityuBhagaCalendarList(List<MrityuBhagaData> mbList, EAppSetting appSet, EPlanet planet)
+        {
+            return mbList.Where(i => i.PlanetId == (int)planet && i.MrityuBhagaSetting == appSet).ToList();
+        }
+                
         public static List<HoraPlanet> MakeHoraPlanetList()
         {
             List<HoraPlanet> hpList = new List<HoraPlanet>();
@@ -2242,7 +2292,42 @@ namespace PAD
             hpList.Add(new HoraPlanet { Id = 7, PlanetCode = EHoraPlanet.MARS, ColorCode = EColor.MARS });
             return hpList;
         }
-        
+
+        public static List<MrityuBhaga> GetMrityuBhagaList()
+        {
+            List<MrityuBhaga> entityList = new List<MrityuBhaga>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = $"select ID, PLANETID, ZODIAKID, DEGREE from MRITYUBHAGA order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                MrityuBhaga temp = new MrityuBhaga
+                                {
+                                    Id = reader.IntValue(0),
+                                    PlanetId = reader.IntValue(1),
+                                    ZodiakId = reader.IntValue(2),
+                                    Degree = reader.IntValue(3)
+                                };
+                                entityList.Add(temp);
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
+
 
     }
 }

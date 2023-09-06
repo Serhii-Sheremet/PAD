@@ -151,6 +151,18 @@ namespace PAD
         public List<Calendar> Ghati60EqualDayList { get; set; }
         public List<Calendar> Ghati60From6DayList { get; set; }
 
+        public List<MrityuBhagaData> MoonMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> SunMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> MercuryMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> VenusMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> MarsMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> JupiterMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> SaturnMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> RahuMeanMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> RahuTrueMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> KetuMeanMrityuBhagaDayList { get; set; }
+        public List<MrityuBhagaData> KetuTrueMrityuBhagaDayList { get; set; }
+
         public Day(
             Profile sPerson,
             DateTime date,
@@ -209,7 +221,8 @@ namespace PAD
             List<EclipseCalendar> eList,
             List<MasaCalendar> mList,
             List<ShunyaNakshatraCalendar> snList,
-            List<ShunyaTithiCalendar> stList)
+            List<ShunyaTithiCalendar> stList,
+            List<MrityuBhagaData> mbDataList)
         {
             Date = date;
             IsDayOfMonth = flag;
@@ -378,7 +391,23 @@ namespace PAD
             MasaDayList = PrepareMasaDayList(mList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(snList, date);
             ShunyaTithiDayList = PrepareShunyaTithiDayList(stList, date);
+
+            EAppSetting mbSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            MoonMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MOON, mbSetting, date);
+            SunMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.SUN, mbSetting, date);
+            MercuryMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MERCURY, mbSetting, date);
+            VenusMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.VENUS, mbSetting, date);
+            MarsMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MARS, mbSetting, date);
+            JupiterMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.JUPITER, mbSetting, date);
+            SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.SATURN, mbSetting, date);
+            RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.RAHUMEAN, mbSetting, date);
+            RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.RAHUTRUE, mbSetting, date);
+            KetuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.KETUMEAN, mbSetting, date);
+            KetuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.KETUTRUE, mbSetting, date);
         }
+
+
 
         // for year's tranzits
         public Day(
@@ -430,8 +459,8 @@ namespace PAD
             List<PlanetCalendar> ketuTruePadaList,
             List<MasaCalendar> masaList,
             List<ShunyaNakshatraCalendar> shuNakList,
-            List<ShunyaTithiCalendar> shuTiList
-            )
+            List<ShunyaTithiCalendar> shuTiList,
+            List<MrityuBhagaData> mbDataList)
         {
             Date = date;
 
@@ -581,8 +610,26 @@ namespace PAD
             MasaDayList = PrepareMasaDayList(masaList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(shuNakList, date);
             ShunyaTithiDayList = PrepareShunyaTithiDayList(shuTiList, date);
+
+            EAppSetting mbSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            MoonMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MOON, mbSetting, date);
+            SunMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.SUN, mbSetting, date);
+            MercuryMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MERCURY, mbSetting, date);
+            VenusMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.VENUS, mbSetting, date);
+            MarsMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.MARS, mbSetting, date);
+            JupiterMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.JUPITER, mbSetting, date);
+            SaturnMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.SATURN, mbSetting, date);
+            RahuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.RAHUMEAN, mbSetting, date);
+            RahuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.RAHUTRUE, mbSetting, date);
+            KetuMeanMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.KETUMEAN, mbSetting, date);
+            KetuTrueMrityuBhagaDayList = PrepareMrityuBhagaDayList(mbDataList, EPlanet.KETUTRUE, mbSetting, date);
         }
 
+        private List<MrityuBhagaData> PrepareMrityuBhagaDayList(List<MrityuBhagaData> mbList, EPlanet planet, EAppSetting appSet, DateTime date)
+        {
+            return mbList.Where(i => i.PlanetId == (int)planet && i.MrityuBhagaSetting == appSet && i.DateTo >= date && i.DateFrom <= date.AddDays(+1)).ToList();
+        }
 
         private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, Profile sPerson, DateTime date, bool isLagna)
         {

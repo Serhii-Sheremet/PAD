@@ -374,3 +374,5 @@ is available. Do you want to load it now?|is available. Do you want to load it n
 is available. Do you want to load it now?|год. Загрузить данные сейчас?|ru
 Data loaded successfully. In order to use new data application has to be restarted. Do you want to restart application now?|Data loaded successfully. In order to use new data application has to be restarted. Do you want to restart application now?|en
 Data loaded successfully. In order to use new data application has to be restarted. Do you want to restart application now?|Данные успешно загружены. Для использования новых данных необходимо перезапустить программу. Перезапустить сейчас?|ru
+You need to update calendar data for next year in order to continue. Check for updates.|You need to update calendar data for next year in order to continue. Check for updates.|en
+You need to update calendar data for next year in order to continue. Check for updates.|Чтобы продолжить, вам необходимо обновить данные календаря на следующий год. Проверьте наличие обновлений.|ru
