@@ -185,9 +185,11 @@ Mrityu Bhaga|Ìğèòüş Áõàãà|ru
 From (N° - 30') till (N° + 30')|From (N° - 30') till (N° + 30')|en
 From (N° - 30') till (N° + 30')|Ñ (N° - 30') äî (N° + 30')|ru
 From (N - 1)° till N°|From (N - 1)° till N°|en
-From (N - 1)° till N°|Ñ (N - 1)° ïî N°|ru
+From (N - 1)° till N°|Ñ (N - 1)° äî N°|ru
 From N° till (N + 1)°|From N° till (N + 1)°|en
-From N° till (N + 1)°|Ñ N° ïî (N + 1)°|ru
+From N° till (N + 1)°|Ñ N° äî (N + 1)°|ru
+From (N - 1)° till (N + 1)°|From (N - 1)° till (N + 1)°|en
+From (N - 1)° till (N + 1)°|Ñ (N - 1)° äî (N + 1)°|ru
 Where "N" is a Mrityu Bhaga|Where "N" is a Mrityu Bhaga|en
 Where "N" is a Mrityu Bhaga|Ãäå "N" - Ìğèòüş Áõàãà|ru
 Nodes (Rahu and Ketu)|Nodes (Rahu and Ketu)|en
@@ -266,6 +268,10 @@ Rahu|Rahu|en
 Rahu|Ğàõó|ru
 Ketu|Ketu|en
 Ketu|Êåòó|ru
+Mrityu Bhaga|Mrityu Bhaga|en
+Mrityu Bhaga|Ìğèòüş Áõàãà|ru
+in Mrityu Bhaga|in Mrityu Bhaga|en
+in Mrityu Bhaga|â Ìğèòüş Áõàãà|ru
 not formed|not formed|en
 not formed|íå îáğàçóåòñÿ|ru
 Start|Start|en

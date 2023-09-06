@@ -173,6 +173,9 @@ namespace PAD
                 case EAppSetting.MRITYUBHAGANMORE:
                     checkBoxMrityuMore.Checked = true;
                     break;
+                case EAppSetting.MRITYUBHAGAERNST:
+                    checkBoxMrityuErnst.Checked = true;
+                    break;
             }
             switch (activeNode)
             {
@@ -206,6 +209,7 @@ namespace PAD
                 UpdateAppSetting(EAppSettingList.MRITYUBHAGA, EAppSetting.MRITYUBHAGANEQUAL);
                 UpdateAppSetting(EAppSettingList.NODE, EAppSetting.NODEMEAN);
                 UpdateAppSetting(EAppSettingList.WEEK, EAppSetting.WEEKSUNDAY);
+                CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
 
                 DialogResult dialogRestartResultLang = frmShowMessage.Show(Utility.GetLocalizedText("In order to apply changes application has to be restarted. Do you want to restart application now?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
                 if (dialogRestartResultLang == DialogResult.Yes)
@@ -219,6 +223,7 @@ namespace PAD
         private void buttonApply_Click(object sender, EventArgs e)
         {
             ApplyingChanges();
+            CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
             if (_newSelectedLanguage != _activeLanguageSetting)
             {
                 ApllyNewLanguage();
@@ -341,6 +346,8 @@ namespace PAD
                 return EAppSetting.MRITYUBHAGANLESS;
             if (checkBoxMrityuMore.Checked)
                 return EAppSetting.MRITYUBHAGANMORE;
+            if (checkBoxMrityuErnst.Checked)
+                return EAppSetting.MRITYUBHAGAERNST;
 
             return EAppSetting.MRITYUBHAGANEQUAL;
         }
@@ -559,11 +566,12 @@ namespace PAD
 
         private void CheckMrityuBhagaCheckboxDefault()
         {
-            if (!checkBoxMrityuEqual.Checked && !checkBoxMrityuLess.Checked && !checkBoxMrityuMore.Checked)
+            if (!checkBoxMrityuEqual.Checked && !checkBoxMrityuLess.Checked && !checkBoxMrityuMore.Checked && !checkBoxMrityuErnst.Checked)
             {
                 checkBoxMrityuEqual.Checked = true;
                 checkBoxMrityuLess.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
         }
 
@@ -573,6 +581,7 @@ namespace PAD
             {
                 checkBoxMrityuLess.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
@@ -591,6 +600,7 @@ namespace PAD
             {
                 checkBoxMrityuEqual.Checked = false;
                 checkBoxMrityuMore.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
@@ -609,12 +619,32 @@ namespace PAD
             {
                 checkBoxMrityuEqual.Checked = false;
                 checkBoxMrityuLess.Checked = false;
+                checkBoxMrityuErnst.Checked = false;
             }
             CheckMrityuBhagaCheckboxDefault();
 
             if (checkBoxMrityuMore.Checked)
             {
                 if (Utility.GetActiveMrityuBhagaMode(_appSetList) != EAppSetting.MRITYUBHAGANMORE)
+                {
+                    _mbChanged = true;
+                }
+            }
+        }
+
+        private void checkBoxMrityuErnst_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxMrityuErnst.Checked)
+            {
+                checkBoxMrityuEqual.Checked = false;
+                checkBoxMrityuLess.Checked = false;
+                checkBoxMrityuMore.Checked = false;
+            }
+            CheckMrityuBhagaCheckboxDefault();
+
+            if (checkBoxMrityuErnst.Checked)
+            {
+                if (Utility.GetActiveMrityuBhagaMode(_appSetList) != EAppSetting.MRITYUBHAGAERNST)
                 {
                     _mbChanged = true;
                 }
@@ -785,6 +815,5 @@ namespace PAD
             }
         }
 
-        
     }
 }
