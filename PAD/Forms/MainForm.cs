@@ -5468,28 +5468,52 @@ namespace PAD
 
         private void checkForUpdatesToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            bool updateExist = false;
             string year = string.Empty;
             string[] filesList = CheckForCalendarsUpdate();
             if (filesList != null)
             {
+                int[] yearsList = new int[filesList.Length];
                 for (int i = 0; i < filesList.Length; i++)
-                    year += filesList[i].Substring(filesList[i].Length - 7, 4) + " ";
-
-                DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Calendars update for year", _activeLanguageCode) + " " + year + " " + Utility.GetLocalizedText("is available. Do you want to load it now?", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.YesNo);
-                if (dialogResult == DialogResult.Yes)
                 {
-                    using (WaitForm wForm = new WaitForm(SaveCalendarData, _activeLanguageCode))
+                    yearsList[i] = Convert.ToInt32(filesList[i].Substring(filesList[i].Length - 7, 4));
+                }
+
+                for (int i = 0; i < yearsList.Length; i++)
+                {
+                    if (Utility.CheckIfYearExist(_moonDataList, yearsList[i]))
                     {
-                        wForm.ShowDialog(this);
+                        updateExist = true;
                     }
-                    SetMinMaxYears();
-                    DeleteUpdates(filesList);
-                    DialogResult dialogResultConfirm = frmShowMessage.Show(Utility.GetLocalizedText("Data loaded successfully. In order to use new data application has to be restarted. Do you want to restart application now?", _activeLanguageCode), Utility.GetLocalizedText("Confirmation", _activeLanguageCode), enumMessageIcon.Question, enumMessageButton.YesNo);
-                    if (dialogResultConfirm == DialogResult.Yes)
+                    else
                     {
-                        Application.Restart();
-                        Environment.Exit(0);
+                        updateExist = false;
+                        year += filesList[i].Substring(filesList[i].Length - 7, 4) + " ";
                     }
+                }
+
+                if (!updateExist)
+                {
+                    DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Calendars update for year", _activeLanguageCode) + " " + year + " " + Utility.GetLocalizedText("is available. Do you want to load it now?", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.YesNo);
+                    if (dialogResult == DialogResult.Yes)
+                    {
+                        using (WaitForm wForm = new WaitForm(SaveCalendarData, _activeLanguageCode))
+                        {
+                            wForm.ShowDialog(this);
+                        }
+                        SetMinMaxYears();
+                        DeleteUpdates(filesList);
+                        DialogResult dialogResultConfirm = frmShowMessage.Show(Utility.GetLocalizedText("Data loaded successfully. In order to use new data application has to be restarted. Do you want to restart application now?", _activeLanguageCode), Utility.GetLocalizedText("Confirmation", _activeLanguageCode), enumMessageIcon.Question, enumMessageButton.YesNo);
+                        if (dialogResultConfirm == DialogResult.Yes)
+                        {
+                            Application.Restart();
+                            Environment.Exit(0);
+                        }
+                    }
+                }
+                else
+                {
+                    frmShowMessage.Show(Utility.GetLocalizedText("No updates found.", _activeLanguageCode), Utility.GetLocalizedText("Information", _activeLanguageCode), enumMessageIcon.Information, enumMessageButton.OK);
                 }
             }
             else

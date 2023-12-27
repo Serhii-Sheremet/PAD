@@ -2294,6 +2294,21 @@ namespace PAD
             return pList.Where(i => i.DateStart > currentDate && i.DateEnd < currentDate.AddDays(+1)).ToList();
         }
 
+        public static bool CheckIfYearExist(List<PlanetData> pDataList, int year)
+        { 
+            bool isExist = false;
+            foreach (PlanetData pd in pDataList)
+            { 
+                if(pd.Date.Year == year) 
+                {
+                    isExist = true;
+                    break;
+                }
+            }
+            return isExist;
+        }
+
+
         /*
         // Google requires money for using this method ....
         public static string GetTimeZoneIdByGeoCoordinates(double latitude, double longitude, DateTime utcDate)
