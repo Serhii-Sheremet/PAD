@@ -1896,8 +1896,8 @@ namespace PAD
                     {
                         while (reader.Read())
                         {
-                            if (double.TryParse(reader.StringValue(0), NumberStyles.Any, CultureInfo.InvariantCulture, out lati) &&
-                                double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out longi))
+                            if (double.TryParse(reader.StringValue(0), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out lati) &&
+                                double.TryParse(reader.StringValue(1), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longi))
                             {
                                 latitude = lati;
                                 longitude = longi;

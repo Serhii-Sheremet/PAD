@@ -1699,10 +1699,10 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                if (double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out longitude) &&
-                                    double.TryParse(reader.StringValue(2), NumberStyles.Any, CultureInfo.InvariantCulture, out latitude) &&
-                                    double.TryParse(reader.StringValue(3), NumberStyles.Any, CultureInfo.InvariantCulture, out speedinlongitude) &&
-                                    double.TryParse(reader.StringValue(4), NumberStyles.Any, CultureInfo.InvariantCulture, out speedinlatitude))
+                                if (double.TryParse(reader.StringValue(1), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude) &&
+                                    double.TryParse(reader.StringValue(2), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                                    double.TryParse(reader.StringValue(3), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out speedinlongitude) &&
+                                    double.TryParse(reader.StringValue(4), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out speedinlatitude))
                                 {
                                     PlanetData temp = new PlanetData
                                     {
@@ -1746,7 +1746,7 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                if (double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out msdifference))
+                                if (double.TryParse(reader.StringValue(1), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out msdifference))
                                 {
                                     TithiData temp = new TithiData
                                     {
@@ -1784,7 +1784,7 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                if (double.TryParse(reader.StringValue(1), NumberStyles.Any, CultureInfo.InvariantCulture, out longitude))
+                                if (double.TryParse(reader.StringValue(1), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
                                 {
                                     NityaJogaData temp = new NityaJogaData
                                     {
@@ -1855,8 +1855,8 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                if (double.TryParse(reader.StringValue(4), NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeFrom) &&
-                                    double.TryParse(reader.StringValue(5), NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeTo))
+                                if (double.TryParse(reader.StringValue(4), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitudeFrom) &&
+                                    double.TryParse(reader.StringValue(5), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitudeTo))
                                 {
                                     MrityuBhagaData temp = new MrityuBhagaData
                                     {

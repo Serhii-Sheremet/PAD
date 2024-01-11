@@ -19,7 +19,7 @@ namespace PAD
                 string temp = Utility.Decrypt(str, true);
                 var arg = temp.Split(new char[] { '|' });
                 DateTime date = DateTime.ParseExact(arg[0], "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.CurrentInfo);
-                if (double.TryParse(arg[1], NumberStyles.Any, CultureInfo.InvariantCulture, out msdifferenece))
+                if (double.TryParse(arg[1], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out msdifferenece))
                 {
                     parsedList.Add(new TithiData
                     {

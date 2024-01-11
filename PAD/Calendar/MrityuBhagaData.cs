@@ -27,8 +27,8 @@ namespace PAD
                 DateTime dateFrom = DateTime.ParseExact(arg[6], "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.CurrentInfo);
                 DateTime dateTo = DateTime.ParseExact(arg[7], "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.CurrentInfo);
                 Enum.TryParse(arg[3], out mbSettings);
-                if (double.TryParse(arg[4], NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeFrom) &&
-                    double.TryParse(arg[5], NumberStyles.Any, CultureInfo.InvariantCulture, out longitudeTo))
+                if (double.TryParse(arg[4], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitudeFrom) &&
+                    double.TryParse(arg[5], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitudeTo))
                 {
                     parsedList.Add(new MrityuBhagaData
                     {
