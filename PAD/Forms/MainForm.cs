@@ -2467,8 +2467,8 @@ namespace PAD
                 ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<EclipseCalendar> eclipseCalendarList = CacheLoad.CreateEclipseCalendarList(eclipseDataList);
-                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
 
                 //Shifting MrityaBhaga by TimeZone
                 moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });

@@ -25,10 +25,10 @@ namespace PAD
                 string temp = Utility.Decrypt(str, true);
                 var arg = temp.Split(new char[] { '|' });
                 DateTime date = DateTime.ParseExact(arg[0], "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.CurrentInfo);
-                if (double.TryParse(arg[1], NumberStyles.Any, CultureInfo.InvariantCulture, out longitude) &&
-                    double.TryParse(arg[2], NumberStyles.Any, CultureInfo.InvariantCulture, out latitude) &&
-                    double.TryParse(arg[3], NumberStyles.Any, CultureInfo.InvariantCulture, out speedinlongitude) &&
-                    double.TryParse(arg[4], NumberStyles.Any, CultureInfo.InvariantCulture, out speedinlatitude))
+                if (double.TryParse(arg[1], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude) &&
+                    double.TryParse(arg[2], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                    double.TryParse(arg[3], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out speedinlongitude) &&
+                    double.TryParse(arg[4], NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out speedinlatitude))
                 {
                     parsedList.Add(new PlanetData{
                         Date = date,
