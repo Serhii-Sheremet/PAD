@@ -12,6 +12,9 @@ using PdfSharp.Drawing;
 using PopupControl;
 using System.IO;
 using System.Drawing.Imaging;
+using TimeZoneConverter;
+using Innovative.SolarCalculator;
+using NodaTime;
 
 namespace PAD
 {
@@ -551,7 +554,7 @@ namespace PAD
         private string GetTimeZoneInfo(int pLivingId)
         {
             string tInfo = string.Empty;
-            string timeZone = string.Empty;
+            string timeZone = string.Empty, ianaTZ = string.Empty;
             double latitude, longitude;
             DateTime startDate, endDate;
             TimeZoneInfo.TransitionTime daylightStart = new TimeZoneInfo.TransitionTime(), daylightEnd = new TimeZoneInfo.TransitionTime();
@@ -559,7 +562,8 @@ namespace PAD
 
             if (Utility.GetGeoCoordinateByLocationId(pLivingId, out latitude, out longitude))
             {
-                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                ianaTZ = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                timeZone = TZConvert.IanaToWindows(ianaTZ);
                 TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
                 TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
 
@@ -2228,8 +2232,9 @@ namespace PAD
             if (Utility.GetGeoCoordinateByLocationId(sPerson.PlaceOfLivingId, out latitude, out longitude))
             {
                 timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
-                TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
-                TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
+
+                //TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
+                //TimeZoneInfo.AdjustmentRule[] adjustmentRules = currentTimeZone.GetAdjustmentRules();
 
                 EpheCalculation eCalc = new EpheCalculation();
                 DateTime startPeriodDate, endPeriodDate;
@@ -2264,245 +2269,856 @@ namespace PAD
                 List<MrityuBhagaData> ketuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUMEAN, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> ketuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.KETUTRUE, startPeriodDate, endPeriodDate);
 
+
+                //LocalDateTime localDateTime = date.ToLocalDateTime();
+                //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
+                //solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
+
                 //prepare Calendars
                 List<NakshatraCalendar> nakshatraCalendarList = CacheLoad.CreateNakshatraCalendarList(moonDataList);
-                nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (NakshatraCalendar item in nakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+                //nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //nakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<TithiCalendar> tithiCalendarList = CacheLoad.CreateTithiCalendarList(tithiDataList);
-                tithiCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                tithiCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (TithiCalendar item in tithiCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //tithiCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //tithiCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
                 List<KaranaCalendar> karanaCalendarList = CacheLoad.CreateKaranaCalendarList(tithiCalendarList);
 
                 List<ChandraBalaCalendar> chandraBalaCalendarList = CacheLoad.CreateChandraBalaCalendarList(moonDataList);
-                chandraBalaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                chandraBalaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (ChandraBalaCalendar item in chandraBalaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //chandraBalaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //chandraBalaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<NityaYogaCalendar> nityaYogaCalendarList = CacheLoad.CreateNityaYogaCalendarList(nityaYogaDataList);
-                nityaYogaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                nityaYogaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (NityaYogaCalendar item in nityaYogaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //nityaYogaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //nityaYogaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MOON, moonDataList);
                 List<MasaCalendar> masaCalendarList = CreateMasaCalendarList(moonZodiakCalendarList, tithiDataList);
-                masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MasaCalendar item in masaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //masaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<ShunyaNakshatraCalendar> shunyaNakshatraCalendarList = CreateShunyaNakshatraCalendarList(masaCalendarList, nakshatraCalendarList);
                 List<ShunyaTithiCalendar> shunyaTithiCalendarList = CreateShunyaTithiCalendarList(masaCalendarList, tithiCalendarList);
 
-                moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in moonZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MOON, moonDataList);
-                moonZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in moonZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //moonZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> moonNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.MOON, moonDataList);
-                moonNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in moonNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //moonNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
                 _moonNakshatraCalendar = Utility.ClonePlanetCalendarList(moonNakshatraCalendarList.ToList());
 
                 List<PlanetCalendar> moonPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.MOON, moonDataList);
-                moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in moonPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.SUN, sunDataList);
-                sunZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in sunZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //sunZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.SUN, sunDataList);
-                sunZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in sunZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //sunZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.SUN, sunDataList);
-                sunNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in sunNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //sunNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> sunPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.SUN, sunDataList);
-                sunPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in sunPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //sunPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MERCURY, mercuryDataList);
-                mercuryZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in mercuryZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //mercuryZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MERCURY, mercuryDataList);
-                mercuryZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in mercuryZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //mercuryZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.MERCURY, mercuryDataList);
-                mercuryNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in mercuryNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //mercuryNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> mercuryPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.MERCURY, mercuryDataList);
-                mercuryPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in mercuryPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //mercuryPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.VENUS, venusDataList);
-                venusZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in venusZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //venusZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.VENUS, venusDataList);
-                venusZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in venusZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //venusZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.VENUS, venusDataList);
-                venusNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in venusNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //venusNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> venusPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.VENUS, venusDataList);
-                venusPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in venusPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //venusPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.MARS, marsDataList);
-                marsZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in marsZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //marsZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.MARS, marsDataList);
-                marsZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in marsZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //marsZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.MARS, marsDataList);
-                marsNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in marsNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //marsNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> marsPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.MARS, marsDataList);
-                marsPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in marsPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //marsPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.JUPITER, jupiterDataList);
-                jupiterZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in jupiterZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //jupiterZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.JUPITER, jupiterDataList);
-                jupiterZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in jupiterZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //jupiterZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.JUPITER, jupiterDataList);
-                jupiterNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in jupiterNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //jupiterNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> jupiterPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.JUPITER, jupiterDataList);
-                jupiterPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in jupiterPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //jupiterPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.SATURN, saturnDataList);
-                saturnZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in saturnZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //saturnZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.SATURN, saturnDataList);
-                saturnZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in saturnZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //saturnZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.SATURN, saturnDataList);
-                saturnNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in saturnNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //saturnNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> saturnPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.SATURN, saturnDataList);
-                saturnPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in saturnPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //saturnPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.RAHUMEAN, rahuMeanDataList);
-                rahuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuMeanZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.RAHUMEAN, rahuMeanDataList);
-                rahuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuMeanZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.RAHUMEAN, rahuMeanDataList);
-                rahuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuMeanNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuMeanPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.RAHUMEAN, rahuMeanDataList);
-                rahuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuMeanPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.KETUMEAN, ketuMeanDataList);
-                ketuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuMeanZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.KETUMEAN, ketuMeanDataList);
-                ketuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuMeanZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.KETUMEAN, ketuMeanDataList);
-                ketuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuMeanNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuMeanPadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.KETUMEAN, ketuMeanDataList);
-                ketuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuMeanPadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanPadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.RAHUTRUE, rahuTrueDataList);
-                rahuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuTrueZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.RAHUTRUE, rahuTrueDataList);
-                rahuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuTrueZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTrueNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.RAHUTRUE, rahuTrueDataList);
-                rahuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuTrueNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> rahuTruePadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.RAHUTRUE, rahuTrueDataList);
-                rahuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in rahuTruePadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueZodiakCalendarList = CacheLoad.CreatePlanetZodiakCalendarList(EPlanet.KETUTRUE, ketuTrueDataList);
-                ketuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuTrueZodiakCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueZodiakCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueZodiakRetroCalendarList = CacheLoad.CreatePlanetZodiakRetroCalendarList(EPlanet.KETUTRUE, ketuTrueDataList);
-                ketuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuTrueZodiakRetroCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueZodiakRetroCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTrueNakshatraCalendarList = CacheLoad.CreatePlanetNakshatraCalendarList(EPlanet.KETUTRUE, ketuTrueDataList);
-                ketuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuTrueNakshatraCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueNakshatraCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<PlanetCalendar> ketuTruePadaCalendarList = CacheLoad.CreatePlanetPadaCalendarList(EPlanet.KETUTRUE, ketuTrueDataList);
-                ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (PlanetCalendar item in ketuTruePadaCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateEnd.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateEnd = item.DateEnd.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateEnd = i.DateEnd.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTruePadaCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); i.DateEnd = i.DateEnd.ShiftByDaylightDelta(adjustmentRules); });
 
                 List<EclipseCalendar> eclipseCalendarList = CacheLoad.CreateEclipseCalendarList(eclipseDataList);
-                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (EclipseCalendar item in eclipseCalendarList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateStart.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateStart = item.DateStart.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //eclipseCalendarList.ForEach(i => { i.DateStart = i.DateStart.ShiftByDaylightDelta(adjustmentRules); });
 
                 //Shifting MrityaBhaga by TimeZone
-                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MrityuBhagaData item in moonMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
 
-                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                //moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //moonMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
-                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MrityuBhagaData item in sunMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
 
-                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                //sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //sunMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
-                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MrityuBhagaData item in mercuryMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
 
-                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                //mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //mercuryMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
-                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
-                
-                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MrityuBhagaData item in venusMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
 
-                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                //venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //venusMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
-                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                foreach (MrityuBhagaData item in marsMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
 
-                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
-                ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+                //marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //marsMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in jupiterMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //jupiterMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in saturnMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //saturnMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in rahuMeanMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in rahuTrueMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //rahuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in ketuMeanMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuMeanMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
+
+                foreach (MrityuBhagaData item in ketuTrueMBDataList)
+                {
+                    LocalDateTime localDateTimeStart = item.DateFrom.ToLocalDateTime();
+                    LocalDateTime localDateTimeEnd = item.DateTo.ToLocalDateTime();
+                    ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    ZonedDateTime zoneDateTimeEnd = localDateTimeEnd.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+                    item.DateFrom = item.DateFrom.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                    item.DateTo = item.DateTo.ShiftByNodaTimeOffset(zoneDateTimeStart.Offset);
+                }
+
+                //ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); i.DateTo = i.DateTo.ShiftByUtcOffset(currentTimeZone.BaseUtcOffset); });
+                //ketuTrueMBDataList.ForEach(i => { i.DateFrom = i.DateFrom.ShiftByDaylightDelta(adjustmentRules); i.DateTo = i.DateTo.ShiftByDaylightDelta(adjustmentRules); });
 
                 Day tempDay;
                 // Preparing original List<DayCalendars> list

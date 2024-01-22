@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using NodaTime;
 
 namespace PAD
 {
@@ -106,9 +107,19 @@ namespace PAD
             return date.Add(baseUtcOffset);
         }
 
+        public static DateTime ShiftByNodaTimeOffset(this DateTime date, Offset ntOffset)
+        {
+            return date.Add(ntOffset.ToTimeSpan());
+        }
+
         public static DateTime ShiftByDaylightDelta(this DateTime date, TimeZoneInfo.AdjustmentRule[] adjustmentRules)
         {
             return Utility.ShiftDateByDaylightDelta(date, adjustmentRules);
+        }
+
+        public static LocalDateTime ToLocalDateTime(this DateTime dateTime)
+        {
+            return new LocalDateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
         }
 
     }

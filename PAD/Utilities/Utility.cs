@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Windows.Forms;
 using TimeZoneConverter;
+using NodaTime;
 
 namespace PAD
 {
@@ -800,20 +801,26 @@ namespace PAD
 
         public static DateTime? CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            DateTime? sunrise = null;
+            //DateTime? sunrise = null;
             SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
-            return sunrise;
+            LocalDateTime localDateTime = date.ToLocalDateTime();
+            ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
+            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            return solarTimes.Sunrise.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
+            //sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
+            //return sunrise;
         }
 
         public static DateTime? CalculateSunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            DateTime? sunset = null;
+            //DateTime? sunset = null;
             SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
-            return sunset;
+            LocalDateTime localDateTime = date.ToLocalDateTime();
+            ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
+            return solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
+            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            //sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
+            //return sunset;
         }
 
         public static string GetSunStatusName(ESun sMode, ELanguage currentLang)
@@ -1881,8 +1888,8 @@ namespace PAD
 
         public static string GetTimeZoneIdByGeoCoordinates(double latitude, double longitude) 
         {
-            string tzIana = TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
-            return TZConvert.IanaToWindows(tzIana);
+            /*string tzIana =*/ return TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
+            //return TZConvert.IanaToWindows(tzIana);
         }
 
         public static string Base64Encode(string plainText)
