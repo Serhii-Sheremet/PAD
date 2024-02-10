@@ -20,9 +20,7 @@ namespace PAD
             }
         }
 
-        private Day _currentDay;
         private Profile _personInfo;
-        private List<Calendar>[] _planetsListOfaDay;
         private ELanguage _activeLang;
 
         public TransitsMap()
@@ -30,28 +28,12 @@ namespace PAD
             InitializeComponent();
         }
 
-        public TransitsMap(Day cDay, Profile profile, ELanguage langCode)
+        public TransitsMap(Profile profile, ELanguage langCode)
         {
             InitializeComponent();
 
-            _currentDay = cDay;
             _personInfo = profile;
-            _planetsListOfaDay = GetPlanetsListOfaDay();
             _activeLang = langCode;
-        }
-
-        private List<Calendar>[] GetPlanetsListOfaDay()
-        {
-            return new List<Calendar>[9] {
-                                            _currentDay.MoonZodiakRetroDayList.ToList(),
-                                            _currentDay.SunZodiakRetroDayList.ToList(),
-                                            _currentDay.VenusZodiakRetroDayList.ToList(),
-                                            _currentDay.JupiterZodiakRetroDayList.ToList(),
-                                            _currentDay.MercuryZodiakRetroDayList.ToList(),
-                                            _currentDay.MarsZodiakRetroDayList.ToList(),
-                                            _currentDay.SaturnZodiakRetroDayList.ToList(),
-                                            _currentDay.RahuMeanZodiakRetroDayList.ToList(),
-                                            _currentDay.KetuMeanZodiakRetroDayList.ToList() };
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
@@ -191,12 +173,12 @@ namespace PAD
         private List<DomPlanet> GetPlanetsListByZnak(int zodiakId, int dom)
         {
             List<DomPlanet> planetsList = new List<DomPlanet>();
-            for (int i = 0; i < _planetsListOfaDay.Length; i++)
+            /*for (int i = 0; i < _planetsListOfaDay.Length; i++)
             {
                 DomPlanet dPlanet = GetPlanetIfCurrentZnak(_planetsListOfaDay[i], zodiakId, dom);
                 if (dPlanet != null)
                     planetsList.Add(dPlanet);
-            }
+            }*/
             return planetsList;
         }
 
@@ -1783,5 +1765,9 @@ namespace PAD
             return allUnchecked;
         }
 
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

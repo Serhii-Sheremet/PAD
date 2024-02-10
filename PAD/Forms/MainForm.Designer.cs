@@ -54,6 +54,7 @@
             this.profileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.locationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tranzitsMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.yearsTranzitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -228,6 +229,7 @@
             this.profileToolStripMenuItem,
             this.locationToolStripMenuItem,
             this.toolStripSeparator1,
+            this.tranzitsMapToolStripMenuItem,
             this.yearsTranzitsToolStripMenuItem,
             this.swephCalcToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -249,6 +251,12 @@
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
+            // 
+            // tranzitsMapToolStripMenuItem
+            // 
+            this.tranzitsMapToolStripMenuItem.Name = "tranzitsMapToolStripMenuItem";
+            resources.ApplyResources(this.tranzitsMapToolStripMenuItem, "tranzitsMapToolStripMenuItem");
+            this.tranzitsMapToolStripMenuItem.Click += new System.EventHandler(this.tranzitsMapToolStripMenuItem_Click);
             // 
             // yearsTranzitsToolStripMenuItem
             // 
@@ -390,5 +398,6 @@
         private System.Windows.Forms.ToolStripMenuItem yearsTranzitsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exportYearToPDFToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem swephCalcToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem tranzitsMapToolStripMenuItem;
     }
 }

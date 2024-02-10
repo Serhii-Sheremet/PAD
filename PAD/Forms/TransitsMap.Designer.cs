@@ -42,6 +42,7 @@
             this.checkBoxSun = new System.Windows.Forms.CheckBox();
             this.checkBoxMoon = new System.Windows.Forms.CheckBox();
             this.checkBoxAll = new System.Windows.Forms.CheckBox();
+            this.buttonClose = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
             this.groupBoxMode.SuspendLayout();
             this.groupBoxAspects.SuspendLayout();
@@ -49,9 +50,9 @@
             // 
             // pictureBoxMap
             // 
-            this.pictureBoxMap.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxMap.Location = new System.Drawing.Point(15, 15);
             this.pictureBoxMap.Name = "pictureBoxMap";
-            this.pictureBoxMap.Size = new System.Drawing.Size(401, 401);
+            this.pictureBoxMap.Size = new System.Drawing.Size(560, 560);
             this.pictureBoxMap.TabIndex = 0;
             this.pictureBoxMap.TabStop = false;
             // 
@@ -59,7 +60,7 @@
             // 
             this.groupBoxMode.Controls.Add(this.radioButtonLagna);
             this.groupBoxMode.Controls.Add(this.radioButtonNatMoon);
-            this.groupBoxMode.Location = new System.Drawing.Point(407, 1);
+            this.groupBoxMode.Location = new System.Drawing.Point(586, 9);
             this.groupBoxMode.Name = "groupBoxMode";
             this.groupBoxMode.Size = new System.Drawing.Size(150, 81);
             this.groupBoxMode.TabIndex = 1;
@@ -71,7 +72,7 @@
             this.radioButtonLagna.AutoSize = true;
             this.radioButtonLagna.Location = new System.Drawing.Point(7, 48);
             this.radioButtonLagna.Name = "radioButtonLagna";
-            this.radioButtonLagna.Size = new System.Drawing.Size(66, 20);
+            this.radioButtonLagna.Size = new System.Drawing.Size(65, 20);
             this.radioButtonLagna.TabIndex = 1;
             this.radioButtonLagna.Text = "Лагны";
             this.radioButtonLagna.UseVisualStyleBackColor = true;
@@ -83,7 +84,7 @@
             this.radioButtonNatMoon.Checked = true;
             this.radioButtonNatMoon.Location = new System.Drawing.Point(7, 22);
             this.radioButtonNatMoon.Name = "radioButtonNatMoon";
-            this.radioButtonNatMoon.Size = new System.Drawing.Size(135, 20);
+            this.radioButtonNatMoon.Size = new System.Drawing.Size(134, 20);
             this.radioButtonNatMoon.TabIndex = 0;
             this.radioButtonNatMoon.TabStop = true;
             this.radioButtonNatMoon.Text = "Натальной Луны";
@@ -101,7 +102,7 @@
             this.groupBoxAspects.Controls.Add(this.checkBoxSun);
             this.groupBoxAspects.Controls.Add(this.checkBoxMoon);
             this.groupBoxAspects.Controls.Add(this.checkBoxAll);
-            this.groupBoxAspects.Location = new System.Drawing.Point(407, 84);
+            this.groupBoxAspects.Location = new System.Drawing.Point(586, 98);
             this.groupBoxAspects.Name = "groupBoxAspects";
             this.groupBoxAspects.Size = new System.Drawing.Size(150, 259);
             this.groupBoxAspects.TabIndex = 2;
@@ -113,7 +114,7 @@
             this.checkBoxRahu.AutoSize = true;
             this.checkBoxRahu.Location = new System.Drawing.Point(7, 230);
             this.checkBoxRahu.Name = "checkBoxRahu";
-            this.checkBoxRahu.Size = new System.Drawing.Size(58, 20);
+            this.checkBoxRahu.Size = new System.Drawing.Size(57, 20);
             this.checkBoxRahu.TabIndex = 8;
             this.checkBoxRahu.Text = "Раху";
             this.checkBoxRahu.UseVisualStyleBackColor = true;
@@ -124,7 +125,7 @@
             this.checkBoxSaturn.AutoSize = true;
             this.checkBoxSaturn.Location = new System.Drawing.Point(7, 204);
             this.checkBoxSaturn.Name = "checkBoxSaturn";
-            this.checkBoxSaturn.Size = new System.Drawing.Size(75, 20);
+            this.checkBoxSaturn.Size = new System.Drawing.Size(74, 20);
             this.checkBoxSaturn.TabIndex = 7;
             this.checkBoxSaturn.Text = "Сатурн";
             this.checkBoxSaturn.UseVisualStyleBackColor = true;
@@ -135,7 +136,7 @@
             this.checkBoxMars.AutoSize = true;
             this.checkBoxMars.Location = new System.Drawing.Point(7, 178);
             this.checkBoxMars.Name = "checkBoxMars";
-            this.checkBoxMars.Size = new System.Drawing.Size(61, 20);
+            this.checkBoxMars.Size = new System.Drawing.Size(60, 20);
             this.checkBoxMars.TabIndex = 6;
             this.checkBoxMars.Text = "Марс";
             this.checkBoxMars.UseVisualStyleBackColor = true;
@@ -146,7 +147,7 @@
             this.checkBoxMercury.AutoSize = true;
             this.checkBoxMercury.Location = new System.Drawing.Point(7, 152);
             this.checkBoxMercury.Name = "checkBoxMercury";
-            this.checkBoxMercury.Size = new System.Drawing.Size(93, 20);
+            this.checkBoxMercury.Size = new System.Drawing.Size(92, 20);
             this.checkBoxMercury.TabIndex = 5;
             this.checkBoxMercury.Text = "Меркурий";
             this.checkBoxMercury.UseVisualStyleBackColor = true;
@@ -157,7 +158,7 @@
             this.checkBoxJupiter.AutoSize = true;
             this.checkBoxJupiter.Location = new System.Drawing.Point(7, 126);
             this.checkBoxJupiter.Name = "checkBoxJupiter";
-            this.checkBoxJupiter.Size = new System.Drawing.Size(77, 20);
+            this.checkBoxJupiter.Size = new System.Drawing.Size(76, 20);
             this.checkBoxJupiter.TabIndex = 4;
             this.checkBoxJupiter.Text = "Юпитер";
             this.checkBoxJupiter.UseVisualStyleBackColor = true;
@@ -168,7 +169,7 @@
             this.checkBoxVenus.AutoSize = true;
             this.checkBoxVenus.Location = new System.Drawing.Point(7, 100);
             this.checkBoxVenus.Name = "checkBoxVenus";
-            this.checkBoxVenus.Size = new System.Drawing.Size(76, 20);
+            this.checkBoxVenus.Size = new System.Drawing.Size(75, 20);
             this.checkBoxVenus.TabIndex = 3;
             this.checkBoxVenus.Text = "Венера";
             this.checkBoxVenus.UseVisualStyleBackColor = true;
@@ -179,7 +180,7 @@
             this.checkBoxSun.AutoSize = true;
             this.checkBoxSun.Location = new System.Drawing.Point(7, 74);
             this.checkBoxSun.Name = "checkBoxSun";
-            this.checkBoxSun.Size = new System.Drawing.Size(76, 20);
+            this.checkBoxSun.Size = new System.Drawing.Size(75, 20);
             this.checkBoxSun.TabIndex = 2;
             this.checkBoxSun.Text = "Солнце";
             this.checkBoxSun.UseVisualStyleBackColor = true;
@@ -190,7 +191,7 @@
             this.checkBoxMoon.AutoSize = true;
             this.checkBoxMoon.Location = new System.Drawing.Point(7, 48);
             this.checkBoxMoon.Name = "checkBoxMoon";
-            this.checkBoxMoon.Size = new System.Drawing.Size(60, 20);
+            this.checkBoxMoon.Size = new System.Drawing.Size(59, 20);
             this.checkBoxMoon.TabIndex = 1;
             this.checkBoxMoon.Text = "Луна";
             this.checkBoxMoon.UseVisualStyleBackColor = true;
@@ -201,18 +202,30 @@
             this.checkBoxAll.AutoSize = true;
             this.checkBoxAll.Location = new System.Drawing.Point(7, 22);
             this.checkBoxAll.Name = "checkBoxAll";
-            this.checkBoxAll.Size = new System.Drawing.Size(51, 20);
+            this.checkBoxAll.Size = new System.Drawing.Size(50, 20);
             this.checkBoxAll.TabIndex = 0;
             this.checkBoxAll.Text = "Все";
             this.checkBoxAll.UseVisualStyleBackColor = true;
             this.checkBoxAll.CheckedChanged += new System.EventHandler(this.checkBoxAll_CheckedChanged);
             // 
+            // buttonClose
+            // 
+            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClose.Location = new System.Drawing.Point(647, 543);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(80, 32);
+            this.buttonClose.TabIndex = 17;
+            this.buttonClose.Text = "Close";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
             // TransitsMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(562, 401);
+            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.ClientSize = new System.Drawing.Size(750, 590);
+            this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.groupBoxAspects);
             this.Controls.Add(this.groupBoxMode);
             this.Controls.Add(this.pictureBoxMap);
@@ -222,7 +235,8 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TransitsMap";
-            this.Text = "Транзиты планет";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Tranzits Map";
             this.Shown += new System.EventHandler(this.TransitsMap_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
             this.groupBoxMode.ResumeLayout(false);
@@ -249,5 +263,6 @@
         private System.Windows.Forms.CheckBox checkBoxSun;
         private System.Windows.Forms.CheckBox checkBoxMoon;
         private System.Windows.Forms.CheckBox checkBoxAll;
+        private System.Windows.Forms.Button buttonClose;
     }
 }

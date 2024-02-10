@@ -6794,5 +6794,11 @@ namespace PAD
             Sweph_Calc scForm = new Sweph_Calc(CacheLoad._mrityuBhagaList.ToList());
             scForm.ShowDialog(this);
         }
+
+        private void tranzitsMapToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TransitsMap tmForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
+            tmForm.ShowDialog(this);
+        }
     }
 }
