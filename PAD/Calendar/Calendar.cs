@@ -49,7 +49,7 @@ namespace PAD
             return 0;
         }
 
-        public virtual string GetTranzitPada(Profile profile, ELanguage langCode)
+        public virtual string GetTranzitPada(Profile_old profile, ELanguage langCode)
         {
             return string.Empty;
         }
@@ -74,7 +74,7 @@ namespace PAD
             return string.Empty;
         }
 
-        public virtual string GetMasaFullName(List<PlanetCalendar> pList, Profile person, ELanguage langCode)
+        public virtual string GetMasaFullName(List<PlanetCalendar> pList, Profile_old person, ELanguage langCode)
         {
             return string.Empty;
         }

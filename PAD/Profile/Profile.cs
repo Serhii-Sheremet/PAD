@@ -8,30 +8,68 @@ namespace PAD
         public string ProfileName { get; set; }
         public string PersonName { get; set; }
         public string PersonSurname { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        public int PlaceOfBirthId { get; set; }
         public int PlaceOfLivingId { get; set; }
-        public int NakshatraMoonId { get; set; }
-        public int PadaMoon { get; set; }
-        public int NakshatraLagnaId { get; set; }
-        public int PadaLagna { get; set; }
-        public int NakshatraSunId { get; set; }
-        public int PadaSun { get; set; }
-        public int NakshatraVenusId { get; set; }
-        public int PadaVenus { get; set; }
-        public int NakshatraJupiterId { get; set; }
-        public int PadaJupiter { get; set; }
-        public int NakshatraMercuryId { get; set; }
-        public int PadaMercury { get; set; }
-        public int NakshatraMarsId { get; set; }
-        public int PadaMars { get; set; }
-        public int NakshatraSaturnId { get; set; }
-        public int PadaSaturn { get; set; }
-        public int NakshatraRahuId { get; set; }
-        public int PadaRahu { get; set; }
-        public int NakshatraKetuId { get; set; }
-        public int PadaKetu { get; set; }
-        public bool IsChecked { get; set; }
-        public string GUID { get; set; }
+        public double Ascendent { get; set; }
+        
+        public double SunLongitude { get; set; }
+	    public double SunLatitude { get; set; }
+        public double SunSpeedInLongitude { get; set; }
+	    public double SunSpeedInLatitude { get; set; }
 
-        public Profile() { GUID = Guid.NewGuid().ToString(); }
+        public double MoonLongitude { get; set; }
+        public double MoonLatitude { get; set; }
+        public double MoonSpeedInLongitude { get; set; }
+        public double MoonSpeedInLatitude { get; set; }
+
+        public double MercuryLongitude { get; set; }
+        public double MercuryLatitude { get; set; }
+        public double MercurySpeedInLongitude { get; set; }
+        public double MercurySpeedInLatitude { get; set; }
+
+        public double VenusLongitude { get; set; }
+        public double VenusLatitude { get; set; }
+        public double VenusSpeedInLongitude { get; set; }
+        public double VenusSpeedInLatitude { get; set; }
+
+        public double MarsLongitude { get; set; }
+        public double MarsLatitude { get; set; }
+        public double MarsSpeedInLongitude { get; set; }
+        public double MarsSpeedInLatitude { get; set; }
+
+        public double JupiterLongitude { get; set; }
+        public double JupiterLatitude { get; set; }
+        public double JupiterSpeedInLongitude { get; set; }
+        public double JupiterSpeedInLatitude { get; set; }
+
+        public double SaturnLongitude { get; set; }
+        public double SaturnLatitude { get; set; }
+        public double SaturnSpeedInLongitude { get; set; }
+        public double SaturnSpeedInLatitude { get; set; }
+
+        public double RahuMeanLongitude { get; set; }
+        public double RahuMeanLatitude { get; set; }
+        public double RahuMeanSpeedInLongitude { get; set; }
+        public double RahuMeanSpeedInLatitude { get; set; }
+
+        public double RahuTrueLongitude { get; set; }
+        public double RahuTrueLatitude { get; set; }
+        public double RahuTrueSpeedInLongitude { get; set; }
+        public double RahuTrueSpeedInLatitude { get; set; }
+
+        public double KetuMeanLongitude { get; set; }
+        public double KetuMeanLatitude { get; set; }
+        public double KetuMeanSpeedInLongitude { get; set; }
+        public double KetuMeanSpeedInLatitude { get; set; }
+                      
+        public double KetuTrueLongitude { get; set; }
+        public double KetuTrueLatitude { get; set; }
+        public double KetuTrueSpeedInLongitude { get; set; }
+        public double KetuTrueSpeedInLatitude { get; set; }
+
+        public int Checked {  get; set; }
+
+
     }
 }

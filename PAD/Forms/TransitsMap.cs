@@ -20,30 +20,36 @@ namespace PAD
             }
         }
 
-        private Profile _personInfo;
+        private Profile_old _personInfo;
         private ELanguage _activeLang;
+        private DateTime _eventDate;
 
         public TransitsMap()
         {
             InitializeComponent();
         }
 
-        public TransitsMap(Profile profile, ELanguage langCode)
+        public TransitsMap(Profile_old profile, ELanguage langCode)
         {
             InitializeComponent();
 
             _personInfo = profile;
             _activeLang = langCode;
+            _eventDate = DateTime.Now;
+
+            maskedTextBoxDate.Text = _eventDate.ToString();
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
         {
-            PrepareTransitMap();
+            //PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void PrepareTransitMap()
         {
-            Bitmap canvas = new Bitmap(pictureBoxMap.Width, pictureBoxMap.Height);
+            Bitmap canvas = new Bitmap(pictureBoxMapMoon.Width, pictureBoxMapMoon.Height);
             Graphics g = Graphics.FromImage(canvas);
             g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
@@ -51,7 +57,7 @@ namespace PAD
             Pen pen = new Pen(Color.Black, 1);
             SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
 
-            int posX = 0, posY = 0, width = pictureBoxMap.Width - 1, height = pictureBoxMap.Height - 1;
+            int posX = 0, posY = 0, width = pictureBoxMapMoon.Width - 1, height = pictureBoxMapMoon.Height - 1;
 
             // drawing doms triangles
             Rectangle rect = new Rectangle(posX, posY, width, height);
@@ -65,12 +71,64 @@ namespace PAD
             g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
 
             // drawing content
-            if (radioButtonNatMoon.Checked)
-                PrepareNatalMoonTransits(g, width, height);
-            else if (radioButtonLagna.Checked)
-                PrepareLagnaTransits(g, width, height);
+            PrepareNatalMoonTransits(g, width, height);
+            pictureBoxMapMoon.Image = canvas;
+        }
 
-            pictureBoxMap.Image = canvas;
+        private void PrepareTransitMapMoon()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxMapMoon.Width, pictureBoxMapMoon.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxMapMoon.Width - 1, height = pictureBoxMapMoon.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            // drawing content
+            PrepareNatalMoonTransits(g, width, height);
+            pictureBoxMapMoon.Image = canvas;
+        }
+
+        private void PrepareTransitMapLagna()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxMapLagna.Width, pictureBoxMapLagna.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxMapLagna.Width - 1, height = pictureBoxMapLagna.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            // drawing content
+            PrepareLagnaTransits(g, width, height);
+            pictureBoxMapLagna.Image = canvas;
         }
 
         private bool CheckIfAspectsActive()
@@ -173,7 +231,7 @@ namespace PAD
         private List<DomPlanet> GetPlanetsListByZnak(int zodiakId, int dom)
         {
             List<DomPlanet> planetsList = new List<DomPlanet>();
-            /*for (int i = 0; i < _planetsListOfaDay.Length; i++)
+           /* for (int i = 0; i < _planetsListOfaDay.Length; i++)
             {
                 DomPlanet dPlanet = GetPlanetIfCurrentZnak(_planetsListOfaDay[i], zodiakId, dom);
                 if (dPlanet != null)
@@ -187,12 +245,12 @@ namespace PAD
             DomPlanet planet = null;
             string planetExaltation = string.Empty;
             int currentZodiakId = CacheLoad._zodiakList.Where(i => i.Id == zodiakId).FirstOrDefault()?.Id ?? 0;
-            for (int i = 0; i < pList.Count; i++)
+           /* for (int i = 0; i < pList.Count; i++)
             {
-                /*
+                
                 if (pList[i].ZodiakCode == (EZodiak)currentZodiakId)
                 {
-                    EExaltation exalt = GetExaltationByPlanetAndZnak(pList[i].PlanetCode, (EZodiak)zodiakId);
+                    EExaltation exalt = Utility.GetExaltationByPlanetAndZnak(pList[i].PlanetCode, (EZodiak)zodiakId);
                     if (exalt == EExaltation.EXALTATION)
                     {
                         planetExaltation = "↑";
@@ -208,9 +266,28 @@ namespace PAD
                         IsActiveAspect = false,
                         ColorCode = (EColor)(CacheLoad._tranzitList.Where(p => p.PlanetId == (int)pList[i].PlanetCode && p.Dom == dom).FirstOrDefault()?.ColorId ?? 0)
                     };
-                }*/
-            }
+                }
+            }*/
             return planet;
+        }
+
+        private void PrepareTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0;
+            // placing dom numbers based on natal moon
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+            //List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(zList, Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraMoonId, _personInfo.PadaMoon));
+            SettingNumberInDom(g, posX, posY, width, height, zList);
+
+            //Get list of planets per dom
+            List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(zList);
+
+            Font textFont = new Font("Times New Roman", 11, FontStyle.Bold);
+            Font aspectFont = new Font("Times New Roman", 11, FontStyle.Regular);
+            Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+            for (int i = 0; i < 12; i++)
+                DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
         }
 
         private void PrepareNatalMoonTransits(Graphics g, int width, int height)
@@ -1627,16 +1704,6 @@ namespace PAD
             }
         }
 
-        private void radioButtonNatMoon_CheckedChanged(object sender, EventArgs e)
-        {
-            PrepareTransitMap();
-        }
-
-        private void radioButtonLagna_CheckedChanged(object sender, EventArgs e)
-        {
-            PrepareTransitMap();
-        }
-
         private void CheckAllAspectBoxes()
         {
             checkBoxMoon.Checked = true;
@@ -1666,12 +1733,14 @@ namespace PAD
             if (checkBoxAll.Checked)
             {
                 CheckAllAspectBoxes();
-                PrepareTransitMap();
+                PrepareTransitMapMoon();
+                PrepareTransitMapLagna();
             }
             else
             {
                 UncheckAllAspectBoxes();
-                PrepareTransitMap();
+                PrepareTransitMapMoon();
+                PrepareTransitMapLagna();
             }
         }
 
@@ -1681,7 +1750,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if(CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
@@ -1690,7 +1760,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxVenera_CheckedChanged(object sender, EventArgs e)
@@ -1699,7 +1770,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxJupiter_CheckedChanged(object sender, EventArgs e)
@@ -1708,7 +1780,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxMercury_CheckedChanged(object sender, EventArgs e)
@@ -1717,7 +1790,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxMars_CheckedChanged(object sender, EventArgs e)
@@ -1726,7 +1800,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxSaturn_CheckedChanged(object sender, EventArgs e)
@@ -1735,7 +1810,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private void checkBoxRahu_CheckedChanged(object sender, EventArgs e)
@@ -1744,7 +1820,8 @@ namespace PAD
                 checkBoxAll.Checked = true;
             if (CheckIfAllPlanetCheckBoxUnchecked())
                 checkBoxAll.Checked = false;
-            PrepareTransitMap();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
         }
 
         private bool CheckIfAllPlanetCheckBoxChecked()
@@ -1769,5 +1846,32 @@ namespace PAD
         {
             Close();
         }
+
+        private void CalculatePlanetsPosition(DateTime date)
+        {
+            double latitude, longitude;
+            string timeZone = string.Empty;
+            if (Utility.GetGeoCoordinateByLocationId(_personInfo.PlaceOfLivingId, out latitude, out longitude))
+            {
+                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                EpheCalculation eCalc = new EpheCalculation();
+
+                PlanetData moonData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MOON, date);
+                PlanetData sunData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SUN, date);
+                PlanetData mercuryData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MERCURY, date);
+                PlanetData venusData = eCalc.CalculatePlanetData_London(EpheConstants.SE_VENUS, date);
+                PlanetData marsData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MARS, date);
+                PlanetData jupiterData = eCalc.CalculatePlanetData_London(EpheConstants.SE_JUPITER, date);
+                PlanetData saturnData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SATURN, date);
+                PlanetData rahuMeanData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MEAN_NODE, date);
+                PlanetData rahuTrueData = eCalc.CalculatePlanetData_London(EpheConstants.SE_TRUE_NODE, date);
+                PlanetData ketuMeanData = eCalc.CalculateKetu(rahuMeanData);
+                PlanetData ketuTrueData = eCalc.CalculateKetu(rahuTrueData);
+
+            }
+
+        }
+
+        
     }
 }

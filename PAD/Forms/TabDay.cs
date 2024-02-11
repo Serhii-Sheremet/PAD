@@ -21,7 +21,7 @@ namespace PAD
 
         private ELanguage _langCode;
         private Day _currDay;
-        private Profile _curProfile;
+        private Profile_old _curProfile;
         private List<PersonsEventsList> _pevList;
         private List<DVLineNames> _dvlnList;
         private List<DVLineNameDescription> _dvlnDescList;
@@ -44,7 +44,7 @@ namespace PAD
             InitializeComponent();
         }
         
-        public TabDay(Day day, Profile sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonsEventsList> evList, ELanguage langCode)
+        public TabDay(Day day, Profile_old sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonsEventsList> evList, ELanguage langCode)
         {
             InitializeComponent();
 

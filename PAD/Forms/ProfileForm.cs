@@ -20,7 +20,7 @@ namespace PAD
             }
         }
 
-        private List<Profile> _proList;
+        private List<Profile_old> _proList;
         private ELanguage _activeLang;
         private bool _isNew;
         private bool _isModify;
@@ -28,8 +28,8 @@ namespace PAD
         private List<NakshatraDescription> _ndList;
         private Location _selectedLocation;
 
-        private Profile _profile;
-        public Profile SelectedProfile
+        private Profile_old _profile;
+        public Profile_old SelectedProfile
         {
             get { return _profile; }
             set { _profile = value; }
@@ -54,7 +54,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public ProfileForm(List<Profile> pList, ELanguage activeLang, bool sMode)
+        public ProfileForm(List<Profile_old> pList, ELanguage activeLang, bool sMode)
         {
             InitializeComponent();
 
@@ -91,12 +91,12 @@ namespace PAD
             textBoxSearch.Focus();
         }
 
-        private void FillProfileListViewByData(List<Profile> pList)
+        private void FillProfileListViewByData(List<Profile_old> pList)
         {
             if (pList.Count > 0)
             {
                 PrepareListView();
-                foreach (Profile p in pList)
+                foreach (Profile_old p in pList)
                 {
                     if (p.IsChecked)
                     {
@@ -534,7 +534,7 @@ namespace PAD
             }
             if (selectedProfileId != 0)
             {
-                SelectedProfile = CacheLoad._profileList.Where(i => i.Id == selectedProfileId).FirstOrDefault();
+                SelectedProfile = CacheLoad._profileList_old.Where(i => i.Id == selectedProfileId).FirstOrDefault();
                 IsChosen = true;
             }
             else
@@ -551,7 +551,7 @@ namespace PAD
             {
                 listViewProfile.Items.Clear();
                 CleanFields();
-                foreach (Profile p in _proList)
+                foreach (Profile_old p in _proList)
                 {
                     PrepareListView();
                     if (p.ProfileName.ToLower().StartsWith(textBoxSearch.Text.ToLower().Trim()))
@@ -846,7 +846,7 @@ namespace PAD
                 DeleteProfile(selectedProfileId);
 
                 _proList.RemoveAll(i => i.Id == selectedProfileId);
-                CacheLoad._profileList.RemoveAll(i => i.Id == selectedProfileId);
+                CacheLoad._profileList_old.RemoveAll(i => i.Id == selectedProfileId);
                 FillProfileListViewByData(_proList);
 
                 CleanFields();
@@ -880,8 +880,8 @@ namespace PAD
                 ModifyProfile(SelectedProfile.Id);
             }
 
-            CacheLoad._profileList = CacheLoad.GetProfileList();
-            _proList = CacheLoad._profileList.ToList();
+            CacheLoad._profileList_old = CacheLoad.GetProfileList();
+            _proList = CacheLoad._profileList_old.ToList();
             FillProfileListViewByData(_proList);
 
             buttonChoose.Enabled = false;
@@ -910,7 +910,7 @@ namespace PAD
             KeyValueData selectedNakshatraRahuItem = (KeyValueData)comboBoxNakshatraRahu.SelectedItem;
             KeyValueData selectedNakshatraKetuItem = (KeyValueData)comboBoxNakshatraKetu.SelectedItem;
 
-            Profile newProfile = new Profile
+            Profile_old newProfile = new Profile_old
             {
                 ProfileName = textBoxProfileName.Text,
                 PersonName = textBoxPersonName.Text,
@@ -944,7 +944,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    SQLiteCommand command = new SQLiteCommand("insert into PROFILE (PROFILENAME, PERSONNAME, PERSONSURNAME, PLACEOFLIVINGID, NAKSHATRAMOONID, PADAMOON, NAKSHATRALAGNAID, PADALAGNA, NAKSHATRASUNID, PADASUN, NAKSHATRAVENUSID, PADAVENUS, NAKSHATRAJUPITERID, PADAJUPITER, NAKSHATRAMERCURYID, PADAMERCURY, NAKSHATRAMARSID, PADAMARS, NAKSHATRASATURNID, PADASATURN, NAKSHATRARAHUID, PADARAHU, NAKSHATRAKETUID, PADAKETU, CHECKED, GUID) values (@PROFILENAME, @PERSONNAME, @PERSONSURNAME, @PLACEOFLIVINGID, @NAKSHATRAMOONID, @PADAMOON, @NAKSHATRALAGNAID, @PADALAGNA, @NAKSHATRASUNID, @PADASUN, @NAKSHATRAVENUSID, @PADAVENUS, @NAKSHATRAJUPITERID, @PADAJUPITER, @NAKSHATRAMERCURYID, @PADAMERCURY, @NAKSHATRAMARSID, @PADAMARS, @NAKSHATRASATURNID, @PADASATURN, @NAKSHATRARAHUID, @PADARAHU, @NAKSHATRAKETUID, @PADAKETU, @CHECKED, @GUID)", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("insert into PROFILE_OLD (PROFILENAME, PERSONNAME, PERSONSURNAME, PLACEOFLIVINGID, NAKSHATRAMOONID, PADAMOON, NAKSHATRALAGNAID, PADALAGNA, NAKSHATRASUNID, PADASUN, NAKSHATRAVENUSID, PADAVENUS, NAKSHATRAJUPITERID, PADAJUPITER, NAKSHATRAMERCURYID, PADAMERCURY, NAKSHATRAMARSID, PADAMARS, NAKSHATRASATURNID, PADASATURN, NAKSHATRARAHUID, PADARAHU, NAKSHATRAKETUID, PADAKETU, CHECKED, GUID) values (@PROFILENAME, @PERSONNAME, @PERSONSURNAME, @PLACEOFLIVINGID, @NAKSHATRAMOONID, @PADAMOON, @NAKSHATRALAGNAID, @PADALAGNA, @NAKSHATRASUNID, @PADASUN, @NAKSHATRAVENUSID, @PADAVENUS, @NAKSHATRAJUPITERID, @PADAJUPITER, @NAKSHATRAMERCURYID, @PADAMERCURY, @NAKSHATRAMARSID, @PADAMARS, @NAKSHATRASATURNID, @PADASATURN, @NAKSHATRARAHUID, @PADARAHU, @NAKSHATRAKETUID, @PADAKETU, @CHECKED, @GUID)", dbCon);
                     command.Parameters.AddWithValue("@PROFILENAME", newProfile.ProfileName);
                     command.Parameters.AddWithValue("@PERSONNAME", newProfile.PersonName);
                     command.Parameters.AddWithValue("@PERSONSURNAME", newProfile.PersonSurname);
@@ -996,7 +996,7 @@ namespace PAD
             if (_selectedLocation != null)
                 locationId = _selectedLocation.Id;
 
-            Profile newProfile = new Profile
+            Profile_old newProfile = new Profile_old
             {
                 ProfileName = textBoxProfileName.Text,
                 PersonName = textBoxPersonName.Text,
@@ -1029,7 +1029,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    SQLiteCommand command = new SQLiteCommand("update PROFILE set PROFILENAME = @PROFILENAME, PERSONNAME = @PERSONNAME, PERSONSURNAME = @PERSONSURNAME, PLACEOFLIVINGID = @PLACEOFLIVINGID, NAKSHATRAMOONID = @NAKSHATRAMOONID, PADAMOON = @PADAMOON, NAKSHATRALAGNAID = @NAKSHATRALAGNAID, PADALAGNA = @PADALAGNA, NAKSHATRASUNID = @NAKSHATRASUNID, PADASUN = @PADASUN, NAKSHATRAVENUSID = @NAKSHATRAVENUSID, PADAVENUS = @PADAVENUS, NAKSHATRAJUPITERID = @NAKSHATRAJUPITERID, PADAJUPITER = @PADAJUPITER, NAKSHATRAMERCURYID = @NAKSHATRAMERCURYID, PADAMERCURY = @PADAMERCURY, NAKSHATRAMARSID = @NAKSHATRAMARSID, PADAMARS = @PADAMARS, NAKSHATRASATURNID = @NAKSHATRASATURNID, PADASATURN = @PADASATURN, NAKSHATRARAHUID = @NAKSHATRARAHUID, PADARAHU = @PADARAHU, NAKSHATRAKETUID = @NAKSHATRAKETUID, PADAKETU = @PADAKETU where ID = @ID", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("update PROFILE_OLD set PROFILENAME = @PROFILENAME, PERSONNAME = @PERSONNAME, PERSONSURNAME = @PERSONSURNAME, PLACEOFLIVINGID = @PLACEOFLIVINGID, NAKSHATRAMOONID = @NAKSHATRAMOONID, PADAMOON = @PADAMOON, NAKSHATRALAGNAID = @NAKSHATRALAGNAID, PADALAGNA = @PADALAGNA, NAKSHATRASUNID = @NAKSHATRASUNID, PADASUN = @PADASUN, NAKSHATRAVENUSID = @NAKSHATRAVENUSID, PADAVENUS = @PADAVENUS, NAKSHATRAJUPITERID = @NAKSHATRAJUPITERID, PADAJUPITER = @PADAJUPITER, NAKSHATRAMERCURYID = @NAKSHATRAMERCURYID, PADAMERCURY = @PADAMERCURY, NAKSHATRAMARSID = @NAKSHATRAMARSID, PADAMARS = @PADAMARS, NAKSHATRASATURNID = @NAKSHATRASATURNID, PADASATURN = @PADASATURN, NAKSHATRARAHUID = @NAKSHATRARAHUID, PADARAHU = @PADARAHU, NAKSHATRAKETUID = @NAKSHATRAKETUID, PADAKETU = @PADAKETU where ID = @ID", dbCon);
                     command.Parameters.AddWithValue("@PROFILENAME", newProfile.ProfileName);
                     command.Parameters.AddWithValue("@PERSONNAME", newProfile.PersonName);
                     command.Parameters.AddWithValue("@PERSONSURNAME", newProfile.PersonSurname);
@@ -1070,10 +1070,10 @@ namespace PAD
                 SQLiteCommand command;
                 try
                 {
-                    command = new SQLiteCommand("update PROFILE set CHECKED = 0", dbCon);
+                    command = new SQLiteCommand("update PROFILE_OLD set CHECKED = 0", dbCon);
                     command.ExecuteNonQuery();
 
-                    command = new SQLiteCommand("update PROFILE set CHECKED = 1 where ID = @ID", dbCon);
+                    command = new SQLiteCommand("update PROFILE_OLD set CHECKED = 1 where ID = @ID", dbCon);
                     command.Parameters.AddWithValue("@ID", pId);
                     command.ExecuteNonQuery();
                 }
@@ -1093,7 +1093,7 @@ namespace PAD
                     SQLiteCommand command;
                     try
                     {
-                        command = new SQLiteCommand("delete from PROFILE where ID = @ID", dbCon);
+                        command = new SQLiteCommand("delete from PROFILE_OLD where ID = @ID", dbCon);
                         command.Parameters.AddWithValue("@ID", pId);
                         command.ExecuteNonQuery();
                     }
@@ -1116,8 +1116,8 @@ namespace PAD
                 selectedProfileId = _proList.Where(i => i.ProfileName.Equals(listViewProfile.SelectedItems[0].Text)).FirstOrDefault()?.Id ?? 0;
                 UpdateCheckStatus(selectedProfileId);
 
-                CacheLoad._profileList = CacheLoad.GetProfileList();
-                _proList = CacheLoad._profileList.ToList();
+                CacheLoad._profileList_old = CacheLoad.GetProfileList();
+                _proList = CacheLoad._profileList_old.ToList();
                 FillProfileListViewByData(_proList);
 
                 CleanFields();

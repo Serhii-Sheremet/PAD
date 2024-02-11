@@ -36,6 +36,7 @@ namespace PAD
 
         private ELanguage _activeLanguageCode;
         private Profile _selectedProfile;
+        private Profile_old _selectedProfile_old;
         private PdfDocument _pdfDoc;
 
         private float _daysOfWeekHeight;
@@ -116,7 +117,8 @@ namespace PAD
             CacheLoad._systemFontList = CacheLoad.GetSystemFontList();
             CacheLoad._fontList = CacheLoad.GetFontList();
             CacheLoad._fontDescList = CacheLoad.GetFontDescList();
-            CacheLoad._profileList = CacheLoad.GetProfileList();
+            CacheLoad._profilesList = CacheLoad.GetProfilesList();
+            CacheLoad._profileList_old = CacheLoad.GetProfileList();
             CacheLoad._personEventsList = CacheLoad.GetPersonsEventsList();
             CacheLoad._planetList = CacheLoad.GetPlanetsList();
             CacheLoad._planetDescList = CacheLoad.GetPlanetDescList();
@@ -539,10 +541,10 @@ namespace PAD
             datePicker.PickerDayTextAlignment = ContentAlignment.MiddleCenter;
 
             //Check if any profile is selected by default. If yes - creating calendar
-            Profile workingProfile = CacheLoad._profileList.Where(i => i.IsChecked).FirstOrDefault();
+            Profile_old workingProfile = CacheLoad._profileList_old.Where(i => i.IsChecked).FirstOrDefault();
             if (workingProfile != null)
             {
-                _selectedProfile = workingProfile;
+                _selectedProfile_old = workingProfile;
                 PrepareProfileAndTimeZoneLabels();
                 using (WaitForm wForm = new WaitForm(DrawCalendarData, _activeLanguageCode))
                 {
@@ -600,11 +602,11 @@ namespace PAD
 
         private void PrepareProfileAndTimeZoneLabels()
         {
-            string nakshatraName = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == _selectedProfile.NakshatraMoonId && i.LanguageCode.Equals(_activeLanguageCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
+            string nakshatraName = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == _selectedProfile_old.NakshatraMoonId && i.LanguageCode.Equals(_activeLanguageCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
             Font labelTitleFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.HEADER)), 10, Utility.GetFontStyleBySettings(EFontList.HEADER));
             Font labelTZFont = new Font(FontFamily.GenericSansSerif, 7, FontStyle.Regular);
 
-            string labelText = _selectedProfile.ProfileName + ", "
+            string labelText = _selectedProfile_old.ProfileName + ", "
                                 + Utility.GetLocalizedText("Moon Nakshatra", _activeLanguageCode) + " "
                                 + nakshatraName;
 
@@ -618,7 +620,7 @@ namespace PAD
                 labelProfile.Left = toolStripMain.Width / 2 - textHSize.Width / 2;
 
                 labelTimeZone.Visible = true;
-                labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+                labelTimeZone.Text = GetTimeZoneInfo(_selectedProfile_old.PlaceOfLivingId);
                 labelTimeZone.Font = labelTZFont;
                 labelTimeZone.BackColor = Color.Transparent;
                 Size textTZSize = TextRenderer.MeasureText(labelTimeZone.Text, labelTZFont);
@@ -632,7 +634,7 @@ namespace PAD
             if (datePicker.Value.Month == _selectedDate.Month)
                 return;
 
-            if (_selectedProfile != null)
+            if (_selectedProfile_old != null)
             {
                 //Cursor.Current = Cursors.WaitCursor;
                 using (WaitForm wForm = new WaitForm(DrawCalendarData, _activeLanguageCode))
@@ -646,7 +648,7 @@ namespace PAD
         {
             // Redrawing calendar for a new selected month
             _selectedDate = datePicker.Value.Date;
-            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Date.Month, 1), _selectedProfile);
+            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Date.Month, 1), _selectedProfile_old);
 
             //Drawing
             CalendarDrawing(_daysList);
@@ -1578,7 +1580,7 @@ namespace PAD
         {
             if (c.Count > 0)
             {
-                string text = c.First().GetMasaFullName(_moonNakshatraCalendar.ToList(), _selectedProfile, _activeLanguageCode); ;
+                string text = c.First().GetMasaFullName(_moonNakshatraCalendar.ToList(), _selectedProfile_old, _activeLanguageCode); ;
                 Size textSize = TextRenderer.MeasureText(text, font);
                 float heightPadding = (height - textSize.Height) / 2;
                 if (c.Count == 1)
@@ -1661,7 +1663,7 @@ namespace PAD
                 }
                 else
                 {
-                    text = pList.First().GetTranzitPada(_selectedProfile, _activeLanguageCode);
+                    text = pList.First().GetTranzitPada(_selectedProfile_old, _activeLanguageCode);
                     if (pList.First().PlanetCode == EPlanet.MOON)
                         text = text.Substring(0, 1);
                 }
@@ -1807,7 +1809,7 @@ namespace PAD
                             }
                             else
                             {
-                                text = pc.GetTranzitPada(_selectedProfile, _activeLanguageCode);
+                                text = pc.GetTranzitPada(_selectedProfile_old, _activeLanguageCode);
                                 if (pc.PlanetCode == EPlanet.MOON)
                                     text = text.Substring(0, 1);
                             }
@@ -1877,13 +1879,13 @@ namespace PAD
 
         private void SetMasaName(Graphics g, Pen pen, Font font, SolidBrush textBrush, float posX, float posY, float width, float height, List<Calendar> cList, DateTime date)
         {
-            string curMasa = cList.First().GetMasaFullName(_moonNakshatraCalendar, _selectedProfile, _activeLanguageCode);
+            string curMasa = cList.First().GetMasaFullName(_moonNakshatraCalendar, _selectedProfile_old, _activeLanguageCode);
             foreach (Calendar c in cList)
             {
                 if (c.DateStart > date)
                 {
                     float startPosX = Utility.ConvertHoursToPixels(width, c.DateStart);
-                    string text = c.GetMasaFullName(_moonNakshatraCalendar, _selectedProfile, _activeLanguageCode); 
+                    string text = c.GetMasaFullName(_moonNakshatraCalendar, _selectedProfile_old, _activeLanguageCode); 
                     Size textSize = TextRenderer.MeasureText(text, font);
                     float heightPadding = (height - textSize.Height) / 2;
                     if (!text.Equals(curMasa))
@@ -2124,7 +2126,7 @@ namespace PAD
                     DrawColoredLine(g, pen, lineFont, textBrush, posX, (posYForLines + 5 * lineHeight), _dayWidth, lineHeight, daysList[day].ChandraBalaDayList);
                     
                     //Check for events and drawing if exists
-                    List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.GUID, daysList[day].Date);
+                    List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile_old.GUID, daysList[day].Date);
                     if (peDayList.Count > 0)
                     {
                         float triangleX = (posX + _dayWidth) - 10;
@@ -2208,7 +2210,7 @@ namespace PAD
             }
         }
 
-        private List<Day> PrepareMonthDays(DateTime startDateOfMonth, Profile sPerson)
+        private List<Day> PrepareMonthDays(DateTime startDateOfMonth, Profile_old sPerson)
         {
             List<Day> daysList = new List<Day>();
             DateTime startDate, endDate;
@@ -3520,15 +3522,15 @@ namespace PAD
 
         private void profileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ProfileForm pForm = new ProfileForm(CacheLoad._profileList.ToList(), _activeLanguageCode, false);
+            ProfileForm pForm = new ProfileForm(CacheLoad._profileList_old.ToList(), _activeLanguageCode, false);
             pForm.ShowDialog(this);
-            if(pForm.SelectedProfile != null && pForm.SelectedProfile != _selectedProfile && pForm.IsChosen)
-            { 
-                _selectedProfile = pForm.SelectedProfile;
+            if(pForm.SelectedProfile != null && pForm.SelectedProfile != _selectedProfile_old && pForm.IsChosen)
+            {
+                _selectedProfile_old = pForm.SelectedProfile;
                 PrepareProfileAndTimeZoneLabels();
                 _daysList = null;
                 _daysOfMonth = null;
-                _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+                _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile_old);
 
                 //Drawing
                 CalendarDrawing(_daysList);
@@ -3590,7 +3592,7 @@ namespace PAD
 
         private void exportYearToPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_selectedProfile != null && _currentYearTranzitsImage != null)
+            if (_selectedProfile_old != null && _currentYearTranzitsImage != null)
             {
                 try
                 {
@@ -3617,7 +3619,7 @@ namespace PAD
 
         private void exportToPDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (_selectedProfile != null)
+            if (_selectedProfile_old != null)
             {
                 try
                 {
@@ -3676,7 +3678,7 @@ namespace PAD
             XFont fontTZ = new XFont("", 8, XFontStyle.Regular);
             XFont fontAuthor = new XFont("", 6, XFontStyle.Regular);
 
-            string localInfo = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+            string localInfo = GetTimeZoneInfo(_selectedProfile_old.PlaceOfLivingId);
             string textAuthor = Utility.GetLocalizedText("Concept: Halyna Sheremet", _activeLanguageCode) + " (VK: Halyna Sheremet http://vk.com/id263300332, Facebook: Halyna Sheremet https://www.facebook.com/halyna.sheremet)     " + Utility.GetLocalizedText("Programming: Sergey Sheremet", _activeLanguageCode);
 
             Bitmap bmpYearTransit = new Bitmap(Convert.ToInt32(page.Width.Point - 20), Convert.ToInt32(page.Height.Point - 100));
@@ -3718,7 +3720,7 @@ namespace PAD
             XFont fontTZ = new XFont("", 8, XFontStyle.Regular);
             XFont fontAuthor = new XFont("", 6, XFontStyle.Regular);
 
-            string localInfo = GetTimeZoneInfo(_selectedProfile.PlaceOfLivingId);
+            string localInfo = GetTimeZoneInfo(_selectedProfile_old.PlaceOfLivingId);
             string textAuthor = Utility.GetLocalizedText("Concept: Halyna Sheremet", _activeLanguageCode) + " (VK: Halyna Sheremet http://vk.com/id263300332, Facebook: Halyna Sheremet https://www.facebook.com/halyna.sheremet)     " + Utility.GetLocalizedText("Programming: Sergey Sheremet", _activeLanguageCode);
 
             XImage[] imageArray = new XImage[2];
@@ -3740,7 +3742,7 @@ namespace PAD
                 graph = XGraphics.FromPdfPage(page);
                 graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
                             new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
-                graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
+                graph.DrawString(_selectedProfile_old.PersonName + " " + _selectedProfile_old.PersonSurname, font, XBrushes.Black,
                                 new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
 
                 graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
@@ -3781,7 +3783,7 @@ namespace PAD
                         graph = XGraphics.FromPdfPage(page);
                         graph.DrawString(datePicker.Value.ToString("MMMM", CultureInfo.GetCultureInfo(Utility.GetActiveCultureCode(_activeLanguageCode))) + ", " + datePicker.Value.Year, font, XBrushes.Black,
                             new XRect(10, 5, page.Width.Point / 2, page.Height.Point), XStringFormats.TopLeft);
-                        graph.DrawString(_selectedProfile.PersonName + " " + _selectedProfile.PersonSurname, font, XBrushes.Black,
+                        graph.DrawString(_selectedProfile_old.PersonName + " " + _selectedProfile_old.PersonSurname, font, XBrushes.Black,
                                         new XRect(page.Width.Point / 2, 5, page.Width.Point / 2 - 10, page.Height.Point), XStringFormats.TopRight);
                         graph.DrawString(localInfo, fontTZ, XBrushes.Black, new XRect(0, 8, page.Width.Point, page.Height.Point), XStringFormats.TopCenter);
 
@@ -3790,7 +3792,7 @@ namespace PAD
 
                     height = Convert.ToInt32(page.Height.Point - 50) / 2;
                     Bitmap bmp = new Bitmap(Convert.ToInt32(page.Width.Point - 20), height);
-                    Bitmap bmpReady = DrawDayRectangle(bmp, _selectedProfile, _daysList[day], _activeLanguageCode);
+                    Bitmap bmpReady = DrawDayRectangle(bmp, _selectedProfile_old, _daysList[day], _activeLanguageCode);
                     XImage image = XImage.FromStream(GetStream(bmpReady, ImageFormat.Bmp));
 
                     graph.DrawImage(image, 10, posY, page.Width.Point - 20, height);
@@ -3801,7 +3803,7 @@ namespace PAD
             while (day < _daysList.Count);
         }
 
-        private Bitmap DrawDayRectangle(Bitmap bmp, Profile sPerson, Day pDay, ELanguage langCode)
+        private Bitmap DrawDayRectangle(Bitmap bmp, Profile_old sPerson, Day pDay, ELanguage langCode)
         {
             int linesCount = 0;
             int formHeight = CalculateCalendarTooltipFormHeight(pDay, out linesCount);
@@ -3816,7 +3818,7 @@ namespace PAD
 
         private void toolStripButtonRefresh_Click(object sender, EventArgs e)
         {
-            if (_selectedProfile == null || _daysList == null)
+            if (_selectedProfile_old == null || _daysList == null)
             {
                 return;
             }
@@ -3843,7 +3845,7 @@ namespace PAD
                 _daysList = null;
                 _daysOfMonth = null;
             }
-            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile);
+            _daysList = PrepareMonthDays(new DateTime(_selectedDate.Year, _selectedDate.Month, 1), _selectedProfile_old);
 
             //Drawing
             PrepareProfileAndTimeZoneLabels();
@@ -3884,7 +3886,7 @@ namespace PAD
                             if (control is YearTranzits)
                             {
                                 YearTranzits yt = control as YearTranzits;
-                                List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile);
+                                List<Day> daysList = yt.PrepareYearDays(year, _selectedProfile_old);
                                 yt.YearTranzitDrawing(daysList);
                                 yt.Refresh();
                             }
@@ -4021,7 +4023,7 @@ namespace PAD
 
         private void pictureBoxCalendar_MouseClick(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null || e.Y < _daysOfWeekHeight || e.Y > (_daysOfWeekHeight + 6 * _dayHeight) - 1)
+            if (_selectedProfile_old == null || e.Y < _daysOfWeekHeight || e.Y > (_daysOfWeekHeight + 6 * _dayHeight) - 1)
                 return;
 
             if (e.Button == MouseButtons.Right)
@@ -4043,7 +4045,7 @@ namespace PAD
                 if ((posY + formHeight) > pictureBoxCalendar.Height)
                     posY = posY + _dayHeight - formHeight - 10;
 
-                CalendarTooltipCreation(_selectedProfile, _daysList[selectedDayIndex], formHeight, linesCount, _activeLanguageCode);
+                CalendarTooltipCreation(_selectedProfile_old, _daysList[selectedDayIndex], formHeight, linesCount, _activeLanguageCode);
                 toolTip.Show(pictureBoxCalendar, Convert.ToInt32(posX), Convert.ToInt32(posY));
             }
 
@@ -4054,7 +4056,7 @@ namespace PAD
                 int selectedDayIndex = rowNumber * 7 + colNumber;
 
                 DateTime date = _daysList[selectedDayIndex].Date;
-                List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.GUID, date);
+                List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile_old.GUID, date);
                 if (peDayList.Count > 0)
                 {
                     if ((e.X > _dayWidth + colNumber * _dayWidth - 10) && (e.X < _dayWidth + colNumber * _dayWidth) &&
@@ -4079,7 +4081,7 @@ namespace PAD
 
         private void pictureBoxCalendar_MouseMove(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null || e.Y < _daysOfWeekHeight || (e.Y >= (_daysOfWeekHeight + 6 * _dayHeight) - 1) || e.X < 0 || e.X >= 7 * _dayWidth)
+            if (_selectedProfile_old == null || e.Y < _daysOfWeekHeight || (e.Y >= (_daysOfWeekHeight + 6 * _dayHeight) - 1) || e.X < 0 || e.X >= 7 * _dayWidth)
                 return;
 
             int colNumber = e.X / Convert.ToInt32(_dayWidth);
@@ -4090,7 +4092,7 @@ namespace PAD
                 return;
 
             DateTime date = _daysList[selectedDayIndex].Date;
-            List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.GUID, date);
+            List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile_old.GUID, date);
             if (peDayList.Count > 0)
             {
                 if ((e.X > _dayWidth + colNumber * _dayWidth - 10) && (e.X < _dayWidth + colNumber * _dayWidth) &&
@@ -4104,7 +4106,7 @@ namespace PAD
 
         private void pictureBoxCalendar_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null || e.Y < _daysOfWeekHeight)
+            if (_selectedProfile_old == null || e.Y < _daysOfWeekHeight)
                 return;
 
             int colNumber = e.X / Convert.ToInt32(_dayWidth);
@@ -4116,7 +4118,7 @@ namespace PAD
 
         private void pictureBoxTranzits_MouseDoubleClick(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null)
+            if (_selectedProfile_old == null)
                 return;
 
             int day = (e.X - Convert.ToInt32(_labelsWidth)) / Convert.ToInt32(_dayTranzWidth);
@@ -4129,7 +4131,7 @@ namespace PAD
 
         private void pictureBoxTranzits_MouseClick(object sender, MouseEventArgs e)
         {
-            if (_selectedProfile == null || _daysList == null)
+            if (_selectedProfile_old == null || _daysList == null)
                 return;
 
             if (e.Button == MouseButtons.Right)
@@ -4744,13 +4746,13 @@ namespace PAD
                 string nakshatra = CacheLoad._nakshatraDescList.Where(i => i.NakshatraId == (int)pc.NakshatraCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
                 Pada pada = CacheLoad._padaList.Where(i => i.Id == pc.PadaId).FirstOrDefault();
                 string specNavamsha = Utility.GetSpecNavamsha(pada, langCode);
-                string badNavamsha = Utility.GetBadNavamsha(_selectedProfile, pada.Id, langCode);
+                string badNavamsha = Utility.GetBadNavamsha(_selectedProfile_old, pada.Id, langCode);
                 if (badNavamsha.Length > 0)
                 {
                     badNavamsha = ";  " +  badNavamsha.Substring(0, (badNavamsha.Length - 2));
                 }
                 string drekkana = string.Empty;
-                List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_selectedProfile, pada.Id);
+                List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_selectedProfile_old, pada.Id);
                 if (deList.Count > 0)
                 {
                     for (int i = 0; i < deList.Count; i++)
@@ -5128,7 +5130,7 @@ namespace PAD
             return rowsList;
         }
 
-        private void CalendarTooltipCreation(Profile pers, Day pDay, int formHeight, int linesCount, ELanguage langCode)
+        private void CalendarTooltipCreation(Profile_old pers, Day pDay, int formHeight, int linesCount, ELanguage langCode)
         {
             toolTip = new Popup(calendarToolTip = new CalendarToolTip(pers, pDay, formHeight, linesCount, langCode));
             toolTip.AutoClose = false;
@@ -5814,10 +5816,10 @@ namespace PAD
             }
             else
             {
-                List<PersonsEventsList> pevList = Utility.GetDayPersonEvents(_selectedProfile.GUID, _daysList[selectedDayIndex].Date); 
+                List<PersonsEventsList> pevList = Utility.GetDayPersonEvents(_selectedProfile_old.GUID, _daysList[selectedDayIndex].Date); 
                 List<DVLineNameDescription> dvlDescList = CacheLoad._dvLineNamesDescList.Where(i => i.LanguageCode.Equals(_activeLanguageCode.ToString())).ToList();
                 TabPage newTab = new TabPage() { Name = "day" + selectedDayIndex.ToString(), Text = tabLabel };
-                TabDay tabForm = new TabDay(_daysList[selectedDayIndex],  _selectedProfile, CacheLoad._dvLineNamesList.ToList(), dvlDescList, pevList, _activeLanguageCode);
+                TabDay tabForm = new TabDay(_daysList[selectedDayIndex], _selectedProfile_old, CacheLoad._dvLineNamesList.ToList(), dvlDescList, pevList, _activeLanguageCode);
                 tabForm.TopLevel = false;
                 tabForm.Parent = newTab;
                 tabControlCalendar.TabPages.Add(newTab);
@@ -5846,7 +5848,7 @@ namespace PAD
 
             double latitude, longitude;
             string timeZone = string.Empty;
-            if (Utility.GetGeoCoordinateByLocationId(_selectedProfile.PlaceOfLivingId, out latitude, out longitude))
+            if (Utility.GetGeoCoordinateByLocationId(_selectedProfile_old.PlaceOfLivingId, out latitude, out longitude))
             {
                 timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
                 //TimeZoneInfo currentTimeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZone);
@@ -6648,14 +6650,14 @@ namespace PAD
                 }
                 else
                 {
-                    if (_selectedProfile != null)
+                    if (_selectedProfile_old != null)
                     {
                         TabPage newTab = new TabPage() { Name = "yearTranzits" + ": " + _selectedYear, Text = tabLabel };
 
                         YearTranzits tabForm = new YearTranzits(
                                 _selectedYear,
                                 _activeLanguageCode,
-                                _selectedProfile,
+                                _selectedProfile_old,
                                 moonZodiakCalendarList,
                                 moonZodiakRetroCalendarList,
                                 moonNakshatraCalendarList,
@@ -6797,7 +6799,7 @@ namespace PAD
 
         private void tranzitsMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TransitsMap tmForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
+            TransitsMap tmForm = new TransitsMap(_selectedProfile_old, _activeLanguageCode);
             tmForm.ShowDialog(this);
         }
     }

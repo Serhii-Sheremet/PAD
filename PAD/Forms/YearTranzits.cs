@@ -19,7 +19,7 @@ namespace PAD
         }
         
         private ELanguage _langCode;
-        private Profile _sProfile;
+        private Profile_old _sProfile;
         private int _sYear;
         private List<Day> dayList;
 
@@ -125,7 +125,7 @@ namespace PAD
         public YearTranzits(
             int year,
             ELanguage langCode,
-            Profile sProfile,
+            Profile_old sProfile,
             List<PlanetCalendar> moonZCList,
             List<PlanetCalendar> moonZRCList,
             List<PlanetCalendar> moonNCList,
@@ -253,7 +253,7 @@ namespace PAD
             monthWidthArray = new float[12];
         }
 
-        public List<Day> PrepareYearDays(int year, Profile sPerson)
+        public List<Day> PrepareYearDays(int year, Profile_old sPerson)
         {
             List<Day> daysList = new List<Day>();
             DateTime startDate = new DateTime(year, 1, 1);

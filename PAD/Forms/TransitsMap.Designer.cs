@@ -28,10 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBoxMap = new System.Windows.Forms.PictureBox();
-            this.groupBoxMode = new System.Windows.Forms.GroupBox();
-            this.radioButtonLagna = new System.Windows.Forms.RadioButton();
-            this.radioButtonNatMoon = new System.Windows.Forms.RadioButton();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransitsMap));
+            this.pictureBoxMapMoon = new System.Windows.Forms.PictureBox();
             this.groupBoxAspects = new System.Windows.Forms.GroupBox();
             this.checkBoxRahu = new System.Windows.Forms.CheckBox();
             this.checkBoxSaturn = new System.Windows.Forms.CheckBox();
@@ -43,53 +41,28 @@
             this.checkBoxMoon = new System.Windows.Forms.CheckBox();
             this.checkBoxAll = new System.Windows.Forms.CheckBox();
             this.buttonClose = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
-            this.groupBoxMode.SuspendLayout();
+            this.groupBoxEvent = new System.Windows.Forms.GroupBox();
+            this.labelLocation = new System.Windows.Forms.Label();
+            this.labelDate = new System.Windows.Forms.Label();
+            this.maskedTextBoxDate = new System.Windows.Forms.MaskedTextBox();
+            this.buttonLocation = new System.Windows.Forms.Button();
+            this.textBoxLocation = new System.Windows.Forms.TextBox();
+            this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
+            this.labelNatalMoon = new System.Windows.Forms.Label();
+            this.labelLagna = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).BeginInit();
             this.groupBoxAspects.SuspendLayout();
+            this.groupBoxEvent.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).BeginInit();
             this.SuspendLayout();
             // 
-            // pictureBoxMap
+            // pictureBoxMapMoon
             // 
-            this.pictureBoxMap.Location = new System.Drawing.Point(15, 15);
-            this.pictureBoxMap.Name = "pictureBoxMap";
-            this.pictureBoxMap.Size = new System.Drawing.Size(560, 560);
-            this.pictureBoxMap.TabIndex = 0;
-            this.pictureBoxMap.TabStop = false;
-            // 
-            // groupBoxMode
-            // 
-            this.groupBoxMode.Controls.Add(this.radioButtonLagna);
-            this.groupBoxMode.Controls.Add(this.radioButtonNatMoon);
-            this.groupBoxMode.Location = new System.Drawing.Point(586, 9);
-            this.groupBoxMode.Name = "groupBoxMode";
-            this.groupBoxMode.Size = new System.Drawing.Size(150, 81);
-            this.groupBoxMode.TabIndex = 1;
-            this.groupBoxMode.TabStop = false;
-            this.groupBoxMode.Text = "Транзиты от";
-            // 
-            // radioButtonLagna
-            // 
-            this.radioButtonLagna.AutoSize = true;
-            this.radioButtonLagna.Location = new System.Drawing.Point(7, 48);
-            this.radioButtonLagna.Name = "radioButtonLagna";
-            this.radioButtonLagna.Size = new System.Drawing.Size(65, 20);
-            this.radioButtonLagna.TabIndex = 1;
-            this.radioButtonLagna.Text = "Лагны";
-            this.radioButtonLagna.UseVisualStyleBackColor = true;
-            this.radioButtonLagna.CheckedChanged += new System.EventHandler(this.radioButtonLagna_CheckedChanged);
-            // 
-            // radioButtonNatMoon
-            // 
-            this.radioButtonNatMoon.AutoSize = true;
-            this.radioButtonNatMoon.Checked = true;
-            this.radioButtonNatMoon.Location = new System.Drawing.Point(7, 22);
-            this.radioButtonNatMoon.Name = "radioButtonNatMoon";
-            this.radioButtonNatMoon.Size = new System.Drawing.Size(134, 20);
-            this.radioButtonNatMoon.TabIndex = 0;
-            this.radioButtonNatMoon.TabStop = true;
-            this.radioButtonNatMoon.Text = "Натальной Луны";
-            this.radioButtonNatMoon.UseVisualStyleBackColor = true;
-            this.radioButtonNatMoon.CheckedChanged += new System.EventHandler(this.radioButtonNatMoon_CheckedChanged);
+            this.pictureBoxMapMoon.Location = new System.Drawing.Point(15, 33);
+            this.pictureBoxMapMoon.Name = "pictureBoxMapMoon";
+            this.pictureBoxMapMoon.Size = new System.Drawing.Size(350, 350);
+            this.pictureBoxMapMoon.TabIndex = 0;
+            this.pictureBoxMapMoon.TabStop = false;
             // 
             // groupBoxAspects
             // 
@@ -102,9 +75,9 @@
             this.groupBoxAspects.Controls.Add(this.checkBoxSun);
             this.groupBoxAspects.Controls.Add(this.checkBoxMoon);
             this.groupBoxAspects.Controls.Add(this.checkBoxAll);
-            this.groupBoxAspects.Location = new System.Drawing.Point(586, 98);
+            this.groupBoxAspects.Location = new System.Drawing.Point(735, 26);
             this.groupBoxAspects.Name = "groupBoxAspects";
-            this.groupBoxAspects.Size = new System.Drawing.Size(150, 259);
+            this.groupBoxAspects.Size = new System.Drawing.Size(110, 259);
             this.groupBoxAspects.TabIndex = 2;
             this.groupBoxAspects.TabStop = false;
             this.groupBoxAspects.Text = "Аспекты";
@@ -211,7 +184,7 @@
             // buttonClose
             // 
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Location = new System.Drawing.Point(647, 543);
+            this.buttonClose.Location = new System.Drawing.Point(765, 458);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(80, 32);
             this.buttonClose.TabIndex = 17;
@@ -219,16 +192,106 @@
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
+            // groupBoxEvent
+            // 
+            this.groupBoxEvent.Controls.Add(this.labelLocation);
+            this.groupBoxEvent.Controls.Add(this.labelDate);
+            this.groupBoxEvent.Controls.Add(this.maskedTextBoxDate);
+            this.groupBoxEvent.Controls.Add(this.buttonLocation);
+            this.groupBoxEvent.Controls.Add(this.textBoxLocation);
+            this.groupBoxEvent.Location = new System.Drawing.Point(15, 392);
+            this.groupBoxEvent.Name = "groupBoxEvent";
+            this.groupBoxEvent.Size = new System.Drawing.Size(274, 98);
+            this.groupBoxEvent.TabIndex = 18;
+            this.groupBoxEvent.TabStop = false;
+            this.groupBoxEvent.Text = "Event Data";
+            // 
+            // labelLocation
+            // 
+            this.labelLocation.AutoSize = true;
+            this.labelLocation.Location = new System.Drawing.Point(6, 62);
+            this.labelLocation.Name = "labelLocation";
+            this.labelLocation.Size = new System.Drawing.Size(58, 16);
+            this.labelLocation.TabIndex = 43;
+            this.labelLocation.Text = "Location";
+            // 
+            // labelDate
+            // 
+            this.labelDate.AutoSize = true;
+            this.labelDate.Location = new System.Drawing.Point(25, 31);
+            this.labelDate.Name = "labelDate";
+            this.labelDate.Size = new System.Drawing.Size(36, 16);
+            this.labelDate.TabIndex = 42;
+            this.labelDate.Text = "Date";
+            // 
+            // maskedTextBoxDate
+            // 
+            this.maskedTextBoxDate.Location = new System.Drawing.Point(67, 25);
+            this.maskedTextBoxDate.Mask = "00/00/0000 90:00";
+            this.maskedTextBoxDate.Name = "maskedTextBoxDate";
+            this.maskedTextBoxDate.Size = new System.Drawing.Size(193, 22);
+            this.maskedTextBoxDate.TabIndex = 41;
+            this.maskedTextBoxDate.ValidatingType = typeof(System.DateTime);
+            // 
+            // buttonLocation
+            // 
+            this.buttonLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLocation.Image = ((System.Drawing.Image)(resources.GetObject("buttonLocation.Image")));
+            this.buttonLocation.Location = new System.Drawing.Point(230, 56);
+            this.buttonLocation.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonLocation.Name = "buttonLocation";
+            this.buttonLocation.Size = new System.Drawing.Size(30, 22);
+            this.buttonLocation.TabIndex = 40;
+            this.buttonLocation.UseVisualStyleBackColor = true;
+            // 
+            // textBoxLocation
+            // 
+            this.textBoxLocation.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxLocation.Location = new System.Drawing.Point(67, 56);
+            this.textBoxLocation.Name = "textBoxLocation";
+            this.textBoxLocation.ReadOnly = true;
+            this.textBoxLocation.Size = new System.Drawing.Size(160, 22);
+            this.textBoxLocation.TabIndex = 39;
+            // 
+            // pictureBoxMapLagna
+            // 
+            this.pictureBoxMapLagna.Location = new System.Drawing.Point(374, 33);
+            this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
+            this.pictureBoxMapLagna.Size = new System.Drawing.Size(350, 350);
+            this.pictureBoxMapLagna.TabIndex = 19;
+            this.pictureBoxMapLagna.TabStop = false;
+            // 
+            // labelNatalMoon
+            // 
+            this.labelNatalMoon.AutoSize = true;
+            this.labelNatalMoon.Location = new System.Drawing.Point(12, 12);
+            this.labelNatalMoon.Name = "labelNatalMoon";
+            this.labelNatalMoon.Size = new System.Drawing.Size(155, 16);
+            this.labelNatalMoon.TabIndex = 44;
+            this.labelNatalMoon.Text = "Tranzits from Natal Moon";
+            // 
+            // labelLagna
+            // 
+            this.labelLagna.AutoSize = true;
+            this.labelLagna.Location = new System.Drawing.Point(371, 12);
+            this.labelLagna.Name = "labelLagna";
+            this.labelLagna.Size = new System.Drawing.Size(124, 16);
+            this.labelLagna.TabIndex = 45;
+            this.labelLagna.Text = "Tranzits from Lagna";
+            // 
             // TransitsMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(750, 590);
+            this.ClientSize = new System.Drawing.Size(860, 505);
+            this.Controls.Add(this.labelLagna);
+            this.Controls.Add(this.labelNatalMoon);
+            this.Controls.Add(this.pictureBoxMapLagna);
+            this.Controls.Add(this.groupBoxEvent);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.groupBoxAspects);
-            this.Controls.Add(this.groupBoxMode);
-            this.Controls.Add(this.pictureBoxMap);
+            this.Controls.Add(this.pictureBoxMapMoon);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(4);
@@ -238,21 +301,20 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Tranzits Map";
             this.Shown += new System.EventHandler(this.TransitsMap_Shown);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
-            this.groupBoxMode.ResumeLayout(false);
-            this.groupBoxMode.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).EndInit();
             this.groupBoxAspects.ResumeLayout(false);
             this.groupBoxAspects.PerformLayout();
+            this.groupBoxEvent.ResumeLayout(false);
+            this.groupBoxEvent.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBoxMap;
-        private System.Windows.Forms.GroupBox groupBoxMode;
-        private System.Windows.Forms.RadioButton radioButtonLagna;
-        private System.Windows.Forms.RadioButton radioButtonNatMoon;
+        private System.Windows.Forms.PictureBox pictureBoxMapMoon;
         private System.Windows.Forms.GroupBox groupBoxAspects;
         private System.Windows.Forms.CheckBox checkBoxRahu;
         private System.Windows.Forms.CheckBox checkBoxSaturn;
@@ -264,5 +326,14 @@
         private System.Windows.Forms.CheckBox checkBoxMoon;
         private System.Windows.Forms.CheckBox checkBoxAll;
         private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.GroupBox groupBoxEvent;
+        private System.Windows.Forms.Button buttonLocation;
+        private System.Windows.Forms.TextBox textBoxLocation;
+        private System.Windows.Forms.MaskedTextBox maskedTextBoxDate;
+        private System.Windows.Forms.Label labelDate;
+        private System.Windows.Forms.Label labelLocation;
+        private System.Windows.Forms.PictureBox pictureBoxMapLagna;
+        private System.Windows.Forms.Label labelNatalMoon;
+        private System.Windows.Forms.Label labelLagna;
     }
 }

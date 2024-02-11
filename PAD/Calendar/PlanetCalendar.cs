@@ -109,7 +109,7 @@ namespace PAD
             return (int)NakshatraCode;
         }
 
-        public override string GetTranzitPada(Profile profile, ELanguage lCode)
+        public override string GetTranzitPada(Profile_old profile, ELanguage lCode)
         {
             Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
             List<BadNavamshaEntity> bneList = Utility.GetBadNavamshaNumbersList(profile, pada.Id, lCode);

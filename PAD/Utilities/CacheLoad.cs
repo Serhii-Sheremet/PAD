@@ -14,7 +14,8 @@ namespace PAD
         public static List<LanguageDescription> _languageDescList;
         public static List<AppTexts> _appTextsList;
         public static List<Location> _locationList;
-        public static List<Profile> _profileList;
+        public static List<Profile> _profilesList;
+        public static List<Profile_old> _profileList_old;
         public static List<PersonsEventsList> _personEventsList;
 
         public static List<AppSettingList> _appSettingList;
@@ -507,15 +508,34 @@ namespace PAD
             return dateList.Select(i => i.Year).Distinct().ToList();
         }
 
-        public static List<Profile> GetProfileList()
+        public static List<Profile> GetProfilesList()
         {
             List<Profile> entityList = new List<Profile>();
+            
+            double ascendent;
+            double sunLongitude, sunLatitude, sunSpeedInlongitude, sunSpeedInlatitude;
+            double moonLongitude, moonLatitude, moonSpeedInlongitude, moonSpeedInlatitude;
+            double mercuryLongitude, mercuryLatitude, mercurySpeedInlongitude, mercurySpeedInlatitude;
+            double venusLongitude, venusLatitude, venusSpeedInlongitude, venusSpeedInlatitude;
+            double marsLongitude, marsLatitude, marsSpeedInlongitude, marsSpeedInlatitude;
+            double jupiterLongitude, jupiterLatitude, jupiterSpeedInlongitude, jupiterSpeedInlatitude;
+            double saturnLongitude, saturnLatitude, saturnSpeedInlongitude, saturnSpeedInlatitude;
+            double rahuMeanLongitude, rahuMeanLatitude, rahuMeanSpeedInlongitude, rahuMeanSpeedInlatitude;
+            double rahuTrueLongitude, rahuTrueLatitude, rahuTrueSpeedInlongitude, rahuTrueSpeedInlatitude;
+            double ketuMeanLongitude, ketuMeanLatitude, ketuMeanSpeedInlongitude, ketuMeanSpeedInlatitude;
+            double ketuTrueLongitude, ketuTrueLatitude, ketuTrueSpeedInlongitude, ketuTrueSpeedInlatitude;
+
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
                 try
                 {
-                    string comm = "select ID, PROFILENAME, PERSONNAME, PERSONSURNAME, PLACEOFLIVINGID, NAKSHATRAMOONID, PADAMOON, NAKSHATRALAGNAID, PADALAGNA, NAKSHATRASUNID, PADASUN, NAKSHATRAVENUSID, PADAVENUS, NAKSHATRAJUPITERID, PADAJUPITER, NAKSHATRAMERCURYID, PADAMERCURY, NAKSHATRAMARSID, PADAMARS, NAKSHATRASATURNID, PADASATURN, NAKSHATRARAHUID, PADARAHU, NAKSHATRAKETUID, PADAKETU, CHECKED, GUID from PROFILE order by ID";
+                    string comm = "select ID, PROFILENAME, PERSONNAME, PERSONSURNAME, DATEOFBIRTH, PLACEOFBIRTHID, PLACEOFLIVINGID, ASCENDENT, SUNLONGITUDE, SUNLATITUDE, SUNSPEEDINLONGITUDE, SUNSPEEDINLATITUDE, " +
+                                    "MOONLONGITUDE, MOONLATITUDE, MOONSPEEDINLONGITUDE, MOONSPEEDINLATITUDE, MERCURYLONGITUDE, MERCURYLATITUDE, MERCURYSPEEDINLONGITUDE, MERCURYSPEEDINLATITUDE, " +
+                                    "VENUSLONGITUDE, VENUSLATITUDE, VENUSSPEEDINLONGITUDE, VENUSSPEEDINLATITUDE, MARSLONGITUDE, MARSLATITUDE, MARSSPEEDINLONGITUDE, MARSSPEEDINLATITUDE, " +
+                                    "JUPITERLONGITUDE, JUPITERLATITUDE, JUPITERSPEEDINLONGITUDE, JUPITERSPEEDINLATITUDE, SATURNLONGITUDE, SATURNLATITUDE, SATURNSPEEDINLONGITUDE, SATURNSPEEDINLATITUDE, " +
+                                    "RAHUMEANLONGITUDE, RAHUMEANLATITUDE, RAHUMEANSPEEDINLONGITUDE, RAHUMEANSPEEDINLATITUDE, RAHUTRUELONGITUDE, RAHUTRUELATITUDE, RAHUTRUESPEEDINLONGITUDE, RAHUTRUESPEEDINLATITUDE, " +
+                                    "KETUMEANLONGITUDE, KETUMEANLATITUDE, KETUMEANSPEEDINLONGITUDE, KETUMEANSPEEDINLATITUDE, KETUTRUELONGITUDE, KETUTRUELATITUDE, KETUTRUESPEEDINLONGITUDE, KETUTRUESPEEDINLATITUDE, CHECKED from PROFILE order by ID";
                     SQLiteCommand command = new SQLiteCommand(comm, dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -523,7 +543,138 @@ namespace PAD
                         {
                             while (reader.Read())
                             {
-                                Profile temp = new Profile
+                                if (double.TryParse(reader.StringValue(7), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ascendent) &&
+                                    double.TryParse(reader.StringValue(8), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out sunLongitude) &&
+                                    double.TryParse(reader.StringValue(9), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out sunLatitude) &&
+                                    double.TryParse(reader.StringValue(10), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out sunSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(11), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out sunSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(12), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out moonLongitude) &&
+                                    double.TryParse(reader.StringValue(13), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out moonLatitude) &&
+                                    double.TryParse(reader.StringValue(14), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out moonSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(15), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out moonSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(16), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out mercuryLongitude) &&
+                                    double.TryParse(reader.StringValue(17), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out mercuryLatitude) &&
+                                    double.TryParse(reader.StringValue(18), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out mercurySpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(19), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out mercurySpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(20), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out venusLongitude) &&
+                                    double.TryParse(reader.StringValue(21), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out venusLatitude) &&
+                                    double.TryParse(reader.StringValue(22), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out venusSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(23), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out venusSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(24), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out marsLongitude) &&
+                                    double.TryParse(reader.StringValue(25), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out marsLatitude) &&
+                                    double.TryParse(reader.StringValue(26), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out marsSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(27), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out marsSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(28), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out jupiterLongitude) &&
+                                    double.TryParse(reader.StringValue(29), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out jupiterLatitude) &&
+                                    double.TryParse(reader.StringValue(30), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out jupiterSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(31), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out jupiterSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(32), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out saturnLongitude) &&
+                                    double.TryParse(reader.StringValue(33), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out saturnLatitude) &&
+                                    double.TryParse(reader.StringValue(34), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out saturnSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(35), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out saturnSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(36), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuMeanLongitude) &&
+                                    double.TryParse(reader.StringValue(37), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuMeanLatitude) &&
+                                    double.TryParse(reader.StringValue(38), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuMeanSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(39), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuMeanSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(40), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuTrueLongitude) &&
+                                    double.TryParse(reader.StringValue(41), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuTrueLatitude) &&
+                                    double.TryParse(reader.StringValue(42), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuTrueSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(43), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out rahuTrueSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(44), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuMeanLongitude) &&
+                                    double.TryParse(reader.StringValue(45), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuMeanLatitude) &&
+                                    double.TryParse(reader.StringValue(46), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuMeanSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(47), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuMeanSpeedInlatitude) &&
+                                    double.TryParse(reader.StringValue(48), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuTrueLongitude) &&
+                                    double.TryParse(reader.StringValue(49), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuTrueLatitude) &&
+                                    double.TryParse(reader.StringValue(50), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuTrueSpeedInlongitude) &&
+                                    double.TryParse(reader.StringValue(51), NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out ketuTrueSpeedInlatitude))
+                                {
+                                    Profile temp = new Profile
+                                    {
+                                        Id = reader.IntValue(0),
+                                        ProfileName = reader.StringValue(1),
+                                        PersonName = reader.StringValue(2),
+                                        PersonSurname = reader.StringValue(3),
+                                        DateOfBirth = DateTime.ParseExact(reader.StringValue(4), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                        PlaceOfBirthId = reader.IntValue(5),
+                                        PlaceOfLivingId = reader.IntValue(6),
+                                        Ascendent = ascendent,
+                                        SunLongitude = sunLongitude,
+                                        SunLatitude = sunLatitude,
+                                        SunSpeedInLongitude = sunSpeedInlongitude,
+                                        SunSpeedInLatitude = sunSpeedInlatitude,
+                                        MoonLongitude = moonLongitude,
+                                        MoonLatitude = moonLatitude,
+                                        MoonSpeedInLongitude = moonSpeedInlongitude,
+                                        MoonSpeedInLatitude = moonSpeedInlatitude,
+                                        MercuryLongitude = mercuryLongitude,
+                                        MercuryLatitude = mercuryLatitude,
+                                        MercurySpeedInLongitude = mercurySpeedInlongitude,
+                                        MercurySpeedInLatitude = mercurySpeedInlatitude,
+                                        VenusLongitude = venusLongitude,
+                                        VenusLatitude = venusLatitude,
+                                        VenusSpeedInLongitude = venusSpeedInlongitude,
+                                        VenusSpeedInLatitude = venusSpeedInlatitude,
+                                        MarsLongitude = marsLongitude,
+                                        MarsLatitude = marsLatitude,
+                                        MarsSpeedInLongitude = marsSpeedInlongitude,
+                                        MarsSpeedInLatitude = marsSpeedInlatitude,
+                                        JupiterLongitude = jupiterLongitude,
+                                        JupiterLatitude = jupiterLatitude,
+                                        JupiterSpeedInLongitude = jupiterSpeedInlongitude,
+                                        JupiterSpeedInLatitude = jupiterSpeedInlatitude,
+                                        SaturnLongitude = saturnLongitude,
+                                        SaturnLatitude = saturnLatitude,
+                                        SaturnSpeedInLongitude = saturnSpeedInlongitude,
+                                        SaturnSpeedInLatitude = saturnSpeedInlatitude,
+                                        RahuMeanLongitude = rahuMeanLongitude, 
+                                        RahuMeanLatitude = rahuMeanLatitude,
+                                        RahuMeanSpeedInLongitude = rahuMeanSpeedInlongitude,
+                                        RahuMeanSpeedInLatitude = rahuMeanSpeedInlatitude,
+                                        RahuTrueLongitude = rahuTrueLongitude,
+                                        RahuTrueLatitude = rahuTrueLatitude,
+                                        RahuTrueSpeedInLongitude = rahuTrueSpeedInlongitude,
+                                        RahuTrueSpeedInLatitude = rahuTrueSpeedInlatitude,
+                                        KetuMeanLongitude = ketuMeanLongitude,
+                                        KetuMeanLatitude = ketuMeanLatitude,
+                                        KetuMeanSpeedInLongitude = ketuMeanSpeedInlongitude,
+                                        KetuMeanSpeedInLatitude = ketuMeanSpeedInlatitude,
+                                        KetuTrueLongitude = ketuTrueLongitude,
+                                        KetuTrueLatitude = ketuTrueLatitude,
+                                        KetuTrueSpeedInLongitude = ketuTrueSpeedInlongitude,
+                                        KetuTrueSpeedInLatitude = ketuTrueSpeedInlatitude,
+                                        Checked = reader.IntValue(52)
+                                    };
+                                    entityList.Add(temp);
+                                }
+                            }
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return entityList;
+        }
+
+        public static List<Profile_old> GetProfileList()
+        {
+            List<Profile_old> entityList = new List<Profile_old>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    string comm = "select ID, PROFILENAME, PERSONNAME, PERSONSURNAME, PLACEOFLIVINGID, NAKSHATRAMOONID, PADAMOON, NAKSHATRALAGNAID, PADALAGNA, NAKSHATRASUNID, PADASUN, NAKSHATRAVENUSID, PADAVENUS, NAKSHATRAJUPITERID, PADAJUPITER, NAKSHATRAMERCURYID, PADAMERCURY, NAKSHATRAMARSID, PADAMARS, NAKSHATRASATURNID, PADASATURN, NAKSHATRARAHUID, PADARAHU, NAKSHATRAKETUID, PADAKETU, CHECKED, GUID from PROFILE_OLD order by ID";
+                    SQLiteCommand command = new SQLiteCommand(comm, dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                Profile_old temp = new Profile_old
                                 {
                                     Id = reader.IntValue(0),
                                     ProfileName = reader.StringValue(1),

@@ -22,7 +22,7 @@ namespace PAD
         }
 
         private ELanguage _langCode;
-        private Profile _currentProfle;
+        private Profile_old _currentProfle;
         private List<string> _timesList;
         private PersonsEventsList _peItem;
         private int _slotsPerHour; // configurable from dayView
@@ -70,7 +70,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public UserEventMenu(Profile profile, int perHour, ELanguage lCode)
+        public UserEventMenu(Profile_old profile, int perHour, ELanguage lCode)
         {
             InitializeComponent();
 
@@ -83,7 +83,7 @@ namespace PAD
             pictureBoxColor.BackColor = Color.LightSalmon;
         }
 
-        public UserEventMenu(Profile profile, PersonsEventsList peItem, int perHour, ELanguage lCode)
+        public UserEventMenu(Profile_old profile, PersonsEventsList peItem, int perHour, ELanguage lCode)
         {
             InitializeComponent();
 

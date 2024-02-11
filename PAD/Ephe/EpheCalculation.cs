@@ -897,6 +897,38 @@ namespace PAD
             return tResults;
         }
 
+        public PlanetData CalculatePlanetData_London(int planetConstant, DateTime date)
+        {
+            EpheFunctions.swe_set_ephe_path(@".\ephe");
+            double longitude = -0.17, latitude = 51.5, altitude = 0; // London
+            EpheParameters eParameters = new EpheParameters() { PlanetConst = planetConstant, Longitude = longitude, Latitude = latitude, Altitude = altitude };
+            EpheResults pResults = new EpheResults() { CalcResults = SWEPH_Calculation(planetConstant, date, longitude, latitude, altitude) };
+            PlanetParameters pParameters = new PlanetParameters()
+            {
+                CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]),
+                CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]),
+                CurrentPada = GetCurrentPada(pResults.CalcResults[0]),
+                CurrentRetro = string.Empty
+            };
+            if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
+            {
+                pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
+            }
+            PlanetData pdData = new PlanetData
+            {
+                Date = date,
+                Longitude = pResults.CalcResults[0],
+                Latitude = pResults.CalcResults[1],
+                SpeedInLongitude = pResults.CalcResults[3],
+                SpedInLatitude = pResults.CalcResults[4],
+                Retro = pParameters.CurrentRetro,
+                ZodiakId = pParameters.CurrentZnak,
+                NakshatraId = pParameters.CurrentNakshatra,
+                PadaId = pParameters.CurrentPada
+            };
+            return pdData;
+        }
+
         public List<PlanetData> CalculatePlanetDataList_London(int planetConstant, DateTime fromDate, DateTime toDate)
         {
             EpheFunctions.swe_set_ephe_path(@".\ephe");
@@ -1114,6 +1146,24 @@ namespace PAD
                 currentTithi = Convert.ToInt32(intDTithi);
             }
             return currentTithi;
+        }
+
+        public PlanetData CalculateKetu(PlanetData rahuData)
+        {
+            double kLongitude = CalculateKetuDegree(rahuData.Longitude);
+            PlanetData pdData = new PlanetData
+            {
+                Date = rahuData.Date,
+                Longitude = kLongitude,
+                Latitude = rahuData.Latitude,
+                SpeedInLongitude = rahuData.SpeedInLongitude,
+                SpedInLatitude = rahuData.SpedInLatitude,
+                Retro = rahuData.Retro,
+                ZodiakId = GetCurrentZnak(kLongitude),
+                NakshatraId = GetCurrentNakshatra(kLongitude),
+                PadaId = GetCurrentPada(kLongitude)
+            };
+            return pdData;
         }
 
         public List<PlanetData> PrepareKetuList(List<PlanetData> rahuList)

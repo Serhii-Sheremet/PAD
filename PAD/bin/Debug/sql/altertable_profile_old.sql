@@ -1,0 +1,9 @@
+PRAGMA foreign_keys=off;
+
+BEGIN TRANSACTION;
+
+ALTER TABLE PROFILE RENAME TO PROFILE_OLD;
+
+COMMIT;
+
+PRAGMA foreign_keys=on;

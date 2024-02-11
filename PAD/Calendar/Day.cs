@@ -164,7 +164,7 @@ namespace PAD
         public List<MrityuBhagaData> KetuTrueMrityuBhagaDayList { get; set; }
 
         public Day(
-            Profile sPerson,
+            Profile_old sPerson,
             DateTime date,
             bool flag,
             DateTime? sunRise,
@@ -418,7 +418,7 @@ namespace PAD
 
         // for year's tranzits
         public Day(
-            Profile sPerson,
+            Profile_old sPerson,
             DateTime date,
             List<PlanetCalendar> moonZodiakList,
             List<PlanetCalendar> moonZodiakRetroList,
@@ -647,7 +647,7 @@ namespace PAD
             return mbList.Where(i => i.DateTo >= date && i.DateFrom <= date.AddDays(+1)).ToList(); 
         }
 
-        private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, Profile sPerson, DateTime date, bool isLagna)
+        private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, Profile_old sPerson, DateTime date, bool isLagna)
         {
             List<Calendar> resList = new List<Calendar>();
             List<PlanetCalendar> pList =  pcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
@@ -695,7 +695,7 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PreparePlanetTaraBalaDayList(List<PlanetCalendar> pcList, Profile sPerson, DateTime date)
+        private List<Calendar> PreparePlanetTaraBalaDayList(List<PlanetCalendar> pcList, Profile_old sPerson, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
             List<PlanetCalendar> pList = pcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
@@ -746,7 +746,7 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PrepareTaraBalaDayList(List<NakshatraCalendar> nList, Profile sPerson, DateTime date)
+        private List<Calendar> PrepareTaraBalaDayList(List<NakshatraCalendar> nList, Profile_old sPerson, DateTime date)
         {
             List<Calendar> dayList = new List<Calendar>();
             List<NakshatraCalendar> ndList = nList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
@@ -869,7 +869,7 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PrepareChandraBalaDayList(List<ChandraBalaCalendar> cbList, Profile sPerson, DateTime date)
+        private List<Calendar> PrepareChandraBalaDayList(List<ChandraBalaCalendar> cbList, Profile_old sPerson, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
             List<ChandraBalaCalendar> listForDay = cbList.Where(s => s.DateEnd >= date && s.DateStart <= date.AddDays(+1)).ToList();

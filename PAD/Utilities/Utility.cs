@@ -2026,7 +2026,7 @@ namespace PAD
             }
         }
 
-        public static string GetBadNavamsha(Profile person, int pId, ELanguage lCode)
+        public static string GetBadNavamsha(Profile_old person, int pId, ELanguage lCode)
         {
             string badNavamsha = string.Empty;
             int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
@@ -2050,7 +2050,7 @@ namespace PAD
             return badNavamsha;
         }
 
-        public static List<BadNavamshaEntity> GetBadNavamshaNumbersList(Profile person, int pId, ELanguage lCode)
+        public static List<BadNavamshaEntity> GetBadNavamshaNumbersList(Profile_old person, int pId, ELanguage lCode)
         {
             List<BadNavamshaEntity> badNavamshaList = new List<BadNavamshaEntity>();
             int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
@@ -2074,7 +2074,7 @@ namespace PAD
             return badNavamshaList;
         }
 
-        public static List<DrekkanaEntity> GetBadDrekkanaList(Profile person, int padaId)
+        public static List<DrekkanaEntity> GetBadDrekkanaList(Profile_old person, int padaId)
         {
             List<DrekkanaEntity> drekkanaList = new List<DrekkanaEntity>();
             List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
@@ -2143,7 +2143,7 @@ namespace PAD
             return drekkanaList;
         }
 
-        private static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile person, bool isLagna)
+        private static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile_old person, bool isLagna)
         {
             List<Pada> newList = new List<Pada>();
             int pId = 0;
