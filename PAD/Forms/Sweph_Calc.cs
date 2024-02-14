@@ -18,19 +18,25 @@ namespace PAD
         private void button1_Click(object sender, EventArgs e)
         {
             EpheCalculation eCalc = new EpheCalculation();
-            DateTime fromDate = new DateTime(2022, 1, 1), toDate = new DateTime(2023, 1, 1);
+            //DateTime fromDate = new DateTime(2022, 1, 1), toDate = new DateTime(2023, 1, 1);
+
             //List<PlanetData> planetDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, fromDate, toDate);
             //List<TithiData> tithiDataList = eCalc.CalculateTithiDataList_London(fromDate, toDate);
             //List<NityaYogaData> nyDataList = eCalc.CalculateNityaYogaDataList_London(fromDate, toDate);
             //List<EclipseData> ecDataList = eCalc.CalculateEclipse_London(fromDate, toDate);
-            List<MrityuBhagaData> mbDataList = eCalc.CalculateMrityuBhagaDataList_London(_mbList, EPlanet.KETUMEAN, fromDate, toDate);
+            //List<MrityuBhagaData> mbDataList = eCalc.CalculateMrityuBhagaDataList_London(_mbList, EPlanet.KETUMEAN, fromDate, toDate);
 
-            label1.Text = "Count: " + mbDataList.Count;
+            // 05.12.1971 00:40 -3
+            DateTime calcDate = new DateTime(1971, 12, 4, 21, 40, 0);
+
+            double[] houses = eCalc.AscendanceCalculation_London(calcDate);
+            int Znak = eCalc.GetCurrentZnak(houses[0]);
+            label1.Text = "House: " + houses[0] + "     " + Znak;
         }
 
-        
+        private void label1_Click(object sender, EventArgs e)
+        {
 
-        
-
+        }
     }
 }
