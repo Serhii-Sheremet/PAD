@@ -1054,7 +1054,7 @@ namespace PAD
             return pResults;
         }
 
-        private int GetCurrentZnak(double longitude)
+        public int GetCurrentZnak(double longitude)
         {
             double znakPart = 360.0000 / 12;
 
@@ -1204,7 +1204,42 @@ namespace PAD
             return calcLongitude;
         }
 
+        public double[] AscendanceCalculation_London(DateTime calcDate)
+        {
+            double lon = -0.17, lat = 51.5; // London
 
+            double[] ascmc = new double[10];
+            double[] cusps = new double[13];
+            // double tjd_ut = 2415020.5;
+
+            int jday = calcDate.Day;
+            int jmonth = calcDate.Month;
+            int jyear = calcDate.Year;
+            int jhour = calcDate.Hour;
+            int jmin = calcDate.Minute;
+            int jsec = calcDate.Second;
+
+            double jut = jhour + jmin / 60.0 + jsec / 3600.0;
+            double tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, EpheConstants.SE_GREG_CAL);
+
+            IntPtr ptrDouble_ascmc = Marshal.AllocHGlobal(Marshal.SizeOf(ascmc[0]) * ascmc.Length);
+            Marshal.Copy(ascmc, 0, ptrDouble_ascmc, 10);
+
+            IntPtr ptrDouble_cusps = Marshal.AllocHGlobal(Marshal.SizeOf(cusps[0]) * cusps.Length);
+            Marshal.Copy(cusps, 0, ptrDouble_cusps, 13);
+
+            int hsys = 'P';
+
+            double iflgret;
+            iflgret = EpheFunctions.swe_houses(tjd_ut, lat, lon, hsys, ptrDouble_cusps, ptrDouble_ascmc);
+
+            Marshal.Copy(ptrDouble_ascmc, ascmc, 0, 10);
+
+            Marshal.FreeHGlobal(ptrDouble_ascmc);
+            Marshal.FreeHGlobal(ptrDouble_cusps);
+
+            return ascmc;
+        }
 
         //char serr[AS_MAXCH];
         //double epheflag = SEFLG_SWIEPH;
