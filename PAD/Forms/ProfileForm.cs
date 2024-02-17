@@ -1,9 +1,12 @@
-﻿using System;
+﻿using NodaTime;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using static PAD.MainForm;
 
 namespace PAD
 {
@@ -26,6 +29,7 @@ namespace PAD
         private bool _isModify;
 
         private List<NakshatraDescription> _ndList;
+        private List<ZodiakDescription> _zdList;
         private Location _selectedLocation;
 
         private Profile_old _profile;
@@ -65,6 +69,7 @@ namespace PAD
             SingleMode = sMode;
 
             _ndList = CacheLoad._nakshatraDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
+            _zdList = CacheLoad._zodiakDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
 
             IsChosen = false;
         }
@@ -84,11 +89,185 @@ namespace PAD
                 buttonChoose.Visible = false;
             }
 
+            PrepareDataGridInfo(_activeLang);
+
             FillProfileListViewByData(_proList);
-            FillNakshatraComboBox();
 
             toolStripButtonAdd.Enabled = true;
             textBoxSearch.Focus();
+        }
+
+        private void PrepareDataGridInfo(ELanguage langCode)
+        {
+            dataGridViewInfo.AutoGenerateColumns = false;
+            dataGridViewInfo.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            dataGridViewInfo.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
+
+            DataGridViewColumn column = new DataGridViewColumn();
+            column.DataPropertyName = "Planet";
+            column.Name = Utility.GetLocalizedText("", langCode);
+            column.Width = 30;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfo.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Znak";
+            column.Name = Utility.GetLocalizedText("Znak", langCode);
+            column.Width = 100;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfo.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Nakshatra";
+            column.Name = Utility.GetLocalizedText("Nakshatra", langCode);
+            column.Width = 140;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfo.Columns.Add(column);
+
+            int lastColWidth = (dataGridViewInfo.Width - 270);
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Pada";
+            column.Name = Utility.GetLocalizedText("Pada", langCode);
+            column.Width = lastColWidth;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewInfo.Columns.Add(column);
+
+            dataGridViewInfo.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewInfo.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            foreach (DataGridViewColumn col in dataGridViewInfo.Columns)
+            {
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            dataGridViewInfo.EnableHeadersVisualStyles = false;
+            dataGridViewInfo.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+            dataGridViewInfo.ScrollBars = ScrollBars.None;
+            dataGridViewInfo.Height = dataGridViewInfo.ColumnHeadersHeight;
+        }
+
+        public struct dgvRowObj
+        {
+            public string Planet { get; set; }
+            public string Zodiak { get; set; }
+            public string Nakshatra { get; set; }
+            public string Pada { get; set; }
+        }
+
+        private void ProfileInfoDataGridViewFillByRow(Profile_old person, ELanguage langCode)
+        {
+            dgvRowObj rowTemp;
+            List<dgvRowObj> rowList = new List<dgvRowObj>();
+
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedText("Lg", langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraLagnaId, person.PadaLagna),
+                Nakshatra = GetNakshatraNameById(person.NakshatraLagnaId),
+                Pada = person.PadaLagna.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SUN, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraSunId, person.PadaSun),
+                Nakshatra = GetNakshatraNameById(person.NakshatraSunId),
+                Pada = person.PadaSun.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MOON, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraMoonId, person.PadaMoon),
+                Nakshatra = GetNakshatraNameById(person.NakshatraMoonId),
+                Pada = person.PadaMoon.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MARS, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraMarsId, person.PadaMars),
+                Nakshatra = GetNakshatraNameById(person.NakshatraMarsId),
+                Pada = person.PadaMars.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MERCURY, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraMercuryId, person.PadaMercury),
+                Nakshatra = GetNakshatraNameById(person.NakshatraMercuryId),
+                Pada = person.PadaMercury.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.JUPITER, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraJupiterId, person.PadaJupiter),
+                Nakshatra = GetNakshatraNameById(person.NakshatraJupiterId),
+                Pada = person.PadaJupiter.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.VENUS, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraVenusId, person.PadaVenus),
+                Nakshatra = GetNakshatraNameById(person.NakshatraVenusId),
+                Pada = person.PadaVenus.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SATURN, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraSaturnId, person.PadaSaturn),
+                Nakshatra = GetNakshatraNameById(person.NakshatraSaturnId),
+                Pada = person.PadaSaturn.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.RAHUMEAN, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraRahuId, person.PadaRahu),
+                Nakshatra = GetNakshatraNameById(person.NakshatraRahuId),
+                Pada = person.PadaRahu.ToString()
+            };
+            rowList.Add(rowTemp);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.KETUMEAN, langCode).Substring(0, 2),
+                Zodiak = GetZodiakNameByIds(person.NakshatraKetuId, person.PadaKetu),
+                Nakshatra = GetNakshatraNameById(person.NakshatraKetuId),
+                Pada = person.PadaKetu.ToString()
+            };
+            rowList.Add(rowTemp);
+
+            for (int i = 0; i < rowList.Count; i++)
+            {
+                string[] row = new string[] {
+                        rowList[i].Planet,
+                        rowList[i].Zodiak,
+                        rowList[i].Nakshatra,
+                        rowList[i].Pada
+                };
+                dataGridViewInfo.Rows.Add(row);
+            }
+            
+            int heihgt = dataGridViewInfo.ColumnHeadersHeight;
+            for (int i = 0; i < dataGridViewInfo.RowCount; i++)
+            {
+                int rowHeight = dataGridViewInfo.Rows[i].GetPreferredHeight(i, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true);
+                heihgt += rowHeight;
+            }
+            dataGridViewInfo.Height = heihgt;
+
+        }
+
+        private string GetZodiakNameByIds(int nakshatraId, int padaId)
+        {
+            int id = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, padaId);
+            return id + ". " + _zdList.Where(i => i.ZodiakId == id).FirstOrDefault().Name;
+        }
+        private string GetNakshatraNameById(int id)
+        {
+            return id + ". " + _ndList.Where(i => i.NakshatraId == id).FirstOrDefault().Name;
         }
 
         private void FillProfileListViewByData(List<Profile_old> pList)
@@ -120,22 +299,7 @@ namespace PAD
             listViewProfile.SmallImageList = imgs;
         }
 
-        private void FillNakshatraComboBox()
-        {
-            foreach (NakshatraDescription nd in _ndList)
-            {
-                comboBoxNakshatraMoon.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraLagna.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraSun.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraVenus.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraJupiter.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraMercury.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraMars.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraSaturn.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraRahu.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-                comboBoxNakshatraKetu.Items.Add(new KeyValueData(nd.NakshatraId + "." + nd.Name, nd.NakshatraId));
-            }
-        }
+        
 
         private void ShowDataByName(string profile)
         {
@@ -147,349 +311,12 @@ namespace PAD
                 textBoxPersonSurname.Text = SelectedProfile.PersonSurname;
                 textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == SelectedProfile.PlaceOfLivingId).FirstOrDefault()?.Locality ?? string.Empty;
 
-                comboBoxNakshatraMoon.SelectedIndex = SelectedProfile.NakshatraMoonId - 1;
-                comboBoxNakshatraLagna.SelectedIndex = SelectedProfile.NakshatraLagnaId - 1;
-                comboBoxNakshatraSun.SelectedIndex = SelectedProfile.NakshatraSunId - 1;
-                comboBoxNakshatraVenus.SelectedIndex = SelectedProfile.NakshatraVenusId - 1;
-                comboBoxNakshatraJupiter.SelectedIndex = SelectedProfile.NakshatraJupiterId - 1;
-                comboBoxNakshatraMercury.SelectedIndex = SelectedProfile.NakshatraMercuryId - 1;
-                comboBoxNakshatraMars.SelectedIndex = SelectedProfile.NakshatraMarsId - 1;
-                comboBoxNakshatraSaturn.SelectedIndex = SelectedProfile.NakshatraSaturnId - 1;
-                comboBoxNakshatraRahu.SelectedIndex = SelectedProfile.NakshatraRahuId - 1;
-                comboBoxNakshatraKetu.SelectedIndex = SelectedProfile.NakshatraKetuId - 1;
+                dataGridViewInfo.Rows.Clear();
+                ProfileInfoDataGridViewFillByRow(SelectedProfile, _activeLang);
 
-                SetPadaMoonRadioButton(SelectedProfile.PadaMoon);
-                SetPadaLagnaRadioButton(SelectedProfile.PadaLagna);
-                SetPadaSunRadioButton(SelectedProfile.PadaSun);
-                SetPadaVenusRadioButton(SelectedProfile.PadaVenus);
-                SetPadaJupiterRadioButton(SelectedProfile.PadaJupiter);
-                SetPadaMercuryRadioButton(SelectedProfile.PadaMercury);
-                SetPadaMarsRadioButton(SelectedProfile.PadaMars);
-                SetPadaSaturnRadioButton(SelectedProfile.PadaSaturn);
-                SetPadaRahuRadioButton(SelectedProfile.PadaRahu);
-                SetPadaKetuRadioButton(SelectedProfile.PadaKetu);
             }
         }
 
-        private void SetPadaMoonRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonMoon1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonMoon2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonMoon3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonMoon4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaLagnaRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonLagna1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonLagna2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonLagna3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonLagna4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaSunRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonSun1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonSun2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonSun3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonSun4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaVenusRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonVenus1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonVenus2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonVenus3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonVenus4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaJupiterRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonJupiter1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonJupiter2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonJupiter3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonJupiter4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaMercuryRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonMercury1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonMercury2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonMercury3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonMercury4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaMarsRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonMars1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonMars2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonMars3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonMars4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaSaturnRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonSaturn1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonSaturn2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonSaturn3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonSaturn4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaRahuRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonRahu1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonRahu2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonRahu3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonRahu4.Checked = true;
-                    break;
-            }
-        }
-
-        private void SetPadaKetuRadioButton(int pada)
-        {
-            switch (pada)
-            {
-                case 1:
-                    radioButtonKetu1.Checked = true;
-                    break;
-                case 2:
-                    radioButtonKetu2.Checked = true;
-                    break;
-                case 3:
-                    radioButtonKetu3.Checked = true;
-                    break;
-                case 4:
-                    radioButtonKetu4.Checked = true;
-                    break;
-            }
-        }
-
-        private int GetPadaMoonFromRadioButtons()
-        {
-            if (radioButtonMoon1.Checked)
-                return 1;
-            if (radioButtonMoon2.Checked)
-                return 2;
-            if (radioButtonMoon3.Checked)
-                return 3;
-            if (radioButtonMoon4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaLagnaFromRadioButtons()
-        {
-            if (radioButtonLagna1.Checked)
-                return 1;
-            if (radioButtonLagna2.Checked)
-                return 2;
-            if (radioButtonLagna3.Checked)
-                return 3;
-            if (radioButtonLagna4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaSunFromRadioButtons()
-        {
-            if (radioButtonSun1.Checked)
-                return 1;
-            if (radioButtonSun2.Checked)
-                return 2;
-            if (radioButtonSun3.Checked)
-                return 3;
-            if (radioButtonSun4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaVenusFromRadioButtons()
-        {
-            if (radioButtonVenus1.Checked)
-                return 1;
-            if (radioButtonVenus2.Checked)
-                return 2;
-            if (radioButtonVenus3.Checked)
-                return 3;
-            if (radioButtonVenus4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaJupiterFromRadioButtons()
-        {
-            if (radioButtonJupiter1.Checked)
-                return 1;
-            if (radioButtonJupiter2.Checked)
-                return 2;
-            if (radioButtonJupiter3.Checked)
-                return 3;
-            if (radioButtonJupiter4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaMercuryFromRadioButtons()
-        {
-            if (radioButtonMercury1.Checked)
-                return 1;
-            if (radioButtonMercury2.Checked)
-                return 2;
-            if (radioButtonMercury3.Checked)
-                return 3;
-            if (radioButtonMercury4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaMarsFromRadioButtons()
-        {
-            if (radioButtonMars1.Checked)
-                return 1;
-            if (radioButtonMars2.Checked)
-                return 2;
-            if (radioButtonMars3.Checked)
-                return 3;
-            if (radioButtonMars4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaSaturnFromRadioButtons()
-        {
-            if (radioButtonSaturn1.Checked)
-                return 1;
-            if (radioButtonSaturn2.Checked)
-                return 2;
-            if (radioButtonSaturn3.Checked)
-                return 3;
-            if (radioButtonSaturn4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaRahuFromRadioButtons()
-        {
-            if (radioButtonRahu1.Checked)
-                return 1;
-            if (radioButtonRahu2.Checked)
-                return 2;
-            if (radioButtonRahu3.Checked)
-                return 3;
-            if (radioButtonRahu4.Checked)
-                return 4;
-            return 0;
-        }
-
-        private int GetPadaKetuFromRadioButtons()
-        {
-            if (radioButtonKetu1.Checked)
-                return 1;
-            if (radioButtonKetu2.Checked)
-                return 2;
-            if (radioButtonKetu3.Checked)
-                return 3;
-            if (radioButtonKetu4.Checked)
-                return 4;
-            return 0;
-        }
 
         private void listViewProfile_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -578,70 +405,7 @@ namespace PAD
             textBoxPersonName.Text = string.Empty;
             textBoxPersonSurname.Text = string.Empty;
             textBoxLivingPlace.Text = string.Empty;
-            comboBoxNakshatraMoon.SelectedIndex = -1;
-            comboBoxNakshatraLagna.SelectedIndex = -1;
-            comboBoxNakshatraSun.SelectedIndex = -1;
-            comboBoxNakshatraVenus.SelectedIndex = -1;
-            comboBoxNakshatraJupiter.SelectedIndex = -1;
-            comboBoxNakshatraMercury.SelectedIndex = -1;
-            comboBoxNakshatraMars.SelectedIndex = -1;
-            comboBoxNakshatraSaturn.SelectedIndex = -1;
-            comboBoxNakshatraRahu.SelectedIndex = -1;
-            comboBoxNakshatraKetu.SelectedIndex = -1;
-            CleanRadioButtons();
-        }
-
-        private void CleanRadioButtons()
-        {
-            radioButtonMoon1.Checked = false;
-            radioButtonMoon2.Checked = false;
-            radioButtonMoon3.Checked = false;
-            radioButtonMoon4.Checked = false;
-
-            radioButtonLagna1.Checked = false;
-            radioButtonLagna2.Checked = false;
-            radioButtonLagna3.Checked = false;
-            radioButtonLagna4.Checked = false;
-
-            radioButtonSun1.Checked = false;
-            radioButtonSun2.Checked = false;
-            radioButtonSun3.Checked = false;
-            radioButtonSun4.Checked = false;
-
-            radioButtonVenus1.Checked = false;
-            radioButtonVenus2.Checked = false;
-            radioButtonVenus3.Checked = false;
-            radioButtonVenus4.Checked = false;
-
-            radioButtonJupiter1.Checked = false;
-            radioButtonJupiter2.Checked = false;
-            radioButtonJupiter3.Checked = false;
-            radioButtonJupiter4.Checked = false;
-
-            radioButtonMercury1.Checked = false;
-            radioButtonMercury2.Checked = false;
-            radioButtonMercury3.Checked = false;
-            radioButtonMercury4.Checked = false;
-
-            radioButtonMars1.Checked = false;
-            radioButtonMars2.Checked = false;
-            radioButtonMars3.Checked = false;
-            radioButtonMars4.Checked = false;
-
-            radioButtonSaturn1.Checked = false;
-            radioButtonSaturn2.Checked = false;
-            radioButtonSaturn3.Checked = false;
-            radioButtonSaturn4.Checked = false;
-
-            radioButtonRahu1.Checked = false;
-            radioButtonRahu2.Checked = false;
-            radioButtonRahu3.Checked = false;
-            radioButtonRahu4.Checked = false;
-
-            radioButtonKetu1.Checked = false;
-            radioButtonKetu2.Checked = false;
-            radioButtonKetu3.Checked = false;
-            radioButtonKetu4.Checked = false;
+            
         }
 
         private void MakeTextFieldsEditable(bool isUpdate)
@@ -651,84 +415,8 @@ namespace PAD
             textBoxPersonSurname.ReadOnly = false;
             buttonLivingPlace.Enabled = true;
 
-            comboBoxNakshatraMoon.Enabled = true;
-            groupBoxPadaMoon.Enabled = true;
-
-            comboBoxNakshatraLagna.Enabled = true;
-            groupBoxPadaLagna.Enabled = true;
-
-            comboBoxNakshatraSun.Enabled = true;
-            groupBoxPadaSun.Enabled = true;
-
-            comboBoxNakshatraVenus.Enabled = true;
-            groupBoxPadaVenus.Enabled = true;
             
-            comboBoxNakshatraJupiter.Enabled = true;
-            groupBoxPadaJupiter.Enabled = true;
 
-            comboBoxNakshatraMercury.Enabled = true;
-            groupBoxPadaMercury.Enabled = true;
-
-            comboBoxNakshatraMars.Enabled = true;
-            groupBoxPadaMars.Enabled = true;
-
-            comboBoxNakshatraSaturn.Enabled = true;
-            groupBoxPadaSaturn.Enabled = true;
-            
-            comboBoxNakshatraRahu.Enabled = true;
-            groupBoxPadaRahu.Enabled = true;
-
-            comboBoxNakshatraKetu.Enabled = true;
-            groupBoxPadaKetu.Enabled = true;
-
-            if (SelectedProfile == null || !isUpdate)
-            {
-                comboBoxNakshatraMoon.SelectedIndex = 0;
-                comboBoxNakshatraLagna.SelectedIndex = 0;
-                comboBoxNakshatraSun.SelectedIndex = 0;
-                comboBoxNakshatraVenus.SelectedIndex = 0;
-                comboBoxNakshatraJupiter.SelectedIndex = 0;
-                comboBoxNakshatraMercury.SelectedIndex = 0;
-                comboBoxNakshatraMars.SelectedIndex = 0;
-                comboBoxNakshatraSaturn.SelectedIndex = 0;
-                comboBoxNakshatraRahu.SelectedIndex = 0;
-                comboBoxNakshatraKetu.SelectedIndex = 0;
-
-                radioButtonMoon1.Checked = true;
-                radioButtonLagna1.Checked = true;
-                radioButtonSun1.Checked = true;
-                radioButtonVenus1.Checked = true;
-                radioButtonJupiter1.Checked = true;
-                radioButtonMercury1.Checked = true;
-                radioButtonMars1.Checked = true;
-                radioButtonSaturn1.Checked = true;
-                radioButtonRahu1.Checked = true;
-                radioButtonKetu1.Checked = true;
-            }
-            else if (SelectedProfile != null && isUpdate)
-            {
-                comboBoxNakshatraMoon.SelectedIndex = SelectedProfile.NakshatraMoonId - 1;
-                comboBoxNakshatraLagna.SelectedIndex = SelectedProfile.NakshatraLagnaId - 1;
-                comboBoxNakshatraSun.SelectedIndex = SelectedProfile.NakshatraSunId - 1;
-                comboBoxNakshatraVenus.SelectedIndex = SelectedProfile.NakshatraVenusId - 1;
-                comboBoxNakshatraJupiter.SelectedIndex = SelectedProfile.NakshatraJupiterId - 1;
-                comboBoxNakshatraMercury.SelectedIndex = SelectedProfile.NakshatraMercuryId - 1;
-                comboBoxNakshatraMars.SelectedIndex = SelectedProfile.NakshatraMarsId - 1;
-                comboBoxNakshatraSaturn.SelectedIndex = SelectedProfile.NakshatraSaturnId - 1;
-                comboBoxNakshatraRahu.SelectedIndex = SelectedProfile.NakshatraRahuId - 1;
-                comboBoxNakshatraKetu.SelectedIndex = SelectedProfile.NakshatraKetuId - 1;
-
-                SetPadaMoonRadioButton(SelectedProfile.PadaMoon);
-                SetPadaLagnaRadioButton(SelectedProfile.PadaLagna);
-                SetPadaSunRadioButton(SelectedProfile.PadaSun);
-                SetPadaVenusRadioButton(SelectedProfile.PadaVenus);
-                SetPadaJupiterRadioButton(SelectedProfile.PadaJupiter);
-                SetPadaMercuryRadioButton(SelectedProfile.PadaMercury);
-                SetPadaMarsRadioButton(SelectedProfile.PadaMars);
-                SetPadaSaturnRadioButton(SelectedProfile.PadaSaturn);
-                SetPadaRahuRadioButton(SelectedProfile.PadaRahu);
-                SetPadaKetuRadioButton(SelectedProfile.PadaKetu);
-            }
 
             textBoxProfileName.BackColor = SystemColors.Window;
             textBoxPersonName.BackColor = SystemColors.Window;
@@ -742,47 +430,6 @@ namespace PAD
             textBoxPersonSurname.ReadOnly = true;
             buttonLivingPlace.Enabled = false;
 
-            comboBoxNakshatraMoon.Enabled = false;
-            comboBoxNakshatraMoon.SelectedIndex = -1;
-            groupBoxPadaMoon.Enabled = false;
-
-            comboBoxNakshatraLagna.Enabled = false;
-            comboBoxNakshatraLagna.SelectedIndex = -1;
-            groupBoxPadaLagna.Enabled = false;
-
-            comboBoxNakshatraSun.Enabled = false;
-            comboBoxNakshatraSun.SelectedIndex = -1;
-            groupBoxPadaSun.Enabled = false;
-
-            comboBoxNakshatraVenus.Enabled = false;
-            comboBoxNakshatraVenus.SelectedIndex = -1;
-            groupBoxPadaVenus.Enabled = false;
-
-            comboBoxNakshatraJupiter.Enabled = false;
-            comboBoxNakshatraJupiter.SelectedIndex = -1;
-            groupBoxPadaJupiter.Enabled = false;
-
-            comboBoxNakshatraMercury.Enabled = false;
-            comboBoxNakshatraMercury.SelectedIndex = -1;
-            groupBoxPadaMercury.Enabled = false;
-
-            comboBoxNakshatraMars.Enabled = false;
-            comboBoxNakshatraMars.SelectedIndex = -1;
-            groupBoxPadaMars.Enabled = false;
-
-            comboBoxNakshatraSaturn.Enabled = false;
-            comboBoxNakshatraSaturn.SelectedIndex = -1;
-            groupBoxPadaSaturn.Enabled = false;
-
-            comboBoxNakshatraRahu.Enabled = false;
-            comboBoxNakshatraRahu.SelectedIndex = -1;
-            groupBoxPadaRahu.Enabled = false;
-
-            comboBoxNakshatraKetu.Enabled = false;
-            comboBoxNakshatraKetu.SelectedIndex = -1;
-            groupBoxPadaKetu.Enabled = false;
-
-            CleanRadioButtons();
 
             textBoxProfileName.BackColor = SystemColors.GradientInactiveCaption;
             textBoxPersonName.BackColor = SystemColors.GradientInactiveCaption;
@@ -899,43 +546,14 @@ namespace PAD
 
         private void InsertNewProfile()
         {
-            KeyValueData selectedNakshatraItem = (KeyValueData)comboBoxNakshatraMoon.SelectedItem;
-            KeyValueData selectedNakshatraLagnaItem = (KeyValueData)comboBoxNakshatraLagna.SelectedItem;
-            KeyValueData selectedNakshatraSunItem = (KeyValueData)comboBoxNakshatraSun.SelectedItem;
-            KeyValueData selectedNakshatraVenusItem = (KeyValueData)comboBoxNakshatraVenus.SelectedItem;
-            KeyValueData selectedNakshatraJupiterItem = (KeyValueData)comboBoxNakshatraJupiter.SelectedItem;
-            KeyValueData selectedNakshatraMercuryItem = (KeyValueData)comboBoxNakshatraMercury.SelectedItem;
-            KeyValueData selectedNakshatraMarsItem = (KeyValueData)comboBoxNakshatraMars.SelectedItem;
-            KeyValueData selectedNakshatraSaturnItem = (KeyValueData)comboBoxNakshatraSaturn.SelectedItem;
-            KeyValueData selectedNakshatraRahuItem = (KeyValueData)comboBoxNakshatraRahu.SelectedItem;
-            KeyValueData selectedNakshatraKetuItem = (KeyValueData)comboBoxNakshatraKetu.SelectedItem;
-
+            
             Profile_old newProfile = new Profile_old
             {
                 ProfileName = textBoxProfileName.Text,
                 PersonName = textBoxPersonName.Text,
                 PersonSurname = textBoxPersonSurname.Text,
                 PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == _selectedLocation.Id).FirstOrDefault()?.Id ?? 0,
-                NakshatraMoonId = selectedNakshatraItem.ItemId,
-                PadaMoon = GetPadaMoonFromRadioButtons(),
-                NakshatraLagnaId = selectedNakshatraLagnaItem.ItemId,
-                PadaLagna = GetPadaLagnaFromRadioButtons(),
-                NakshatraSunId = selectedNakshatraSunItem.ItemId,
-                PadaSun = GetPadaSunFromRadioButtons(),
-                NakshatraVenusId = selectedNakshatraVenusItem.ItemId,
-                PadaVenus = GetPadaVenusFromRadioButtons(),
-                NakshatraJupiterId = selectedNakshatraJupiterItem.ItemId,
-                PadaJupiter = GetPadaJupiterFromRadioButtons(),
-                NakshatraMercuryId = selectedNakshatraMercuryItem.ItemId,
-                PadaMercury = GetPadaMercuryFromRadioButtons(),
-                NakshatraMarsId = selectedNakshatraMarsItem.ItemId,
-                PadaMars = GetPadaMarsFromRadioButtons(),
-                NakshatraSaturnId = selectedNakshatraSaturnItem.ItemId,
-                PadaSaturn = GetPadaSaturnFromRadioButtons(),
-                NakshatraRahuId = selectedNakshatraRahuItem.ItemId,
-                PadaRahu = GetPadaRahuFromRadioButtons(),
-                NakshatraKetuId = selectedNakshatraKetuItem.ItemId,
-                PadaKetu = GetPadaKetuFromRadioButtons(),
+                
                 IsChecked = false
             };
 
@@ -981,16 +599,7 @@ namespace PAD
 
         private void ModifyProfile(int pId)
         {
-            KeyValueData selectedNakshatraMoonItem = (KeyValueData)comboBoxNakshatraMoon.SelectedItem;
-            KeyValueData selectedNakshatraLagnaItem = (KeyValueData)comboBoxNakshatraLagna.SelectedItem;
-            KeyValueData selectedNakshatraSunItem = (KeyValueData)comboBoxNakshatraSun.SelectedItem;
-            KeyValueData selectedNakshatraVenusItem = (KeyValueData)comboBoxNakshatraVenus.SelectedItem;
-            KeyValueData selectedNakshatraJupiterItem = (KeyValueData)comboBoxNakshatraJupiter.SelectedItem;
-            KeyValueData selectedNakshatraMercuryItem = (KeyValueData)comboBoxNakshatraMercury.SelectedItem;
-            KeyValueData selectedNakshatraMarsItem = (KeyValueData)comboBoxNakshatraMars.SelectedItem;
-            KeyValueData selectedNakshatraSaturnItem = (KeyValueData)comboBoxNakshatraSaturn.SelectedItem;
-            KeyValueData selectedNakshatraRahuItem = (KeyValueData)comboBoxNakshatraRahu.SelectedItem;
-            KeyValueData selectedNakshatraKetuItem = (KeyValueData)comboBoxNakshatraKetu.SelectedItem;
+            
 
             int locationId = SelectedProfile.PlaceOfLivingId;
             if (_selectedLocation != null)
@@ -1002,26 +611,8 @@ namespace PAD
                 PersonName = textBoxPersonName.Text,
                 PersonSurname = textBoxPersonSurname.Text,
                 PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == locationId).FirstOrDefault()?.Id ?? 0,
-                NakshatraMoonId = selectedNakshatraMoonItem.ItemId,
-                PadaMoon = GetPadaMoonFromRadioButtons(),
-                NakshatraLagnaId = selectedNakshatraLagnaItem.ItemId,
-                PadaLagna = GetPadaLagnaFromRadioButtons(),
-                NakshatraSunId = selectedNakshatraSunItem.ItemId,
-                PadaSun = GetPadaSunFromRadioButtons(),
-                NakshatraVenusId = selectedNakshatraVenusItem.ItemId,
-                PadaVenus = GetPadaVenusFromRadioButtons(),
-                NakshatraJupiterId = selectedNakshatraJupiterItem.ItemId,
-                PadaJupiter = GetPadaJupiterFromRadioButtons(),
-                NakshatraMercuryId = selectedNakshatraMercuryItem.ItemId,
-                PadaMercury = GetPadaMercuryFromRadioButtons(),
-                NakshatraMarsId = selectedNakshatraMarsItem.ItemId,
-                PadaMars = GetPadaMarsFromRadioButtons(),
-                NakshatraSaturnId = selectedNakshatraSaturnItem.ItemId,
-                PadaSaturn = GetPadaSaturnFromRadioButtons(),
-                NakshatraRahuId = selectedNakshatraRahuItem.ItemId,
-                PadaRahu = GetPadaRahuFromRadioButtons(),
-                NakshatraKetuId = selectedNakshatraKetuItem.ItemId,
-                PadaKetu = GetPadaKetuFromRadioButtons()
+                
+               
             };
 
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -1127,6 +718,10 @@ namespace PAD
             }
         }
 
+
         
+
+
+
     }
 }
