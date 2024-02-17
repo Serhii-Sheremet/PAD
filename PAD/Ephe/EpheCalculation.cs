@@ -1204,14 +1204,20 @@ namespace PAD
             return calcLongitude;
         }
 
-        public double[] AscendanceCalculation_London(DateTime calcDate)
+        public double[] AscendanceCalculation(DateTime calcDate, double lon, double lat, double alt , int hsys)
         {
-            double lon = -0.17, lat = 51.5; // London
+            //double lon = -0.17, lat = 51.5, alt = 0; // London
+            //double lon = 26.764657, lat = 49.506984, alt = 0;  //Chorny Ostriv
+            //int hsys = 'O';
 
             double[] ascmc = new double[10];
             double[] cusps = new double[13];
-            // double tjd_ut = 2415020.5;
+            
+            EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
+            EpheFunctions.swe_set_topo(lon, lat, alt);
 
+            double jut = 0.0;
+            double tjd_ut = 2415020.5;
             int jday = calcDate.Day;
             int jmonth = calcDate.Month;
             int jyear = calcDate.Year;
@@ -1219,8 +1225,8 @@ namespace PAD
             int jmin = calcDate.Minute;
             int jsec = calcDate.Second;
 
-            double jut = jhour + jmin / 60.0 + jsec / 3600.0;
-            double tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, EpheConstants.SE_GREG_CAL);
+            jut = jhour + jmin / 60.0 + jsec / 3600.0;
+            tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, EpheConstants.SE_GREG_CAL);
 
             IntPtr ptrDouble_ascmc = Marshal.AllocHGlobal(Marshal.SizeOf(ascmc[0]) * ascmc.Length);
             Marshal.Copy(ascmc, 0, ptrDouble_ascmc, 10);
@@ -1228,10 +1234,8 @@ namespace PAD
             IntPtr ptrDouble_cusps = Marshal.AllocHGlobal(Marshal.SizeOf(cusps[0]) * cusps.Length);
             Marshal.Copy(cusps, 0, ptrDouble_cusps, 13);
 
-            int hsys = 'P';
-
-            double iflgret;
-            iflgret = EpheFunctions.swe_houses(tjd_ut, lat, lon, hsys, ptrDouble_cusps, ptrDouble_ascmc);
+            double iflgret = EpheFunctions.swe_houses_ex(tjd_ut, EpheConstants.SEFLG_SIDEREAL, lat, lon, hsys, ptrDouble_cusps, ptrDouble_ascmc);
+            //iflgret = EpheFunctions.swe_houses(tjd_ut, lat, lon, hsys, ptrDouble_cusps, ptrDouble_ascmc);
 
             Marshal.Copy(ptrDouble_ascmc, ascmc, 0, 10);
 

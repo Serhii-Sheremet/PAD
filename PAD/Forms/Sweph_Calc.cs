@@ -29,14 +29,11 @@ namespace PAD
             // 05.12.1971 00:40 -3
             DateTime calcDate = new DateTime(1971, 12, 4, 21, 40, 0);
 
-            double[] houses = eCalc.AscendanceCalculation_London(calcDate);
+            double[] houses = eCalc.AscendanceCalculation(calcDate, 26.764657, 49.506984, 0 , 'O');
             int Znak = eCalc.GetCurrentZnak(houses[0]);
             label1.Text = "House: " + houses[0] + "     " + Znak;
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+        
     }
 }
