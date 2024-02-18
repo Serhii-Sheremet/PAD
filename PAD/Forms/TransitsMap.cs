@@ -42,39 +42,10 @@ namespace PAD
 
         private void TransitsMap_Shown(object sender, EventArgs e)
         {
-            //PrepareTransitMap();
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
         }
-
-        private void PrepareTransitMap()
-        {
-            Bitmap canvas = new Bitmap(pictureBoxMapMoon.Width, pictureBoxMapMoon.Height);
-            Graphics g = Graphics.FromImage(canvas);
-            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
-            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
-
-            Pen pen = new Pen(Color.Black, 1);
-            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
-
-            int posX = 0, posY = 0, width = pictureBoxMapMoon.Width - 1, height = pictureBoxMapMoon.Height - 1;
-
-            // drawing doms triangles
-            Rectangle rect = new Rectangle(posX, posY, width, height);
-            g.FillRectangle(brush, rect);
-            g.DrawRectangle(pen, rect);
-            g.DrawLine(pen, posX, posY, posX + width, posY + height);
-            g.DrawLine(pen, posX, posY + height, posX + width, posY);
-            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
-            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
-            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
-            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
-
-            // drawing content
-            PrepareNatalMoonTransits(g, width, height);
-            pictureBoxMapMoon.Image = canvas;
-        }
-
+        
         private void PrepareTransitMapMoon()
         {
             Bitmap canvas = new Bitmap(pictureBoxMapMoon.Width, pictureBoxMapMoon.Height);

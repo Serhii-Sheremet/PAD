@@ -1269,6 +1269,29 @@ namespace PAD
             return true;
         }
 
+        public static List<PlanetData> ClonePlanetDataList(List<PlanetData> pdList)
+        {
+            List<PlanetData> newPDList = new List<PlanetData>();
+            foreach (PlanetData pd in pdList)
+            {
+                PlanetData pdObj = new PlanetData
+                {
+                    PlanetId = pd.PlanetId,
+                    Date = pd.Date,
+                    Longitude = pd.Longitude,
+                    Latitude = pd.Latitude,
+                    SpeedInLongitude = pd.SpeedInLongitude,
+                    SpedInLatitude = pd.SpedInLatitude,
+                    Retro = pd.Retro,
+                    ZodiakId = pd.ZodiakId,
+                    NakshatraId = pd.NakshatraId,
+                    PadaId = pd.PadaId
+                };
+                newPDList.Add(pdObj);
+            }
+            return newPDList;
+        }
+
         public static List<PlanetCalendar> ClonePlanetCalendarList(List<PlanetCalendar> pcList)
         {
             List<PlanetCalendar> newPCList = new List<PlanetCalendar>();
@@ -2281,6 +2304,65 @@ namespace PAD
                 default:
                     return -1;
             }
+        }
+
+        public static int GetPlanetIdBySWEConst(int sweConst)
+        {
+            switch (sweConst)
+            {
+                case EpheConstants.SE_MOON:
+                    return 1;
+
+                case EpheConstants.SE_SUN:
+                    return 2;
+
+                case EpheConstants.SE_VENUS:
+                    return 3;
+
+                case EpheConstants.SE_JUPITER:
+                    return 4;
+
+                case EpheConstants.SE_MERCURY:
+                    return 5;
+
+                case EpheConstants.SE_MARS:
+                    return 6;
+
+                case EpheConstants.SE_SATURN:
+                    return 7;
+
+                case EpheConstants.SE_MEAN_NODE:
+                    return 8;
+
+                case EpheConstants.SE_TRUE_NODE:
+                    return 10;
+
+                default:
+                    return -1;
+            }
+        }
+
+        public static string ConvertDecimalToDegree(double decimalValue)
+        {
+            int degree = (int)decimalValue;
+            
+            if (degree > 30)
+            {
+                int amount = degree / 30;
+                degree = degree - (amount * 30);
+            }
+
+            int sec = (int)Math.Round(decimalValue * 3600);
+            int deg = sec / 3600;
+            sec = Math.Abs(sec % 3600);
+            int min = sec / 60;
+            sec %= 60;
+            return degree + "º" + min + "'" + sec + "\"";
+        }
+
+        public static int GetPadaNumberByPadaId(int padaId)
+        {
+            return CacheLoad._padaList.Where(i => i.Id == padaId).FirstOrDefault()?.PadaNumber ?? 0;
         }
 
         public static string GetLocalizedPlanetNameByCode(EPlanet planetCode, ELanguage langCode)

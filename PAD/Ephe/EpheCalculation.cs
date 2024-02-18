@@ -916,6 +916,7 @@ namespace PAD
             }
             PlanetData pdData = new PlanetData
             {
+                PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
                 Date = date,
                 Longitude = pResults.CalcResults[0],
                 Latitude = pResults.CalcResults[1],
@@ -1081,7 +1082,7 @@ namespace PAD
                 return false;
         }
 
-        private int GetCurrentNakshatra(double longitude)
+        public int GetCurrentNakshatra(double longitude)
         {
             double nakshatraPart = 360.0000 / 27;
 
@@ -1100,7 +1101,7 @@ namespace PAD
             return currentNakshatra;
         }
 
-        private int GetCurrentPada(double longitude)
+        public int GetCurrentPada(double longitude)
         {
             double padaPart = 360.0000 / 108;
 
@@ -1151,8 +1152,19 @@ namespace PAD
         public PlanetData CalculateKetu(PlanetData rahuData)
         {
             double kLongitude = CalculateKetuDegree(rahuData.Longitude);
+            int planetId = 0;
+            if (rahuData.PlanetId == 8)
+            {
+                planetId = 9;
+            }
+            if (rahuData.PlanetId == 10)
+            {
+                planetId = 11;
+            }
+
             PlanetData pdData = new PlanetData
             {
+                PlanetId = planetId,
                 Date = rahuData.Date,
                 Longitude = kLongitude,
                 Latitude = rahuData.Latitude,
@@ -1204,7 +1216,7 @@ namespace PAD
             return calcLongitude;
         }
 
-        public double[] AscendanceCalculation(DateTime calcDate, double lon, double lat, double alt , int hsys)
+        public double[] AscendanceCalculation(DateTime calcDate, double lat, double lon, double alt , int hsys)
         {
             //double lon = -0.17, lat = 51.5, alt = 0; // London
             //double lon = 26.764657, lat = 49.506984, alt = 0;  //Chorny Ostriv
