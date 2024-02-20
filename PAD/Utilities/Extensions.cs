@@ -122,5 +122,13 @@ namespace PAD
             return new LocalDateTime(dateTime.Year, dateTime.Month, dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
         }
 
+        public static int SelectedIndex(this ListView listView)
+        {
+            if (listView.SelectedIndices.Count > 0)
+                return listView.SelectedIndices[0];
+            else
+                return 0;
+        }
+
     }
 }

@@ -331,7 +331,6 @@
     <Compile Include="Profile\Location.cs" />
     <Compile Include="Profile\PersonsEventsList.cs" />
     <Compile Include="Profile\Profile.cs" />
-    <Compile Include="Profile\Profile_old.cs" />
     <Compile Include="Forms\TransitsMap.cs">
       <SubType>Form</SubType>
     </Compile>

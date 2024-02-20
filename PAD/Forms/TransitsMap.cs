@@ -20,7 +20,7 @@ namespace PAD
             }
         }
 
-        private Profile_old _personInfo;
+        private Profile _personInfo;
         private ELanguage _activeLang;
         private DateTime _eventDate;
 
@@ -29,7 +29,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public TransitsMap(Profile_old profile, ELanguage langCode)
+        public TransitsMap(Profile profile, ELanguage langCode)
         {
             InitializeComponent();
 
@@ -266,7 +266,7 @@ namespace PAD
             int posX = 0, posY = 0;
             // placing dom numbers based on natal moon
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(zList, Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraMoonId, _personInfo.PadaMoon));
+            List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(zList, Utility.GetZodiakIdFromNakshatraIdandPada(CacheLoad._birthNakshatraMoonId, CacheLoad._birthPadaMoonNumber));
             SettingNumberInDom(g, posX, posY, width, height, swappedZodiakList);
 
             //Get list of planets per dom
@@ -285,19 +285,19 @@ namespace PAD
             int posX = 0, posY = 0;
             // placing dom numbers based on lagna
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            int lagnaId = Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraLagnaId, _personInfo.PadaLagna);
-            List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
-            SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+            //int lagnaId = Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraLagnaId, _personInfo.PadaLagna);
+            //List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
+            //SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
 
             //Get list of planets per dom
-            List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+            //List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
 
             Font textFont = new Font("Times New Roman", 11, FontStyle.Bold);
             Font aspectFont = new Font("Times New Roman", 11, FontStyle.Regular);
             Size textSize = TextRenderer.MeasureText("СоR", textFont);
-
-            for (int i = 0; i < 12; i++)
-                DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
+            
+            //for (int i = 0; i < 12; i++)
+            //    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
         }
 
         private void DrawDomWithPlanets(Graphics g, int width, int height, Font textFont, Font aspectFont, int textHeight, List<DomPlanet>[] planetsList, int index)

@@ -1,12 +1,11 @@
-﻿using NodaTime;
-using System;
-using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
+using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using static PAD.MainForm;
 
 namespace PAD
 {
@@ -23,7 +22,7 @@ namespace PAD
             }
         }
 
-        private List<Profile_old> _proList;
+        private List<Profile> _proList;
         private ELanguage _activeLang;
         private bool _isNew;
         private bool _isModify;
@@ -32,14 +31,18 @@ namespace PAD
         private List<ZodiakDescription> _zdList;
         private Location _selectedBirthLocation;
         private Location _selectedLivingLocation;
+
+        private List<PlanetData> _pdBirthList;
+        private double _birthAscendant;
+
         private List<PlanetData> _pdList;
         private double _ascendant;
         private int _lagnaId;
         private int _nakshatralagnaId;
         private int _padaLagna;
 
-        private Profile_old _profile;
-        public Profile_old SelectedProfile
+        private Profile _profile;
+        public Profile SelectedProfile
         {
             get { return _profile; }
             set { _profile = value; }
@@ -64,7 +67,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public ProfileForm(List<Profile_old> pList, ELanguage activeLang, bool sMode)
+        public ProfileForm(List<Profile> pList, ELanguage activeLang, bool sMode)
         {
             InitializeComponent();
 
@@ -103,51 +106,10 @@ namespace PAD
             FillProfileListViewByData(_proList);
       
             PrepareDataGridInfo(_activeLang);
-            //listViewProfile.Items[0].Selected = true;
+            listViewProfile.Items[0].Selected = true;
 
             toolStripButtonAdd.Enabled = true;
             textBoxSearch.Focus();
-        }
-
-        private void CalculatePlanetsPosition(DateTime date, double latitude, double longitude)
-        {
-            string timeZone = string.Empty;
-            timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
-            LocalDateTime localDateTimeStart = date.ToLocalDateTime();
-            ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
-            DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);
-
-
-            EpheCalculation eCalc = new EpheCalculation();
-
-            _pdList = new List<PlanetData>();
-            PlanetData moonData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MOON, shiftedDate);
-            _pdList.Add(moonData);
-            PlanetData sunData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SUN, shiftedDate);
-            _pdList.Add(sunData);
-            PlanetData mercuryData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MERCURY, shiftedDate);
-            _pdList.Add(mercuryData);
-            PlanetData venusData = eCalc.CalculatePlanetData_London(EpheConstants.SE_VENUS, shiftedDate);
-            _pdList.Add(venusData);
-            PlanetData marsData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MARS, shiftedDate);
-            _pdList.Add(marsData);
-            PlanetData jupiterData = eCalc.CalculatePlanetData_London(EpheConstants.SE_JUPITER, shiftedDate);
-            _pdList.Add(jupiterData);
-            PlanetData saturnData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SATURN, shiftedDate);
-            _pdList.Add(saturnData);
-            PlanetData rahuMeanData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MEAN_NODE, shiftedDate);
-            _pdList.Add(rahuMeanData);
-            PlanetData rahuTrueData = eCalc.CalculatePlanetData_London(EpheConstants.SE_TRUE_NODE, shiftedDate);
-            _pdList.Add(rahuTrueData);
-            PlanetData ketuMeanData = eCalc.CalculateKetu(rahuMeanData);
-            _pdList.Add(ketuMeanData);
-            PlanetData ketuTrueData = eCalc.CalculateKetu(rahuTrueData);
-            _pdList.Add(ketuTrueData);
-            _ascendant = eCalc.AscendanceCalculation(shiftedDate, latitude, longitude, 0, 'O')[0];
-            _nakshatralagnaId = eCalc.GetCurrentNakshatra(_ascendant);
-            _padaLagna = Utility.GetPadaNumberByPadaId(eCalc.GetCurrentPada(_ascendant));
-            _lagnaId = eCalc.GetCurrentZnak(_ascendant);
-
         }
 
         private void PrepareTransitMap()
@@ -186,9 +148,18 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                nakshatraId = SelectedProfile.NakshatraLagnaId;
-                pada = SelectedProfile.PadaLagna;
-                lagnaId = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
+                Location birthLocation = CacheLoad._locationList.Where(i => i.Id == SelectedProfile.PlaceOfBirthId).FirstOrDefault();
+                double latitude, longitude;
+                if (double.TryParse(birthLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                    double.TryParse(birthLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+                {
+                    _pdBirthList = Utility.CalculatePlanetsPositionForDate(SelectedProfile.DateOfBirth, latitude, longitude);
+                    _birthAscendant = Utility.CalculateAscendantForDate(SelectedProfile.DateOfBirth, latitude, longitude, 0, 'O');
+
+                    nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+                    pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+                    lagnaId = Utility.GetZodiakIdFromDegree(_birthAscendant);
+                }
             }
             else
             {
@@ -206,7 +177,7 @@ namespace PAD
             //Get list of planets per dom
             List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
 
-            Font textFont = new Font("Times New Roman", 14, FontStyle.Bold);
+            Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
             Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
             Size textSize = TextRenderer.MeasureText("СоR", textFont);
 
@@ -392,28 +363,22 @@ namespace PAD
 
             // remove nodes from list based on config
             EAppSetting nodeSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
-            List<PlanetData> pdTunedList =/* new List<PlanetData>();*/  Utility.ClonePlanetDataList(_pdList);
+            List<PlanetData> pdTunedList;
+            if (SelectedProfile != null)
+            {
+                pdTunedList = Utility.ClonePlanetDataList(_pdBirthList);
+            }
+            else
+            {
+                pdTunedList = Utility.ClonePlanetDataList(_pdList);
+            }
             if (nodeSetting == EAppSetting.NODEMEAN)
             {
-                /*foreach (PlanetData pd in _pdList)
-                {
-                    if (pd.PlanetId != 10 && pd.PlanetId != 11)
-                    { 
-                        pdTunedList.Add(pd);
-                    }
-                }*/
                 var planetToRemove = new[] { 10, 11 };
                 pdTunedList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
             }
             if (nodeSetting == EAppSetting.NODETRUE)
             {
-                /*foreach (PlanetData pd in _pdList)
-                {
-                    if (pd.PlanetId != 8 && pd.PlanetId != 9)
-                    {
-                        pdTunedList.Add(pd);
-                    }
-                }*/
                 var planetToRemove = new[] { 8, 9 };
                 pdTunedList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
             }
@@ -2330,7 +2295,7 @@ namespace PAD
             }
             dataGridViewInfo.EnableHeadersVisualStyles = false;
             dataGridViewInfo.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
-            dataGridViewInfo.ScrollBars = ScrollBars.None;
+            dataGridViewInfo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             dataGridViewInfo.Height = dataGridViewInfo.ColumnHeadersHeight;
         }
 
@@ -2352,9 +2317,12 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraLagnaId, SelectedProfile.PadaLagna);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraLagnaId);
-                pada = SelectedProfile.PadaLagna.ToString();
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+                degree = Utility.ConvertDecimalToDegree(_birthAscendant);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2375,9 +2343,13 @@ namespace PAD
 
             if(SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraSunId, SelectedProfile.PadaSun);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraSunId);
-                pada = SelectedProfile.PadaSun.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2401,9 +2373,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraMoonId, SelectedProfile.PadaMoon);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraMoonId);
-                pada = SelectedProfile.PadaMoon.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2427,9 +2403,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraMarsId, SelectedProfile.PadaMars);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraMarsId);
-                pada = SelectedProfile.PadaMars.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2453,9 +2433,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraMercuryId, SelectedProfile.PadaMercury);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraMercuryId);
-                pada = SelectedProfile.PadaMercury.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2479,9 +2463,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraJupiterId, SelectedProfile.PadaJupiter);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraJupiterId);
-                pada = SelectedProfile.PadaJupiter.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2505,9 +2493,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraVenusId, SelectedProfile.PadaVenus);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraVenusId);
-                pada = SelectedProfile.PadaVenus.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2531,9 +2523,13 @@ namespace PAD
 
             if (SelectedProfile != null)
             {
-                zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraSaturnId, SelectedProfile.PadaSaturn);
-                nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraSaturnId);
-                pada = SelectedProfile.PadaSaturn.ToString();
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().Longitude;
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                nakshatra = GetNakshatraNameById(nakshatraId);
+                pada = padaNum.ToString();
+                zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
             }
             else
             {
@@ -2559,9 +2555,13 @@ namespace PAD
             {
                 if (SelectedProfile != null)
                 {
-                    zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraRahuId, SelectedProfile.PadaRahu);
-                    nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraRahuId);
-                    pada = SelectedProfile.PadaRahu.ToString();
+                    double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().Longitude;
+                    int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                    int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                    degree = Utility.ConvertDecimalToDegree(pLong);
+                    nakshatra = GetNakshatraNameById(nakshatraId);
+                    pada = padaNum.ToString();
+                    zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
                 }
                 else
                 {
@@ -2585,9 +2585,13 @@ namespace PAD
 
                 if (SelectedProfile != null)
                 {
-                    zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraKetuId, SelectedProfile.PadaKetu);
-                    nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraKetuId);
-                    pada = SelectedProfile.PadaKetu.ToString();
+                    double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().Longitude;
+                    int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                    int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                    degree = Utility.ConvertDecimalToDegree(pLong);
+                    nakshatra = GetNakshatraNameById(nakshatraId);
+                    pada = padaNum.ToString();
+                    zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
                 }
                 else
                 {
@@ -2614,9 +2618,13 @@ namespace PAD
             {
                 if (SelectedProfile != null)
                 {
-                    zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraRahuId, SelectedProfile.PadaRahu);
-                    nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraRahuId);
-                    pada = SelectedProfile.PadaRahu.ToString();
+                    double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().Longitude;
+                    int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                    int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                    degree = Utility.ConvertDecimalToDegree(pLong);
+                    nakshatra = GetNakshatraNameById(nakshatraId);
+                    pada = padaNum.ToString();
+                    zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
                 }
                 else
                 {
@@ -2640,9 +2648,13 @@ namespace PAD
 
                 if (SelectedProfile != null)
                 {
-                    zodiak = GetZodiakNameByIds(SelectedProfile.NakshatraKetuId, SelectedProfile.PadaKetu);
-                    nakshatra = GetNakshatraNameById(SelectedProfile.NakshatraKetuId);
-                    pada = SelectedProfile.PadaKetu.ToString();
+                    double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().Longitude;
+                    int nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                    int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                    degree = Utility.ConvertDecimalToDegree(pLong);
+                    nakshatra = GetNakshatraNameById(nakshatraId);
+                    pada = padaNum.ToString();
+                    zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
                 }
                 else
                 {
@@ -2665,6 +2677,7 @@ namespace PAD
                 rowList.Add(rowTemp);
             }
 
+            dataGridViewInfo.Rows.Clear();
             for (int i = 0; i < rowList.Count; i++)
             {
                 string[] row = new string[] {
@@ -2687,9 +2700,9 @@ namespace PAD
             dataGridViewInfo.ClearSelection();
         }
 
-        private string GetZodiakNameByIds(int nakshatraId, int padaId)
+        private string GetZodiakNameByIds(int nakshatraId, int pada)
         {
-            int id = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, padaId);
+            int id = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
             return id + ". " + _zdList.Where(i => i.ZodiakId == id).FirstOrDefault().Name;
         }
         private string GetNakshatraNameById(int id)
@@ -2697,14 +2710,14 @@ namespace PAD
             return id + ". " + _ndList.Where(i => i.NakshatraId == id).FirstOrDefault().Name;
         }
 
-        private void FillProfileListViewByData(List<Profile_old> pList)
+        private void FillProfileListViewByData(List<Profile> pList)
         {
             if (pList.Count > 0)
             {
                 PrepareListView();
-                foreach (Profile_old p in pList)
+                foreach (Profile p in pList)
                 {
-                    if (p.IsChecked)
+                    if (p.Checked == 1)
                     {
                         listViewProfile.Items.Add(p.ProfileName, 0);
                     }
@@ -2735,8 +2748,11 @@ namespace PAD
             {
                 textBoxProfileName.Text = SelectedProfile.ProfileName;
                 textBoxPersonName.Text = SelectedProfile.PersonName;
-                textBoxPersonSurname.Text = SelectedProfile.PersonSurname;
+                textBoxPersonSurname.Text = SelectedProfile.PersonSurname; 
+                maskedTextBoxDate.Text = SelectedProfile.DateOfBirth.ToString("dd.MM.yyyy HH:mm:ss");
+                textBoxBirthPlace.Text = CacheLoad._locationList.Where(i => i.Id == SelectedProfile.PlaceOfBirthId).FirstOrDefault()?.Locality ?? string.Empty;
                 textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == SelectedProfile.PlaceOfLivingId).FirstOrDefault()?.Locality ?? string.Empty;
+                richTextBoxNotes.Text = SelectedProfile.Message;
 
                 dataGridViewInfo.Rows.Clear();
                 PrepareTransitMap();
@@ -2782,14 +2798,14 @@ namespace PAD
             {
                 return;
             }
-            int intselectedindex = listViewProfile.SelectedIndices[0];
-            if (intselectedindex >= 0)
+            int selectedIndex = listViewProfile.SelectedIndex();
+            if (selectedIndex >= 0)
             {
-                selectedProfileId = _proList.Where(i => i.ProfileName.Equals(listViewProfile.SelectedItems[0].Text)).FirstOrDefault()?.Id ?? 0;
+                selectedProfileId = _proList.Where(i => i.ProfileName.Equals(listViewProfile.Items[selectedIndex].Text)).FirstOrDefault()?.Id ?? 0;
             }
             if (selectedProfileId != 0)
             {
-                SelectedProfile = CacheLoad._profileList_old.Where(i => i.Id == selectedProfileId).FirstOrDefault();
+                SelectedProfile = CacheLoad._profileList.Where(i => i.Id == selectedProfileId).FirstOrDefault();
                 IsChosen = true;
             }
             else
@@ -2806,7 +2822,7 @@ namespace PAD
             {
                 listViewProfile.Items.Clear();
                 CleanFields();
-                foreach (Profile_old p in _proList)
+                foreach (Profile p in _proList)
                 {
                     PrepareListView();
                     if (p.ProfileName.ToLower().StartsWith(textBoxSearch.Text.ToLower().Trim()))
@@ -2835,7 +2851,9 @@ namespace PAD
             maskedTextBoxDate.Text = string.Empty;
             textBoxBirthPlace.Text = string.Empty;
             textBoxLivingPlace.Text = string.Empty;
-            
+            richTextBoxNotes.Text = string.Empty;
+            pictureBoxMap.Image = null;
+            dataGridViewInfo.Rows.Clear();
         }
 
         private void MakeTextFieldsEditable(bool isUpdate)
@@ -2844,16 +2862,14 @@ namespace PAD
             textBoxPersonName.ReadOnly = false;
             textBoxPersonSurname.ReadOnly = false;
             maskedTextBoxDate.ReadOnly = false;
+            richTextBoxNotes.ReadOnly = false;
             buttonBirthPlace.Enabled = true;
             buttonLivingPlace.Enabled = true;
-
-            
-
-
             textBoxProfileName.BackColor = SystemColors.Window;
             textBoxPersonName.BackColor = SystemColors.Window;
             textBoxPersonSurname.BackColor = SystemColors.Window;
             maskedTextBoxDate.BackColor = SystemColors.Window;
+            richTextBoxNotes.BackColor = SystemColors.Window;
         }
 
         private void MakeTextFieldsReadOnly()
@@ -2861,12 +2877,15 @@ namespace PAD
             textBoxProfileName.ReadOnly = true;
             textBoxPersonName.ReadOnly = true;
             textBoxPersonSurname.ReadOnly = true;
+            maskedTextBoxDate.ReadOnly = true;
+            richTextBoxNotes.ReadOnly = true;
+            buttonBirthPlace.Enabled = false;
             buttonLivingPlace.Enabled = false;
-
-
             textBoxProfileName.BackColor = SystemColors.GradientInactiveCaption;
             textBoxPersonName.BackColor = SystemColors.GradientInactiveCaption;
             textBoxPersonSurname.BackColor = SystemColors.GradientInactiveCaption;
+            maskedTextBoxDate.BackColor= SystemColors.GradientInactiveCaption;
+            richTextBoxNotes.BackColor= SystemColors.GradientInactiveCaption;
         }
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
@@ -2880,7 +2899,9 @@ namespace PAD
             toolStripButtonAdd.Enabled = false;
             toolStripButtonEdit.Enabled = false;
             toolStripButtonDelete.Enabled = false;
-            toolStripButtonSave.Enabled = true;
+            toolStripButtonSave.Enabled = false;
+            buttonGenerateMap.Enabled = true;
+            buttonSaveProfile.Enabled = false;
             buttonChoose.Enabled = false;
             buttonDefault.Enabled = false;
             MakeTextFieldsEditable(false);
@@ -2937,7 +2958,7 @@ namespace PAD
                 DeleteProfile(selectedProfileId);
 
                 _proList.RemoveAll(i => i.Id == selectedProfileId);
-                CacheLoad._profileList_old.RemoveAll(i => i.Id == selectedProfileId);
+                CacheLoad._profileList.RemoveAll(i => i.Id == selectedProfileId);
                 FillProfileListViewByData(_proList);
 
                 CleanFields();
@@ -2951,28 +2972,13 @@ namespace PAD
 
         private void toolStripButtonSave_Click(object sender, EventArgs e)
         {
-            if (textBoxProfileName.Text.Equals(string.Empty))
-            {
-                frmShowMessage.Show(Utility.GetLocalizedText("Enter profile name.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
-                return;
-            }
-            if (textBoxLivingPlace.Text.Equals(string.Empty))
-            {
-                frmShowMessage.Show(Utility.GetLocalizedText("Choose place of living.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
-                return;
-            }
-
-            if (_isNew)
-            {
-                InsertNewProfile();
-            }
             if (_isModify)
             {
                 ModifyProfile(SelectedProfile.Id);
             }
 
-            CacheLoad._profileList_old = CacheLoad.GetProfileList();
-            _proList = CacheLoad._profileList_old.ToList();
+            CacheLoad._profileList = CacheLoad.GetProfilesList();
+            _proList = CacheLoad._profileList.ToList();
             FillProfileListViewByData(_proList);
 
             buttonChoose.Enabled = false;
@@ -2990,15 +2996,17 @@ namespace PAD
 
         private void InsertNewProfile()
         {
-            
-            Profile_old newProfile = new Profile_old
+            DateTime date = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+            Profile newProfile = new Profile
             {
                 ProfileName = textBoxProfileName.Text,
                 PersonName = textBoxPersonName.Text,
                 PersonSurname = textBoxPersonSurname.Text,
+                DateOfBirth = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                PlaceOfBirthId = CacheLoad._locationList.Where(i => i.Id == _selectedBirthLocation.Id).FirstOrDefault()?.Id ?? 0,
                 PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == _selectedLivingLocation.Id).FirstOrDefault()?.Id ?? 0,
-                
-                IsChecked = false
+                Message = richTextBoxNotes.Text,
+                Checked = 0
             };
 
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -3006,34 +3014,15 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    SQLiteCommand command = new SQLiteCommand("insert into PROFILE_OLD (PROFILENAME, PERSONNAME, PERSONSURNAME, PLACEOFLIVINGID, NAKSHATRAMOONID, PADAMOON, NAKSHATRALAGNAID, PADALAGNA, NAKSHATRASUNID, PADASUN, NAKSHATRAVENUSID, PADAVENUS, NAKSHATRAJUPITERID, PADAJUPITER, NAKSHATRAMERCURYID, PADAMERCURY, NAKSHATRAMARSID, PADAMARS, NAKSHATRASATURNID, PADASATURN, NAKSHATRARAHUID, PADARAHU, NAKSHATRAKETUID, PADAKETU, CHECKED, GUID) values (@PROFILENAME, @PERSONNAME, @PERSONSURNAME, @PLACEOFLIVINGID, @NAKSHATRAMOONID, @PADAMOON, @NAKSHATRALAGNAID, @PADALAGNA, @NAKSHATRASUNID, @PADASUN, @NAKSHATRAVENUSID, @PADAVENUS, @NAKSHATRAJUPITERID, @PADAJUPITER, @NAKSHATRAMERCURYID, @PADAMERCURY, @NAKSHATRAMARSID, @PADAMARS, @NAKSHATRASATURNID, @PADASATURN, @NAKSHATRARAHUID, @PADARAHU, @NAKSHATRAKETUID, @PADAKETU, @CHECKED, @GUID)", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("insert into PROFILE (PROFILENAME, PERSONNAME, PERSONSURNAME, DATEOFBIRTH, PLACEOFBIRTHID, PLACEOFLIVINGID, MESSAGE, CHECKED) values (@PROFILENAME, @PERSONNAME, @PERSONSURNAME, @DATEOFBIRTH, @PLACEOFBIRTHID, @PLACEOFLIVINGID, @MESSAGE, @CHECKED)", dbCon);
                     command.Parameters.AddWithValue("@PROFILENAME", newProfile.ProfileName);
                     command.Parameters.AddWithValue("@PERSONNAME", newProfile.PersonName);
                     command.Parameters.AddWithValue("@PERSONSURNAME", newProfile.PersonSurname);
+                    command.Parameters.AddWithValue("@DATEOFBIRTH", newProfile.DateOfBirth.ToString("yyyy-MM-dd HH:mm:ss"));
+                    command.Parameters.AddWithValue("@PLACEOFBIRTHID", newProfile.PlaceOfBirthId);
                     command.Parameters.AddWithValue("@PLACEOFLIVINGID", newProfile.PlaceOfLivingId);
-                    command.Parameters.AddWithValue("@NAKSHATRAMOONID", newProfile.NakshatraMoonId);
-                    command.Parameters.AddWithValue("@PADAMOON", newProfile.PadaMoon);
-                    command.Parameters.AddWithValue("@NAKSHATRALAGNAID", newProfile.NakshatraLagnaId);
-                    command.Parameters.AddWithValue("@PADALAGNA", newProfile.PadaLagna);
-                    command.Parameters.AddWithValue("@NAKSHATRASUNID", newProfile.NakshatraSunId);
-                    command.Parameters.AddWithValue("@PADASUN", newProfile.PadaSun);
-                    command.Parameters.AddWithValue("@NAKSHATRAVENUSID", newProfile.NakshatraVenusId);
-                    command.Parameters.AddWithValue("@PADAVENUS", newProfile.PadaVenus);
-                    command.Parameters.AddWithValue("@NAKSHATRAJUPITERID", newProfile.NakshatraJupiterId);
-                    command.Parameters.AddWithValue("@PADAJUPITER", newProfile.PadaJupiter);
-                    command.Parameters.AddWithValue("@NAKSHATRAMERCURYID", newProfile.NakshatraMercuryId);
-                    command.Parameters.AddWithValue("@PADAMERCURY", newProfile.PadaMercury);
-                    command.Parameters.AddWithValue("@NAKSHATRAMARSID", newProfile.NakshatraMarsId);
-                    command.Parameters.AddWithValue("@PADAMARS", newProfile.PadaMars);
-                    command.Parameters.AddWithValue("@NAKSHATRASATURNID", newProfile.NakshatraSaturnId);
-                    command.Parameters.AddWithValue("@PADASATURN", newProfile.PadaSaturn);
-                    command.Parameters.AddWithValue("@NAKSHATRARAHUID", newProfile.NakshatraRahuId);
-                    command.Parameters.AddWithValue("@PADARAHU", newProfile.PadaRahu);
-                    command.Parameters.AddWithValue("@NAKSHATRAKETUID", newProfile.NakshatraKetuId);
-                    command.Parameters.AddWithValue("@PADAKETU", newProfile.PadaKetu);
-                    command.Parameters.AddWithValue("@CHECKED", Convert.ToInt32(newProfile.IsChecked));
-                    command.Parameters.AddWithValue("@GUID", newProfile.GUID);
-
+                    command.Parameters.AddWithValue("@MESSAGE", newProfile.Message);
+                    command.Parameters.AddWithValue("@CHECKED", newProfile.Checked);
                     command.ExecuteNonQuery();
                 }
                 catch { }
@@ -3049,14 +3038,15 @@ namespace PAD
             if (_selectedLivingLocation != null)
                 locationId = _selectedLivingLocation.Id;
 
-            Profile_old newProfile = new Profile_old
+            Profile newProfile = new Profile
             {
                 ProfileName = textBoxProfileName.Text,
                 PersonName = textBoxPersonName.Text,
                 PersonSurname = textBoxPersonSurname.Text,
+                DateOfBirth = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
+                PlaceOfBirthId = CacheLoad._locationList.Where(i => i.Id == _selectedBirthLocation.Id).FirstOrDefault()?.Id ?? 0,
                 PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == locationId).FirstOrDefault()?.Id ?? 0,
-                
-               
+                Message = richTextBoxNotes.Text
             };
 
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
@@ -3064,31 +3054,14 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    SQLiteCommand command = new SQLiteCommand("update PROFILE_OLD set PROFILENAME = @PROFILENAME, PERSONNAME = @PERSONNAME, PERSONSURNAME = @PERSONSURNAME, PLACEOFLIVINGID = @PLACEOFLIVINGID, NAKSHATRAMOONID = @NAKSHATRAMOONID, PADAMOON = @PADAMOON, NAKSHATRALAGNAID = @NAKSHATRALAGNAID, PADALAGNA = @PADALAGNA, NAKSHATRASUNID = @NAKSHATRASUNID, PADASUN = @PADASUN, NAKSHATRAVENUSID = @NAKSHATRAVENUSID, PADAVENUS = @PADAVENUS, NAKSHATRAJUPITERID = @NAKSHATRAJUPITERID, PADAJUPITER = @PADAJUPITER, NAKSHATRAMERCURYID = @NAKSHATRAMERCURYID, PADAMERCURY = @PADAMERCURY, NAKSHATRAMARSID = @NAKSHATRAMARSID, PADAMARS = @PADAMARS, NAKSHATRASATURNID = @NAKSHATRASATURNID, PADASATURN = @PADASATURN, NAKSHATRARAHUID = @NAKSHATRARAHUID, PADARAHU = @PADARAHU, NAKSHATRAKETUID = @NAKSHATRAKETUID, PADAKETU = @PADAKETU where ID = @ID", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("update PROFILE set PROFILENAME = @PROFILENAME, PERSONNAME = @PERSONNAME, PERSONSURNAME = @PERSONSURNAME, DATEOFBIRTH = @DATEOFBIRTH, PLACEOFBIRTHID = @PLACEOFBIRTHID, PLACEOFLIVINGID = @PLACEOFLIVINGID, MESSAGE = @MESSAGE where ID = @ID", dbCon);
                     command.Parameters.AddWithValue("@PROFILENAME", newProfile.ProfileName);
                     command.Parameters.AddWithValue("@PERSONNAME", newProfile.PersonName);
                     command.Parameters.AddWithValue("@PERSONSURNAME", newProfile.PersonSurname);
+                    command.Parameters.AddWithValue("@DATEOFBIRTH", newProfile.DateOfBirth);
+                    command.Parameters.AddWithValue("@PLACEOFBIRTHID", newProfile.PlaceOfBirthId);
                     command.Parameters.AddWithValue("@PLACEOFLIVINGID", newProfile.PlaceOfLivingId);
-                    command.Parameters.AddWithValue("@NAKSHATRAMOONID", newProfile.NakshatraMoonId);
-                    command.Parameters.AddWithValue("@PADAMOON", newProfile.PadaMoon);
-                    command.Parameters.AddWithValue("@NAKSHATRALAGNAID", newProfile.NakshatraLagnaId);
-                    command.Parameters.AddWithValue("@PADALAGNA", newProfile.PadaLagna);
-                    command.Parameters.AddWithValue("@NAKSHATRASUNID", newProfile.NakshatraSunId);
-                    command.Parameters.AddWithValue("@PADASUN", newProfile.PadaSun);
-                    command.Parameters.AddWithValue("@NAKSHATRAVENUSID", newProfile.NakshatraVenusId);
-                    command.Parameters.AddWithValue("@PADAVENUS", newProfile.PadaVenus);
-                    command.Parameters.AddWithValue("@NAKSHATRAJUPITERID", newProfile.NakshatraJupiterId);
-                    command.Parameters.AddWithValue("@PADAJUPITER", newProfile.PadaJupiter);
-                    command.Parameters.AddWithValue("@NAKSHATRAMERCURYID", newProfile.NakshatraMercuryId);
-                    command.Parameters.AddWithValue("@PADAMERCURY", newProfile.PadaMercury);
-                    command.Parameters.AddWithValue("@NAKSHATRAMARSID", newProfile.NakshatraMarsId);
-                    command.Parameters.AddWithValue("@PADAMARS", newProfile.PadaMars);
-                    command.Parameters.AddWithValue("@NAKSHATRASATURNID", newProfile.NakshatraSaturnId);
-                    command.Parameters.AddWithValue("@PADASATURN", newProfile.PadaSaturn);
-                    command.Parameters.AddWithValue("@NAKSHATRARAHUID", newProfile.NakshatraRahuId);
-                    command.Parameters.AddWithValue("@PADARAHU", newProfile.PadaRahu);
-                    command.Parameters.AddWithValue("@NAKSHATRAKETUID", newProfile.NakshatraKetuId);
-                    command.Parameters.AddWithValue("@PADAKETU", newProfile.PadaKetu);
+                    command.Parameters.AddWithValue("@MESSAGE", newProfile.Message);
                     command.Parameters.AddWithValue("@ID", pId);
                     command.ExecuteNonQuery();
                 }
@@ -3105,10 +3078,10 @@ namespace PAD
                 SQLiteCommand command;
                 try
                 {
-                    command = new SQLiteCommand("update PROFILE_OLD set CHECKED = 0", dbCon);
+                    command = new SQLiteCommand("update PROFILE set CHECKED = 0", dbCon);
                     command.ExecuteNonQuery();
 
-                    command = new SQLiteCommand("update PROFILE_OLD set CHECKED = 1 where ID = @ID", dbCon);
+                    command = new SQLiteCommand("update PROFILE set CHECKED = 1 where ID = @ID", dbCon);
                     command.Parameters.AddWithValue("@ID", pId);
                     command.ExecuteNonQuery();
                 }
@@ -3128,7 +3101,7 @@ namespace PAD
                     SQLiteCommand command;
                     try
                     {
-                        command = new SQLiteCommand("delete from PROFILE_OLD where ID = @ID", dbCon);
+                        command = new SQLiteCommand("delete from PROFILE where ID = @ID", dbCon);
                         command.Parameters.AddWithValue("@ID", pId);
                         command.ExecuteNonQuery();
                     }
@@ -3151,8 +3124,8 @@ namespace PAD
                 selectedProfileId = _proList.Where(i => i.ProfileName.Equals(listViewProfile.SelectedItems[0].Text)).FirstOrDefault()?.Id ?? 0;
                 UpdateCheckStatus(selectedProfileId);
 
-                CacheLoad._profileList_old = CacheLoad.GetProfileList();
-                _proList = CacheLoad._profileList_old.ToList();
+                CacheLoad._profileList = CacheLoad.GetProfilesList();
+                _proList = CacheLoad._profileList.ToList();
                 FillProfileListViewByData(_proList);
 
                 CleanFields();
@@ -3164,7 +3137,6 @@ namespace PAD
 
         private void buttonGenerateMap_Click(object sender, EventArgs e)
         {
-
             if (maskedTextBoxDate.Text.Equals(string.Empty))
             {
                 frmShowMessage.Show(Utility.GetLocalizedText("Enter date of Birth.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
@@ -3176,31 +3148,75 @@ namespace PAD
                 return;
             }
 
-            DateTime bDate;
+            DateTime birthDate;
             double latitude, longitude;
             if (Utility.GetGeoCoordinateByLocationId(_selectedBirthLocation.Id, out latitude, out longitude))
             {
                 try
                 {
-                    DateTime.TryParse(maskedTextBoxDate.Text, out bDate);
+                    DateTime.TryParse(maskedTextBoxDate.Text, out birthDate);
 
-                    /*
                     buttonChoose.Enabled = false;
                     buttonDefault.Enabled = false;
                     toolStripButtonAdd.Enabled = true; ;
                     toolStripButtonEdit.Enabled = false;
                     toolStripButtonDelete.Enabled = false;
                     toolStripButtonSave.Enabled = false;
-                    */
+                    buttonSaveProfile.Enabled = true;
 
-                    CalculatePlanetsPosition(bDate, latitude, longitude);
+                    _pdList = Utility.CalculatePlanetsPositionForDate(birthDate, latitude, longitude);
+                    _ascendant = Utility.CalculateAscendantForDate(birthDate, latitude, longitude, 0, 'O');
+                    _nakshatralagnaId = Utility.GetNakshatraIdFromDegree(_ascendant);
+                    _padaLagna = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_ascendant));
+                    _lagnaId = Utility.GetZodiakIdFromDegree(_ascendant);
                     PrepareTransitMap();
                     ProfileInfoDataGridViewFillByRow(_activeLang);
                 }
                 catch { }
             }
         }
+        private void buttonSaveProfile_Click(object sender, EventArgs e)
+        {
+            if (textBoxProfileName.Text.Equals(string.Empty))
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Enter profile name.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+                return;
+            }
+            if (textBoxBirthPlace.Text.Equals(string.Empty))
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Choose place of birth.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+                return;
+            }
+            if (textBoxLivingPlace.Text.Equals(string.Empty))
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Choose place of living.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+                return;
+            }
 
-        
+            if (_isNew)
+            {
+                InsertNewProfile();
+            }
+
+            CacheLoad._profileList = CacheLoad.GetProfilesList();
+            _proList = CacheLoad._profileList.ToList();
+            FillProfileListViewByData(_proList);
+
+            buttonChoose.Enabled = false;
+            buttonDefault.Enabled = false;
+            toolStripButtonAdd.Enabled = true; ;
+            toolStripButtonEdit.Enabled = false;
+            toolStripButtonDelete.Enabled = false;
+            toolStripButtonSave.Enabled = false;
+
+            CleanFields();
+            MakeTextFieldsReadOnly();
+            textBoxSearch_TextChanged(sender, e);
+            textBoxSearch.Focus();
+
+        }
+
+
+
     }
 }

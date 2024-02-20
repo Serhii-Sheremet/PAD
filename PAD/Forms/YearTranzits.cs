@@ -19,7 +19,6 @@ namespace PAD
         }
         
         private ELanguage _langCode;
-        private Profile_old _sProfile;
         private int _sYear;
         private List<Day> dayList;
 
@@ -118,14 +117,13 @@ namespace PAD
 
         private void DrawYearTranzits()
         {
-            dayList = PrepareYearDays(_sYear, _sProfile);
+            dayList = PrepareYearDays(_sYear);
             YearTranzitDrawing(dayList);
         }
 
         public YearTranzits(
             int year,
             ELanguage langCode,
-            Profile_old sProfile,
             List<PlanetCalendar> moonZCList,
             List<PlanetCalendar> moonZRCList,
             List<PlanetCalendar> moonNCList,
@@ -190,7 +188,6 @@ namespace PAD
 
             _sYear = year;
             _langCode = langCode;
-            _sProfile = sProfile;
             _moonZCList = moonZCList;
             _moonZRCList = moonZRCList;
             _moonNCList = moonNCList;
@@ -253,7 +250,7 @@ namespace PAD
             monthWidthArray = new float[12];
         }
 
-        public List<Day> PrepareYearDays(int year, Profile_old sPerson)
+        public List<Day> PrepareYearDays(int year)
         {
             List<Day> daysList = new List<Day>();
             DateTime startDate = new DateTime(year, 1, 1);
@@ -264,7 +261,6 @@ namespace PAD
             {
 
                 tempDay = new Day(
-                                    sPerson,
                                     currentDay,
                                     _moonZCList,
                                     _moonZRCList,
@@ -1034,7 +1030,7 @@ namespace PAD
                 }
                 else
                 {
-                    text = pcList.First().GetTranzitPada(_sProfile, _langCode);
+                    text = pcList.First().GetTranzitPada(_langCode);
                     if (pcList.First().PlanetCode == EPlanet.SUN || pcList.First().PlanetCode == EPlanet.VENUS || pcList.First().PlanetCode == EPlanet.MERCURY)
                     {
                         text = text.Substring(0, 1);
@@ -1179,7 +1175,7 @@ namespace PAD
                             }
                             else
                             {
-                                text = pc.GetTranzitPada(_sProfile, _langCode);
+                                text = pc.GetTranzitPada(_langCode);
                                 if (pc.PlanetCode == EPlanet.SUN || pc.PlanetCode == EPlanet.VENUS || pc.PlanetCode == EPlanet.MERCURY)
                                 {
                                     text = text.Substring(0, 1);

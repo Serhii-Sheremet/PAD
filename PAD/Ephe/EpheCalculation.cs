@@ -76,7 +76,7 @@ namespace PAD
             {
                 mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
             }
-            currentZnak = GetCurrentZnak(mbResults.CalcResults[0]);
+            currentZnak = Utility.GetZodiakIdFromDegree(mbResults.CalcResults[0]);
             currentRetrogradeStatus = GetCurrentRetrogradeStatus(mbResults.CalcResults[3]);
             newZnak = currentZnak;
             newRetrogradeStatus = currentRetrogradeStatus;
@@ -285,7 +285,7 @@ namespace PAD
                 {
                     mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
                 }
-                mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
+                mbResults.Znak = Utility.GetZodiakIdFromDegree(mbResults.CalcResults[0]);
 
                 if(mbResults.Znak != currentZnak && mbResults.CalcResults[3] < 0)
                 {
@@ -319,7 +319,7 @@ namespace PAD
                 {
                     mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
                 }
-                mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
+                mbResults.Znak = Utility.GetZodiakIdFromDegree(mbResults.CalcResults[0]);
 
                 if (mbResults.CalcResults[3] >= 0 )
                 {
@@ -348,7 +348,7 @@ namespace PAD
                 {
                     mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
                 }
-                mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
+                mbResults.Znak = Utility.GetZodiakIdFromDegree(mbResults.CalcResults[0]);
 
                 if ((mbParameters.Degree - mbResults.CalcResults[0]) <= 30 && (mbResults.CalcResults[0] <= mbParameters.DegreeFrom || (mbResults.CalcResults[0] >= mbParameters.DegreeTo) ))
                 {
@@ -384,7 +384,7 @@ namespace PAD
                 {
                     mbResults.CalcResults[0] = CalculateKetuDegree(mbResults.CalcResults[0]);
                 }
-                mbResults.Znak = GetCurrentZnak(mbResults.CalcResults[0]);
+                mbResults.Znak = Utility.GetZodiakIdFromDegree(mbResults.CalcResults[0]);
                 mbResults.RetrogradeStatus = GetCurrentRetrogradeStatus(mbResults.CalcResults[3]);
 
                 if (mbResults.Znak != currentZnak || mbResults.RetrogradeStatus != currentRetrogradeStatus)
@@ -754,7 +754,7 @@ namespace PAD
                                                                     MoonResults = SWEPH_Calculation(EpheConstants.SE_MOON, curDate.AddSeconds(-1), longitude, latitude, altitude)};
 
             double yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
-            int currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
+            int currentYogaNakshatra = Utility.GetNakshatraIdFromDegree(yogaLongitude);
 
             List<NityaYogaData> nyDataList = new List<NityaYogaData>();
             while (curDate < toDate.AddSeconds(+1))
@@ -762,7 +762,7 @@ namespace PAD
                 nyResults = GetNityaYogaTimeFromEpoch(curDate, sunParameters, moonParameters, currentYogaNakshatra, CheckYogaNakshatraChangeInTimePeriod);
                 curDate = EPOCHToDateTime(nyResults.DateInSeconds);
                 yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
-                currentYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
+                currentYogaNakshatra = Utility.GetNakshatraIdFromDegree(yogaLongitude);
 
                 NityaYogaData nyTemp = new NityaYogaData
                 {
@@ -788,7 +788,7 @@ namespace PAD
                 nyResults.SunResults = SWEPH_Calculation(sunParameters.PlanetConst, EPOCHToDateTime(date), sunParameters.Longitude, sunParameters.Latitude, sunParameters.Altitude);
                 nyResults.MoonResults = SWEPH_Calculation(moonParameters.PlanetConst, EPOCHToDateTime(date), moonParameters.Longitude, moonParameters.Latitude, moonParameters.Altitude);
                 double yogaLongitude = GetYoga360Longitude(nyResults.SunResults[0] + nyResults.MoonResults[0] + (7 * nakshatraPart));
-                int cYogaNakshatra = GetCurrentNakshatra(yogaLongitude);
+                int cYogaNakshatra = Utility.GetNakshatraIdFromDegree(yogaLongitude);
 
                 if (cYogaNakshatra != currentYogaNakshatra)
                 {
@@ -905,9 +905,9 @@ namespace PAD
             EpheResults pResults = new EpheResults() { CalcResults = SWEPH_Calculation(planetConstant, date, longitude, latitude, altitude) };
             PlanetParameters pParameters = new PlanetParameters()
             {
-                CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]),
-                CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]),
-                CurrentPada = GetCurrentPada(pResults.CalcResults[0]),
+                CurrentZnak = Utility.GetZodiakIdFromDegree(pResults.CalcResults[0]),
+                CurrentNakshatra = Utility.GetNakshatraIdFromDegree(pResults.CalcResults[0]),
+                CurrentPada = Utility.GetPadaIdFromDegree(pResults.CalcResults[0]),
                 CurrentRetro = string.Empty
             };
             if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
@@ -938,9 +938,9 @@ namespace PAD
 
             EpheParameters eParameters = new EpheParameters() { PlanetConst = planetConstant, Longitude = longitude, Latitude = latitude, Altitude = altitude };
             EpheResults pResults = new EpheResults() { CalcResults = SWEPH_Calculation(planetConstant, curDate.AddSeconds(-1), longitude, latitude, altitude) };
-            PlanetParameters pParameters = new PlanetParameters() { CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]),
-                                                                    CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]),
-                                                                    CurrentPada = GetCurrentPada(pResults.CalcResults[0]),
+            PlanetParameters pParameters = new PlanetParameters() { CurrentZnak = Utility.GetZodiakIdFromDegree(pResults.CalcResults[0]),
+                                                                    CurrentNakshatra = Utility.GetNakshatraIdFromDegree(pResults.CalcResults[0]),
+                                                                    CurrentPada = Utility.GetPadaIdFromDegree(pResults.CalcResults[0]),
                                                                     CurrentRetro = string.Empty};
             
             List<PlanetData> planetDataList = new List<PlanetData>();
@@ -969,9 +969,9 @@ namespace PAD
                 pResults = GetPlanetTimeFromEpoch(curDate, eParameters, pParameters, CheckPlanetChangeInTimePeriod);
                 curDate = EPOCHToDateTime(pResults.DateInSeconds);
 
-                pParameters.CurrentZnak = GetCurrentZnak(pResults.CalcResults[0]);
-                pParameters.CurrentNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]);
-                pParameters.CurrentPada = GetCurrentPada(pResults.CalcResults[0]);
+                pParameters.CurrentZnak = Utility.GetZodiakIdFromDegree(pResults.CalcResults[0]);
+                pParameters.CurrentNakshatra = Utility.GetNakshatraIdFromDegree(pResults.CalcResults[0]);
+                pParameters.CurrentPada = Utility.GetPadaIdFromDegree(pResults.CalcResults[0]);
                 pParameters.CurrentRetro = string.Empty;
                 if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
                 {
@@ -1021,9 +1021,9 @@ namespace PAD
             {
                 pResults.CalcResults = SWEPH_Calculation(eParameters.PlanetConst, EPOCHToDateTime(date), eParameters.Longitude, eParameters.Latitude, eParameters.Altitude);
 
-                cZnak = GetCurrentZnak(pResults.CalcResults[0]);
-                cNakshatra = GetCurrentNakshatra(pResults.CalcResults[0]);
-                cPada = GetCurrentPada(pResults.CalcResults[0]);
+                cZnak = Utility.GetZodiakIdFromDegree(pResults.CalcResults[0]);
+                cNakshatra = Utility.GetNakshatraIdFromDegree(pResults.CalcResults[0]);
+                cPada = Utility.GetPadaIdFromDegree(pResults.CalcResults[0]);
                 cRetro = string.Empty;
                 if (eParameters.PlanetConst != EpheConstants.SE_SUN && eParameters.PlanetConst != EpheConstants.SE_MOON)
                 {
@@ -1055,69 +1055,12 @@ namespace PAD
             return pResults;
         }
 
-        public int GetCurrentZnak(double longitude)
-        {
-            double znakPart = 360.0000 / 12;
-
-            double currentDZnak = longitude / znakPart;
-            double intDZnak = (int)currentDZnak;
-
-            int currentZnak = 0;
-            if (currentDZnak > intDZnak)
-            {
-                currentZnak = Convert.ToInt32(intDZnak) + 1;
-            }
-            else if (currentDZnak == intDZnak)
-            {
-                currentZnak = Convert.ToInt32(intDZnak);
-            }
-            return currentZnak;
-        }
-
         private bool GetCurrentRetrogradeStatus(double velocity)
         {
             if (velocity < 0)
                 return true;
             else
                 return false;
-        }
-
-        public int GetCurrentNakshatra(double longitude)
-        {
-            double nakshatraPart = 360.0000 / 27;
-
-            double currentDNakshatra = longitude / nakshatraPart;
-            double intDNakshatra = (int)currentDNakshatra;
-
-            int currentNakshatra = 0;
-            if (currentDNakshatra > intDNakshatra)
-            {
-                currentNakshatra = Convert.ToInt32(intDNakshatra) + 1;
-            }
-            else if (currentDNakshatra == intDNakshatra)
-            {
-                currentNakshatra = Convert.ToInt32(intDNakshatra);
-            }
-            return currentNakshatra;
-        }
-
-        public int GetCurrentPada(double longitude)
-        {
-            double padaPart = 360.0000 / 108;
-
-            double currentDPada = longitude / padaPart;
-            double intDPada = (int)currentDPada;
-
-            int currentPada = 0;
-            if (currentDPada > intDPada)
-            {
-                currentPada = Convert.ToInt32(intDPada) + 1;
-            }
-            else if (currentDPada == intDPada)
-            {
-                currentPada = Convert.ToInt32(intDPada);
-            }
-            return currentPada;
         }
 
         private string GetRetroInfo(double speed)
@@ -1171,9 +1114,9 @@ namespace PAD
                 SpeedInLongitude = rahuData.SpeedInLongitude,
                 SpedInLatitude = rahuData.SpedInLatitude,
                 Retro = rahuData.Retro,
-                ZodiakId = GetCurrentZnak(kLongitude),
-                NakshatraId = GetCurrentNakshatra(kLongitude),
-                PadaId = GetCurrentPada(kLongitude)
+                ZodiakId = Utility.GetZodiakIdFromDegree(kLongitude),
+                NakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude),
+                PadaId = Utility.GetPadaIdFromDegree(kLongitude)
             };
             return pdData;
         }
@@ -1192,9 +1135,9 @@ namespace PAD
                     SpeedInLongitude = pd.SpeedInLongitude,
                     SpedInLatitude = pd.SpedInLatitude,
                     Retro = pd.Retro,
-                    ZodiakId = GetCurrentZnak(kLongitude),
-                    NakshatraId = GetCurrentNakshatra(kLongitude),
-                    PadaId = GetCurrentPada(kLongitude)
+                    ZodiakId = Utility.GetZodiakIdFromDegree(kLongitude),
+                    NakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude),
+                    PadaId = Utility.GetPadaIdFromDegree(kLongitude)
                 };
                 ketuList.Add(pdTemp);
             }

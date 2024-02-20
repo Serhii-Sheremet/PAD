@@ -109,10 +109,10 @@ namespace PAD
             return (int)NakshatraCode;
         }
 
-        public override string GetTranzitPada(Profile_old profile, ELanguage lCode)
+        public override string GetTranzitPada(ELanguage lCode)
         {
             Pada pada = CacheLoad._padaList.Where(i => i.Id == PadaId).FirstOrDefault();
-            List<BadNavamshaEntity> bneList = Utility.GetBadNavamshaNumbersList(profile, pada.Id, lCode);
+            List<BadNavamshaEntity> bneList = Utility.GetBadNavamshaNumbersList(pada.Id, lCode);
             string badNavamsha = string.Empty;
             if (bneList.Count > 0)
             {
@@ -131,7 +131,7 @@ namespace PAD
                     }
                 }
             }
-            List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(profile, pada.Id);
+            List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(pada.Id);
             string drekkana = string.Empty;
             {
                 if (deList.Count > 0)

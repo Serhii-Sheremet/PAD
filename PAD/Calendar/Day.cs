@@ -164,7 +164,7 @@ namespace PAD
         public List<MrityuBhagaData> KetuTrueMrityuBhagaDayList { get; set; }
 
         public Day(
-            Profile_old sPerson,
+            Profile sPerson,
             DateTime date,
             bool flag,
             DateTime? sunRise,
@@ -283,120 +283,120 @@ namespace PAD
             List<PlanetCalendar> ketuTrueRetroLagnaList = Utility.ClonePlanetCalendarList(ketuTrueZodiakRetroList);
 
             List<PlanetCalendar> moonNTBList = Utility.ClonePlanetCalendarList(moonNakshatraList);
-            MoonZodiakDayList = PreparePlanetZodiakDayList(moonZodiakList, sPerson, date, false);
-            MoonZodiakRetroDayList = PreparePlanetZodiakDayList(moonZodiakRetroList, sPerson, date, false);
+            MoonZodiakDayList = PreparePlanetZodiakDayList(moonZodiakList, date, false);
+            MoonZodiakRetroDayList = PreparePlanetZodiakDayList(moonZodiakRetroList, date, false);
             MoonNakshatraDayList = PreparePlanetNakshatraDayList(moonNakshatraList, date);
             MoonPadaDayList = PreparePlanetPadaDayList(moonPadaList, date);
-            MoonTaraBalaDayList = PreparePlanetTaraBalaDayList(moonNTBList, sPerson, date);
+            MoonTaraBalaDayList = PreparePlanetTaraBalaDayList(moonNTBList, date);
 
             List<PlanetCalendar> sunNTBList = Utility.ClonePlanetCalendarList(sunNakshatraList);
-            SunZodiakDayList = PreparePlanetZodiakDayList(sunZodiakList, sPerson, date, false);
-            SunZodiakRetroDayList = PreparePlanetZodiakDayList(sunZodiakRetroList, sPerson, date, false);
+            SunZodiakDayList = PreparePlanetZodiakDayList(sunZodiakList, date, false);
+            SunZodiakRetroDayList = PreparePlanetZodiakDayList(sunZodiakRetroList, date, false);
             SunNakshatraDayList = PreparePlanetNakshatraDayList(sunNakshatraList, date);
             SunPadaDayList = PreparePlanetPadaDayList(sunPadaList, date);
-            SunTaraBalaDayList = PreparePlanetTaraBalaDayList(sunNTBList, sPerson, date);
+            SunTaraBalaDayList = PreparePlanetTaraBalaDayList(sunNTBList, date);
 
             List<PlanetCalendar> mercuryNTBList = Utility.ClonePlanetCalendarList(mercuryNakshatraList);
-            MercuryZodiakDayList = PreparePlanetZodiakDayList(mercuryZodiakList, sPerson, date, false);
-            MercuryZodiakRetroDayList = PreparePlanetZodiakDayList(mercuryZodiakRetroList, sPerson, date, false);
+            MercuryZodiakDayList = PreparePlanetZodiakDayList(mercuryZodiakList, date, false);
+            MercuryZodiakRetroDayList = PreparePlanetZodiakDayList(mercuryZodiakRetroList, date, false);
             MercuryNakshatraDayList = PreparePlanetNakshatraDayList(mercuryNakshatraList, date);
             MercuryPadaDayList = PreparePlanetPadaDayList(mercuryPadaList, date);
-            MercuryTaraBalaDayList = PreparePlanetTaraBalaDayList(mercuryNTBList, sPerson, date);
+            MercuryTaraBalaDayList = PreparePlanetTaraBalaDayList(mercuryNTBList, date);
 
             List<PlanetCalendar> venusNTBList = Utility.ClonePlanetCalendarList(venusNakshatraList);
-            VenusZodiakDayList = PreparePlanetZodiakDayList(venusZodiakList, sPerson, date, false);
-            VenusZodiakRetroDayList = PreparePlanetZodiakDayList(venusZodiakRetroList, sPerson, date, false);
+            VenusZodiakDayList = PreparePlanetZodiakDayList(venusZodiakList, date, false);
+            VenusZodiakRetroDayList = PreparePlanetZodiakDayList(venusZodiakRetroList, date, false);
             VenusNakshatraDayList = PreparePlanetNakshatraDayList(venusNakshatraList, date);
             VenusPadaDayList = PreparePlanetPadaDayList(venusPadaList, date);
-            VenusTaraBalaDayList = PreparePlanetTaraBalaDayList(venusNTBList, sPerson, date);
+            VenusTaraBalaDayList = PreparePlanetTaraBalaDayList(venusNTBList, date);
 
             List<PlanetCalendar> marsNTBList = Utility.ClonePlanetCalendarList(marsNakshatraList);
-            MarsZodiakDayList = PreparePlanetZodiakDayList(marsZodiakList, sPerson, date, false);
-            MarsZodiakRetroDayList = PreparePlanetZodiakDayList(marsZodiakRetroList, sPerson, date, false);
+            MarsZodiakDayList = PreparePlanetZodiakDayList(marsZodiakList, date, false);
+            MarsZodiakRetroDayList = PreparePlanetZodiakDayList(marsZodiakRetroList, date, false);
             MarsNakshatraDayList = PreparePlanetNakshatraDayList(marsNakshatraList, date);
             MarsPadaDayList = PreparePlanetPadaDayList(marsPadaList, date);
-            MarsTaraBalaDayList = PreparePlanetTaraBalaDayList(marsNTBList, sPerson, date);
+            MarsTaraBalaDayList = PreparePlanetTaraBalaDayList(marsNTBList, date);
 
             List<PlanetCalendar> jupiterNTBList = Utility.ClonePlanetCalendarList(jupiterNakshatraList);
-            JupiterZodiakDayList = PreparePlanetZodiakDayList(jupiterZodiakList, sPerson, date, false);
-            JupiterZodiakRetroDayList = PreparePlanetZodiakDayList(jupiterZodiakRetroList, sPerson, date, false);
+            JupiterZodiakDayList = PreparePlanetZodiakDayList(jupiterZodiakList, date, false);
+            JupiterZodiakRetroDayList = PreparePlanetZodiakDayList(jupiterZodiakRetroList, date, false);
             JupiterNakshatraDayList = PreparePlanetNakshatraDayList(jupiterNakshatraList, date);
             JupiterPadaDayList = PreparePlanetPadaDayList(jupiterPadaList, date);
-            JupiterTaraBalaDayList = PreparePlanetTaraBalaDayList(jupiterNTBList, sPerson, date);
+            JupiterTaraBalaDayList = PreparePlanetTaraBalaDayList(jupiterNTBList, date);
 
             List<PlanetCalendar> saturnNTBList = Utility.ClonePlanetCalendarList(saturnNakshatraList);
-            SaturnZodiakDayList = PreparePlanetZodiakDayList(saturnZodiakList, sPerson, date, false);
-            SaturnZodiakRetroDayList = PreparePlanetZodiakDayList(saturnZodiakRetroList, sPerson, date, false);
+            SaturnZodiakDayList = PreparePlanetZodiakDayList(saturnZodiakList, date, false);
+            SaturnZodiakRetroDayList = PreparePlanetZodiakDayList(saturnZodiakRetroList, date, false);
             SaturnNakshatraDayList = PreparePlanetNakshatraDayList(saturnNakshatraList, date);
             SaturnPadaDayList = PreparePlanetPadaDayList(saturnPadaList, date);
-            SaturnTaraBalaDayList = PreparePlanetTaraBalaDayList(saturnNTBList, sPerson, date);
+            SaturnTaraBalaDayList = PreparePlanetTaraBalaDayList(saturnNTBList, date);
 
             List<PlanetCalendar> rahuMeanNTBList = Utility.ClonePlanetCalendarList(rahuMeanNakshatraList);
-            RahuMeanZodiakDayList = PreparePlanetZodiakDayList(rahuMeanZodiakList, sPerson, date, false);
-            RahuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(rahuMeanZodiakRetroList, sPerson, date, false);
+            RahuMeanZodiakDayList = PreparePlanetZodiakDayList(rahuMeanZodiakList, date, false);
+            RahuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(rahuMeanZodiakRetroList, date, false);
             RahuMeanNakshatraDayList = PreparePlanetNakshatraDayList(rahuMeanNakshatraList, date);
             RahuMeanPadaDayList = PreparePlanetPadaDayList(rahuMeanPadaList, date);
-            RahuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuMeanNTBList, sPerson, date);
+            RahuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuMeanNTBList, date);
 
             List<PlanetCalendar> ketuMeanNTBList = Utility.ClonePlanetCalendarList(ketuMeanNakshatraList);
-            KetuMeanZodiakDayList = PreparePlanetZodiakDayList(ketuMeanZodiakList, sPerson, date, false);
-            KetuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(ketuMeanZodiakRetroList, sPerson, date, false);
+            KetuMeanZodiakDayList = PreparePlanetZodiakDayList(ketuMeanZodiakList, date, false);
+            KetuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(ketuMeanZodiakRetroList, date, false);
             KetuMeanNakshatraDayList = PreparePlanetNakshatraDayList(ketuMeanNakshatraList, date);
             KetuMeanPadaDayList = PreparePlanetPadaDayList(ketuMeanPadaList, date);
-            KetuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuMeanNTBList, sPerson, date);
+            KetuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuMeanNTBList, date);
 
             List<PlanetCalendar> rahuTrueNTBList = Utility.ClonePlanetCalendarList(rahuTrueNakshatraList);
-            RahuTrueZodiakDayList = PreparePlanetZodiakDayList(rahuTrueZodiakList, sPerson, date, false);
-            RahuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(rahuTrueZodiakRetroList, sPerson, date, false);
+            RahuTrueZodiakDayList = PreparePlanetZodiakDayList(rahuTrueZodiakList, date, false);
+            RahuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(rahuTrueZodiakRetroList, date, false);
             RahuTrueNakshatraDayList = PreparePlanetNakshatraDayList(rahuTrueNakshatraList, date);
             RahuTruePadaDayList = PreparePlanetPadaDayList(rahuTruePadaList, date);
-            RahuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuTrueNTBList, sPerson, date);
+            RahuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuTrueNTBList, date);
 
             List<PlanetCalendar> ketuTrueNTBList = Utility.ClonePlanetCalendarList(ketuTrueNakshatraList);
-            KetuTrueZodiakDayList = PreparePlanetZodiakDayList(ketuTrueZodiakList, sPerson, date, false);
-            KetuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(ketuTrueZodiakRetroList, sPerson, date, false);
+            KetuTrueZodiakDayList = PreparePlanetZodiakDayList(ketuTrueZodiakList, date, false);
+            KetuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(ketuTrueZodiakRetroList, date, false);
             KetuTrueNakshatraDayList = PreparePlanetNakshatraDayList(ketuTrueNakshatraList, date);
             KetuTruePadaDayList = PreparePlanetPadaDayList(ketuTruePadaList, date);
-            KetuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuTrueNTBList, sPerson, date);
+            KetuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuTrueNTBList, date);
 
-            MoonZodiakLagnaDayList = PreparePlanetZodiakDayList(moonLagnaList, sPerson, date, true);
-            MoonZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(moonRetroLagnaList, sPerson, date, true);
+            MoonZodiakLagnaDayList = PreparePlanetZodiakDayList(moonLagnaList, date, true);
+            MoonZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(moonRetroLagnaList, date, true);
 
-            SunZodiakLagnaDayList = PreparePlanetZodiakDayList(sunLagnaList, sPerson, date, true);
-            SunZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(sunRetroLagnaList, sPerson, date, true);
+            SunZodiakLagnaDayList = PreparePlanetZodiakDayList(sunLagnaList, date, true);
+            SunZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(sunRetroLagnaList, date, true);
 
-            MercuryZodiakLagnaDayList = PreparePlanetZodiakDayList(mercuryLagnaList, sPerson, date, true);
-            MercuryZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(mercuryRetroLagnaList, sPerson, date, true);
+            MercuryZodiakLagnaDayList = PreparePlanetZodiakDayList(mercuryLagnaList, date, true);
+            MercuryZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(mercuryRetroLagnaList, date, true);
 
-            VenusZodiakLagnaDayList = PreparePlanetZodiakDayList(venusLagnaList, sPerson, date, true);
-            VenusZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(venusRetroLagnaList, sPerson, date, true);
+            VenusZodiakLagnaDayList = PreparePlanetZodiakDayList(venusLagnaList, date, true);
+            VenusZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(venusRetroLagnaList, date, true);
 
-            MarsZodiakLagnaDayList = PreparePlanetZodiakDayList(marsLagnaList, sPerson, date, true);
-            MarsZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(marsRetroLagnaList, sPerson, date, true);
+            MarsZodiakLagnaDayList = PreparePlanetZodiakDayList(marsLagnaList, date, true);
+            MarsZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(marsRetroLagnaList, date, true);
 
-            JupiterZodiakLagnaDayList = PreparePlanetZodiakDayList(jupiterLagnaList, sPerson, date, true);
-            JupiterZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(jupiterRetroLagnaList, sPerson, date, true);
+            JupiterZodiakLagnaDayList = PreparePlanetZodiakDayList(jupiterLagnaList, date, true);
+            JupiterZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(jupiterRetroLagnaList, date, true);
 
-            SaturnZodiakLagnaDayList = PreparePlanetZodiakDayList(saturnLagnaList, sPerson, date, true);
-            SaturnZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(saturnRetroLagnaList, sPerson, date, true);
+            SaturnZodiakLagnaDayList = PreparePlanetZodiakDayList(saturnLagnaList, date, true);
+            SaturnZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(saturnRetroLagnaList, date, true);
 
-            RahuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuMeanLagnaList, sPerson, date, true);
-            RahuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuMeanRetroLagnaList, sPerson, date, true);
+            RahuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuMeanLagnaList, date, true);
+            RahuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuMeanRetroLagnaList, date, true);
 
-            KetuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuMeanLagnaList, sPerson, date, true);
-            KetuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuMeanRetroLagnaList, sPerson, date, true);
+            KetuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuMeanLagnaList, date, true);
+            KetuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuMeanRetroLagnaList, date, true);
 
-            RahuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuTrueLagnaList, sPerson, date, true);
-            RahuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuTrueRetroLagnaList, sPerson, date, true);
+            RahuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuTrueLagnaList, date, true);
+            RahuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuTrueRetroLagnaList, date, true);
 
-            KetuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuTrueLagnaList, sPerson, date, true);
-            KetuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuTrueRetroLagnaList, sPerson, date, true);
+            KetuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuTrueLagnaList, date, true);
+            KetuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuTrueRetroLagnaList, date, true);
 
             NakshatraDayList = PrepareNakshatraDayList(nakshatraList, date);
-            TaraBalaDayList = PrepareTaraBalaDayList(nakshatraList, sPerson, date);
+            TaraBalaDayList = PrepareTaraBalaDayList(nakshatraList, date);
             TithiDayList = PrepareTithiDayList(tithiList, date);
             KaranaDayList = PrepareKaranaDayList(karanaList, date);
-            ChandraBalaDayList = PrepareChandraBalaDayList(chandraBalaList, sPerson, date);
+            ChandraBalaDayList = PrepareChandraBalaDayList(chandraBalaList, date);
             NityaJogaDayList = PrepareNityaYogaDayList(njList, date);
             EclipseDayList = PrepareEclipseDayList(eList, date);
             MasaDayList = PrepareMasaDayList(mList, date);
@@ -418,7 +418,6 @@ namespace PAD
 
         // for year's tranzits
         public Day(
-            Profile_old sPerson,
             DateTime date,
             List<PlanetCalendar> moonZodiakList,
             List<PlanetCalendar> moonZodiakRetroList,
@@ -516,114 +515,114 @@ namespace PAD
             List<PlanetCalendar> ketuTrueRetroLagnaList = Utility.ClonePlanetCalendarList(ketuTrueZodiakRetroList);
 
             List<PlanetCalendar> moonNTBList = Utility.ClonePlanetCalendarList(moonNakshatraList);
-            MoonZodiakDayList = PreparePlanetZodiakDayList(moonZodiakList, sPerson, date, false);
-            MoonZodiakRetroDayList = PreparePlanetZodiakDayList(moonZodiakRetroList, sPerson, date, false);
+            MoonZodiakDayList = PreparePlanetZodiakDayList(moonZodiakList, date, false);
+            MoonZodiakRetroDayList = PreparePlanetZodiakDayList(moonZodiakRetroList, date, false);
             MoonNakshatraDayList = PreparePlanetNakshatraDayList(moonNakshatraList, date);
             MoonPadaDayList = PreparePlanetPadaDayList(moonPadaList, date);
-            MoonTaraBalaDayList = PreparePlanetTaraBalaDayList(moonNTBList, sPerson, date);
+            MoonTaraBalaDayList = PreparePlanetTaraBalaDayList(moonNTBList, date);
 
             List<PlanetCalendar> sunNTBList = Utility.ClonePlanetCalendarList(sunNakshatraList);
-            SunZodiakDayList = PreparePlanetZodiakDayList(sunZodiakList, sPerson, date, false);
-            SunZodiakRetroDayList = PreparePlanetZodiakDayList(sunZodiakRetroList, sPerson, date, false);
+            SunZodiakDayList = PreparePlanetZodiakDayList(sunZodiakList, date, false);
+            SunZodiakRetroDayList = PreparePlanetZodiakDayList(sunZodiakRetroList, date, false);
             SunNakshatraDayList = PreparePlanetNakshatraDayList(sunNakshatraList, date);
             SunPadaDayList = PreparePlanetPadaDayList(sunPadaList, date);
-            SunTaraBalaDayList = PreparePlanetTaraBalaDayList(sunNTBList, sPerson, date);
+            SunTaraBalaDayList = PreparePlanetTaraBalaDayList(sunNTBList, date);
 
             List<PlanetCalendar> mercuryNTBList = Utility.ClonePlanetCalendarList(mercuryNakshatraList);
-            MercuryZodiakDayList = PreparePlanetZodiakDayList(mercuryZodiakList, sPerson, date, false);
-            MercuryZodiakRetroDayList = PreparePlanetZodiakDayList(mercuryZodiakRetroList, sPerson, date, false);
+            MercuryZodiakDayList = PreparePlanetZodiakDayList(mercuryZodiakList, date, false);
+            MercuryZodiakRetroDayList = PreparePlanetZodiakDayList(mercuryZodiakRetroList, date, false);
             MercuryNakshatraDayList = PreparePlanetNakshatraDayList(mercuryNakshatraList, date);
             MercuryPadaDayList = PreparePlanetPadaDayList(mercuryPadaList, date);
-            MercuryTaraBalaDayList = PreparePlanetTaraBalaDayList(mercuryNTBList, sPerson, date);
+            MercuryTaraBalaDayList = PreparePlanetTaraBalaDayList(mercuryNTBList, date);
 
             List<PlanetCalendar> venusNTBList = Utility.ClonePlanetCalendarList(venusNakshatraList);
-            VenusZodiakDayList = PreparePlanetZodiakDayList(venusZodiakList, sPerson, date, false);
-            VenusZodiakRetroDayList = PreparePlanetZodiakDayList(venusZodiakRetroList, sPerson, date, false);
+            VenusZodiakDayList = PreparePlanetZodiakDayList(venusZodiakList, date, false);
+            VenusZodiakRetroDayList = PreparePlanetZodiakDayList(venusZodiakRetroList, date, false);
             VenusNakshatraDayList = PreparePlanetNakshatraDayList(venusNakshatraList, date);
             VenusPadaDayList = PreparePlanetPadaDayList(venusPadaList, date);
-            VenusTaraBalaDayList = PreparePlanetTaraBalaDayList(venusNTBList, sPerson, date);
+            VenusTaraBalaDayList = PreparePlanetTaraBalaDayList(venusNTBList, date);
 
             List<PlanetCalendar> marsNTBList = Utility.ClonePlanetCalendarList(marsNakshatraList);
-            MarsZodiakDayList = PreparePlanetZodiakDayList(marsZodiakList, sPerson, date, false);
-            MarsZodiakRetroDayList = PreparePlanetZodiakDayList(marsZodiakRetroList, sPerson, date, false);
+            MarsZodiakDayList = PreparePlanetZodiakDayList(marsZodiakList, date, false);
+            MarsZodiakRetroDayList = PreparePlanetZodiakDayList(marsZodiakRetroList, date, false);
             MarsNakshatraDayList = PreparePlanetNakshatraDayList(marsNakshatraList, date);
             MarsPadaDayList = PreparePlanetPadaDayList(marsPadaList, date);
-            MarsTaraBalaDayList = PreparePlanetTaraBalaDayList(marsNTBList, sPerson, date);
+            MarsTaraBalaDayList = PreparePlanetTaraBalaDayList(marsNTBList, date);
 
             List<PlanetCalendar> jupiterNTBList = Utility.ClonePlanetCalendarList(jupiterNakshatraList);
-            JupiterZodiakDayList = PreparePlanetZodiakDayList(jupiterZodiakList, sPerson, date, false);
-            JupiterZodiakRetroDayList = PreparePlanetZodiakDayList(jupiterZodiakRetroList, sPerson, date, false);
+            JupiterZodiakDayList = PreparePlanetZodiakDayList(jupiterZodiakList, date, false);
+            JupiterZodiakRetroDayList = PreparePlanetZodiakDayList(jupiterZodiakRetroList, date, false);
             JupiterNakshatraDayList = PreparePlanetNakshatraDayList(jupiterNakshatraList, date);
             JupiterPadaDayList = PreparePlanetPadaDayList(jupiterPadaList, date);
-            JupiterTaraBalaDayList = PreparePlanetTaraBalaDayList(jupiterNTBList, sPerson, date);
+            JupiterTaraBalaDayList = PreparePlanetTaraBalaDayList(jupiterNTBList, date);
 
             List<PlanetCalendar> saturnNTBList = Utility.ClonePlanetCalendarList(saturnNakshatraList);
-            SaturnZodiakDayList = PreparePlanetZodiakDayList(saturnZodiakList, sPerson, date, false);
-            SaturnZodiakRetroDayList = PreparePlanetZodiakDayList(saturnZodiakRetroList, sPerson, date, false);
+            SaturnZodiakDayList = PreparePlanetZodiakDayList(saturnZodiakList, date, false);
+            SaturnZodiakRetroDayList = PreparePlanetZodiakDayList(saturnZodiakRetroList, date, false);
             SaturnNakshatraDayList = PreparePlanetNakshatraDayList(saturnNakshatraList, date);
             SaturnPadaDayList = PreparePlanetPadaDayList(saturnPadaList, date);
-            SaturnTaraBalaDayList = PreparePlanetTaraBalaDayList(saturnNTBList, sPerson, date);
+            SaturnTaraBalaDayList = PreparePlanetTaraBalaDayList(saturnNTBList, date);
 
             List<PlanetCalendar> rahuMeanNTBList = Utility.ClonePlanetCalendarList(rahuMeanNakshatraList);
-            RahuMeanZodiakDayList = PreparePlanetZodiakDayList(rahuMeanZodiakList, sPerson, date, false);
-            RahuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(rahuMeanZodiakRetroList, sPerson, date, false);
+            RahuMeanZodiakDayList = PreparePlanetZodiakDayList(rahuMeanZodiakList, date, false);
+            RahuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(rahuMeanZodiakRetroList, date, false);
             RahuMeanNakshatraDayList = PreparePlanetNakshatraDayList(rahuMeanNakshatraList, date);
             RahuMeanPadaDayList = PreparePlanetPadaDayList(rahuMeanPadaList, date);
-            RahuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuMeanNTBList, sPerson, date);
+            RahuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuMeanNTBList, date);
 
             List<PlanetCalendar> ketuMeanNTBList = Utility.ClonePlanetCalendarList(ketuMeanNakshatraList);
-            KetuMeanZodiakDayList = PreparePlanetZodiakDayList(ketuMeanZodiakList, sPerson, date, false);
-            KetuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(ketuMeanZodiakRetroList, sPerson, date, false);
+            KetuMeanZodiakDayList = PreparePlanetZodiakDayList(ketuMeanZodiakList, date, false);
+            KetuMeanZodiakRetroDayList = PreparePlanetZodiakDayList(ketuMeanZodiakRetroList, date, false);
             KetuMeanNakshatraDayList = PreparePlanetNakshatraDayList(ketuMeanNakshatraList, date);
             KetuMeanPadaDayList = PreparePlanetPadaDayList(ketuMeanPadaList, date);
-            KetuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuMeanNTBList, sPerson, date);
+            KetuMeanTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuMeanNTBList, date);
 
             List<PlanetCalendar> rahuTrueNTBList = Utility.ClonePlanetCalendarList(rahuTrueNakshatraList);
-            RahuTrueZodiakDayList = PreparePlanetZodiakDayList(rahuTrueZodiakList, sPerson, date, false);
-            RahuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(rahuTrueZodiakRetroList, sPerson, date, false);
+            RahuTrueZodiakDayList = PreparePlanetZodiakDayList(rahuTrueZodiakList, date, false);
+            RahuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(rahuTrueZodiakRetroList, date, false);
             RahuTrueNakshatraDayList = PreparePlanetNakshatraDayList(rahuTrueNakshatraList, date);
             RahuTruePadaDayList = PreparePlanetPadaDayList(rahuTruePadaList, date);
-            RahuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuTrueNTBList, sPerson, date);
+            RahuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(rahuTrueNTBList, date);
 
             List<PlanetCalendar> ketuTrueNTBList = Utility.ClonePlanetCalendarList(ketuTrueNakshatraList);
-            KetuTrueZodiakDayList = PreparePlanetZodiakDayList(ketuTrueZodiakList, sPerson, date, false);
-            KetuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(ketuTrueZodiakRetroList, sPerson, date, false);
+            KetuTrueZodiakDayList = PreparePlanetZodiakDayList(ketuTrueZodiakList, date, false);
+            KetuTrueZodiakRetroDayList = PreparePlanetZodiakDayList(ketuTrueZodiakRetroList, date, false);
             KetuTrueNakshatraDayList = PreparePlanetNakshatraDayList(ketuTrueNakshatraList, date);
             KetuTruePadaDayList = PreparePlanetPadaDayList(ketuTruePadaList, date);
-            KetuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuTrueNTBList, sPerson, date);
+            KetuTrueTaraBalaDayList = PreparePlanetTaraBalaDayList(ketuTrueNTBList, date);
 
-            MoonZodiakLagnaDayList = PreparePlanetZodiakDayList(moonLagnaList, sPerson, date, true);
-            MoonZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(moonRetroLagnaList, sPerson, date, true);
+            MoonZodiakLagnaDayList = PreparePlanetZodiakDayList(moonLagnaList, date, true);
+            MoonZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(moonRetroLagnaList, date, true);
 
-            SunZodiakLagnaDayList = PreparePlanetZodiakDayList(sunLagnaList, sPerson, date, true);
-            SunZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(sunRetroLagnaList, sPerson, date, true);
+            SunZodiakLagnaDayList = PreparePlanetZodiakDayList(sunLagnaList, date, true);
+            SunZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(sunRetroLagnaList, date, true);
 
-            MercuryZodiakLagnaDayList = PreparePlanetZodiakDayList(mercuryLagnaList, sPerson, date, true);
-            MercuryZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(mercuryRetroLagnaList, sPerson, date, true);
+            MercuryZodiakLagnaDayList = PreparePlanetZodiakDayList(mercuryLagnaList, date, true);
+            MercuryZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(mercuryRetroLagnaList, date, true);
 
-            VenusZodiakLagnaDayList = PreparePlanetZodiakDayList(venusLagnaList, sPerson, date, true);
-            VenusZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(venusRetroLagnaList, sPerson, date, true);
+            VenusZodiakLagnaDayList = PreparePlanetZodiakDayList(venusLagnaList, date, true);
+            VenusZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(venusRetroLagnaList, date, true);
 
-            MarsZodiakLagnaDayList = PreparePlanetZodiakDayList(marsLagnaList, sPerson, date, true);
-            MarsZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(marsRetroLagnaList, sPerson, date, true);
+            MarsZodiakLagnaDayList = PreparePlanetZodiakDayList(marsLagnaList, date, true);
+            MarsZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(marsRetroLagnaList, date, true);
 
-            JupiterZodiakLagnaDayList = PreparePlanetZodiakDayList(jupiterLagnaList, sPerson, date, true);
-            JupiterZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(jupiterRetroLagnaList, sPerson, date, true);
+            JupiterZodiakLagnaDayList = PreparePlanetZodiakDayList(jupiterLagnaList, date, true);
+            JupiterZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(jupiterRetroLagnaList, date, true);
 
-            SaturnZodiakLagnaDayList = PreparePlanetZodiakDayList(saturnLagnaList, sPerson, date, true);
-            SaturnZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(saturnRetroLagnaList, sPerson, date, true);
+            SaturnZodiakLagnaDayList = PreparePlanetZodiakDayList(saturnLagnaList, date, true);
+            SaturnZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(saturnRetroLagnaList, date, true);
 
-            RahuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuMeanLagnaList, sPerson, date, true);
-            RahuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuMeanRetroLagnaList, sPerson, date, true);
+            RahuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuMeanLagnaList, date, true);
+            RahuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuMeanRetroLagnaList, date, true);
 
-            KetuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuMeanLagnaList, sPerson, date, true);
-            KetuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuMeanRetroLagnaList, sPerson, date, true);
+            KetuMeanZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuMeanLagnaList, date, true);
+            KetuMeanZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuMeanRetroLagnaList, date, true);
 
-            RahuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuTrueLagnaList, sPerson, date, true);
-            RahuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuTrueRetroLagnaList, sPerson, date, true);
+            RahuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(rahuTrueLagnaList, date, true);
+            RahuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(rahuTrueRetroLagnaList, date, true);
 
-            KetuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuTrueLagnaList, sPerson, date, true);
-            KetuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuTrueRetroLagnaList, sPerson, date, true);
+            KetuTrueZodiakLagnaDayList = PreparePlanetZodiakDayList(ketuTrueLagnaList, date, true);
+            KetuTrueZodiakRetroLagnaDayList = PreparePlanetZodiakDayList(ketuTrueRetroLagnaList, date, true);
 
             MasaDayList = PrepareMasaDayList(masaList, date);
             ShunyaNakshatraDayList = PrepareShunyaNakshatraDayList(shuNakList, date);
@@ -647,7 +646,7 @@ namespace PAD
             return mbList.Where(i => i.DateTo >= date && i.DateFrom <= date.AddDays(+1)).ToList(); 
         }
 
-        private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, Profile_old sPerson, DateTime date, bool isLagna)
+        private List<Calendar> PreparePlanetZodiakDayList(List<PlanetCalendar> pcList, DateTime date, bool isLagna)
         {
             List<Calendar> resList = new List<Calendar>();
             List<PlanetCalendar> pList =  pcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
@@ -655,14 +654,13 @@ namespace PAD
             {
                 if (isLagna)
                 {
-                    int lagnaId = Utility.GetZodiakIdFromNakshatraIdandPada(sPerson.NakshatraLagnaId, sPerson.PadaLagna);
-                    List<Zodiak> swappedZodiakLagnaList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), lagnaId);
+                    List<Zodiak> swappedZodiakLagnaList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), CacheLoad._birthLagnaId);
                     pc.LagnaDom = GetPlanetDom(swappedZodiakLagnaList, pc.ZodiakCode);
                     pc.ColorCode = (EColor)GetPlanetColor(pc.PlanetCode, pc.LagnaDom);
                 }
                 else
                 {
-                    List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), Utility.GetZodiakIdFromNakshatraIdandPada(sPerson.NakshatraMoonId, sPerson.PadaMoon));
+                    List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), CacheLoad._birthZodiakMoonId);
                     pc.Dom = GetPlanetDom(swappedZodiakList, pc.ZodiakCode);
                     pc.ColorCode = (EColor)GetPlanetColor(pc.PlanetCode, pc.Dom);
                 }
@@ -695,11 +693,11 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PreparePlanetTaraBalaDayList(List<PlanetCalendar> pcList, Profile_old sPerson, DateTime date)
+        private List<Calendar> PreparePlanetTaraBalaDayList(List<PlanetCalendar> pcList, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
             List<PlanetCalendar> pList = pcList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
-            List<Nakshatra> swappedNakshatraList = SwappingNakshatraList(CacheLoad._nakshatraList.ToList(), sPerson.NakshatraMoonId);
+            List<Nakshatra> swappedNakshatraList = SwappingNakshatraList(CacheLoad._nakshatraList.ToList(), CacheLoad._birthNakshatraMoonId);
             int[,] taraBala2DArray = Make2DArrayFromNakshatraList(swappedNakshatraList);
             foreach (PlanetCalendar pc in pList)
             {
@@ -746,11 +744,11 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PrepareTaraBalaDayList(List<NakshatraCalendar> nList, Profile_old sPerson, DateTime date)
+        private List<Calendar> PrepareTaraBalaDayList(List<NakshatraCalendar> nList, DateTime date)
         {
             List<Calendar> dayList = new List<Calendar>();
             List<NakshatraCalendar> ndList = nList.Where(i => i.DateEnd >= date && i.DateStart <= date.AddDays(+1)).ToList();
-            List<Nakshatra> swappedNakshatraList = SwappingNakshatraList(CacheLoad._nakshatraList.ToList(), sPerson.NakshatraMoonId);
+            List<Nakshatra> swappedNakshatraList = SwappingNakshatraList(CacheLoad._nakshatraList.ToList(), CacheLoad._birthNakshatraMoonId);
             int[,] taraBala2DArray = Make2DArrayFromNakshatraList(swappedNakshatraList);
             foreach (NakshatraCalendar nc in ndList)
             {
@@ -869,11 +867,11 @@ namespace PAD
             return resList;
         }
 
-        private List<Calendar> PrepareChandraBalaDayList(List<ChandraBalaCalendar> cbList, Profile_old sPerson, DateTime date)
+        private List<Calendar> PrepareChandraBalaDayList(List<ChandraBalaCalendar> cbList, DateTime date)
         {
             List<Calendar> resList = new List<Calendar>();
             List<ChandraBalaCalendar> listForDay = cbList.Where(s => s.DateEnd >= date && s.DateStart <= date.AddDays(+1)).ToList();
-            List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), Utility.GetZodiakIdFromNakshatraIdandPada(sPerson.NakshatraMoonId, sPerson.PadaMoon));
+            List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(CacheLoad._zodiakList.ToList(), CacheLoad._birthZodiakMoonId);
             foreach (ChandraBalaCalendar cbc in listForDay)
             {
                 cbc.ColorCode = GetChandraBalaColor(swappedZodiakList, cbc.ZodiakCode);

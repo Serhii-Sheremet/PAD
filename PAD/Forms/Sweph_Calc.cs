@@ -30,7 +30,7 @@ namespace PAD
             DateTime calcDate = new DateTime(1971, 12, 4, 21, 40, 0);
 
             double[] houses = eCalc.AscendanceCalculation(calcDate, 49.506984, 26.764657, 0 , 'O');
-            int Znak = eCalc.GetCurrentZnak(houses[0]);
+            int Znak = Utility.GetZodiakIdFromDegree(houses[0]);
             label1.Text = "House: " + houses[0] + "     " + Znak;
         }
 

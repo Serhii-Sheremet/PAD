@@ -2049,12 +2049,12 @@ namespace PAD
             }
         }
 
-        public static string GetBadNavamsha(Profile_old person, int pId, ELanguage lCode)
+        public static string GetBadNavamsha(int pId, ELanguage lCode)
         {
             string badNavamsha = string.Empty;
             int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
-            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
-            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), true);
 
             int indexMoon = 0, indexLagna = 0;
             for (int i = 0; i < badNavamshaArray.Length; i++)
@@ -2073,12 +2073,12 @@ namespace PAD
             return badNavamsha;
         }
 
-        public static List<BadNavamshaEntity> GetBadNavamshaNumbersList(Profile_old person, int pId, ELanguage lCode)
+        public static List<BadNavamshaEntity> GetBadNavamshaNumbersList(int pId, ELanguage lCode)
         {
             List<BadNavamshaEntity> badNavamshaList = new List<BadNavamshaEntity>();
             int[] badNavamshaArray = new int[] { 36, 55, 64, 72, 81, 88, 96 };
-            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
-            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), true);
 
             int indexMoon = 0, indexLagna = 0;
             for (int i = 0; i < badNavamshaArray.Length; i++)
@@ -2097,11 +2097,11 @@ namespace PAD
             return badNavamshaList;
         }
 
-        public static List<DrekkanaEntity> GetBadDrekkanaList(Profile_old person, int padaId)
+        public static List<DrekkanaEntity> GetBadDrekkanaList(int padaId)
         {
             List<DrekkanaEntity> drekkanaList = new List<DrekkanaEntity>();
-            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, false);
-            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), person, true);
+            List<Pada> swappedPadaByMoonList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), false);
+            List<Pada> swappedPadaByLagnaList = SortingPadaListByBirthMoonOrLagna(CacheLoad._padaList.ToList(), true);
             int birthMoonDrekkana = swappedPadaByMoonList.First().Drekkana;
             int birthLagnaDrekkana = swappedPadaByLagnaList.First().Drekkana;
             int currentMoonDrekkana = 0, currentLagnaDrekkana = 0;
@@ -2166,19 +2166,19 @@ namespace PAD
             return drekkanaList;
         }
 
-        private static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, Profile_old person, bool isLagna)
+        private static List<Pada> SortingPadaListByBirthMoonOrLagna(List<Pada> pList, bool isLagna)
         {
             List<Pada> newList = new List<Pada>();
             int pId = 0;
             if (isLagna)
             {
-                pId = pList.Where(i => i.NakshatraId == person.NakshatraLagnaId && i.PadaNumber == person.PadaLagna).FirstOrDefault()?.Id ?? 0;
+                pId = pList.Where(i => i.NakshatraId == CacheLoad._birthNakshatraLagnaId && i.PadaNumber == CacheLoad._birthPadaLagnaNumber).FirstOrDefault()?.Id ?? 0;
                 newList.AddRange(pList.Where(s => s.Id >= pId).ToList());
                 newList.AddRange(pList.Where(s => s.Id < pId).ToList());
             }
             else
             {
-                pId = pList.Where(i => i.NakshatraId == person.NakshatraMoonId && i.PadaNumber == person.PadaMoon).FirstOrDefault()?.Id ?? 0;
+                pId = pList.Where(i => i.NakshatraId == CacheLoad._birthNakshatraMoonId && i.PadaNumber == CacheLoad._birthPadaMoonNumber).FirstOrDefault()?.Id ?? 0;
                 newList.AddRange(pList.Where(s => s.Id >= pId).ToList());
                 newList.AddRange(pList.Where(s => s.Id < pId).ToList());
             }
@@ -2360,6 +2360,111 @@ namespace PAD
             return degree + "º" + min + "'" + sec + "\"";
         }
 
+        public static List<PlanetData> CalculatePlanetsPositionForDate(DateTime date, double latitude, double longitude)
+        {
+            EpheCalculation eCalc = new EpheCalculation();
+            List<PlanetData> pdList = new List<PlanetData>();
+            string timeZone = string.Empty;
+            timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+            LocalDateTime localDateTimeStart = date.ToLocalDateTime();
+            ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+            DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);
+            
+            PlanetData moonData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MOON, shiftedDate);
+            pdList.Add(moonData);
+            PlanetData sunData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SUN, shiftedDate);
+            pdList.Add(sunData);
+            PlanetData mercuryData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MERCURY, shiftedDate);
+            pdList.Add(mercuryData);
+            PlanetData venusData = eCalc.CalculatePlanetData_London(EpheConstants.SE_VENUS, shiftedDate);
+            pdList.Add(venusData);
+            PlanetData marsData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MARS, shiftedDate);
+            pdList.Add(marsData);
+            PlanetData jupiterData = eCalc.CalculatePlanetData_London(EpheConstants.SE_JUPITER, shiftedDate);
+            pdList.Add(jupiterData);
+            PlanetData saturnData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SATURN, shiftedDate);
+            pdList.Add(saturnData);
+            PlanetData rahuMeanData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MEAN_NODE, shiftedDate);
+            pdList.Add(rahuMeanData);
+            PlanetData rahuTrueData = eCalc.CalculatePlanetData_London(EpheConstants.SE_TRUE_NODE, shiftedDate);
+            pdList.Add(rahuTrueData);
+            PlanetData ketuMeanData = eCalc.CalculateKetu(rahuMeanData);
+            pdList.Add(ketuMeanData);
+            PlanetData ketuTrueData = eCalc.CalculateKetu(rahuTrueData);
+            pdList.Add(ketuTrueData);
+
+            return pdList;
+        }
+
+        public static double CalculateAscendantForDate(DateTime date, double latitude, double longitude, double altitude, int hsys)
+        {
+            EpheCalculation eCalc = new EpheCalculation();
+            string timeZone = string.Empty;
+            timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+            LocalDateTime localDateTimeStart = date.ToLocalDateTime();
+            ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
+            DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);
+
+            return eCalc.AscendanceCalculation(shiftedDate, latitude, longitude, altitude, hsys)[0];
+        }
+
+        public static int GetZodiakIdFromDegree(double longitude)
+        {
+            double znakPart = 360.0000 / 12;
+
+            double currentDZnak = longitude / znakPart;
+            double intDZnak = (int)currentDZnak;
+
+            int currentZnak = 0;
+            if (currentDZnak > intDZnak)
+            {
+                currentZnak = Convert.ToInt32(intDZnak) + 1;
+            }
+            else if (currentDZnak == intDZnak)
+            {
+                currentZnak = Convert.ToInt32(intDZnak);
+            }
+            return currentZnak;
+        }
+
+        public static int GetNakshatraIdFromDegree(double longitude)
+        {
+            double nakshatraPart = 360.0000 / 27;
+
+            double currentDNakshatra = longitude / nakshatraPart;
+            double intDNakshatra = (int)currentDNakshatra;
+
+            int currentNakshatra = 0;
+            if (currentDNakshatra > intDNakshatra)
+            {
+                currentNakshatra = Convert.ToInt32(intDNakshatra) + 1;
+            }
+            else if (currentDNakshatra == intDNakshatra)
+            {
+                currentNakshatra = Convert.ToInt32(intDNakshatra);
+            }
+            return currentNakshatra;
+        }
+
+        public static int GetPadaIdFromDegree(double longitude)
+        {
+            double padaPart = 360.0000 / 108;
+
+            double currentDPada = longitude / padaPart;
+            double intDPada = (int)currentDPada;
+
+            int currentPada = 0;
+            if (currentDPada > intDPada)
+            {
+                currentPada = Convert.ToInt32(intDPada) + 1;
+            }
+            else if (currentDPada == intDPada)
+            {
+                currentPada = Convert.ToInt32(intDPada);
+            }
+            return currentPada;
+        }
+
         public static int GetPadaNumberByPadaId(int padaId)
         {
             return CacheLoad._padaList.Where(i => i.Id == padaId).FirstOrDefault()?.PadaNumber ?? 0;
@@ -2370,14 +2475,14 @@ namespace PAD
             return CacheLoad._planetDescList.Where(i => i.PlanetId == (int)planetCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
         }
 
-        public static List<PersonsEventsList> GetDayPersonEvents(string guid, DateTime date)
+        public static List<PersonsEventsList> GetDayPersonEvents(int id, DateTime date)
         {
             #region _pevList hack update
             CacheLoad._personEventsList = null;
             CacheLoad._personEventsList = CacheLoad.GetPersonsEventsList();
             #endregion
 
-            return CacheLoad._personEventsList.Where(i => i.DateStart > date && i.DateEnd < date.AddDays(+1) && i.GUID.Equals(guid)).ToList();
+            return CacheLoad._personEventsList.Where(i => i.DateStart > date && i.DateEnd < date.AddDays(+1) && i.Id == id).ToList();
         }
 
         public static List<PersonsEventsList> GetDayEventsList(List<PersonsEventsList> pList, DateTime currentDate)

@@ -84,7 +84,7 @@
             this.buttonClose.Location = new System.Drawing.Point(930, 592);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(80, 32);
-            this.buttonClose.TabIndex = 16;
+            this.buttonClose.TabIndex = 42;
             this.buttonClose.Text = "Close";
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
@@ -191,7 +191,7 @@
             this.buttonChoose.Location = new System.Drawing.Point(844, 592);
             this.buttonChoose.Name = "buttonChoose";
             this.buttonChoose.Size = new System.Drawing.Size(80, 32);
-            this.buttonChoose.TabIndex = 32;
+            this.buttonChoose.TabIndex = 40;
             this.buttonChoose.Text = "Choose";
             this.buttonChoose.UseVisualStyleBackColor = true;
             this.buttonChoose.Click += new System.EventHandler(this.buttonChoose_Click);
@@ -287,7 +287,7 @@
             this.buttonLivingPlace.Margin = new System.Windows.Forms.Padding(0);
             this.buttonLivingPlace.Name = "buttonLivingPlace";
             this.buttonLivingPlace.Size = new System.Drawing.Size(30, 22);
-            this.buttonLivingPlace.TabIndex = 38;
+            this.buttonLivingPlace.TabIndex = 30;
             this.buttonLivingPlace.UseVisualStyleBackColor = true;
             this.buttonLivingPlace.Click += new System.EventHandler(this.buttonLivingPlace_Click);
             // 
@@ -298,7 +298,7 @@
             this.buttonDefault.Location = new System.Drawing.Point(718, 592);
             this.buttonDefault.Name = "buttonDefault";
             this.buttonDefault.Size = new System.Drawing.Size(91, 32);
-            this.buttonDefault.TabIndex = 42;
+            this.buttonDefault.TabIndex = 38;
             this.buttonDefault.Text = "Default";
             this.buttonDefault.UseVisualStyleBackColor = true;
             this.buttonDefault.Click += new System.EventHandler(this.buttonDefault_Click);
@@ -456,11 +456,11 @@
             // 
             this.maskedTextBoxDate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.maskedTextBoxDate.Location = new System.Drawing.Point(810, 151);
-            this.maskedTextBoxDate.Mask = "00/00/0000 90:00";
+            this.maskedTextBoxDate.Mask = "00/00/0000 90:00:00";
             this.maskedTextBoxDate.Name = "maskedTextBoxDate";
             this.maskedTextBoxDate.ReadOnly = true;
             this.maskedTextBoxDate.Size = new System.Drawing.Size(200, 22);
-            this.maskedTextBoxDate.TabIndex = 47;
+            this.maskedTextBoxDate.TabIndex = 26;
             this.maskedTextBoxDate.ValidatingType = typeof(System.DateTime);
             // 
             // buttonBirthPlace
@@ -472,7 +472,7 @@
             this.buttonBirthPlace.Margin = new System.Windows.Forms.Padding(0);
             this.buttonBirthPlace.Name = "buttonBirthPlace";
             this.buttonBirthPlace.Size = new System.Drawing.Size(30, 22);
-            this.buttonBirthPlace.TabIndex = 51;
+            this.buttonBirthPlace.TabIndex = 28;
             this.buttonBirthPlace.UseVisualStyleBackColor = true;
             this.buttonBirthPlace.Click += new System.EventHandler(this.buttonBirthPlace_Click);
             // 
@@ -496,11 +496,12 @@
             // 
             // buttonGenerateMap
             // 
+            this.buttonGenerateMap.Enabled = false;
             this.buttonGenerateMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonGenerateMap.Location = new System.Drawing.Point(718, 249);
             this.buttonGenerateMap.Name = "buttonGenerateMap";
             this.buttonGenerateMap.Size = new System.Drawing.Size(292, 32);
-            this.buttonGenerateMap.TabIndex = 52;
+            this.buttonGenerateMap.TabIndex = 32;
             this.buttonGenerateMap.Text = "Generate Chart";
             this.buttonGenerateMap.UseVisualStyleBackColor = true;
             this.buttonGenerateMap.Click += new System.EventHandler(this.buttonGenerateMap_Click);
@@ -512,17 +513,20 @@
             this.buttonSaveProfile.Location = new System.Drawing.Point(718, 296);
             this.buttonSaveProfile.Name = "buttonSaveProfile";
             this.buttonSaveProfile.Size = new System.Drawing.Size(292, 32);
-            this.buttonSaveProfile.TabIndex = 53;
+            this.buttonSaveProfile.TabIndex = 34;
             this.buttonSaveProfile.Text = "Add as new Profile";
             this.buttonSaveProfile.UseVisualStyleBackColor = true;
+            this.buttonSaveProfile.Click += new System.EventHandler(this.buttonSaveProfile_Click);
             // 
             // richTextBoxNotes
             // 
+            this.richTextBoxNotes.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.richTextBoxNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBoxNotes.Location = new System.Drawing.Point(718, 344);
             this.richTextBoxNotes.Name = "richTextBoxNotes";
+            this.richTextBoxNotes.ReadOnly = true;
             this.richTextBoxNotes.Size = new System.Drawing.Size(292, 229);
-            this.richTextBoxNotes.TabIndex = 54;
+            this.richTextBoxNotes.TabIndex = 36;
             this.richTextBoxNotes.Text = "";
             // 
             // ProfileForm

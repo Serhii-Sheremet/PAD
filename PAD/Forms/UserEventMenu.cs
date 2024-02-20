@@ -22,7 +22,7 @@ namespace PAD
         }
 
         private ELanguage _langCode;
-        private Profile_old _currentProfle;
+        private Profile _currentProfle;
         private List<string> _timesList;
         private PersonsEventsList _peItem;
         private int _slotsPerHour; // configurable from dayView
@@ -70,7 +70,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public UserEventMenu(Profile_old profile, int perHour, ELanguage lCode)
+        public UserEventMenu(Profile profile, int perHour, ELanguage lCode)
         {
             InitializeComponent();
 
@@ -83,7 +83,7 @@ namespace PAD
             pictureBoxColor.BackColor = Color.LightSalmon;
         }
 
-        public UserEventMenu(Profile_old profile, PersonsEventsList peItem, int perHour, ELanguage lCode)
+        public UserEventMenu(Profile profile, PersonsEventsList peItem, int perHour, ELanguage lCode)
         {
             InitializeComponent();
 
@@ -233,13 +233,13 @@ namespace PAD
                 dbCon.Open();
                 try
                 {
-                    SQLiteCommand command = new SQLiteCommand("insert into USER_EVENTS (DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE, GUID) values (@DATESTART, @DATEEND, @NAME, @MESSAGE, @ARGBVALUE, @GUID)", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("insert into USER_EVENTS (PROFILEID, DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE) values (@PROFILEID, @DATESTART, @DATEEND, @NAME, @MESSAGE, @ARGBVALUE)", dbCon);
+                    command.Parameters.AddWithValue("@PROFILEID", _currentProfle.Id);
                     command.Parameters.AddWithValue("@DATESTART", startDate);
                     command.Parameters.AddWithValue("@DATEEND", endDate);
                     command.Parameters.AddWithValue("@NAME", textBoxName.Text);
                     command.Parameters.AddWithValue("@MESSAGE", richTextBoxMessage.Text);
                     command.Parameters.AddWithValue("@ARGBVALUE", pictureBoxColor.BackColor.ToArgb());
-                    command.Parameters.AddWithValue("@GUID", _currentProfle.GUID);
                     
                     command.ExecuteNonQuery();
                 }

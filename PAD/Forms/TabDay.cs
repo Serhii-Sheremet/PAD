@@ -21,7 +21,7 @@ namespace PAD
 
         private ELanguage _langCode;
         private Day _currDay;
-        private Profile_old _curProfile;
+        private Profile _curProfile;
         private List<PersonsEventsList> _pevList;
         private List<DVLineNames> _dvlnList;
         private List<DVLineNameDescription> _dvlnDescList;
@@ -44,7 +44,7 @@ namespace PAD
             InitializeComponent();
         }
         
-        public TabDay(Day day, Profile_old sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonsEventsList> evList, ELanguage langCode)
+        public TabDay(Day day, Profile sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonsEventsList> evList, ELanguage langCode)
         {
             InitializeComponent();
 
@@ -485,7 +485,7 @@ namespace PAD
                     ClearAppointments(false);
 
                     //refresh list of user appointments from db
-                    _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.GUID, _currDay.Date), _currDay.Date);
+                    _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                     //creates new user appointments
                     foreach (PersonsEventsList pev in _pevList)
@@ -532,7 +532,7 @@ namespace PAD
                 ClearAppointments(false);
 
                 //refresh list of user appointments from db
-                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.GUID, _currDay.Date), _currDay.Date);
+                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                 //creates new user appointments
                 foreach (PersonsEventsList pev in _pevList)
@@ -578,7 +578,7 @@ namespace PAD
                 ClearAppointments(false);
 
                 //refresh list of user appointments from db
-                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.GUID, _currDay.Date), _currDay.Date);
+                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                 //creates new user appointments
                 foreach (PersonsEventsList pev in _pevList)
@@ -645,7 +645,7 @@ namespace PAD
                 }
                 //we need to refresh _pevList here so it will read db and get new appointments
                 #region _pevList hack update
-                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.GUID, _currDay.Date), _currDay.Date);
+                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
                 #endregion
             }
         }
@@ -656,7 +656,7 @@ namespace PAD
             {
                 //we need to refresh _pevList here so it will read db and get new appointments
                 #region _pevList hack update
-                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.GUID, _currDay.Date), _currDay.Date);
+                _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
                 #endregion
 
                 int index = _pevList.FindIndex(i => i.Name.Equals(dayView.SelectedAppointment.Title) && i.DateStart == dayView.SelectedAppointment.StartDate && i.DateEnd == dayView.SelectedAppointment.EndDate);
@@ -960,7 +960,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -970,7 +970,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1105,7 +1105,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1115,7 +1115,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1249,7 +1249,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1259,7 +1259,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1393,7 +1393,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1403,7 +1403,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1537,7 +1537,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1547,7 +1547,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1681,7 +1681,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1691,7 +1691,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1825,7 +1825,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1835,7 +1835,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -1987,7 +1987,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -1997,7 +1997,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)
@@ -2149,7 +2149,7 @@ namespace PAD
                         {
                             specNavamsha = specNavamsha.Substring(2, specNavamsha.Length - 2);
                         }
-                        string badNavamsha = Utility.GetBadNavamsha(_curProfile, sPada.Id, lCode);
+                        string badNavamsha = Utility.GetBadNavamsha(sPada.Id, lCode);
                         if (badNavamsha.Length > 0 && specNavamsha.Length > 0)
                         {
                             badNavamsha = ";  " + badNavamsha.Substring(0, (badNavamsha.Length - 2));
@@ -2159,7 +2159,7 @@ namespace PAD
                             badNavamsha = badNavamsha.Substring(0, (badNavamsha.Length - 2));
                         }
                         string drekkana = string.Empty;
-                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(_curProfile, sPada.Id);
+                        List<DrekkanaEntity> deList = Utility.GetBadDrekkanaList(sPada.Id);
                         if (deList.Count > 0)
                         {
                             for (int i = 0; i < deList.Count; i++)

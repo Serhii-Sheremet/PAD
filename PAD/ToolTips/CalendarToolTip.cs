@@ -9,7 +9,7 @@ namespace PAD
     public partial class CalendarToolTip : UserControl
     {
         private Day currDay;
-        private Profile_old sPerson;
+        private Profile sPerson;
         private ELanguage lang;
         private int linesCount;
         private int lineHeight;
@@ -20,7 +20,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public CalendarToolTip(Profile_old pers, Day day, int formHeight, int lc, ELanguage langCode)
+        public CalendarToolTip(Profile pers, Day day, int formHeight, int lc, ELanguage langCode)
         {
             InitializeComponent();
             sPerson = pers;
@@ -31,7 +31,7 @@ namespace PAD
             lineHeight = (this.Height - dayFrameHeight - 12) / linesCount;
         }
 
-        public CalendarToolTip(Profile_old pers, Day day, int formWidth, int formHeight, int lc, ELanguage langCode)
+        public CalendarToolTip(Profile pers, Day day, int formWidth, int formHeight, int lc, ELanguage langCode)
         {
             InitializeComponent();
             sPerson = pers;
