@@ -1171,8 +1171,8 @@ namespace PAD
             EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
             EpheFunctions.swe_set_topo(lon, lat, alt);
 
-            double jut = 0.0;
-            double tjd_ut = 2415020.5;
+            double jut;
+            double tjd_ut;
             int jday = calcDate.Day;
             int jmonth = calcDate.Month;
             int jyear = calcDate.Year;
@@ -1198,6 +1198,102 @@ namespace PAD
             Marshal.FreeHGlobal(ptrDouble_cusps);
 
             return ascmc;
+        }
+
+        public double SunRiseCalculation(DateTime calcDate, double lat, double lon, double alt, double atpress, double attemp)
+        {
+            // int rsmi = EpheConstants.SE_CALC_RISE;
+            // int rsmi = EpheConstants.SE_CALC_SET;
+            double[] geopos = { lon, lat, alt };
+
+            EpheFunctions.swe_set_topo(geopos[0], geopos[1], geopos[2]);
+
+            double jut;
+            double tjd_ut;
+            int jday = calcDate.Day;
+            int jmonth = calcDate.Month;
+            int jyear = calcDate.Year;
+            int jhour = calcDate.Hour;
+            int jmin = calcDate.Minute;
+            int jsec = calcDate.Second;
+
+            jut = jhour + jmin / 60.0 + jsec / 3600.0;
+            tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, EpheConstants.SE_GREG_CAL);
+            double dt = lon / 360.0;
+            tjd_ut -= dt;
+
+            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION;
+            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER + EpheConstants.SE_BIT_NO_REFRACTION;
+            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION | EpheConstants.SE_BIT_GEOCTR_NO_ECL_LAT;
+            int rsmi = EpheConstants.SE_CALC_RISE;
+
+
+            int ipl = EpheConstants.SE_SUN;
+            int epheflag = EpheConstants.SEFLG_SWIEPH;
+
+            IntPtr ptrDouble_geopos = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
+            Marshal.Copy(geopos, 0, ptrDouble_geopos, 3);
+
+            double[] tret = new double[1];
+            IntPtr ptrDouble_tret = Marshal.AllocHGlobal(Marshal.SizeOf(tret[0]));
+            Marshal.Copy(tret, 0, ptrDouble_tret, 1);
+
+            char[] serr = new char[1];
+            IntPtr ptrChar_serr = Marshal.AllocHGlobal(Marshal.SizeOf(serr[0]));
+            Marshal.Copy(serr, 0, ptrChar_serr, 1);
+
+            char[] starname = new char[1];
+            IntPtr ptrChar_starname = Marshal.AllocHGlobal(Marshal.SizeOf(starname[0]));
+            Marshal.Copy(starname, 0, ptrChar_starname, 1);
+
+            int return_code = EpheFunctions.swe_rise_trans(tjd_ut, ipl, ptrChar_starname, Convert.ToInt32(epheflag), rsmi, ptrDouble_geopos, atpress, attemp, ptrDouble_tret, ptrChar_serr);
+
+            Marshal.Copy(ptrDouble_tret, tret, 0, 1);
+            Marshal.Copy(ptrChar_serr, serr, 0, 1);
+
+            Marshal.FreeHGlobal(ptrDouble_geopos);
+            Marshal.FreeHGlobal(ptrDouble_tret);
+            Marshal.FreeHGlobal(ptrChar_serr);
+            Marshal.FreeHGlobal(ptrChar_starname);
+
+            return tret[0];
+        }
+
+        public DateTime DateTimeFromJulday(double tjd) 
+        {
+            int[] year = new int[1];
+            IntPtr ptrInt_year = Marshal.AllocHGlobal(Marshal.SizeOf(year[0]));
+            Marshal.Copy(year, 0, ptrInt_year, 1);
+
+            int[] month = new int[1];
+            IntPtr ptrInt_month = Marshal.AllocHGlobal(Marshal.SizeOf(month[0]));
+            Marshal.Copy(month, 0, ptrInt_month, 1);
+
+            int[] day = new int[1];
+            IntPtr ptrInt_day = Marshal.AllocHGlobal(Marshal.SizeOf(day[0]));
+            Marshal.Copy(day, 0, ptrInt_day, 1);
+
+            double[] hour = new double[1];
+            IntPtr ptrDouble_hour = Marshal.AllocHGlobal(Marshal.SizeOf(hour[0]));
+            Marshal.Copy(hour, 0, ptrDouble_hour, 1);
+
+            EpheFunctions.swe_revjul(tjd, EpheConstants.SE_GREG_CAL, ptrInt_year, ptrInt_month, ptrInt_day, ptrDouble_hour);
+
+            Marshal.Copy(ptrInt_year, year, 0, 1);
+            Marshal.Copy(ptrInt_month, month, 0, 1);
+            Marshal.Copy(ptrInt_day, day, 0, 1);
+            Marshal.Copy(ptrDouble_hour, hour, 0, 1);
+
+            Marshal.FreeHGlobal(ptrInt_year);
+            Marshal.FreeHGlobal(ptrInt_month);
+            Marshal.FreeHGlobal(ptrInt_day);
+            Marshal.FreeHGlobal(ptrDouble_hour);
+
+            double leftoverMinutes = (hour[0] - Math.Floor(hour[0])) * 60;
+            double seconds = Math.Floor( (leftoverMinutes - Math.Floor(leftoverMinutes)) * 60 );
+
+            DateTime dateTime = new DateTime(year[0], month[0], day[0], Convert.ToInt32(hour[0]), Convert.ToInt32(leftoverMinutes), Convert.ToInt32(seconds));
+            return dateTime;
         }
 
         //char serr[AS_MAXCH];
