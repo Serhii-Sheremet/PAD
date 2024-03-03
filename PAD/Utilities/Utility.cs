@@ -801,26 +801,26 @@ namespace PAD
 
         public static DateTime? CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            //DateTime? sunrise = null;
+            DateTime? sunrise = null;
             SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            LocalDateTime localDateTime = date.ToLocalDateTime();
-            ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
-            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            return solarTimes.Sunrise.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            //sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
-            //return sunrise;
+            //LocalDateTime localDateTime = date.ToLocalDateTime();
+            //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            //return solarTimes.Sunrise.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
+            sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
+            return sunrise;
         }
 
         public static DateTime? CalculateSunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            //DateTime? sunset = null;
+            DateTime? sunset = null;
             SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            LocalDateTime localDateTime = date.ToLocalDateTime();
-            ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
-            return solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            //sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
-            //return sunset;
+            //LocalDateTime localDateTime = date.ToLocalDateTime();
+            //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
+            //return solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
+            return sunset;
         }
 
         public static string GetSunStatusName(ESun sMode, ELanguage currentLang)
@@ -1909,10 +1909,15 @@ namespace PAD
             return isParsedOk;
         }
 
-        public static string GetTimeZoneIdByGeoCoordinates(double latitude, double longitude) 
+        public static string GetTimeZoneNameByGeoCoordinates(double latitude, double longitude) 
         {
-            /*string tzIana =*/ return TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
-            //return TZConvert.IanaToWindows(tzIana);
+            return TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
+        }
+
+        public static string GetTimeZoneDotNetIdByGeoCoordinates(double latitude, double longitude)
+        {
+            string tzIana = TimeZoneLookup.GetTimeZone(latitude, longitude).Result;
+            return TZConvert.IanaToWindows(tzIana);
         }
 
         public static string Base64Encode(string plainText)
@@ -2365,7 +2370,7 @@ namespace PAD
             EpheCalculation eCalc = new EpheCalculation();
             List<PlanetData> pdList = new List<PlanetData>();
             string timeZone = string.Empty;
-            timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+            timeZone = Utility.GetTimeZoneNameByGeoCoordinates(latitude, longitude);
             LocalDateTime localDateTimeStart = date.ToLocalDateTime();
             ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
             DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);
@@ -2400,7 +2405,7 @@ namespace PAD
         {
             EpheCalculation eCalc = new EpheCalculation();
             string timeZone = string.Empty;
-            timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+            timeZone = Utility.GetTimeZoneNameByGeoCoordinates(latitude, longitude);
             LocalDateTime localDateTimeStart = date.ToLocalDateTime();
             ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
             DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);

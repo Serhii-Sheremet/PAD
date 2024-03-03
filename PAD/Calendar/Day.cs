@@ -244,7 +244,7 @@ namespace PAD
             string timeZone = string.Empty;
             if (Utility.GetGeoCoordinateByLocationId(sPerson.PlaceOfLivingId, out latitude, out longitude))
             {
-                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                timeZone = Utility.GetTimeZoneDotNetIdByGeoCoordinates(latitude, longitude);
                 SunRise = Utility.CalculateSunriseForDateAndLocation(date, latitude, longitude, timeZone);
                 SunSet = Utility.CalculateSunsetForDateAndLocation(date, latitude, longitude, timeZone);
             }

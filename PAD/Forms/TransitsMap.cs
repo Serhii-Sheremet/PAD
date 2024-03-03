@@ -1824,7 +1824,7 @@ namespace PAD
             string timeZone = string.Empty;
             if (Utility.GetGeoCoordinateByLocationId(_personInfo.PlaceOfLivingId, out latitude, out longitude))
             {
-                timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
+                //timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
                 EpheCalculation eCalc = new EpheCalculation();
 
                 PlanetData moonData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MOON, date);
