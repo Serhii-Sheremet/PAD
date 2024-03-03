@@ -11,7 +11,6 @@ namespace PAD
         public string Name;
         public string Message;
         public int ARGBValue;
-        public string GUID;
 
         public PersonsEventsList ParseFile(string s)
         {
@@ -22,8 +21,7 @@ namespace PAD
                 DateEnd = DateTime.ParseExact(row[1], "yyyy-MM-dd HH:mm:ss", DateTimeFormatInfo.CurrentInfo),
                 Name = row[2],
                 Message = row[3],
-                ARGBValue = Convert.ToInt32(row[4]),
-                GUID = row[5]
+                ARGBValue = Convert.ToInt32(row[4])
             };
         }
     }

@@ -564,7 +564,7 @@ namespace PAD
                 dbCon.Open();
                 try
                 {   
-                    SQLiteCommand command = new SQLiteCommand("select ID, DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE, GUID from USER_EVENTS order by ID", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("select ID, DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE from USER_EVENTS order by ID", dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
@@ -576,8 +576,7 @@ namespace PAD
                                 DateEnd = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
                                 Name = reader.StringValue(3),
                                 Message = reader.StringValue(4),
-                                ARGBValue = reader.IntValue(5),
-                                GUID = reader.StringValue(6)
+                                ARGBValue = reader.IntValue(5)
                             };
                             pevList.Add(temp);
                         }
