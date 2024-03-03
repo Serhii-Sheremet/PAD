@@ -22,7 +22,7 @@ namespace PAD
         private ELanguage _langCode;
         private Day _currDay;
         private Profile _curProfile;
-        private List<PersonsEventsList> _pevList;
+        private List<PersonEvent> _pevList;
         private List<DVLineNames> _dvlnList;
         private List<DVLineNameDescription> _dvlnDescList;
         private bool isAppCreated;
@@ -44,7 +44,7 @@ namespace PAD
             InitializeComponent();
         }
         
-        public TabDay(Day day, Profile sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonsEventsList> evList, ELanguage langCode)
+        public TabDay(Day day, Profile sProfile, List<DVLineNames> dvlNamesList, List<DVLineNameDescription> dvlNamesDescList, List<PersonEvent> evList, ELanguage langCode)
         {
             InitializeComponent();
 
@@ -243,7 +243,7 @@ namespace PAD
             if (_pevList != null)
             {
                 string group = ((int)EDVNames.USER).ToString();
-                foreach (PersonsEventsList pev in _pevList)
+                foreach (PersonEvent pev in _pevList)
                 {
                     setAppointments(pev.DateStart, pev.DateEnd, pev.Name, Color.FromArgb(pev.ARGBValue), false, group, false);
                 }
@@ -488,7 +488,7 @@ namespace PAD
                     _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                     //creates new user appointments
-                    foreach (PersonsEventsList pev in _pevList)
+                    foreach (PersonEvent pev in _pevList)
                     {
                         setAppointments(pev.DateStart, pev.DateEnd, pev.Name, Color.FromArgb(pev.ARGBValue), false, ((int)EDVNames.USER).ToString(), false);
                     }
@@ -535,7 +535,7 @@ namespace PAD
                 _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                 //creates new user appointments
-                foreach (PersonsEventsList pev in _pevList)
+                foreach (PersonEvent pev in _pevList)
                 {
                     setAppointments(pev.DateStart, pev.DateEnd, pev.Name, Color.FromArgb(pev.ARGBValue), false, ((int)EDVNames.USER).ToString(), false);
                 }
@@ -581,7 +581,7 @@ namespace PAD
                 _pevList = Utility.GetDayEventsList(Utility.GetDayPersonEvents(_curProfile.Id, _currDay.Date), _currDay.Date);
 
                 //creates new user appointments
-                foreach (PersonsEventsList pev in _pevList)
+                foreach (PersonEvent pev in _pevList)
                 {
                     setAppointments(pev.DateStart, pev.DateEnd, pev.Name, Color.FromArgb(pev.ARGBValue), false, ((int)EDVNames.USER).ToString(), false);
                 }

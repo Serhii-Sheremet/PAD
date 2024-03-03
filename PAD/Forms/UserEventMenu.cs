@@ -24,7 +24,7 @@ namespace PAD
         private ELanguage _langCode;
         private Profile _currentProfle;
         private List<string> _timesList;
-        private PersonsEventsList _peItem;
+        private PersonEvent _peItem;
         private int _slotsPerHour; // configurable from dayView
 
         private bool _toCreate = false; // true - create appointment, false - not create appointment
@@ -83,7 +83,7 @@ namespace PAD
             pictureBoxColor.BackColor = Color.LightSalmon;
         }
 
-        public UserEventMenu(Profile profile, PersonsEventsList peItem, int perHour, ELanguage lCode)
+        public UserEventMenu(Profile profile, PersonEvent peItem, int perHour, ELanguage lCode)
         {
             InitializeComponent();
 

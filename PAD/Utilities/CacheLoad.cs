@@ -15,7 +15,7 @@ namespace PAD
         public static List<AppTexts> _appTextsList;
         public static List<Location> _locationList;
         public static List<Profile> _profileList;
-        public static List<PersonsEventsList> _personEventsList;
+        public static List<PersonEvent> _personEventsList;
 
         public static List<AppSettingList> _appSettingList;
         public static List<Colors> _colorList;
@@ -556,27 +556,28 @@ namespace PAD
             return entityList;
         }
 
-        public static List<PersonsEventsList> GetPersonsEventsList()
+        public static List<PersonEvent> GetPersonsEventsList()
         {
-            List<PersonsEventsList> pevList = new List<PersonsEventsList>();
+            List<PersonEvent> pevList = new List<PersonEvent>();
             using (SQLiteConnection dbCon = Utility.GetSQLConnection())
             {
                 dbCon.Open();
                 try
                 {   
-                    SQLiteCommand command = new SQLiteCommand("select ID, DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE from USER_EVENTS order by ID", dbCon);
+                    SQLiteCommand command = new SQLiteCommand("select ID, PROFILEID, DATESTART, DATEEND, NAME, MESSAGE, ARGBVALUE from USER_EVENTS order by ID", dbCon);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            PersonsEventsList temp = new PersonsEventsList
+                            PersonEvent temp = new PersonEvent
                             {
                                 Id = reader.IntValue(0),
-                                DateStart = DateTime.ParseExact(reader.GetString(1), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                                DateEnd = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
-                                Name = reader.StringValue(3),
-                                Message = reader.StringValue(4),
-                                ARGBValue = reader.IntValue(5)
+                                ProfileId = reader.IntValue(1),
+                                DateStart = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                DateEnd = DateTime.ParseExact(reader.GetString(3), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                Name = reader.StringValue(4),
+                                Message = reader.StringValue(5),
+                                ARGBValue = reader.IntValue(6)
                             };
                             pevList.Add(temp);
                         }

@@ -7,7 +7,7 @@ namespace PAD
 {
     public partial class PersonEventTooltip : UserControl
     {
-        private List<PersonsEventsList> _peList;
+        private List<PersonEvent> _peList;
         private Font _dateFont;
         private Font _timeFont;
         private Font _textFont;
@@ -18,7 +18,7 @@ namespace PAD
             InitializeComponent();
         }
 
-        public PersonEventTooltip(List<PersonsEventsList> peList, int width, int height, Font dateFont, Font timeFont, Font textFont, ELanguage lCode)
+        public PersonEventTooltip(List<PersonEvent> peList, int width, int height, Font dateFont, Font timeFont, Font textFont, ELanguage lCode)
         {
             InitializeComponent();
             _peList = peList;
@@ -61,8 +61,8 @@ namespace PAD
             e.Graphics.DrawString(text, _dateFont, textBrush, posX, posY);
             posY += textSize.Height;
 
-            List<PersonsEventsList> sortedList = _peList.OrderBy(i => i.DateStart).ToList();
-            foreach (PersonsEventsList pev in sortedList)
+            List<PersonEvent> sortedList = _peList.OrderBy(i => i.DateStart).ToList();
+            foreach (PersonEvent pev in sortedList)
             {
                 text = Utility.GetLocalizedText("Time period", _langCode) + ": " + pev.DateStart.ToString("HH:mm") + " - " + pev.DateEnd.ToString("HH:mm");
                 textSize = TextRenderer.MeasureText(text, _timeFont);

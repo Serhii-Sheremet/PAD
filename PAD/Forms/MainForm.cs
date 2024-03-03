@@ -2147,7 +2147,7 @@ namespace PAD
                     DrawColoredLine(g, pen, lineFont, textBrush, posX, (posYForLines + 5 * lineHeight), _dayWidth, lineHeight, daysList[day].ChandraBalaDayList);
                     
                     //Check for events and drawing if exists
-                    List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, daysList[day].Date);
+                    List<PersonEvent> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, daysList[day].Date);
                     if (peDayList.Count > 0)
                     {
                         float triangleX = (posX + _dayWidth) - 10;
@@ -3465,7 +3465,7 @@ namespace PAD
                 int selectedDayIndex = rowNumber * 7 + colNumber;
 
                 DateTime date = _daysList[selectedDayIndex].Date;
-                List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, date);
+                List<PersonEvent> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, date);
                 if (peDayList.Count > 0)
                 {
                     if ((e.X > _dayWidth + colNumber * _dayWidth - 10) && (e.X < _dayWidth + colNumber * _dayWidth) &&
@@ -3501,7 +3501,7 @@ namespace PAD
                 return;
 
             DateTime date = _daysList[selectedDayIndex].Date;
-            List<PersonsEventsList> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, date);
+            List<PersonEvent> peDayList = Utility.GetDayPersonEvents(_selectedProfile.Id, date);
             if (peDayList.Count > 0)
             {
                 if ((e.X > _dayWidth + colNumber * _dayWidth - 10) && (e.X < _dayWidth + colNumber * _dayWidth) &&
@@ -5148,7 +5148,7 @@ namespace PAD
             return dgv;
         }
 
-        private void PersonEventToolTipCreation(List<PersonsEventsList> peList)
+        private void PersonEventToolTipCreation(List<PersonEvent> peList)
         {
             // still problem for auto close when leaving day
             Font dateFont = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.PEVTOOLTIPDATE)), 10, Utility.GetFontStyleBySettings(EFontList.PEVTOOLTIPDATE));
@@ -5172,7 +5172,7 @@ namespace PAD
                 formHeight += textSize.Height + 4;
             }
 
-            foreach (PersonsEventsList pe in peList)
+            foreach (PersonEvent pe in peList)
             {
                 string tPeriod = Utility.GetLocalizedText("Time period", _activeLanguageCode) + ": " + pe.DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + pe.DateEnd.ToString("dd.MM.yyyy HH:mm:ss");
                 string desc1 = pe.Name;
@@ -5225,7 +5225,7 @@ namespace PAD
             }
             else
             {
-                List<PersonsEventsList> pevList = Utility.GetDayPersonEvents(_selectedProfile.Id, _daysList[selectedDayIndex].Date); 
+                List<PersonEvent> pevList = Utility.GetDayPersonEvents(_selectedProfile.Id, _daysList[selectedDayIndex].Date); 
                 List<DVLineNameDescription> dvlDescList = CacheLoad._dvLineNamesDescList.Where(i => i.LanguageCode.Equals(_activeLanguageCode.ToString())).ToList();
                 TabPage newTab = new TabPage() { Name = "day" + selectedDayIndex.ToString(), Text = tabLabel };
                 TabDay tabForm = new TabDay(_daysList[selectedDayIndex], _selectedProfile, CacheLoad._dvLineNamesList.ToList(), dvlDescList, pevList, _activeLanguageCode);

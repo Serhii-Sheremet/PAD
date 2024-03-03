@@ -2480,7 +2480,7 @@ namespace PAD
             return CacheLoad._planetDescList.Where(i => i.PlanetId == (int)planetCode && i.LanguageCode.Equals(langCode.ToString())).FirstOrDefault()?.Name ?? string.Empty;
         }
 
-        public static List<PersonsEventsList> GetDayPersonEvents(int id, DateTime date)
+        public static List<PersonEvent> GetDayPersonEvents(int id, DateTime date)
         {
             #region _pevList hack update
             CacheLoad._personEventsList = null;
@@ -2490,7 +2490,7 @@ namespace PAD
             return CacheLoad._personEventsList.Where(i => i.DateStart > date && i.DateEnd < date.AddDays(+1) && i.Id == id).ToList();
         }
 
-        public static List<PersonsEventsList> GetDayEventsList(List<PersonsEventsList> pList, DateTime currentDate)
+        public static List<PersonEvent> GetDayEventsList(List<PersonEvent> pList, DateTime currentDate)
         {
             return pList.Where(i => i.DateStart > currentDate && i.DateEnd < currentDate.AddDays(+1)).ToList();
         }

@@ -329,7 +329,7 @@
       <DependentUpon>YearTranzits.cs</DependentUpon>
     </Compile>
     <Compile Include="Profile\Location.cs" />
-    <Compile Include="Profile\PersonsEventsList.cs" />
+    <Compile Include="Profile\PersonEvent.cs" />
     <Compile Include="Profile\Profile.cs" />
     <Compile Include="Forms\TransitsMap.cs">
       <SubType>Form</SubType>
