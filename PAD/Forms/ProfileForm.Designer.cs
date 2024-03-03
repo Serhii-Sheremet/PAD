@@ -463,6 +463,7 @@
             this.maskedTextBoxDate.Size = new System.Drawing.Size(200, 22);
             this.maskedTextBoxDate.TabIndex = 26;
             this.maskedTextBoxDate.ValidatingType = typeof(System.DateTime);
+            this.maskedTextBoxDate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.maskedTextBoxDate_KeyPress);
             // 
             // buttonBirthPlace
             // 

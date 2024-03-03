@@ -227,7 +227,7 @@
             // maskedTextBoxDate
             // 
             this.maskedTextBoxDate.Location = new System.Drawing.Point(67, 25);
-            this.maskedTextBoxDate.Mask = "00/00/0000 90:00";
+            this.maskedTextBoxDate.Mask = "00/00/0000 90:00:00";
             this.maskedTextBoxDate.Name = "maskedTextBoxDate";
             this.maskedTextBoxDate.Size = new System.Drawing.Size(193, 22);
             this.maskedTextBoxDate.TabIndex = 41;

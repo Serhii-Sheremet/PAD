@@ -66,6 +66,8 @@
             this.datePicker = new CustomControls.DatePicker();
             this.labelProfile = new System.Windows.Forms.Label();
             this.labelTimeZone = new System.Windows.Forms.Label();
+            this.viewTranzitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.tabControlCalendar.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
@@ -229,7 +231,9 @@
             this.profileToolStripMenuItem,
             this.locationToolStripMenuItem,
             this.toolStripSeparator1,
+            this.viewTranzitToolStripMenuItem,
             this.tranzitsMapToolStripMenuItem,
+            this.toolStripSeparator7,
             this.yearsTranzitsToolStripMenuItem,
             this.swephCalcToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -331,6 +335,17 @@
             resources.ApplyResources(this.labelTimeZone, "labelTimeZone");
             this.labelTimeZone.Name = "labelTimeZone";
             // 
+            // viewTranzitToolStripMenuItem
+            // 
+            this.viewTranzitToolStripMenuItem.Name = "viewTranzitToolStripMenuItem";
+            resources.ApplyResources(this.viewTranzitToolStripMenuItem, "viewTranzitToolStripMenuItem");
+            this.viewTranzitToolStripMenuItem.Click += new System.EventHandler(this.viewTranzitToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
+            // 
             // MainForm
             // 
             resources.ApplyResources(this, "$this");
@@ -399,5 +414,7 @@
         private System.Windows.Forms.ToolStripMenuItem exportYearToPDFToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem swephCalcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tranzitsMapToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewTranzitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }

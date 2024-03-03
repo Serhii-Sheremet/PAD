@@ -54,6 +54,10 @@
     <ApplicationIcon>Calendar.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ArrowButton">
+      <HintPath>bin\Debug\Lib\ArrowButton.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Calendar.DayView">
       <HintPath>bin\Debug\Lib\Calendar.DayView.dll</HintPath>
       <Private>False</Private>
@@ -303,6 +307,12 @@
     <Compile Include="Forms\UserEventMenu.Designer.cs">
       <DependentUpon>UserEventMenu.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ViewTranzit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ViewTranzit.Designer.cs">
+      <DependentUpon>ViewTranzit.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\WaitForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -414,6 +424,9 @@
     <EmbeddedResource Include="Forms\UserEventMenu.resx">
       <DependentUpon>UserEventMenu.cs</DependentUpon>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ViewTranzit.resx">
+      <DependentUpon>ViewTranzit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\WaitForm.resx">
       <DependentUpon>WaitForm.cs</DependentUpon>

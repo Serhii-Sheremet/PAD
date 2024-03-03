@@ -5686,5 +5686,11 @@ namespace PAD
             TransitsMap tmForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
             tmForm.ShowDialog(this);
         }
+
+        private void viewTranzitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ViewTranzit vtForm = new ViewTranzit(_activeLanguageCode);
+            vtForm.ShowDialog(this);
+        }
     }
 }

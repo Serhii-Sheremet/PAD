@@ -4,7 +4,6 @@ using System.Data.SQLite;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
 
 namespace PAD
@@ -3225,7 +3224,10 @@ namespace PAD
 
         }
 
-
-
+        private void maskedTextBoxDate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
     }
 }
