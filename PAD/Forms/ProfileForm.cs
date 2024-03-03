@@ -2793,25 +2793,26 @@ namespace PAD
 
         private void buttonChoose_Click(object sender, EventArgs e)
         {
-            int selectedProfileId = 0;
+            int selectedProfileId = 0, selectedIndex = -1;
             if (listViewProfile.SelectedIndices.Count <= 0)
             {
                 return;
             }
-            int selectedIndex = listViewProfile.SelectedIndex();
+            
+            selectedIndex = listViewProfile.SelectedIndex();
             if (selectedIndex >= 0)
             {
                 selectedProfileId = _proList.Where(i => i.ProfileName.Equals(listViewProfile.Items[selectedIndex].Text)).FirstOrDefault()?.Id ?? 0;
-            }
-            if (selectedProfileId != 0)
-            {
-                SelectedProfile = CacheLoad._profileList.Where(i => i.Id == selectedProfileId).FirstOrDefault();
-                IsChosen = true;
-            }
-            else
-            {
-                SelectedProfile = null;
+                if (selectedProfileId != 0)
+                {
+                    SelectedProfile = CacheLoad._profileList.Where(i => i.Id == selectedProfileId).FirstOrDefault();
+                    IsChosen = true;
+                }
+                else
+                {
+                    SelectedProfile = null;
 
+                }
             }
             Close();
         }
@@ -2870,6 +2871,8 @@ namespace PAD
             textBoxPersonSurname.BackColor = SystemColors.Window;
             maskedTextBoxDate.BackColor = SystemColors.Window;
             richTextBoxNotes.BackColor = SystemColors.Window;
+            buttonBirthPlace.BackColor = SystemColors.Window;
+            buttonLivingPlace.BackColor = SystemColors.Window;
         }
 
         private void MakeTextFieldsReadOnly()
@@ -2886,6 +2889,8 @@ namespace PAD
             textBoxPersonSurname.BackColor = SystemColors.GradientInactiveCaption;
             maskedTextBoxDate.BackColor= SystemColors.GradientInactiveCaption;
             richTextBoxNotes.BackColor= SystemColors.GradientInactiveCaption;
+            buttonBirthPlace.BackColor= SystemColors.GradientInactiveCaption;
+            buttonLivingPlace.BackColor= SystemColors.GradientInactiveCaption;
         }
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
@@ -2901,6 +2906,7 @@ namespace PAD
             toolStripButtonDelete.Enabled = false;
             toolStripButtonSave.Enabled = false;
             buttonGenerateMap.Enabled = true;
+            buttonGenerateMap.BackColor = SystemColors.Window;
             buttonSaveProfile.Enabled = false;
             buttonChoose.Enabled = false;
             buttonDefault.Enabled = false;
@@ -3032,8 +3038,6 @@ namespace PAD
 
         private void ModifyProfile(int pId)
         {
-            
-
             int locationId = SelectedProfile.PlaceOfLivingId;
             if (_selectedLivingLocation != null)
                 locationId = _selectedLivingLocation.Id;
@@ -3163,6 +3167,7 @@ namespace PAD
                     toolStripButtonDelete.Enabled = false;
                     toolStripButtonSave.Enabled = false;
                     buttonSaveProfile.Enabled = true;
+                    buttonSaveProfile.BackColor = SystemColors.Window;
 
                     _pdList = Utility.CalculatePlanetsPositionForDate(birthDate, latitude, longitude);
                     _ascendant = Utility.CalculateAscendantForDate(birthDate, latitude, longitude, 0, 'O');
@@ -3208,6 +3213,10 @@ namespace PAD
             toolStripButtonEdit.Enabled = false;
             toolStripButtonDelete.Enabled = false;
             toolStripButtonSave.Enabled = false;
+            buttonGenerateMap.Enabled = false;
+            buttonSaveProfile.Enabled = false;
+            buttonGenerateMap.BackColor = SystemColors.GradientInactiveCaption;
+            buttonSaveProfile.BackColor = SystemColors.GradientInactiveCaption;
 
             CleanFields();
             MakeTextFieldsReadOnly();

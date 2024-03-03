@@ -280,6 +280,7 @@
             // 
             // buttonLivingPlace
             // 
+            this.buttonLivingPlace.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.buttonLivingPlace.Enabled = false;
             this.buttonLivingPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLivingPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonLivingPlace.Image")));
@@ -288,7 +289,7 @@
             this.buttonLivingPlace.Name = "buttonLivingPlace";
             this.buttonLivingPlace.Size = new System.Drawing.Size(30, 22);
             this.buttonLivingPlace.TabIndex = 30;
-            this.buttonLivingPlace.UseVisualStyleBackColor = true;
+            this.buttonLivingPlace.UseVisualStyleBackColor = false;
             this.buttonLivingPlace.Click += new System.EventHandler(this.buttonLivingPlace_Click);
             // 
             // buttonDefault
@@ -465,6 +466,7 @@
             // 
             // buttonBirthPlace
             // 
+            this.buttonBirthPlace.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.buttonBirthPlace.Enabled = false;
             this.buttonBirthPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBirthPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonBirthPlace.Image")));
@@ -473,7 +475,7 @@
             this.buttonBirthPlace.Name = "buttonBirthPlace";
             this.buttonBirthPlace.Size = new System.Drawing.Size(30, 22);
             this.buttonBirthPlace.TabIndex = 28;
-            this.buttonBirthPlace.UseVisualStyleBackColor = true;
+            this.buttonBirthPlace.UseVisualStyleBackColor = false;
             this.buttonBirthPlace.Click += new System.EventHandler(this.buttonBirthPlace_Click);
             // 
             // labelPlaceBirth
@@ -496,26 +498,31 @@
             // 
             // buttonGenerateMap
             // 
+            this.buttonGenerateMap.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.buttonGenerateMap.Enabled = false;
             this.buttonGenerateMap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonGenerateMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonGenerateMap.Location = new System.Drawing.Point(718, 249);
             this.buttonGenerateMap.Name = "buttonGenerateMap";
             this.buttonGenerateMap.Size = new System.Drawing.Size(292, 32);
             this.buttonGenerateMap.TabIndex = 32;
             this.buttonGenerateMap.Text = "Generate Chart";
-            this.buttonGenerateMap.UseVisualStyleBackColor = true;
+            this.buttonGenerateMap.UseVisualStyleBackColor = false;
             this.buttonGenerateMap.Click += new System.EventHandler(this.buttonGenerateMap_Click);
             // 
             // buttonSaveProfile
             // 
+            this.buttonSaveProfile.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.buttonSaveProfile.Enabled = false;
             this.buttonSaveProfile.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonSaveProfile.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonSaveProfile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSaveProfile.Location = new System.Drawing.Point(718, 296);
             this.buttonSaveProfile.Name = "buttonSaveProfile";
             this.buttonSaveProfile.Size = new System.Drawing.Size(292, 32);
             this.buttonSaveProfile.TabIndex = 34;
             this.buttonSaveProfile.Text = "Add as new Profile";
-            this.buttonSaveProfile.UseVisualStyleBackColor = true;
+            this.buttonSaveProfile.UseVisualStyleBackColor = false;
             this.buttonSaveProfile.Click += new System.EventHandler(this.buttonSaveProfile_Click);
             // 
             // richTextBoxNotes
