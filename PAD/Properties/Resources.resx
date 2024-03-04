@@ -118,16 +118,19 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="close_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Images\close_10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Moon_Eclipse_alpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Images\Moon_Eclipse_alpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="green_check_32" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\Images\green-check_32.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Moon_Eclipse_alpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\bin\Debug\Images\Moon_Eclipse_alpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Sun_Eclipse_alpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\bin\Debug\Images\Sun_Eclipse_alpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="close_10" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Images\close_10.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="refresh_alpha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\bin\Debug\Images\refresh_alpha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

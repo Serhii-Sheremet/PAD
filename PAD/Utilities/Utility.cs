@@ -592,7 +592,7 @@ namespace PAD
                         if (tsi is ToolStripMenuItem)
                         {
                             LocalizeMenuLabel(tsi, langCode);
-                        }
+                        }                        
                         if (tsi is ToolStripComboBox)
                         {
                             ToolStripComboBox tscb = tsi as ToolStripComboBox;
@@ -619,6 +619,10 @@ namespace PAD
                     foreach (ToolStripItem tsi in ((ToolStrip)control).Items)
                     {
                         if (tsi is ToolStripButton)
+                        {
+                            LocalizeMenuLabel(tsi, langCode);
+                        }
+                        if (tsi is ToolStripLabel)
                         {
                             LocalizeMenuLabel(tsi, langCode);
                         }

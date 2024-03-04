@@ -498,6 +498,7 @@
     <None Include="Resources\Warning.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="bin\Debug\Images\refresh_alpha.png" />
     <Content Include="swedll32.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

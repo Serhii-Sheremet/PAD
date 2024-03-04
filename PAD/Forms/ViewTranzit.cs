@@ -67,7 +67,7 @@ namespace PAD
         {
             Utility.LocalizeForm(this, _activeLang);
 
-            textBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
             textBoxSeconds.Text = _curDate.Second.ToString();
             textBoxMinutes.Text = _curDate.Minute.ToString();
             textBoxHours.Text = _curDate.Hour.ToString();
@@ -360,14 +360,13 @@ namespace PAD
             int min = Convert.ToInt32(textBoxMinutes.Text);
             int sec = Convert.ToInt32(textBoxSeconds.Text);
             _curDate = new DateTime(year, month, day, hour, min, sec);
-            textBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
             
         }
 
         private void textBoxDate_TextChanged(object sender, EventArgs e)
         {
-            PrepareTransitMap();
-            ProfileInfoDataGridViewFillByRow(_activeLang);
+            
         }
 
         private void PrepareTransitMap()
@@ -2809,6 +2808,24 @@ namespace PAD
         }
 
         private void textBoxLivingPlace_TextChanged(object sender, EventArgs e)
+        {
+            PrepareTransitMap();
+            ProfileInfoDataGridViewFillByRow(_activeLang);
+        }
+
+        private void toolStripButtonRefresh_Click(object sender, EventArgs e)
+        {
+            _curDate = DateTime.Now;
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            textBoxSeconds.Text = _curDate.Second.ToString();
+            textBoxMinutes.Text = _curDate.Minute.ToString();
+            textBoxHours.Text = _curDate.Hour.ToString();
+            textBoxDay.Text = _curDate.Day.ToString();
+            textBoxMonth.Text = _curDate.Month.ToString();
+            textBoxYear.Text = _curDate.Year.ToString();
+        }
+
+        private void toolStripTextBoxDate_TextChanged(object sender, EventArgs e)
         {
             PrepareTransitMap();
             ProfileInfoDataGridViewFillByRow(_activeLang);

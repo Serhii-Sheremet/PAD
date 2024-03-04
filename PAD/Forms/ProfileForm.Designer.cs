@@ -81,7 +81,7 @@
             // buttonClose
             // 
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Location = new System.Drawing.Point(930, 592);
+            this.buttonClose.Location = new System.Drawing.Point(972, 592);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(80, 32);
             this.buttonClose.TabIndex = 42;
@@ -125,7 +125,7 @@
             // textBoxPersonSurname
             // 
             this.textBoxPersonSurname.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.textBoxPersonSurname.Location = new System.Drawing.Point(810, 123);
+            this.textBoxPersonSurname.Location = new System.Drawing.Point(851, 123);
             this.textBoxPersonSurname.Name = "textBoxPersonSurname";
             this.textBoxPersonSurname.ReadOnly = true;
             this.textBoxPersonSurname.Size = new System.Drawing.Size(200, 22);
@@ -143,7 +143,7 @@
             // textBoxPersonName
             // 
             this.textBoxPersonName.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.textBoxPersonName.Location = new System.Drawing.Point(810, 96);
+            this.textBoxPersonName.Location = new System.Drawing.Point(851, 96);
             this.textBoxPersonName.Name = "textBoxPersonName";
             this.textBoxPersonName.ReadOnly = true;
             this.textBoxPersonName.Size = new System.Drawing.Size(200, 22);
@@ -161,7 +161,7 @@
             // textBoxProfileName
             // 
             this.textBoxProfileName.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.textBoxProfileName.Location = new System.Drawing.Point(810, 69);
+            this.textBoxProfileName.Location = new System.Drawing.Point(851, 69);
             this.textBoxProfileName.Name = "textBoxProfileName";
             this.textBoxProfileName.ReadOnly = true;
             this.textBoxProfileName.Size = new System.Drawing.Size(200, 22);
@@ -178,7 +178,7 @@
             // 
             // textBoxSearch
             // 
-            this.textBoxSearch.Location = new System.Drawing.Point(810, 43);
+            this.textBoxSearch.Location = new System.Drawing.Point(851, 43);
             this.textBoxSearch.Name = "textBoxSearch";
             this.textBoxSearch.Size = new System.Drawing.Size(200, 22);
             this.textBoxSearch.TabIndex = 18;
@@ -188,7 +188,7 @@
             // 
             this.buttonChoose.Enabled = false;
             this.buttonChoose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonChoose.Location = new System.Drawing.Point(844, 592);
+            this.buttonChoose.Location = new System.Drawing.Point(886, 592);
             this.buttonChoose.Name = "buttonChoose";
             this.buttonChoose.Size = new System.Drawing.Size(80, 32);
             this.buttonChoose.TabIndex = 40;
@@ -208,7 +208,7 @@
             this.toolStripButtonSave});
             this.toolStripProfileMenu.Location = new System.Drawing.Point(200, 0);
             this.toolStripProfileMenu.Name = "toolStripProfileMenu";
-            this.toolStripProfileMenu.Size = new System.Drawing.Size(816, 39);
+            this.toolStripProfileMenu.Size = new System.Drawing.Size(864, 39);
             this.toolStripProfileMenu.TabIndex = 33;
             // 
             // toolStripButtonAdd
@@ -272,7 +272,7 @@
             // textBoxLivingPlace
             // 
             this.textBoxLivingPlace.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.textBoxLivingPlace.Location = new System.Drawing.Point(811, 206);
+            this.textBoxLivingPlace.Location = new System.Drawing.Point(852, 206);
             this.textBoxLivingPlace.Name = "textBoxLivingPlace";
             this.textBoxLivingPlace.ReadOnly = true;
             this.textBoxLivingPlace.Size = new System.Drawing.Size(168, 22);
@@ -284,7 +284,7 @@
             this.buttonLivingPlace.Enabled = false;
             this.buttonLivingPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonLivingPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonLivingPlace.Image")));
-            this.buttonLivingPlace.Location = new System.Drawing.Point(980, 206);
+            this.buttonLivingPlace.Location = new System.Drawing.Point(1021, 206);
             this.buttonLivingPlace.Margin = new System.Windows.Forms.Padding(0);
             this.buttonLivingPlace.Name = "buttonLivingPlace";
             this.buttonLivingPlace.Size = new System.Drawing.Size(30, 22);
@@ -298,7 +298,7 @@
             this.buttonDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDefault.Location = new System.Drawing.Point(718, 592);
             this.buttonDefault.Name = "buttonDefault";
-            this.buttonDefault.Size = new System.Drawing.Size(91, 32);
+            this.buttonDefault.Size = new System.Drawing.Size(135, 32);
             this.buttonDefault.TabIndex = 38;
             this.buttonDefault.Text = "Default";
             this.buttonDefault.UseVisualStyleBackColor = true;
@@ -370,7 +370,7 @@
             // checkBoxMars
             // 
             this.checkBoxMars.AutoSize = true;
-            this.checkBoxMars.Location = new System.Drawing.Point(7, 151);
+            this.checkBoxMars.Location = new System.Drawing.Point(7, 88);
             this.checkBoxMars.Name = "checkBoxMars";
             this.checkBoxMars.Size = new System.Drawing.Size(56, 20);
             this.checkBoxMars.TabIndex = 6;
@@ -381,7 +381,7 @@
             // checkBoxMercury
             // 
             this.checkBoxMercury.AutoSize = true;
-            this.checkBoxMercury.Location = new System.Drawing.Point(7, 130);
+            this.checkBoxMercury.Location = new System.Drawing.Point(7, 109);
             this.checkBoxMercury.Name = "checkBoxMercury";
             this.checkBoxMercury.Size = new System.Drawing.Size(74, 20);
             this.checkBoxMercury.TabIndex = 5;
@@ -392,7 +392,7 @@
             // checkBoxJupiter
             // 
             this.checkBoxJupiter.AutoSize = true;
-            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 109);
+            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 130);
             this.checkBoxJupiter.Name = "checkBoxJupiter";
             this.checkBoxJupiter.Size = new System.Drawing.Size(66, 20);
             this.checkBoxJupiter.TabIndex = 4;
@@ -403,7 +403,7 @@
             // checkBoxVenus
             // 
             this.checkBoxVenus.AutoSize = true;
-            this.checkBoxVenus.Location = new System.Drawing.Point(7, 88);
+            this.checkBoxVenus.Location = new System.Drawing.Point(7, 151);
             this.checkBoxVenus.Name = "checkBoxVenus";
             this.checkBoxVenus.Size = new System.Drawing.Size(64, 20);
             this.checkBoxVenus.TabIndex = 3;
@@ -414,7 +414,7 @@
             // checkBoxSun
             // 
             this.checkBoxSun.AutoSize = true;
-            this.checkBoxSun.Location = new System.Drawing.Point(7, 67);
+            this.checkBoxSun.Location = new System.Drawing.Point(7, 46);
             this.checkBoxSun.Name = "checkBoxSun";
             this.checkBoxSun.Size = new System.Drawing.Size(49, 20);
             this.checkBoxSun.TabIndex = 2;
@@ -425,7 +425,7 @@
             // checkBoxMoon
             // 
             this.checkBoxMoon.AutoSize = true;
-            this.checkBoxMoon.Location = new System.Drawing.Point(7, 46);
+            this.checkBoxMoon.Location = new System.Drawing.Point(7, 67);
             this.checkBoxMoon.Name = "checkBoxMoon";
             this.checkBoxMoon.Size = new System.Drawing.Size(60, 20);
             this.checkBoxMoon.TabIndex = 1;
@@ -456,7 +456,7 @@
             // maskedTextBoxDate
             // 
             this.maskedTextBoxDate.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.maskedTextBoxDate.Location = new System.Drawing.Point(810, 151);
+            this.maskedTextBoxDate.Location = new System.Drawing.Point(851, 151);
             this.maskedTextBoxDate.Mask = "00/00/0000 90:00:00";
             this.maskedTextBoxDate.Name = "maskedTextBoxDate";
             this.maskedTextBoxDate.ReadOnly = true;
@@ -471,7 +471,7 @@
             this.buttonBirthPlace.Enabled = false;
             this.buttonBirthPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonBirthPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonBirthPlace.Image")));
-            this.buttonBirthPlace.Location = new System.Drawing.Point(980, 179);
+            this.buttonBirthPlace.Location = new System.Drawing.Point(1021, 179);
             this.buttonBirthPlace.Margin = new System.Windows.Forms.Padding(0);
             this.buttonBirthPlace.Name = "buttonBirthPlace";
             this.buttonBirthPlace.Size = new System.Drawing.Size(30, 22);
@@ -491,7 +491,7 @@
             // textBoxBirthPlace
             // 
             this.textBoxBirthPlace.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
-            this.textBoxBirthPlace.Location = new System.Drawing.Point(811, 179);
+            this.textBoxBirthPlace.Location = new System.Drawing.Point(852, 179);
             this.textBoxBirthPlace.Name = "textBoxBirthPlace";
             this.textBoxBirthPlace.ReadOnly = true;
             this.textBoxBirthPlace.Size = new System.Drawing.Size(168, 22);
@@ -505,7 +505,7 @@
             this.buttonGenerateMap.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonGenerateMap.Location = new System.Drawing.Point(718, 249);
             this.buttonGenerateMap.Name = "buttonGenerateMap";
-            this.buttonGenerateMap.Size = new System.Drawing.Size(292, 32);
+            this.buttonGenerateMap.Size = new System.Drawing.Size(334, 32);
             this.buttonGenerateMap.TabIndex = 32;
             this.buttonGenerateMap.Text = "Generate Chart";
             this.buttonGenerateMap.UseVisualStyleBackColor = false;
@@ -520,7 +520,7 @@
             this.buttonSaveProfile.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonSaveProfile.Location = new System.Drawing.Point(718, 296);
             this.buttonSaveProfile.Name = "buttonSaveProfile";
-            this.buttonSaveProfile.Size = new System.Drawing.Size(292, 32);
+            this.buttonSaveProfile.Size = new System.Drawing.Size(334, 32);
             this.buttonSaveProfile.TabIndex = 34;
             this.buttonSaveProfile.Text = "Add as new Profile";
             this.buttonSaveProfile.UseVisualStyleBackColor = false;
@@ -533,7 +533,7 @@
             this.richTextBoxNotes.Location = new System.Drawing.Point(718, 344);
             this.richTextBoxNotes.Name = "richTextBoxNotes";
             this.richTextBoxNotes.ReadOnly = true;
-            this.richTextBoxNotes.Size = new System.Drawing.Size(292, 229);
+            this.richTextBoxNotes.Size = new System.Drawing.Size(334, 229);
             this.richTextBoxNotes.TabIndex = 36;
             this.richTextBoxNotes.Text = "";
             // 
@@ -542,7 +542,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(1016, 631);
+            this.ClientSize = new System.Drawing.Size(1064, 631);
             this.Controls.Add(this.richTextBoxNotes);
             this.Controls.Add(this.buttonSaveProfile);
             this.Controls.Add(this.buttonGenerateMap);

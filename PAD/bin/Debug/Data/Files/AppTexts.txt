@@ -104,14 +104,18 @@ Edit profile|Edit profile|en
 Edit profile|Изменить профиль|ru
 Delete profile|Delete profile|en
 Delete profile|Удалить профиль|ru
-Profile name|Profile name|en
-Profile name|Имя профиля|ru
+Profile Name|Profile Name|en
+Profile Name|Имя Профиля|ru
 Name|Name|en
 Name|Имя|ru
 Surname|Surname|en
 Surname|Фамилия|ru
-Place of living|Place of living|en
-Place of living|Место жительства|ru
+Date of Birth|Date of Birth|en
+Date of Birth|Дата Рождения|ru
+Place of Birth|Place of Birth|en
+Place of Birth|Место Рождения|ru
+Place of Living|Place of Living|en
+Place of Living|Место Проживания|ru
 Birth details|Birth details|en
 Birth details|Детали рождения|ru
 Pada|Pada|en
@@ -120,8 +124,38 @@ Navamsa|Navamsa|en
 Navamsa|Навамша|ru
 Lagna|Lagna|en
 Lagna|Лагна|ru
-Make default|Make default|en
-Make default|Выбрать по умолчанию|ru
+Aspects|Aspects|en
+Aspects|Аспекты|ru
+All|All|en
+All|Все|ru
+Degree|Degree|en
+Degree|Градус|ru
+Rasi|Rasi|en
+Rasi|Раши|ru
+Generate Chart|Generate Chart|en
+Generate Chart|Создать Карту|ru
+Add as new Profile|Add as new Profile|en
+Add as new Profile|Добавить как новый Профиль|ru
+Default|Default|en
+Default|По умолчанию|ru
+View Tranzit|View Tranzit|en
+View Tranzit|Посмотреть Транзит|ru
+Tranzit Date|Tranzit Date|en
+Tranzit Date|Дата Транзита|ru
+Seconds|Seconds|en
+Seconds|Секунды|ru
+Minutes|Minutes|en
+Minutes|Минуты|ru
+Hours|Hours|en
+Hours|Часы|ru
+Day|Day|en
+Day|День|ru
+Month|Month|en
+Month|Месяц|ru
+Year|Year|en
+Year|Год|ru
+Location|Location|en
+Location|Местоположение|ru
 Color settings|Color settings|en
 Color settings|Конфигурация цветa|ru
 Color settings have been changed. Do you want to apply new settings?|Color settings have been changed. Do you want to apply new settings?|en

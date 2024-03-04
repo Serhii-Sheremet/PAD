@@ -41,7 +41,6 @@
             this.checkBoxMoon = new System.Windows.Forms.CheckBox();
             this.checkBoxAll = new System.Windows.Forms.CheckBox();
             this.dataGridViewInfo = new System.Windows.Forms.DataGridView();
-            this.pictureBoxMap = new System.Windows.Forms.PictureBox();
             this.groupBoxSeconds = new System.Windows.Forms.GroupBox();
             this.textBoxSecondsStep = new System.Windows.Forms.TextBox();
             this.arrowButtonSecondsRight = new ArrowButton.ArrowButton();
@@ -72,28 +71,35 @@
             this.arrowButtonYearRight = new ArrowButton.ArrowButton();
             this.textBoxYear = new System.Windows.Forms.TextBox();
             this.arrowButtonYearLeft = new ArrowButton.ArrowButton();
-            this.groupBoxDate = new System.Windows.Forms.GroupBox();
-            this.textBoxDate = new System.Windows.Forms.TextBox();
             this.groupBoxLocation = new System.Windows.Forms.GroupBox();
             this.buttonLivingPlace = new System.Windows.Forms.Button();
             this.textBoxLivingPlace = new System.Windows.Forms.TextBox();
+            this.toolStripProfileMenu = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripTextBoxDate = new System.Windows.Forms.ToolStripTextBox();
+            this.pictureBoxMap = new System.Windows.Forms.PictureBox();
+            this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.groupBoxAspects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfo)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
             this.groupBoxSeconds.SuspendLayout();
             this.groupBoxMinutes.SuspendLayout();
             this.groupBoxHours.SuspendLayout();
             this.groupBoxDay.SuspendLayout();
             this.groupBoxMonth.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
-            this.groupBoxDate.SuspendLayout();
             this.groupBoxLocation.SuspendLayout();
+            this.toolStripProfileMenu.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonClose
             // 
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Location = new System.Drawing.Point(542, 550);
+            this.buttonClose.Location = new System.Drawing.Point(542, 581);
             this.buttonClose.Margin = new System.Windows.Forms.Padding(4);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(107, 39);
@@ -113,7 +119,7 @@
             this.groupBoxAspects.Controls.Add(this.checkBoxSun);
             this.groupBoxAspects.Controls.Add(this.checkBoxMoon);
             this.groupBoxAspects.Controls.Add(this.checkBoxAll);
-            this.groupBoxAspects.Location = new System.Drawing.Point(400, 362);
+            this.groupBoxAspects.Location = new System.Drawing.Point(400, 393);
             this.groupBoxAspects.Name = "groupBoxAspects";
             this.groupBoxAspects.Size = new System.Drawing.Size(112, 230);
             this.groupBoxAspects.TabIndex = 49;
@@ -145,7 +151,7 @@
             // checkBoxMars
             // 
             this.checkBoxMars.AutoSize = true;
-            this.checkBoxMars.Location = new System.Drawing.Point(7, 151);
+            this.checkBoxMars.Location = new System.Drawing.Point(7, 88);
             this.checkBoxMars.Name = "checkBoxMars";
             this.checkBoxMars.Size = new System.Drawing.Size(56, 20);
             this.checkBoxMars.TabIndex = 6;
@@ -156,7 +162,7 @@
             // checkBoxMercury
             // 
             this.checkBoxMercury.AutoSize = true;
-            this.checkBoxMercury.Location = new System.Drawing.Point(7, 130);
+            this.checkBoxMercury.Location = new System.Drawing.Point(7, 109);
             this.checkBoxMercury.Name = "checkBoxMercury";
             this.checkBoxMercury.Size = new System.Drawing.Size(74, 20);
             this.checkBoxMercury.TabIndex = 5;
@@ -167,7 +173,7 @@
             // checkBoxJupiter
             // 
             this.checkBoxJupiter.AutoSize = true;
-            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 109);
+            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 130);
             this.checkBoxJupiter.Name = "checkBoxJupiter";
             this.checkBoxJupiter.Size = new System.Drawing.Size(66, 20);
             this.checkBoxJupiter.TabIndex = 4;
@@ -178,7 +184,7 @@
             // checkBoxVenus
             // 
             this.checkBoxVenus.AutoSize = true;
-            this.checkBoxVenus.Location = new System.Drawing.Point(7, 88);
+            this.checkBoxVenus.Location = new System.Drawing.Point(7, 151);
             this.checkBoxVenus.Name = "checkBoxVenus";
             this.checkBoxVenus.Size = new System.Drawing.Size(64, 20);
             this.checkBoxVenus.TabIndex = 3;
@@ -189,7 +195,7 @@
             // checkBoxSun
             // 
             this.checkBoxSun.AutoSize = true;
-            this.checkBoxSun.Location = new System.Drawing.Point(7, 67);
+            this.checkBoxSun.Location = new System.Drawing.Point(7, 46);
             this.checkBoxSun.Name = "checkBoxSun";
             this.checkBoxSun.Size = new System.Drawing.Size(49, 20);
             this.checkBoxSun.TabIndex = 2;
@@ -200,7 +206,7 @@
             // checkBoxMoon
             // 
             this.checkBoxMoon.AutoSize = true;
-            this.checkBoxMoon.Location = new System.Drawing.Point(7, 46);
+            this.checkBoxMoon.Location = new System.Drawing.Point(7, 67);
             this.checkBoxMoon.Name = "checkBoxMoon";
             this.checkBoxMoon.Size = new System.Drawing.Size(60, 20);
             this.checkBoxMoon.TabIndex = 1;
@@ -226,7 +232,7 @@
             this.dataGridViewInfo.AllowUserToResizeColumns = false;
             this.dataGridViewInfo.AllowUserToResizeRows = false;
             this.dataGridViewInfo.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewInfo.Location = new System.Drawing.Point(12, 369);
+            this.dataGridViewInfo.Location = new System.Drawing.Point(12, 400);
             this.dataGridViewInfo.MultiSelect = false;
             this.dataGridViewInfo.Name = "dataGridViewInfo";
             this.dataGridViewInfo.ReadOnly = true;
@@ -234,21 +240,13 @@
             this.dataGridViewInfo.Size = new System.Drawing.Size(380, 150);
             this.dataGridViewInfo.TabIndex = 48;
             // 
-            // pictureBoxMap
-            // 
-            this.pictureBoxMap.Location = new System.Drawing.Point(12, 12);
-            this.pictureBoxMap.Name = "pictureBoxMap";
-            this.pictureBoxMap.Size = new System.Drawing.Size(500, 350);
-            this.pictureBoxMap.TabIndex = 47;
-            this.pictureBoxMap.TabStop = false;
-            // 
             // groupBoxSeconds
             // 
             this.groupBoxSeconds.Controls.Add(this.textBoxSecondsStep);
             this.groupBoxSeconds.Controls.Add(this.arrowButtonSecondsRight);
             this.groupBoxSeconds.Controls.Add(this.textBoxSeconds);
             this.groupBoxSeconds.Controls.Add(this.arrowButtonSecondsLeft);
-            this.groupBoxSeconds.Location = new System.Drawing.Point(522, 61);
+            this.groupBoxSeconds.Location = new System.Drawing.Point(522, 48);
             this.groupBoxSeconds.Name = "groupBoxSeconds";
             this.groupBoxSeconds.Size = new System.Drawing.Size(140, 56);
             this.groupBoxSeconds.TabIndex = 55;
@@ -313,7 +311,7 @@
             this.groupBoxMinutes.Controls.Add(this.arrowButtonMinutesRight);
             this.groupBoxMinutes.Controls.Add(this.textBoxMinutes);
             this.groupBoxMinutes.Controls.Add(this.arrowButtonMinutesLeft);
-            this.groupBoxMinutes.Location = new System.Drawing.Point(522, 117);
+            this.groupBoxMinutes.Location = new System.Drawing.Point(522, 104);
             this.groupBoxMinutes.Name = "groupBoxMinutes";
             this.groupBoxMinutes.Size = new System.Drawing.Size(140, 56);
             this.groupBoxMinutes.TabIndex = 56;
@@ -378,7 +376,7 @@
             this.groupBoxHours.Controls.Add(this.arrowButtonHoursRight);
             this.groupBoxHours.Controls.Add(this.textBoxHours);
             this.groupBoxHours.Controls.Add(this.arrowButtonHoursLeft);
-            this.groupBoxHours.Location = new System.Drawing.Point(522, 173);
+            this.groupBoxHours.Location = new System.Drawing.Point(522, 160);
             this.groupBoxHours.Name = "groupBoxHours";
             this.groupBoxHours.Size = new System.Drawing.Size(140, 56);
             this.groupBoxHours.TabIndex = 57;
@@ -443,7 +441,7 @@
             this.groupBoxDay.Controls.Add(this.arrowButtonDayRight);
             this.groupBoxDay.Controls.Add(this.textBoxDay);
             this.groupBoxDay.Controls.Add(this.arrowButtonDayLeft);
-            this.groupBoxDay.Location = new System.Drawing.Point(522, 229);
+            this.groupBoxDay.Location = new System.Drawing.Point(522, 216);
             this.groupBoxDay.Name = "groupBoxDay";
             this.groupBoxDay.Size = new System.Drawing.Size(140, 56);
             this.groupBoxDay.TabIndex = 58;
@@ -508,7 +506,7 @@
             this.groupBoxMonth.Controls.Add(this.arrowButtonMonthRight);
             this.groupBoxMonth.Controls.Add(this.textBoxMonth);
             this.groupBoxMonth.Controls.Add(this.arrowButtonMonthLeft);
-            this.groupBoxMonth.Location = new System.Drawing.Point(522, 285);
+            this.groupBoxMonth.Location = new System.Drawing.Point(522, 272);
             this.groupBoxMonth.Name = "groupBoxMonth";
             this.groupBoxMonth.Size = new System.Drawing.Size(140, 56);
             this.groupBoxMonth.TabIndex = 59;
@@ -573,7 +571,7 @@
             this.groupBoxYear.Controls.Add(this.arrowButtonYearRight);
             this.groupBoxYear.Controls.Add(this.textBoxYear);
             this.groupBoxYear.Controls.Add(this.arrowButtonYearLeft);
-            this.groupBoxYear.Location = new System.Drawing.Point(522, 341);
+            this.groupBoxYear.Location = new System.Drawing.Point(522, 328);
             this.groupBoxYear.Name = "groupBoxYear";
             this.groupBoxYear.Size = new System.Drawing.Size(140, 56);
             this.groupBoxYear.TabIndex = 60;
@@ -631,32 +629,11 @@
             this.arrowButtonYearLeft.TabIndex = 55;
             this.arrowButtonYearLeft.Click += new System.EventHandler(this.arrowButtonYearLeft_Click);
             // 
-            // groupBoxDate
-            // 
-            this.groupBoxDate.Controls.Add(this.textBoxDate);
-            this.groupBoxDate.Location = new System.Drawing.Point(522, 5);
-            this.groupBoxDate.Name = "groupBoxDate";
-            this.groupBoxDate.Size = new System.Drawing.Size(140, 56);
-            this.groupBoxDate.TabIndex = 61;
-            this.groupBoxDate.TabStop = false;
-            this.groupBoxDate.Text = "Current Date";
-            // 
-            // textBoxDate
-            // 
-            this.textBoxDate.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxDate.Location = new System.Drawing.Point(7, 22);
-            this.textBoxDate.Name = "textBoxDate";
-            this.textBoxDate.ReadOnly = true;
-            this.textBoxDate.Size = new System.Drawing.Size(126, 22);
-            this.textBoxDate.TabIndex = 53;
-            this.textBoxDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBoxDate.TextChanged += new System.EventHandler(this.textBoxDate_TextChanged);
-            // 
             // groupBoxLocation
             // 
             this.groupBoxLocation.Controls.Add(this.buttonLivingPlace);
             this.groupBoxLocation.Controls.Add(this.textBoxLivingPlace);
-            this.groupBoxLocation.Location = new System.Drawing.Point(522, 477);
+            this.groupBoxLocation.Location = new System.Drawing.Point(522, 508);
             this.groupBoxLocation.Name = "groupBoxLocation";
             this.groupBoxLocation.Size = new System.Drawing.Size(140, 56);
             this.groupBoxLocation.TabIndex = 62;
@@ -686,13 +663,94 @@
             this.textBoxLivingPlace.TabIndex = 66;
             this.textBoxLivingPlace.TextChanged += new System.EventHandler(this.textBoxLivingPlace_TextChanged);
             // 
+            // toolStripProfileMenu
+            // 
+            this.toolStripProfileMenu.AutoSize = false;
+            this.toolStripProfileMenu.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStripProfileMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonRefresh,
+            this.toolStripSeparator1,
+            this.toolStripButtonSave,
+            this.toolStripSeparator2,
+            this.toolStripLabel1,
+            this.toolStripLabelDate,
+            this.toolStripTextBoxDate});
+            this.toolStripProfileMenu.Location = new System.Drawing.Point(0, 0);
+            this.toolStripProfileMenu.Name = "toolStripProfileMenu";
+            this.toolStripProfileMenu.Size = new System.Drawing.Size(674, 39);
+            this.toolStripProfileMenu.TabIndex = 63;
+            // 
+            // toolStripButtonRefresh
+            // 
+            this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRefresh.Image = global::PAD.Properties.Resources.refresh_alpha;
+            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRefresh.Text = "Refresh";
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripButtonSave
+            // 
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Enabled = false;
+            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonSave.Text = "Save Tranzit";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripTextBoxDate
+            // 
+            this.toolStripTextBoxDate.AutoSize = false;
+            this.toolStripTextBoxDate.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripTextBoxDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.toolStripTextBoxDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripTextBoxDate.Name = "toolStripTextBoxDate";
+            this.toolStripTextBoxDate.ReadOnly = true;
+            this.toolStripTextBoxDate.Size = new System.Drawing.Size(140, 15);
+            this.toolStripTextBoxDate.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolStripTextBoxDate.TextChanged += new System.EventHandler(this.toolStripTextBoxDate_TextChanged);
+            // 
+            // pictureBoxMap
+            // 
+            this.pictureBoxMap.Location = new System.Drawing.Point(12, 43);
+            this.pictureBoxMap.Name = "pictureBoxMap";
+            this.pictureBoxMap.Size = new System.Drawing.Size(500, 350);
+            this.pictureBoxMap.TabIndex = 47;
+            this.pictureBoxMap.TabStop = false;
+            // 
+            // toolStripLabelDate
+            // 
+            this.toolStripLabelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabelDate.Name = "toolStripLabelDate";
+            this.toolStripLabelDate.Size = new System.Drawing.Size(91, 36);
+            this.toolStripLabelDate.Text = "Tranzit Date";
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.AutoSize = false;
+            this.toolStripLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(120, 36);
+            // 
             // ViewTranzit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(674, 601);
+            this.ClientSize = new System.Drawing.Size(674, 631);
+            this.Controls.Add(this.toolStripProfileMenu);
             this.Controls.Add(this.groupBoxLocation);
-            this.Controls.Add(this.groupBoxDate);
             this.Controls.Add(this.groupBoxYear);
             this.Controls.Add(this.groupBoxMonth);
             this.Controls.Add(this.groupBoxDay);
@@ -715,7 +773,6 @@
             this.groupBoxAspects.ResumeLayout(false);
             this.groupBoxAspects.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfo)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
             this.groupBoxSeconds.ResumeLayout(false);
             this.groupBoxSeconds.PerformLayout();
             this.groupBoxMinutes.ResumeLayout(false);
@@ -728,10 +785,11 @@
             this.groupBoxMonth.PerformLayout();
             this.groupBoxYear.ResumeLayout(false);
             this.groupBoxYear.PerformLayout();
-            this.groupBoxDate.ResumeLayout(false);
-            this.groupBoxDate.PerformLayout();
             this.groupBoxLocation.ResumeLayout(false);
             this.groupBoxLocation.PerformLayout();
+            this.toolStripProfileMenu.ResumeLayout(false);
+            this.toolStripProfileMenu.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -781,10 +839,16 @@
         private ArrowButton.ArrowButton arrowButtonYearRight;
         private System.Windows.Forms.TextBox textBoxYear;
         private ArrowButton.ArrowButton arrowButtonYearLeft;
-        private System.Windows.Forms.GroupBox groupBoxDate;
-        private System.Windows.Forms.TextBox textBoxDate;
         private System.Windows.Forms.GroupBox groupBoxLocation;
         private System.Windows.Forms.Button buttonLivingPlace;
         private System.Windows.Forms.TextBox textBoxLivingPlace;
+        private System.Windows.Forms.ToolStrip toolStripProfileMenu;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxDate;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelDate;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }

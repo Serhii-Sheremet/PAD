@@ -93,6 +93,16 @@ namespace PAD.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap refresh_alpha {
+            get {
+                object obj = ResourceManager.GetObject("refresh_alpha", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Sun_Eclipse_alpha {
             get {
                 object obj = ResourceManager.GetObject("Sun_Eclipse_alpha", resourceCulture);
