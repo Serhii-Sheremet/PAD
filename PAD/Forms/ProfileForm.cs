@@ -2273,11 +2273,11 @@ namespace PAD
             column = new DataGridViewColumn();
             column.DataPropertyName = "Nakshatra";
             column.Name = Utility.GetLocalizedText("Nakshatra", langCode);
-            column.Width = 140;
+            column.Width = 150;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dataGridViewInfo.Columns.Add(column);
 
-            int lastColWidth = (dataGridViewInfo.Width - 320);
+            int lastColWidth = (dataGridViewInfo.Width - 330);
             column = new DataGridViewColumn();
             column.DataPropertyName = "Pada";
             column.Name = Utility.GetLocalizedText("Pada", langCode);
@@ -2294,7 +2294,7 @@ namespace PAD
             }
             dataGridViewInfo.EnableHeadersVisualStyles = false;
             dataGridViewInfo.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
-            dataGridViewInfo.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            dataGridViewInfo.ScrollBars = ScrollBars.None;
             dataGridViewInfo.Height = dataGridViewInfo.ColumnHeadersHeight;
         }
 

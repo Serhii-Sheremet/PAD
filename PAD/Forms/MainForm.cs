@@ -5689,7 +5689,7 @@ namespace PAD
 
         private void viewTranzitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ViewTranzit vtForm = new ViewTranzit(_activeLanguageCode);
+            ViewTranzit vtForm = new ViewTranzit(_selectedProfile, _activeLanguageCode);
             vtForm.ShowDialog(this);
         }
     }

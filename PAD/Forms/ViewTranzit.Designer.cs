@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ViewTranzit));
             this.buttonClose = new System.Windows.Forms.Button();
             this.groupBoxAspects = new System.Windows.Forms.GroupBox();
             this.checkBoxRahu = new System.Windows.Forms.CheckBox();
@@ -73,6 +74,9 @@
             this.arrowButtonYearLeft = new ArrowButton.ArrowButton();
             this.groupBoxDate = new System.Windows.Forms.GroupBox();
             this.textBoxDate = new System.Windows.Forms.TextBox();
+            this.groupBoxLocation = new System.Windows.Forms.GroupBox();
+            this.buttonLivingPlace = new System.Windows.Forms.Button();
+            this.textBoxLivingPlace = new System.Windows.Forms.TextBox();
             this.groupBoxAspects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfo)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
@@ -83,6 +87,7 @@
             this.groupBoxMonth.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
             this.groupBoxDate.SuspendLayout();
+            this.groupBoxLocation.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonClose
@@ -124,6 +129,7 @@
             this.checkBoxRahu.TabIndex = 8;
             this.checkBoxRahu.Text = "Rahu";
             this.checkBoxRahu.UseVisualStyleBackColor = true;
+            this.checkBoxRahu.CheckedChanged += new System.EventHandler(this.checkBoxRahu_CheckedChanged);
             // 
             // checkBoxSaturn
             // 
@@ -134,6 +140,7 @@
             this.checkBoxSaturn.TabIndex = 7;
             this.checkBoxSaturn.Text = "Saturn";
             this.checkBoxSaturn.UseVisualStyleBackColor = true;
+            this.checkBoxSaturn.CheckedChanged += new System.EventHandler(this.checkBoxSaturn_CheckedChanged);
             // 
             // checkBoxMars
             // 
@@ -144,6 +151,7 @@
             this.checkBoxMars.TabIndex = 6;
             this.checkBoxMars.Text = "Mars";
             this.checkBoxMars.UseVisualStyleBackColor = true;
+            this.checkBoxMars.CheckedChanged += new System.EventHandler(this.checkBoxMars_CheckedChanged);
             // 
             // checkBoxMercury
             // 
@@ -154,6 +162,7 @@
             this.checkBoxMercury.TabIndex = 5;
             this.checkBoxMercury.Text = "Mercury";
             this.checkBoxMercury.UseVisualStyleBackColor = true;
+            this.checkBoxMercury.CheckedChanged += new System.EventHandler(this.checkBoxMercury_CheckedChanged);
             // 
             // checkBoxJupiter
             // 
@@ -164,6 +173,7 @@
             this.checkBoxJupiter.TabIndex = 4;
             this.checkBoxJupiter.Text = "Jupiter";
             this.checkBoxJupiter.UseVisualStyleBackColor = true;
+            this.checkBoxJupiter.CheckedChanged += new System.EventHandler(this.checkBoxJupiter_CheckedChanged);
             // 
             // checkBoxVenus
             // 
@@ -174,6 +184,7 @@
             this.checkBoxVenus.TabIndex = 3;
             this.checkBoxVenus.Text = "Venus";
             this.checkBoxVenus.UseVisualStyleBackColor = true;
+            this.checkBoxVenus.CheckedChanged += new System.EventHandler(this.checkBoxVenus_CheckedChanged);
             // 
             // checkBoxSun
             // 
@@ -184,6 +195,7 @@
             this.checkBoxSun.TabIndex = 2;
             this.checkBoxSun.Text = "Sun";
             this.checkBoxSun.UseVisualStyleBackColor = true;
+            this.checkBoxSun.CheckedChanged += new System.EventHandler(this.checkBoxSun_CheckedChanged);
             // 
             // checkBoxMoon
             // 
@@ -194,6 +206,7 @@
             this.checkBoxMoon.TabIndex = 1;
             this.checkBoxMoon.Text = "Moon";
             this.checkBoxMoon.UseVisualStyleBackColor = true;
+            this.checkBoxMoon.CheckedChanged += new System.EventHandler(this.checkBoxMoon_CheckedChanged);
             // 
             // checkBoxAll
             // 
@@ -204,6 +217,7 @@
             this.checkBoxAll.TabIndex = 0;
             this.checkBoxAll.Text = "All";
             this.checkBoxAll.UseVisualStyleBackColor = true;
+            this.checkBoxAll.CheckedChanged += new System.EventHandler(this.checkBoxAll_CheckedChanged);
             // 
             // dataGridViewInfo
             // 
@@ -636,12 +650,48 @@
             this.textBoxDate.Size = new System.Drawing.Size(126, 22);
             this.textBoxDate.TabIndex = 53;
             this.textBoxDate.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxDate.TextChanged += new System.EventHandler(this.textBoxDate_TextChanged);
+            // 
+            // groupBoxLocation
+            // 
+            this.groupBoxLocation.Controls.Add(this.buttonLivingPlace);
+            this.groupBoxLocation.Controls.Add(this.textBoxLivingPlace);
+            this.groupBoxLocation.Location = new System.Drawing.Point(522, 477);
+            this.groupBoxLocation.Name = "groupBoxLocation";
+            this.groupBoxLocation.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxLocation.TabIndex = 62;
+            this.groupBoxLocation.TabStop = false;
+            this.groupBoxLocation.Text = "Location";
+            // 
+            // buttonLivingPlace
+            // 
+            this.buttonLivingPlace.BackColor = System.Drawing.SystemColors.Window;
+            this.buttonLivingPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLivingPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonLivingPlace.Image")));
+            this.buttonLivingPlace.Location = new System.Drawing.Point(106, 23);
+            this.buttonLivingPlace.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonLivingPlace.Name = "buttonLivingPlace";
+            this.buttonLivingPlace.Size = new System.Drawing.Size(30, 22);
+            this.buttonLivingPlace.TabIndex = 65;
+            this.buttonLivingPlace.UseVisualStyleBackColor = false;
+            this.buttonLivingPlace.Click += new System.EventHandler(this.buttonLivingPlace_Click);
+            // 
+            // textBoxLivingPlace
+            // 
+            this.textBoxLivingPlace.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxLivingPlace.Location = new System.Drawing.Point(6, 23);
+            this.textBoxLivingPlace.Name = "textBoxLivingPlace";
+            this.textBoxLivingPlace.ReadOnly = true;
+            this.textBoxLivingPlace.Size = new System.Drawing.Size(100, 22);
+            this.textBoxLivingPlace.TabIndex = 66;
+            this.textBoxLivingPlace.TextChanged += new System.EventHandler(this.textBoxLivingPlace_TextChanged);
             // 
             // ViewTranzit
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(674, 601);
+            this.Controls.Add(this.groupBoxLocation);
             this.Controls.Add(this.groupBoxDate);
             this.Controls.Add(this.groupBoxYear);
             this.Controls.Add(this.groupBoxMonth);
@@ -680,6 +730,8 @@
             this.groupBoxYear.PerformLayout();
             this.groupBoxDate.ResumeLayout(false);
             this.groupBoxDate.PerformLayout();
+            this.groupBoxLocation.ResumeLayout(false);
+            this.groupBoxLocation.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -731,5 +783,8 @@
         private ArrowButton.ArrowButton arrowButtonYearLeft;
         private System.Windows.Forms.GroupBox groupBoxDate;
         private System.Windows.Forms.TextBox textBoxDate;
+        private System.Windows.Forms.GroupBox groupBoxLocation;
+        private System.Windows.Forms.Button buttonLivingPlace;
+        private System.Windows.Forms.TextBox textBoxLivingPlace;
     }
 }
