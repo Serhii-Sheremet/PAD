@@ -32,7 +32,6 @@ namespace PAD
 
         private List<PlanetData> _pdList;
         private double _ascendant;
-        private int _lagnaId;
         private int _nakshatralagnaId;
         private int _padaLagna;
 
@@ -54,7 +53,6 @@ namespace PAD
             _zdList = CacheLoad._zodiakDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
 
             _ascendant = 0.00;
-            _lagnaId = -1;
             _nakshatralagnaId = -1;
             _padaLagna = -1;
 
@@ -361,12 +359,6 @@ namespace PAD
             int sec = Convert.ToInt32(textBoxSeconds.Text);
             _curDate = new DateTime(year, month, day, hour, min, sec);
             toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
-            
-        }
-
-        private void textBoxDate_TextChanged(object sender, EventArgs e)
-        {
-            
         }
 
         private void PrepareTransitMap()

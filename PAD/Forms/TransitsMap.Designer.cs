@@ -30,6 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransitsMap));
             this.pictureBoxMapMoon = new System.Windows.Forms.PictureBox();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
+            this.labelNatalMoon = new System.Windows.Forms.Label();
+            this.labelLagna = new System.Windows.Forms.Label();
             this.groupBoxAspects = new System.Windows.Forms.GroupBox();
             this.checkBoxRahu = new System.Windows.Forms.CheckBox();
             this.checkBoxSaturn = new System.Windows.Forms.CheckBox();
@@ -40,29 +44,112 @@
             this.checkBoxSun = new System.Windows.Forms.CheckBox();
             this.checkBoxMoon = new System.Windows.Forms.CheckBox();
             this.checkBoxAll = new System.Windows.Forms.CheckBox();
-            this.buttonClose = new System.Windows.Forms.Button();
-            this.groupBoxEvent = new System.Windows.Forms.GroupBox();
-            this.labelLocation = new System.Windows.Forms.Label();
-            this.labelDate = new System.Windows.Forms.Label();
-            this.maskedTextBoxDate = new System.Windows.Forms.MaskedTextBox();
-            this.buttonLocation = new System.Windows.Forms.Button();
-            this.textBoxLocation = new System.Windows.Forms.TextBox();
-            this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
-            this.labelNatalMoon = new System.Windows.Forms.Label();
-            this.labelLagna = new System.Windows.Forms.Label();
+            this.dataGridViewInfoTranzit = new System.Windows.Forms.DataGridView();
+            this.toolStripProfileMenu = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelProfile = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxDate = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
+            this.groupBoxLocation = new System.Windows.Forms.GroupBox();
+            this.buttonLivingPlace = new System.Windows.Forms.Button();
+            this.textBoxLivingPlace = new System.Windows.Forms.TextBox();
+            this.groupBoxYear = new System.Windows.Forms.GroupBox();
+            this.textBoxYearStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonYearRight = new ArrowButton.ArrowButton();
+            this.textBoxYear = new System.Windows.Forms.TextBox();
+            this.arrowButtonYearLeft = new ArrowButton.ArrowButton();
+            this.groupBoxMonth = new System.Windows.Forms.GroupBox();
+            this.textBoxMonthStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonMonthRight = new ArrowButton.ArrowButton();
+            this.textBoxMonth = new System.Windows.Forms.TextBox();
+            this.arrowButtonMonthLeft = new ArrowButton.ArrowButton();
+            this.groupBoxDay = new System.Windows.Forms.GroupBox();
+            this.textBoxDayStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonDayRight = new ArrowButton.ArrowButton();
+            this.textBoxDay = new System.Windows.Forms.TextBox();
+            this.arrowButtonDayLeft = new ArrowButton.ArrowButton();
+            this.groupBoxHours = new System.Windows.Forms.GroupBox();
+            this.textBoxHoursStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonHoursRight = new ArrowButton.ArrowButton();
+            this.textBoxHours = new System.Windows.Forms.TextBox();
+            this.arrowButtonHoursLeft = new ArrowButton.ArrowButton();
+            this.groupBoxMinutes = new System.Windows.Forms.GroupBox();
+            this.textBoxMinutesStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonMinutesRight = new ArrowButton.ArrowButton();
+            this.textBoxMinutes = new System.Windows.Forms.TextBox();
+            this.arrowButtonMinutesLeft = new ArrowButton.ArrowButton();
+            this.groupBoxSeconds = new System.Windows.Forms.GroupBox();
+            this.textBoxSecondsStep = new System.Windows.Forms.TextBox();
+            this.arrowButtonSecondsRight = new ArrowButton.ArrowButton();
+            this.textBoxSeconds = new System.Windows.Forms.TextBox();
+            this.arrowButtonSecondsLeft = new ArrowButton.ArrowButton();
+            this.dataGridViewInfoNatal = new System.Windows.Forms.DataGridView();
+            this.labelNatal = new System.Windows.Forms.Label();
+            this.labelTranzit = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).BeginInit();
-            this.groupBoxAspects.SuspendLayout();
-            this.groupBoxEvent.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).BeginInit();
+            this.groupBoxAspects.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoTranzit)).BeginInit();
+            this.toolStripProfileMenu.SuspendLayout();
+            this.groupBoxLocation.SuspendLayout();
+            this.groupBoxYear.SuspendLayout();
+            this.groupBoxMonth.SuspendLayout();
+            this.groupBoxDay.SuspendLayout();
+            this.groupBoxHours.SuspendLayout();
+            this.groupBoxMinutes.SuspendLayout();
+            this.groupBoxSeconds.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoNatal)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBoxMapMoon
             // 
-            this.pictureBoxMapMoon.Location = new System.Drawing.Point(15, 33);
+            this.pictureBoxMapMoon.Location = new System.Drawing.Point(518, 58);
             this.pictureBoxMapMoon.Name = "pictureBoxMapMoon";
-            this.pictureBoxMapMoon.Size = new System.Drawing.Size(350, 350);
+            this.pictureBoxMapMoon.Size = new System.Drawing.Size(500, 350);
             this.pictureBoxMapMoon.TabIndex = 0;
             this.pictureBoxMapMoon.TabStop = false;
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClose.Location = new System.Drawing.Point(1087, 620);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(80, 32);
+            this.buttonClose.TabIndex = 17;
+            this.buttonClose.Text = "Close";
+            this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // pictureBoxMapLagna
+            // 
+            this.pictureBoxMapLagna.Location = new System.Drawing.Point(11, 58);
+            this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
+            this.pictureBoxMapLagna.Size = new System.Drawing.Size(500, 350);
+            this.pictureBoxMapLagna.TabIndex = 19;
+            this.pictureBoxMapLagna.TabStop = false;
+            // 
+            // labelNatalMoon
+            // 
+            this.labelNatalMoon.AutoSize = true;
+            this.labelNatalMoon.Location = new System.Drawing.Point(515, 37);
+            this.labelNatalMoon.Name = "labelNatalMoon";
+            this.labelNatalMoon.Size = new System.Drawing.Size(156, 16);
+            this.labelNatalMoon.TabIndex = 44;
+            this.labelNatalMoon.Text = "Transits from Natal Moon";
+            // 
+            // labelLagna
+            // 
+            this.labelLagna.AutoSize = true;
+            this.labelLagna.Location = new System.Drawing.Point(8, 37);
+            this.labelLagna.Name = "labelLagna";
+            this.labelLagna.Size = new System.Drawing.Size(125, 16);
+            this.labelLagna.TabIndex = 45;
+            this.labelLagna.Text = "Transits from Lagna";
             // 
             // groupBoxAspects
             // 
@@ -75,238 +162,730 @@
             this.groupBoxAspects.Controls.Add(this.checkBoxSun);
             this.groupBoxAspects.Controls.Add(this.checkBoxMoon);
             this.groupBoxAspects.Controls.Add(this.checkBoxAll);
-            this.groupBoxAspects.Location = new System.Drawing.Point(735, 26);
+            this.groupBoxAspects.Location = new System.Drawing.Point(906, 424);
             this.groupBoxAspects.Name = "groupBoxAspects";
-            this.groupBoxAspects.Size = new System.Drawing.Size(110, 259);
-            this.groupBoxAspects.TabIndex = 2;
+            this.groupBoxAspects.Size = new System.Drawing.Size(112, 230);
+            this.groupBoxAspects.TabIndex = 47;
             this.groupBoxAspects.TabStop = false;
-            this.groupBoxAspects.Text = "Аспекты";
+            this.groupBoxAspects.Text = "Aspects";
             // 
             // checkBoxRahu
             // 
             this.checkBoxRahu.AutoSize = true;
-            this.checkBoxRahu.Location = new System.Drawing.Point(7, 230);
+            this.checkBoxRahu.Location = new System.Drawing.Point(7, 193);
             this.checkBoxRahu.Name = "checkBoxRahu";
-            this.checkBoxRahu.Size = new System.Drawing.Size(57, 20);
+            this.checkBoxRahu.Size = new System.Drawing.Size(58, 20);
             this.checkBoxRahu.TabIndex = 8;
-            this.checkBoxRahu.Text = "Раху";
+            this.checkBoxRahu.Text = "Rahu";
             this.checkBoxRahu.UseVisualStyleBackColor = true;
             this.checkBoxRahu.CheckedChanged += new System.EventHandler(this.checkBoxRahu_CheckedChanged);
             // 
             // checkBoxSaturn
             // 
             this.checkBoxSaturn.AutoSize = true;
-            this.checkBoxSaturn.Location = new System.Drawing.Point(7, 204);
+            this.checkBoxSaturn.Location = new System.Drawing.Point(7, 172);
             this.checkBoxSaturn.Name = "checkBoxSaturn";
-            this.checkBoxSaturn.Size = new System.Drawing.Size(74, 20);
+            this.checkBoxSaturn.Size = new System.Drawing.Size(64, 20);
             this.checkBoxSaturn.TabIndex = 7;
-            this.checkBoxSaturn.Text = "Сатурн";
+            this.checkBoxSaturn.Text = "Saturn";
             this.checkBoxSaturn.UseVisualStyleBackColor = true;
             this.checkBoxSaturn.CheckedChanged += new System.EventHandler(this.checkBoxSaturn_CheckedChanged);
             // 
             // checkBoxMars
             // 
             this.checkBoxMars.AutoSize = true;
-            this.checkBoxMars.Location = new System.Drawing.Point(7, 178);
+            this.checkBoxMars.Location = new System.Drawing.Point(7, 88);
             this.checkBoxMars.Name = "checkBoxMars";
-            this.checkBoxMars.Size = new System.Drawing.Size(60, 20);
+            this.checkBoxMars.Size = new System.Drawing.Size(56, 20);
             this.checkBoxMars.TabIndex = 6;
-            this.checkBoxMars.Text = "Марс";
+            this.checkBoxMars.Text = "Mars";
             this.checkBoxMars.UseVisualStyleBackColor = true;
             this.checkBoxMars.CheckedChanged += new System.EventHandler(this.checkBoxMars_CheckedChanged);
             // 
             // checkBoxMercury
             // 
             this.checkBoxMercury.AutoSize = true;
-            this.checkBoxMercury.Location = new System.Drawing.Point(7, 152);
+            this.checkBoxMercury.Location = new System.Drawing.Point(7, 109);
             this.checkBoxMercury.Name = "checkBoxMercury";
-            this.checkBoxMercury.Size = new System.Drawing.Size(92, 20);
+            this.checkBoxMercury.Size = new System.Drawing.Size(74, 20);
             this.checkBoxMercury.TabIndex = 5;
-            this.checkBoxMercury.Text = "Меркурий";
+            this.checkBoxMercury.Text = "Mercury";
             this.checkBoxMercury.UseVisualStyleBackColor = true;
             this.checkBoxMercury.CheckedChanged += new System.EventHandler(this.checkBoxMercury_CheckedChanged);
             // 
             // checkBoxJupiter
             // 
             this.checkBoxJupiter.AutoSize = true;
-            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 126);
+            this.checkBoxJupiter.Location = new System.Drawing.Point(7, 130);
             this.checkBoxJupiter.Name = "checkBoxJupiter";
-            this.checkBoxJupiter.Size = new System.Drawing.Size(76, 20);
+            this.checkBoxJupiter.Size = new System.Drawing.Size(66, 20);
             this.checkBoxJupiter.TabIndex = 4;
-            this.checkBoxJupiter.Text = "Юпитер";
+            this.checkBoxJupiter.Text = "Jupiter";
             this.checkBoxJupiter.UseVisualStyleBackColor = true;
             this.checkBoxJupiter.CheckedChanged += new System.EventHandler(this.checkBoxJupiter_CheckedChanged);
             // 
             // checkBoxVenus
             // 
             this.checkBoxVenus.AutoSize = true;
-            this.checkBoxVenus.Location = new System.Drawing.Point(7, 100);
+            this.checkBoxVenus.Location = new System.Drawing.Point(7, 151);
             this.checkBoxVenus.Name = "checkBoxVenus";
-            this.checkBoxVenus.Size = new System.Drawing.Size(75, 20);
+            this.checkBoxVenus.Size = new System.Drawing.Size(64, 20);
             this.checkBoxVenus.TabIndex = 3;
-            this.checkBoxVenus.Text = "Венера";
+            this.checkBoxVenus.Text = "Venus";
             this.checkBoxVenus.UseVisualStyleBackColor = true;
-            this.checkBoxVenus.CheckedChanged += new System.EventHandler(this.checkBoxVenera_CheckedChanged);
+            this.checkBoxVenus.CheckedChanged += new System.EventHandler(this.checkBoxVenus_CheckedChanged);
             // 
             // checkBoxSun
             // 
             this.checkBoxSun.AutoSize = true;
-            this.checkBoxSun.Location = new System.Drawing.Point(7, 74);
+            this.checkBoxSun.Location = new System.Drawing.Point(7, 46);
             this.checkBoxSun.Name = "checkBoxSun";
-            this.checkBoxSun.Size = new System.Drawing.Size(75, 20);
+            this.checkBoxSun.Size = new System.Drawing.Size(49, 20);
             this.checkBoxSun.TabIndex = 2;
-            this.checkBoxSun.Text = "Солнце";
+            this.checkBoxSun.Text = "Sun";
             this.checkBoxSun.UseVisualStyleBackColor = true;
             this.checkBoxSun.CheckedChanged += new System.EventHandler(this.checkBoxSun_CheckedChanged);
             // 
             // checkBoxMoon
             // 
             this.checkBoxMoon.AutoSize = true;
-            this.checkBoxMoon.Location = new System.Drawing.Point(7, 48);
+            this.checkBoxMoon.Location = new System.Drawing.Point(7, 67);
             this.checkBoxMoon.Name = "checkBoxMoon";
-            this.checkBoxMoon.Size = new System.Drawing.Size(59, 20);
+            this.checkBoxMoon.Size = new System.Drawing.Size(60, 20);
             this.checkBoxMoon.TabIndex = 1;
-            this.checkBoxMoon.Text = "Луна";
+            this.checkBoxMoon.Text = "Moon";
             this.checkBoxMoon.UseVisualStyleBackColor = true;
             this.checkBoxMoon.CheckedChanged += new System.EventHandler(this.checkBoxMoon_CheckedChanged);
             // 
             // checkBoxAll
             // 
             this.checkBoxAll.AutoSize = true;
-            this.checkBoxAll.Location = new System.Drawing.Point(7, 22);
+            this.checkBoxAll.Location = new System.Drawing.Point(7, 25);
             this.checkBoxAll.Name = "checkBoxAll";
-            this.checkBoxAll.Size = new System.Drawing.Size(50, 20);
+            this.checkBoxAll.Size = new System.Drawing.Size(41, 20);
             this.checkBoxAll.TabIndex = 0;
-            this.checkBoxAll.Text = "Все";
+            this.checkBoxAll.Text = "All";
             this.checkBoxAll.UseVisualStyleBackColor = true;
             this.checkBoxAll.CheckedChanged += new System.EventHandler(this.checkBoxAll_CheckedChanged);
             // 
-            // buttonClose
+            // dataGridViewInfoTranzit
             // 
-            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Location = new System.Drawing.Point(765, 458);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(80, 32);
-            this.buttonClose.TabIndex = 17;
-            this.buttonClose.Text = "Close";
-            this.buttonClose.UseVisualStyleBackColor = true;
-            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            this.dataGridViewInfoTranzit.AllowUserToAddRows = false;
+            this.dataGridViewInfoTranzit.AllowUserToDeleteRows = false;
+            this.dataGridViewInfoTranzit.AllowUserToResizeColumns = false;
+            this.dataGridViewInfoTranzit.AllowUserToResizeRows = false;
+            this.dataGridViewInfoTranzit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewInfoTranzit.Location = new System.Drawing.Point(518, 431);
+            this.dataGridViewInfoTranzit.MultiSelect = false;
+            this.dataGridViewInfoTranzit.Name = "dataGridViewInfoTranzit";
+            this.dataGridViewInfoTranzit.ReadOnly = true;
+            this.dataGridViewInfoTranzit.RowHeadersVisible = false;
+            this.dataGridViewInfoTranzit.Size = new System.Drawing.Size(380, 150);
+            this.dataGridViewInfoTranzit.TabIndex = 49;
             // 
-            // groupBoxEvent
+            // toolStripProfileMenu
             // 
-            this.groupBoxEvent.Controls.Add(this.labelLocation);
-            this.groupBoxEvent.Controls.Add(this.labelDate);
-            this.groupBoxEvent.Controls.Add(this.maskedTextBoxDate);
-            this.groupBoxEvent.Controls.Add(this.buttonLocation);
-            this.groupBoxEvent.Controls.Add(this.textBoxLocation);
-            this.groupBoxEvent.Location = new System.Drawing.Point(15, 392);
-            this.groupBoxEvent.Name = "groupBoxEvent";
-            this.groupBoxEvent.Size = new System.Drawing.Size(274, 98);
-            this.groupBoxEvent.TabIndex = 18;
-            this.groupBoxEvent.TabStop = false;
-            this.groupBoxEvent.Text = "Event Data";
+            this.toolStripProfileMenu.AutoSize = false;
+            this.toolStripProfileMenu.ImageScalingSize = new System.Drawing.Size(32, 32);
+            this.toolStripProfileMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonRefresh,
+            this.toolStripSeparator1,
+            this.toolStripButtonSave,
+            this.toolStripSeparator2,
+            this.toolStripLabel1,
+            this.toolStripLabelProfile,
+            this.toolStripLabel2,
+            this.toolStripTextBoxDate,
+            this.toolStripLabelDate});
+            this.toolStripProfileMenu.Location = new System.Drawing.Point(0, 0);
+            this.toolStripProfileMenu.Name = "toolStripProfileMenu";
+            this.toolStripProfileMenu.Size = new System.Drawing.Size(1178, 39);
+            this.toolStripProfileMenu.TabIndex = 64;
             // 
-            // labelLocation
+            // toolStripButtonRefresh
             // 
-            this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(6, 62);
-            this.labelLocation.Name = "labelLocation";
-            this.labelLocation.Size = new System.Drawing.Size(58, 16);
-            this.labelLocation.TabIndex = 43;
-            this.labelLocation.Text = "Location";
+            this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRefresh.Image = global::PAD.Properties.Resources.refresh_alpha;
+            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRefresh.Text = "Refresh";
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
-            // labelDate
+            // toolStripSeparator1
             // 
-            this.labelDate.AutoSize = true;
-            this.labelDate.Location = new System.Drawing.Point(25, 31);
-            this.labelDate.Name = "labelDate";
-            this.labelDate.Size = new System.Drawing.Size(36, 16);
-            this.labelDate.TabIndex = 42;
-            this.labelDate.Text = "Date";
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
-            // maskedTextBoxDate
+            // toolStripButtonSave
             // 
-            this.maskedTextBoxDate.Location = new System.Drawing.Point(67, 25);
-            this.maskedTextBoxDate.Mask = "00/00/0000 90:00:00";
-            this.maskedTextBoxDate.Name = "maskedTextBoxDate";
-            this.maskedTextBoxDate.Size = new System.Drawing.Size(193, 22);
-            this.maskedTextBoxDate.TabIndex = 41;
-            this.maskedTextBoxDate.ValidatingType = typeof(System.DateTime);
+            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonSave.Enabled = false;
+            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
+            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSave.Name = "toolStripButtonSave";
+            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonSave.Text = "Save Tranzit";
             // 
-            // buttonLocation
+            // toolStripSeparator2
             // 
-            this.buttonLocation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonLocation.Image = ((System.Drawing.Image)(resources.GetObject("buttonLocation.Image")));
-            this.buttonLocation.Location = new System.Drawing.Point(230, 56);
-            this.buttonLocation.Margin = new System.Windows.Forms.Padding(0);
-            this.buttonLocation.Name = "buttonLocation";
-            this.buttonLocation.Size = new System.Drawing.Size(30, 22);
-            this.buttonLocation.TabIndex = 40;
-            this.buttonLocation.UseVisualStyleBackColor = true;
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
-            // textBoxLocation
+            // toolStripLabel1
             // 
-            this.textBoxLocation.BackColor = System.Drawing.SystemColors.Window;
-            this.textBoxLocation.Location = new System.Drawing.Point(67, 56);
-            this.textBoxLocation.Name = "textBoxLocation";
-            this.textBoxLocation.ReadOnly = true;
-            this.textBoxLocation.Size = new System.Drawing.Size(160, 22);
-            this.textBoxLocation.TabIndex = 39;
+            this.toolStripLabel1.AutoSize = false;
+            this.toolStripLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(120, 36);
             // 
-            // pictureBoxMapLagna
+            // toolStripLabelProfile
             // 
-            this.pictureBoxMapLagna.Location = new System.Drawing.Point(374, 33);
-            this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
-            this.pictureBoxMapLagna.Size = new System.Drawing.Size(350, 350);
-            this.pictureBoxMapLagna.TabIndex = 19;
-            this.pictureBoxMapLagna.TabStop = false;
+            this.toolStripLabelProfile.Font = new System.Drawing.Font("Segoe Print", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabelProfile.Name = "toolStripLabelProfile";
+            this.toolStripLabelProfile.Size = new System.Drawing.Size(69, 36);
+            this.toolStripLabelProfile.Text = "Profile:";
             // 
-            // labelNatalMoon
+            // toolStripLabel2
             // 
-            this.labelNatalMoon.AutoSize = true;
-            this.labelNatalMoon.Location = new System.Drawing.Point(12, 12);
-            this.labelNatalMoon.Name = "labelNatalMoon";
-            this.labelNatalMoon.Size = new System.Drawing.Size(155, 16);
-            this.labelNatalMoon.TabIndex = 44;
-            this.labelNatalMoon.Text = "Tranzits from Natal Moon";
+            this.toolStripLabel2.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabel2.AutoSize = false;
+            this.toolStripLabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabel2.Name = "toolStripLabel2";
+            this.toolStripLabel2.Size = new System.Drawing.Size(10, 36);
             // 
-            // labelLagna
+            // toolStripTextBoxDate
             // 
-            this.labelLagna.AutoSize = true;
-            this.labelLagna.Location = new System.Drawing.Point(371, 12);
-            this.labelLagna.Name = "labelLagna";
-            this.labelLagna.Size = new System.Drawing.Size(124, 16);
-            this.labelLagna.TabIndex = 45;
-            this.labelLagna.Text = "Tranzits from Lagna";
+            this.toolStripTextBoxDate.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripTextBoxDate.AutoSize = false;
+            this.toolStripTextBoxDate.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.toolStripTextBoxDate.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.toolStripTextBoxDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripTextBoxDate.Name = "toolStripTextBoxDate";
+            this.toolStripTextBoxDate.ReadOnly = true;
+            this.toolStripTextBoxDate.Size = new System.Drawing.Size(140, 15);
+            this.toolStripTextBoxDate.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.toolStripTextBoxDate.TextChanged += new System.EventHandler(this.toolStripTextBoxDate_TextChanged_1);
+            // 
+            // toolStripLabelDate
+            // 
+            this.toolStripLabelDate.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabelDate.Name = "toolStripLabelDate";
+            this.toolStripLabelDate.Size = new System.Drawing.Size(92, 36);
+            this.toolStripLabelDate.Text = "Transit Date";
+            // 
+            // groupBoxLocation
+            // 
+            this.groupBoxLocation.Controls.Add(this.buttonLivingPlace);
+            this.groupBoxLocation.Controls.Add(this.textBoxLivingPlace);
+            this.groupBoxLocation.Location = new System.Drawing.Point(1027, 513);
+            this.groupBoxLocation.Name = "groupBoxLocation";
+            this.groupBoxLocation.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxLocation.TabIndex = 71;
+            this.groupBoxLocation.TabStop = false;
+            this.groupBoxLocation.Text = "Location";
+            // 
+            // buttonLivingPlace
+            // 
+            this.buttonLivingPlace.BackColor = System.Drawing.SystemColors.Window;
+            this.buttonLivingPlace.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonLivingPlace.Image = ((System.Drawing.Image)(resources.GetObject("buttonLivingPlace.Image")));
+            this.buttonLivingPlace.Location = new System.Drawing.Point(106, 23);
+            this.buttonLivingPlace.Margin = new System.Windows.Forms.Padding(0);
+            this.buttonLivingPlace.Name = "buttonLivingPlace";
+            this.buttonLivingPlace.Size = new System.Drawing.Size(30, 22);
+            this.buttonLivingPlace.TabIndex = 65;
+            this.buttonLivingPlace.UseVisualStyleBackColor = false;
+            this.buttonLivingPlace.Click += new System.EventHandler(this.buttonLivingPlace_Click);
+            // 
+            // textBoxLivingPlace
+            // 
+            this.textBoxLivingPlace.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxLivingPlace.Location = new System.Drawing.Point(6, 23);
+            this.textBoxLivingPlace.Name = "textBoxLivingPlace";
+            this.textBoxLivingPlace.ReadOnly = true;
+            this.textBoxLivingPlace.Size = new System.Drawing.Size(100, 22);
+            this.textBoxLivingPlace.TabIndex = 66;
+            this.textBoxLivingPlace.TextChanged += new System.EventHandler(this.textBoxLivingPlace_TextChanged);
+            // 
+            // groupBoxYear
+            // 
+            this.groupBoxYear.Controls.Add(this.textBoxYearStep);
+            this.groupBoxYear.Controls.Add(this.arrowButtonYearRight);
+            this.groupBoxYear.Controls.Add(this.textBoxYear);
+            this.groupBoxYear.Controls.Add(this.arrowButtonYearLeft);
+            this.groupBoxYear.Location = new System.Drawing.Point(1027, 338);
+            this.groupBoxYear.Name = "groupBoxYear";
+            this.groupBoxYear.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxYear.TabIndex = 70;
+            this.groupBoxYear.TabStop = false;
+            this.groupBoxYear.Text = "Year";
+            // 
+            // textBoxYearStep
+            // 
+            this.textBoxYearStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxYearStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxYearStep.MaxLength = 2;
+            this.textBoxYearStep.Name = "textBoxYearStep";
+            this.textBoxYearStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxYearStep.TabIndex = 58;
+            this.textBoxYearStep.Text = "1";
+            this.textBoxYearStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxYearStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxYearStep_KeyPress);
+            // 
+            // arrowButtonYearRight
+            // 
+            this.arrowButtonYearRight.ArrowEnabled = true;
+            this.arrowButtonYearRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonYearRight.Name = "arrowButtonYearRight";
+            this.arrowButtonYearRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearRight.Rotation = 90;
+            this.arrowButtonYearRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonYearRight.TabIndex = 57;
+            this.arrowButtonYearRight.Click += new System.EventHandler(this.arrowButtonYearRight_Click);
+            // 
+            // textBoxYear
+            // 
+            this.textBoxYear.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxYear.Location = new System.Drawing.Point(28, 21);
+            this.textBoxYear.MaxLength = 4;
+            this.textBoxYear.Name = "textBoxYear";
+            this.textBoxYear.Size = new System.Drawing.Size(50, 22);
+            this.textBoxYear.TabIndex = 56;
+            this.textBoxYear.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxYear.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxYear_KeyPress);
+            // 
+            // arrowButtonYearLeft
+            // 
+            this.arrowButtonYearLeft.ArrowEnabled = true;
+            this.arrowButtonYearLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonYearLeft.Name = "arrowButtonYearLeft";
+            this.arrowButtonYearLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonYearLeft.Rotation = 270;
+            this.arrowButtonYearLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonYearLeft.TabIndex = 55;
+            this.arrowButtonYearLeft.Click += new System.EventHandler(this.arrowButtonYearLeft_Click);
+            // 
+            // groupBoxMonth
+            // 
+            this.groupBoxMonth.Controls.Add(this.textBoxMonthStep);
+            this.groupBoxMonth.Controls.Add(this.arrowButtonMonthRight);
+            this.groupBoxMonth.Controls.Add(this.textBoxMonth);
+            this.groupBoxMonth.Controls.Add(this.arrowButtonMonthLeft);
+            this.groupBoxMonth.Location = new System.Drawing.Point(1027, 282);
+            this.groupBoxMonth.Name = "groupBoxMonth";
+            this.groupBoxMonth.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxMonth.TabIndex = 69;
+            this.groupBoxMonth.TabStop = false;
+            this.groupBoxMonth.Text = "Month";
+            // 
+            // textBoxMonthStep
+            // 
+            this.textBoxMonthStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxMonthStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxMonthStep.MaxLength = 2;
+            this.textBoxMonthStep.Name = "textBoxMonthStep";
+            this.textBoxMonthStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxMonthStep.TabIndex = 58;
+            this.textBoxMonthStep.Text = "1";
+            this.textBoxMonthStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxMonthStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMonthStep_KeyPress);
+            // 
+            // arrowButtonMonthRight
+            // 
+            this.arrowButtonMonthRight.ArrowEnabled = true;
+            this.arrowButtonMonthRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonMonthRight.Name = "arrowButtonMonthRight";
+            this.arrowButtonMonthRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthRight.Rotation = 90;
+            this.arrowButtonMonthRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonMonthRight.TabIndex = 57;
+            this.arrowButtonMonthRight.Click += new System.EventHandler(this.arrowButtonMonthRight_Click);
+            // 
+            // textBoxMonth
+            // 
+            this.textBoxMonth.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxMonth.Location = new System.Drawing.Point(28, 21);
+            this.textBoxMonth.MaxLength = 2;
+            this.textBoxMonth.Name = "textBoxMonth";
+            this.textBoxMonth.Size = new System.Drawing.Size(50, 22);
+            this.textBoxMonth.TabIndex = 56;
+            this.textBoxMonth.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxMonth.TextChanged += new System.EventHandler(this.textBoxMonth_TextChanged);
+            this.textBoxMonth.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMonth_KeyPress);
+            // 
+            // arrowButtonMonthLeft
+            // 
+            this.arrowButtonMonthLeft.ArrowEnabled = true;
+            this.arrowButtonMonthLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonMonthLeft.Name = "arrowButtonMonthLeft";
+            this.arrowButtonMonthLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMonthLeft.Rotation = 270;
+            this.arrowButtonMonthLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonMonthLeft.TabIndex = 55;
+            this.arrowButtonMonthLeft.Click += new System.EventHandler(this.arrowButtonMonthLeft_Click);
+            // 
+            // groupBoxDay
+            // 
+            this.groupBoxDay.Controls.Add(this.textBoxDayStep);
+            this.groupBoxDay.Controls.Add(this.arrowButtonDayRight);
+            this.groupBoxDay.Controls.Add(this.textBoxDay);
+            this.groupBoxDay.Controls.Add(this.arrowButtonDayLeft);
+            this.groupBoxDay.Location = new System.Drawing.Point(1027, 226);
+            this.groupBoxDay.Name = "groupBoxDay";
+            this.groupBoxDay.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxDay.TabIndex = 68;
+            this.groupBoxDay.TabStop = false;
+            this.groupBoxDay.Text = "Day";
+            // 
+            // textBoxDayStep
+            // 
+            this.textBoxDayStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxDayStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxDayStep.MaxLength = 2;
+            this.textBoxDayStep.Name = "textBoxDayStep";
+            this.textBoxDayStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxDayStep.TabIndex = 58;
+            this.textBoxDayStep.Text = "1";
+            this.textBoxDayStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxDayStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDayStep_KeyPress);
+            // 
+            // arrowButtonDayRight
+            // 
+            this.arrowButtonDayRight.ArrowEnabled = true;
+            this.arrowButtonDayRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonDayRight.Name = "arrowButtonDayRight";
+            this.arrowButtonDayRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayRight.Rotation = 90;
+            this.arrowButtonDayRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonDayRight.TabIndex = 57;
+            this.arrowButtonDayRight.Click += new System.EventHandler(this.arrowButtonDayRight_Click);
+            // 
+            // textBoxDay
+            // 
+            this.textBoxDay.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxDay.Location = new System.Drawing.Point(28, 21);
+            this.textBoxDay.MaxLength = 2;
+            this.textBoxDay.Name = "textBoxDay";
+            this.textBoxDay.Size = new System.Drawing.Size(50, 22);
+            this.textBoxDay.TabIndex = 56;
+            this.textBoxDay.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxDay.TextChanged += new System.EventHandler(this.textBoxDay_TextChanged);
+            this.textBoxDay.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxDay_KeyPress);
+            // 
+            // arrowButtonDayLeft
+            // 
+            this.arrowButtonDayLeft.ArrowEnabled = true;
+            this.arrowButtonDayLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonDayLeft.Name = "arrowButtonDayLeft";
+            this.arrowButtonDayLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonDayLeft.Rotation = 270;
+            this.arrowButtonDayLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonDayLeft.TabIndex = 55;
+            this.arrowButtonDayLeft.Click += new System.EventHandler(this.arrowButtonDayLeft_Click);
+            // 
+            // groupBoxHours
+            // 
+            this.groupBoxHours.Controls.Add(this.textBoxHoursStep);
+            this.groupBoxHours.Controls.Add(this.arrowButtonHoursRight);
+            this.groupBoxHours.Controls.Add(this.textBoxHours);
+            this.groupBoxHours.Controls.Add(this.arrowButtonHoursLeft);
+            this.groupBoxHours.Location = new System.Drawing.Point(1027, 170);
+            this.groupBoxHours.Name = "groupBoxHours";
+            this.groupBoxHours.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxHours.TabIndex = 67;
+            this.groupBoxHours.TabStop = false;
+            this.groupBoxHours.Text = "Hours";
+            // 
+            // textBoxHoursStep
+            // 
+            this.textBoxHoursStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxHoursStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxHoursStep.MaxLength = 2;
+            this.textBoxHoursStep.Name = "textBoxHoursStep";
+            this.textBoxHoursStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxHoursStep.TabIndex = 58;
+            this.textBoxHoursStep.Text = "1";
+            this.textBoxHoursStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxHoursStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxHoursStep_KeyPress);
+            // 
+            // arrowButtonHoursRight
+            // 
+            this.arrowButtonHoursRight.ArrowEnabled = true;
+            this.arrowButtonHoursRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonHoursRight.Name = "arrowButtonHoursRight";
+            this.arrowButtonHoursRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursRight.Rotation = 90;
+            this.arrowButtonHoursRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonHoursRight.TabIndex = 57;
+            this.arrowButtonHoursRight.Click += new System.EventHandler(this.arrowButtonHoursRight_Click);
+            // 
+            // textBoxHours
+            // 
+            this.textBoxHours.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxHours.Location = new System.Drawing.Point(28, 21);
+            this.textBoxHours.MaxLength = 2;
+            this.textBoxHours.Name = "textBoxHours";
+            this.textBoxHours.Size = new System.Drawing.Size(50, 22);
+            this.textBoxHours.TabIndex = 56;
+            this.textBoxHours.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxHours.TextChanged += new System.EventHandler(this.textBoxHours_TextChanged);
+            this.textBoxHours.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxHours_KeyPress);
+            // 
+            // arrowButtonHoursLeft
+            // 
+            this.arrowButtonHoursLeft.ArrowEnabled = true;
+            this.arrowButtonHoursLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonHoursLeft.Name = "arrowButtonHoursLeft";
+            this.arrowButtonHoursLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonHoursLeft.Rotation = 270;
+            this.arrowButtonHoursLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonHoursLeft.TabIndex = 55;
+            this.arrowButtonHoursLeft.Click += new System.EventHandler(this.arrowButtonHoursLeft_Click);
+            // 
+            // groupBoxMinutes
+            // 
+            this.groupBoxMinutes.Controls.Add(this.textBoxMinutesStep);
+            this.groupBoxMinutes.Controls.Add(this.arrowButtonMinutesRight);
+            this.groupBoxMinutes.Controls.Add(this.textBoxMinutes);
+            this.groupBoxMinutes.Controls.Add(this.arrowButtonMinutesLeft);
+            this.groupBoxMinutes.Location = new System.Drawing.Point(1027, 114);
+            this.groupBoxMinutes.Name = "groupBoxMinutes";
+            this.groupBoxMinutes.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxMinutes.TabIndex = 66;
+            this.groupBoxMinutes.TabStop = false;
+            this.groupBoxMinutes.Text = "Minutes";
+            // 
+            // textBoxMinutesStep
+            // 
+            this.textBoxMinutesStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxMinutesStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxMinutesStep.MaxLength = 2;
+            this.textBoxMinutesStep.Name = "textBoxMinutesStep";
+            this.textBoxMinutesStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxMinutesStep.TabIndex = 58;
+            this.textBoxMinutesStep.Text = "1";
+            this.textBoxMinutesStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxMinutesStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMinutesStep_KeyPress);
+            // 
+            // arrowButtonMinutesRight
+            // 
+            this.arrowButtonMinutesRight.ArrowEnabled = true;
+            this.arrowButtonMinutesRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonMinutesRight.Name = "arrowButtonMinutesRight";
+            this.arrowButtonMinutesRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesRight.Rotation = 90;
+            this.arrowButtonMinutesRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonMinutesRight.TabIndex = 57;
+            this.arrowButtonMinutesRight.Click += new System.EventHandler(this.arrowButtonMinutesRight_Click);
+            // 
+            // textBoxMinutes
+            // 
+            this.textBoxMinutes.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxMinutes.Location = new System.Drawing.Point(28, 21);
+            this.textBoxMinutes.MaxLength = 2;
+            this.textBoxMinutes.Name = "textBoxMinutes";
+            this.textBoxMinutes.Size = new System.Drawing.Size(50, 22);
+            this.textBoxMinutes.TabIndex = 56;
+            this.textBoxMinutes.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxMinutes.TextChanged += new System.EventHandler(this.textBoxMinutes_TextChanged);
+            this.textBoxMinutes.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxMinutes_KeyPress);
+            // 
+            // arrowButtonMinutesLeft
+            // 
+            this.arrowButtonMinutesLeft.ArrowEnabled = true;
+            this.arrowButtonMinutesLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonMinutesLeft.Name = "arrowButtonMinutesLeft";
+            this.arrowButtonMinutesLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonMinutesLeft.Rotation = 270;
+            this.arrowButtonMinutesLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonMinutesLeft.TabIndex = 55;
+            this.arrowButtonMinutesLeft.Click += new System.EventHandler(this.arrowButtonMinutesLeft_Click);
+            // 
+            // groupBoxSeconds
+            // 
+            this.groupBoxSeconds.Controls.Add(this.textBoxSecondsStep);
+            this.groupBoxSeconds.Controls.Add(this.arrowButtonSecondsRight);
+            this.groupBoxSeconds.Controls.Add(this.textBoxSeconds);
+            this.groupBoxSeconds.Controls.Add(this.arrowButtonSecondsLeft);
+            this.groupBoxSeconds.Location = new System.Drawing.Point(1027, 58);
+            this.groupBoxSeconds.Name = "groupBoxSeconds";
+            this.groupBoxSeconds.Size = new System.Drawing.Size(140, 56);
+            this.groupBoxSeconds.TabIndex = 65;
+            this.groupBoxSeconds.TabStop = false;
+            this.groupBoxSeconds.Text = "Seconds";
+            // 
+            // textBoxSecondsStep
+            // 
+            this.textBoxSecondsStep.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxSecondsStep.Location = new System.Drawing.Point(111, 21);
+            this.textBoxSecondsStep.MaxLength = 2;
+            this.textBoxSecondsStep.Name = "textBoxSecondsStep";
+            this.textBoxSecondsStep.Size = new System.Drawing.Size(22, 22);
+            this.textBoxSecondsStep.TabIndex = 58;
+            this.textBoxSecondsStep.Text = "10";
+            this.textBoxSecondsStep.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxSecondsStep.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSecondsStep_KeyPress);
+            // 
+            // arrowButtonSecondsRight
+            // 
+            this.arrowButtonSecondsRight.ArrowEnabled = true;
+            this.arrowButtonSecondsRight.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsRight.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsRight.Location = new System.Drawing.Point(78, 20);
+            this.arrowButtonSecondsRight.Name = "arrowButtonSecondsRight";
+            this.arrowButtonSecondsRight.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsRight.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsRight.Rotation = 90;
+            this.arrowButtonSecondsRight.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonSecondsRight.TabIndex = 57;
+            this.arrowButtonSecondsRight.Click += new System.EventHandler(this.arrowButtonSecondsRight_Click);
+            // 
+            // textBoxSeconds
+            // 
+            this.textBoxSeconds.BackColor = System.Drawing.SystemColors.Window;
+            this.textBoxSeconds.Location = new System.Drawing.Point(28, 21);
+            this.textBoxSeconds.MaxLength = 2;
+            this.textBoxSeconds.Name = "textBoxSeconds";
+            this.textBoxSeconds.Size = new System.Drawing.Size(50, 22);
+            this.textBoxSeconds.TabIndex = 56;
+            this.textBoxSeconds.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBoxSeconds.TextChanged += new System.EventHandler(this.textBoxSeconds_TextChanged);
+            this.textBoxSeconds.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBoxSeconds_KeyPress);
+            // 
+            // arrowButtonSecondsLeft
+            // 
+            this.arrowButtonSecondsLeft.ArrowEnabled = true;
+            this.arrowButtonSecondsLeft.HoverEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsLeft.HoverStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsLeft.Location = new System.Drawing.Point(2, 20);
+            this.arrowButtonSecondsLeft.Name = "arrowButtonSecondsLeft";
+            this.arrowButtonSecondsLeft.NormalEndColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsLeft.NormalStartColor = System.Drawing.Color.Silver;
+            this.arrowButtonSecondsLeft.Rotation = 270;
+            this.arrowButtonSecondsLeft.Size = new System.Drawing.Size(24, 24);
+            this.arrowButtonSecondsLeft.TabIndex = 55;
+            this.arrowButtonSecondsLeft.Click += new System.EventHandler(this.arrowButtonSecondsLeft_Click);
+            // 
+            // dataGridViewInfoNatal
+            // 
+            this.dataGridViewInfoNatal.AllowUserToAddRows = false;
+            this.dataGridViewInfoNatal.AllowUserToDeleteRows = false;
+            this.dataGridViewInfoNatal.AllowUserToResizeColumns = false;
+            this.dataGridViewInfoNatal.AllowUserToResizeRows = false;
+            this.dataGridViewInfoNatal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewInfoNatal.Location = new System.Drawing.Point(12, 431);
+            this.dataGridViewInfoNatal.MultiSelect = false;
+            this.dataGridViewInfoNatal.Name = "dataGridViewInfoNatal";
+            this.dataGridViewInfoNatal.ReadOnly = true;
+            this.dataGridViewInfoNatal.RowHeadersVisible = false;
+            this.dataGridViewInfoNatal.Size = new System.Drawing.Size(380, 150);
+            this.dataGridViewInfoNatal.TabIndex = 72;
+            // 
+            // labelNatal
+            // 
+            this.labelNatal.AutoSize = true;
+            this.labelNatal.Location = new System.Drawing.Point(8, 412);
+            this.labelNatal.Name = "labelNatal";
+            this.labelNatal.Size = new System.Drawing.Size(150, 16);
+            this.labelNatal.TabIndex = 73;
+            this.labelNatal.Text = "Natal position of planets";
+            // 
+            // labelTranzit
+            // 
+            this.labelTranzit.AutoSize = true;
+            this.labelTranzit.Location = new System.Drawing.Point(515, 412);
+            this.labelTranzit.Name = "labelTranzit";
+            this.labelTranzit.Size = new System.Drawing.Size(159, 16);
+            this.labelTranzit.TabIndex = 74;
+            this.labelTranzit.Text = "Transit position of planets";
             // 
             // TransitsMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ButtonFace;
-            this.ClientSize = new System.Drawing.Size(860, 505);
+            this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1178, 664);
+            this.Controls.Add(this.labelTranzit);
+            this.Controls.Add(this.labelNatal);
+            this.Controls.Add(this.dataGridViewInfoNatal);
+            this.Controls.Add(this.groupBoxLocation);
+            this.Controls.Add(this.groupBoxYear);
+            this.Controls.Add(this.groupBoxMonth);
+            this.Controls.Add(this.groupBoxDay);
+            this.Controls.Add(this.groupBoxHours);
+            this.Controls.Add(this.groupBoxMinutes);
+            this.Controls.Add(this.groupBoxSeconds);
+            this.Controls.Add(this.toolStripProfileMenu);
+            this.Controls.Add(this.dataGridViewInfoTranzit);
+            this.Controls.Add(this.groupBoxAspects);
             this.Controls.Add(this.labelLagna);
             this.Controls.Add(this.labelNatalMoon);
             this.Controls.Add(this.pictureBoxMapLagna);
-            this.Controls.Add(this.groupBoxEvent);
             this.Controls.Add(this.buttonClose);
-            this.Controls.Add(this.groupBoxAspects);
             this.Controls.Add(this.pictureBoxMapMoon);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "TransitsMap";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Tranzits Map";
+            this.Text = "Transit Chart";
             this.Shown += new System.EventHandler(this.TransitsMap_Shown);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
             this.groupBoxAspects.ResumeLayout(false);
             this.groupBoxAspects.PerformLayout();
-            this.groupBoxEvent.ResumeLayout(false);
-            this.groupBoxEvent.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoTranzit)).EndInit();
+            this.toolStripProfileMenu.ResumeLayout(false);
+            this.toolStripProfileMenu.PerformLayout();
+            this.groupBoxLocation.ResumeLayout(false);
+            this.groupBoxLocation.PerformLayout();
+            this.groupBoxYear.ResumeLayout(false);
+            this.groupBoxYear.PerformLayout();
+            this.groupBoxMonth.ResumeLayout(false);
+            this.groupBoxMonth.PerformLayout();
+            this.groupBoxDay.ResumeLayout(false);
+            this.groupBoxDay.PerformLayout();
+            this.groupBoxHours.ResumeLayout(false);
+            this.groupBoxHours.PerformLayout();
+            this.groupBoxMinutes.ResumeLayout(false);
+            this.groupBoxMinutes.PerformLayout();
+            this.groupBoxSeconds.ResumeLayout(false);
+            this.groupBoxSeconds.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoNatal)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -315,6 +894,10 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBoxMapMoon;
+        private System.Windows.Forms.Button buttonClose;
+        private System.Windows.Forms.PictureBox pictureBoxMapLagna;
+        private System.Windows.Forms.Label labelNatalMoon;
+        private System.Windows.Forms.Label labelLagna;
         private System.Windows.Forms.GroupBox groupBoxAspects;
         private System.Windows.Forms.CheckBox checkBoxRahu;
         private System.Windows.Forms.CheckBox checkBoxSaturn;
@@ -325,15 +908,52 @@
         private System.Windows.Forms.CheckBox checkBoxSun;
         private System.Windows.Forms.CheckBox checkBoxMoon;
         private System.Windows.Forms.CheckBox checkBoxAll;
-        private System.Windows.Forms.Button buttonClose;
-        private System.Windows.Forms.GroupBox groupBoxEvent;
-        private System.Windows.Forms.Button buttonLocation;
-        private System.Windows.Forms.TextBox textBoxLocation;
-        private System.Windows.Forms.MaskedTextBox maskedTextBoxDate;
-        private System.Windows.Forms.Label labelDate;
-        private System.Windows.Forms.Label labelLocation;
-        private System.Windows.Forms.PictureBox pictureBoxMapLagna;
-        private System.Windows.Forms.Label labelNatalMoon;
-        private System.Windows.Forms.Label labelLagna;
+        private System.Windows.Forms.DataGridView dataGridViewInfoTranzit;
+        private System.Windows.Forms.ToolStrip toolStripProfileMenu;
+        private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelDate;
+        private System.Windows.Forms.ToolStripTextBox toolStripTextBoxDate;
+        private System.Windows.Forms.ToolStripLabel toolStripLabelProfile;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private System.Windows.Forms.GroupBox groupBoxLocation;
+        private System.Windows.Forms.Button buttonLivingPlace;
+        private System.Windows.Forms.TextBox textBoxLivingPlace;
+        private System.Windows.Forms.GroupBox groupBoxYear;
+        private System.Windows.Forms.TextBox textBoxYearStep;
+        private ArrowButton.ArrowButton arrowButtonYearRight;
+        private System.Windows.Forms.TextBox textBoxYear;
+        private ArrowButton.ArrowButton arrowButtonYearLeft;
+        private System.Windows.Forms.GroupBox groupBoxMonth;
+        private System.Windows.Forms.TextBox textBoxMonthStep;
+        private ArrowButton.ArrowButton arrowButtonMonthRight;
+        private System.Windows.Forms.TextBox textBoxMonth;
+        private ArrowButton.ArrowButton arrowButtonMonthLeft;
+        private System.Windows.Forms.GroupBox groupBoxDay;
+        private System.Windows.Forms.TextBox textBoxDayStep;
+        private ArrowButton.ArrowButton arrowButtonDayRight;
+        private System.Windows.Forms.TextBox textBoxDay;
+        private ArrowButton.ArrowButton arrowButtonDayLeft;
+        private System.Windows.Forms.GroupBox groupBoxHours;
+        private System.Windows.Forms.TextBox textBoxHoursStep;
+        private ArrowButton.ArrowButton arrowButtonHoursRight;
+        private System.Windows.Forms.TextBox textBoxHours;
+        private ArrowButton.ArrowButton arrowButtonHoursLeft;
+        private System.Windows.Forms.GroupBox groupBoxMinutes;
+        private System.Windows.Forms.TextBox textBoxMinutesStep;
+        private ArrowButton.ArrowButton arrowButtonMinutesRight;
+        private System.Windows.Forms.TextBox textBoxMinutes;
+        private ArrowButton.ArrowButton arrowButtonMinutesLeft;
+        private System.Windows.Forms.GroupBox groupBoxSeconds;
+        private System.Windows.Forms.TextBox textBoxSecondsStep;
+        private ArrowButton.ArrowButton arrowButtonSecondsRight;
+        private System.Windows.Forms.TextBox textBoxSeconds;
+        private ArrowButton.ArrowButton arrowButtonSecondsLeft;
+        private System.Windows.Forms.DataGridView dataGridViewInfoNatal;
+        private System.Windows.Forms.Label labelNatal;
+        private System.Windows.Forms.Label labelTranzit;
     }
 }

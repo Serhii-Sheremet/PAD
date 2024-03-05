@@ -54,7 +54,9 @@
             this.profileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.locationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.viewTranzitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tranzitsMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.yearsTranzitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,8 +68,6 @@
             this.datePicker = new CustomControls.DatePicker();
             this.labelProfile = new System.Windows.Forms.Label();
             this.labelTimeZone = new System.Windows.Forms.Label();
-            this.viewTranzitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripMain.SuspendLayout();
             this.tabControlCalendar.SuspendLayout();
             this.tabPageCalendar.SuspendLayout();
@@ -256,11 +256,22 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
+            // viewTranzitToolStripMenuItem
+            // 
+            this.viewTranzitToolStripMenuItem.Name = "viewTranzitToolStripMenuItem";
+            resources.ApplyResources(this.viewTranzitToolStripMenuItem, "viewTranzitToolStripMenuItem");
+            this.viewTranzitToolStripMenuItem.Click += new System.EventHandler(this.viewTranzitToolStripMenuItem_Click);
+            // 
             // tranzitsMapToolStripMenuItem
             // 
             this.tranzitsMapToolStripMenuItem.Name = "tranzitsMapToolStripMenuItem";
             resources.ApplyResources(this.tranzitsMapToolStripMenuItem, "tranzitsMapToolStripMenuItem");
             this.tranzitsMapToolStripMenuItem.Click += new System.EventHandler(this.tranzitsMapToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // yearsTranzitsToolStripMenuItem
             // 
@@ -334,17 +345,6 @@
             // 
             resources.ApplyResources(this.labelTimeZone, "labelTimeZone");
             this.labelTimeZone.Name = "labelTimeZone";
-            // 
-            // viewTranzitToolStripMenuItem
-            // 
-            this.viewTranzitToolStripMenuItem.Name = "viewTranzitToolStripMenuItem";
-            resources.ApplyResources(this.viewTranzitToolStripMenuItem, "viewTranzitToolStripMenuItem");
-            this.viewTranzitToolStripMenuItem.Click += new System.EventHandler(this.viewTranzitToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // MainForm
             // 

@@ -66,7 +66,7 @@ namespace PAD
 
         public void SetTranzitFocus()
         {
-            string tabLabel = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+            string tabLabel = Utility.GetLocalizedText("Transits", _activeLanguageCode);
             for (int i = 0; i < tabControlCalendar.TabPages.Count; i++)
             {
                 if (tabControlCalendar.TabPages[i].Text.Equals(tabLabel))
@@ -430,7 +430,7 @@ namespace PAD
             rect.Offset(2, 2);
 
             string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
-            string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+            string tranzitText = Utility.GetLocalizedText("Transits", _activeLanguageCode);
 
             if (tabControlCalendar.TabPages[e.Index].Text.Equals(calendarText) && tabControlCalendar.TabPages[e.Index].Text.Equals(tranzitText))
             {
@@ -457,7 +457,7 @@ namespace PAD
             Rectangle closeButton = new Rectangle(rect.Right - (img.Width + 4), rect.Top + (rect.Height - img.Height) / 2, img.Width, img.Height);
 
             string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
-            string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
+            string tranzitText = Utility.GetLocalizedText("Transits", _activeLanguageCode);
 
             if (!tabControlCalendar.TabPages[tabControlCalendar.SelectedIndex].Text.Equals(calendarText) && !tabControlCalendar.TabPages[tabControlCalendar.SelectedIndex].Text.Equals(tranzitText) && closeButton.Contains(e.Location))
             {
@@ -3265,8 +3265,8 @@ namespace PAD
             if (tabControlCalendar.TabPages.Count > 2)
             {
                 string calendarText = Utility.GetLocalizedText("Calendar", _activeLanguageCode);
-                string tranzitText = Utility.GetLocalizedText("Tranzits", _activeLanguageCode);
-                string yearTranzitText = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode);
+                string tranzitText = Utility.GetLocalizedText("Transits", _activeLanguageCode);
+                string yearTranzitText = Utility.GetLocalizedText("Year's transits", _activeLanguageCode);
 
                 foreach (TabPage tp in tabControlCalendar.TabPages)
                 {
@@ -3767,8 +3767,8 @@ namespace PAD
             dgv.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPTEXT));
 
             DataGridViewColumn column = new DataGridViewColumn();
-            column.DataPropertyName = "Tranzit";
-            column.Name = Utility.GetLocalizedText("Tranzit", langCode) + " " + planetName;
+            column.DataPropertyName = "Transit";
+            column.Name = Utility.GetLocalizedText("Transit", langCode) + " " + planetName;
             column.Width = 120;
             column.CellTemplate = new DataGridViewTextBoxCell();
             dgv.Columns.Add(column);
@@ -5518,7 +5518,7 @@ namespace PAD
 
                 int index = -1;
                 bool isPresent = false;
-                string tabLabel = Utility.GetLocalizedText("Year's tranzits", _activeLanguageCode) + ": " + _selectedYear;
+                string tabLabel = Utility.GetLocalizedText("Year's transits", _activeLanguageCode) + ": " + _selectedYear;
                 for (int i = 0; i < tabControlCalendar.TabPages.Count; i++)
                 {
                     if (tabControlCalendar.TabPages[i].Text.Equals(tabLabel))

@@ -79,10 +79,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxDate = new System.Windows.Forms.ToolStripTextBox();
             this.pictureBoxMap = new System.Windows.Forms.PictureBox();
-            this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.groupBoxAspects.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfo)).BeginInit();
             this.groupBoxSeconds.SuspendLayout();
@@ -710,6 +710,20 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.AutoSize = false;
+            this.toolStripLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(120, 36);
+            // 
+            // toolStripLabelDate
+            // 
+            this.toolStripLabelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.toolStripLabelDate.Name = "toolStripLabelDate";
+            this.toolStripLabelDate.Size = new System.Drawing.Size(92, 36);
+            this.toolStripLabelDate.Text = "Transit Date";
+            // 
             // toolStripTextBoxDate
             // 
             this.toolStripTextBoxDate.AutoSize = false;
@@ -729,20 +743,6 @@
             this.pictureBoxMap.Size = new System.Drawing.Size(500, 350);
             this.pictureBoxMap.TabIndex = 47;
             this.pictureBoxMap.TabStop = false;
-            // 
-            // toolStripLabelDate
-            // 
-            this.toolStripLabelDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripLabelDate.Name = "toolStripLabelDate";
-            this.toolStripLabelDate.Size = new System.Drawing.Size(91, 36);
-            this.toolStripLabelDate.Text = "Tranzit Date";
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.AutoSize = false;
-            this.toolStripLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(120, 36);
             // 
             // ViewTranzit
             // 
@@ -768,7 +768,7 @@
             this.MinimizeBox = false;
             this.Name = "ViewTranzit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "View Tranzit";
+            this.Text = "View Transit";
             this.Shown += new System.EventHandler(this.ViewTranzit_Shown);
             this.groupBoxAspects.ResumeLayout(false);
             this.groupBoxAspects.PerformLayout();

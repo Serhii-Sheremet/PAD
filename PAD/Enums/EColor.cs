@@ -33,6 +33,7 @@
         SHUNYANAKSHATRA = 28,
         SHUNIATITHI = 29,
         MRITYUBHAGA = 30,
-        GRAY = 31
+        GRAY = 31,
+        BLACK = 32
     }
 }

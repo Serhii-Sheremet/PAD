@@ -207,6 +207,7 @@ namespace PAD
             defaultList.Add(new Colors { Id = 29, Code = "SHUNIATITHI", ARGBValue = -16181 });
             defaultList.Add(new Colors { Id = 30, Code = "MRITYABHAGA", ARGBValue = -1064908 });
             defaultList.Add(new Colors { Id = 31, Code = "GRAY", ARGBValue = -4144960 });
+            defaultList.Add(new Colors { Id = 32, Code = "BLACK", ARGBValue = -16777216 });
 
             UpdateColorSettings(defaultList);
             CacheLoad._colorList = defaultList;

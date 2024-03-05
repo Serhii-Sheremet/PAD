@@ -106,16 +106,16 @@
             this.groupBoxTranzits.Size = new System.Drawing.Size(360, 152);
             this.groupBoxTranzits.TabIndex = 10;
             this.groupBoxTranzits.TabStop = false;
-            this.groupBoxTranzits.Text = "Planets tranzits";
+            this.groupBoxTranzits.Text = "Planets transit";
             // 
             // checkBoxBoth
             // 
             this.checkBoxBoth.AutoSize = true;
             this.checkBoxBoth.Location = new System.Drawing.Point(13, 111);
             this.checkBoxBoth.Name = "checkBoxBoth";
-            this.checkBoxBoth.Size = new System.Drawing.Size(310, 20);
+            this.checkBoxBoth.Size = new System.Drawing.Size(303, 20);
             this.checkBoxBoth.TabIndex = 2;
-            this.checkBoxBoth.Text = "Planets tranzits from natal Moon and from Lagna";
+            this.checkBoxBoth.Text = "Planets transit from natal Moon and from Lagna";
             this.checkBoxBoth.UseVisualStyleBackColor = true;
             this.checkBoxBoth.CheckedChanged += new System.EventHandler(this.checkBoxBoth_CheckedChanged);
             // 
@@ -126,7 +126,7 @@
             this.checkBoxLagna.Name = "checkBoxLagna";
             this.checkBoxLagna.Size = new System.Drawing.Size(179, 20);
             this.checkBoxLagna.TabIndex = 1;
-            this.checkBoxLagna.Text = "Planets trazits from Lagna";
+            this.checkBoxLagna.Text = "Planets transit from Lagna";
             this.checkBoxLagna.UseVisualStyleBackColor = true;
             this.checkBoxLagna.CheckedChanged += new System.EventHandler(this.checkBoxLagna_CheckedChanged);
             // 
@@ -135,9 +135,9 @@
             this.checkBoxMoon.AutoSize = true;
             this.checkBoxMoon.Location = new System.Drawing.Point(13, 25);
             this.checkBoxMoon.Name = "checkBoxMoon";
-            this.checkBoxMoon.Size = new System.Drawing.Size(214, 20);
+            this.checkBoxMoon.Size = new System.Drawing.Size(207, 20);
             this.checkBoxMoon.TabIndex = 0;
-            this.checkBoxMoon.Text = "Planets tranzits from natal Moon";
+            this.checkBoxMoon.Text = "Planets transit from natal Moon";
             this.checkBoxMoon.UseVisualStyleBackColor = true;
             this.checkBoxMoon.CheckedChanged += new System.EventHandler(this.checkBoxMoon_CheckedChanged);
             // 
@@ -158,7 +158,7 @@
             this.checkBoxHoraFrom6.AutoSize = true;
             this.checkBoxHoraFrom6.Location = new System.Drawing.Point(13, 103);
             this.checkBoxHoraFrom6.Name = "checkBoxHoraFrom6";
-            this.checkBoxHoraFrom6.Size = new System.Drawing.Size(198, 20);
+            this.checkBoxHoraFrom6.Size = new System.Drawing.Size(197, 20);
             this.checkBoxHoraFrom6.TabIndex = 2;
             this.checkBoxHoraFrom6.Text = "From 6:00 AM (Hora = 1 hour)";
             this.checkBoxHoraFrom6.UseVisualStyleBackColor = true;
@@ -169,7 +169,7 @@
             this.checkBoxHoraEqual.AutoSize = true;
             this.checkBoxHoraEqual.Location = new System.Drawing.Point(13, 69);
             this.checkBoxHoraEqual.Name = "checkBoxHoraEqual";
-            this.checkBoxHoraEqual.Size = new System.Drawing.Size(172, 20);
+            this.checkBoxHoraEqual.Size = new System.Drawing.Size(171, 20);
             this.checkBoxHoraEqual.TabIndex = 1;
             this.checkBoxHoraEqual.Text = "Sunrise-to-Sunrise (1/24)";
             this.checkBoxHoraEqual.UseVisualStyleBackColor = true;
@@ -202,7 +202,7 @@
             this.checkBoxMuhurtsFrom6.AutoSize = true;
             this.checkBoxMuhurtsFrom6.Location = new System.Drawing.Point(13, 111);
             this.checkBoxMuhurtsFrom6.Name = "checkBoxMuhurtsFrom6";
-            this.checkBoxMuhurtsFrom6.Size = new System.Drawing.Size(217, 20);
+            this.checkBoxMuhurtsFrom6.Size = new System.Drawing.Size(216, 20);
             this.checkBoxMuhurtsFrom6.TabIndex = 3;
             this.checkBoxMuhurtsFrom6.Text = "From 6:00 AM (Muhurta = 48 min)";
             this.checkBoxMuhurtsFrom6.UseVisualStyleBackColor = true;
@@ -213,7 +213,7 @@
             this.checkBoxMuhurtsEqual.AutoSize = true;
             this.checkBoxMuhurtsEqual.Location = new System.Drawing.Point(13, 69);
             this.checkBoxMuhurtsEqual.Name = "checkBoxMuhurtsEqual";
-            this.checkBoxMuhurtsEqual.Size = new System.Drawing.Size(172, 20);
+            this.checkBoxMuhurtsEqual.Size = new System.Drawing.Size(171, 20);
             this.checkBoxMuhurtsEqual.TabIndex = 1;
             this.checkBoxMuhurtsEqual.Text = "Sunrise-to-Sunrise (1/30)";
             this.checkBoxMuhurtsEqual.UseVisualStyleBackColor = true;
@@ -247,7 +247,7 @@
             this.labelRussian.AutoSize = true;
             this.labelRussian.Location = new System.Drawing.Point(231, 111);
             this.labelRussian.Name = "labelRussian";
-            this.labelRussian.Size = new System.Drawing.Size(57, 16);
+            this.labelRussian.Size = new System.Drawing.Size(56, 16);
             this.labelRussian.TabIndex = 6;
             this.labelRussian.Text = "Russian";
             // 
@@ -256,7 +256,7 @@
             this.labelEnglish.AutoSize = true;
             this.labelEnglish.Location = new System.Drawing.Point(65, 111);
             this.labelEnglish.Name = "labelEnglish";
-            this.labelEnglish.Size = new System.Drawing.Size(52, 16);
+            this.labelEnglish.Size = new System.Drawing.Size(51, 16);
             this.labelEnglish.TabIndex = 5;
             this.labelEnglish.Text = "English";
             // 
@@ -328,7 +328,7 @@
             this.checkBoxMrityuErnst.AutoSize = true;
             this.checkBoxMrityuErnst.Location = new System.Drawing.Point(13, 101);
             this.checkBoxMrityuErnst.Name = "checkBoxMrityuErnst";
-            this.checkBoxMrityuErnst.Size = new System.Drawing.Size(160, 20);
+            this.checkBoxMrityuErnst.Size = new System.Drawing.Size(159, 20);
             this.checkBoxMrityuErnst.TabIndex = 7;
             this.checkBoxMrityuErnst.Text = "From (N - 1)° till (N + 1)°";
             this.checkBoxMrityuErnst.UseVisualStyleBackColor = true;
@@ -349,7 +349,7 @@
             this.checkBoxMrityuEqual.AutoSize = true;
             this.checkBoxMrityuEqual.Location = new System.Drawing.Point(13, 23);
             this.checkBoxMrityuEqual.Name = "checkBoxMrityuEqual";
-            this.checkBoxMrityuEqual.Size = new System.Drawing.Size(180, 20);
+            this.checkBoxMrityuEqual.Size = new System.Drawing.Size(179, 20);
             this.checkBoxMrityuEqual.TabIndex = 2;
             this.checkBoxMrityuEqual.Text = "From (N° - 30\') till (N° + 30\')";
             this.checkBoxMrityuEqual.UseVisualStyleBackColor = true;
@@ -360,7 +360,7 @@
             this.checkBoxMrityuMore.AutoSize = true;
             this.checkBoxMrityuMore.Location = new System.Drawing.Point(13, 75);
             this.checkBoxMrityuMore.Name = "checkBoxMrityuMore";
-            this.checkBoxMrityuMore.Size = new System.Drawing.Size(135, 20);
+            this.checkBoxMrityuMore.Size = new System.Drawing.Size(134, 20);
             this.checkBoxMrityuMore.TabIndex = 1;
             this.checkBoxMrityuMore.Text = "From N° till (N + 1)°";
             this.checkBoxMrityuMore.UseVisualStyleBackColor = true;
@@ -371,7 +371,7 @@
             this.checkBoxMrityuLess.AutoSize = true;
             this.checkBoxMrityuLess.Location = new System.Drawing.Point(13, 49);
             this.checkBoxMrityuLess.Name = "checkBoxMrityuLess";
-            this.checkBoxMrityuLess.Size = new System.Drawing.Size(132, 20);
+            this.checkBoxMrityuLess.Size = new System.Drawing.Size(131, 20);
             this.checkBoxMrityuLess.TabIndex = 0;
             this.checkBoxMrityuLess.Text = "From (N - 1)° till N°";
             this.checkBoxMrityuLess.UseVisualStyleBackColor = true;
@@ -393,7 +393,7 @@
             this.checkBoxNodeTrue.AutoSize = true;
             this.checkBoxNodeTrue.Location = new System.Drawing.Point(13, 45);
             this.checkBoxNodeTrue.Name = "checkBoxNodeTrue";
-            this.checkBoxNodeTrue.Size = new System.Drawing.Size(96, 20);
+            this.checkBoxNodeTrue.Size = new System.Drawing.Size(95, 20);
             this.checkBoxNodeTrue.TabIndex = 1;
             this.checkBoxNodeTrue.Text = "True nodes";
             this.checkBoxNodeTrue.UseVisualStyleBackColor = true;
@@ -404,7 +404,7 @@
             this.checkBoxNodeMean.AutoSize = true;
             this.checkBoxNodeMean.Location = new System.Drawing.Point(13, 21);
             this.checkBoxNodeMean.Name = "checkBoxNodeMean";
-            this.checkBoxNodeMean.Size = new System.Drawing.Size(102, 20);
+            this.checkBoxNodeMean.Size = new System.Drawing.Size(101, 20);
             this.checkBoxNodeMean.TabIndex = 0;
             this.checkBoxNodeMean.Text = "Mean nodes";
             this.checkBoxNodeMean.UseVisualStyleBackColor = true;
@@ -426,7 +426,7 @@
             this.checkBoxWeekMonday.AutoSize = true;
             this.checkBoxWeekMonday.Location = new System.Drawing.Point(13, 45);
             this.checkBoxWeekMonday.Name = "checkBoxWeekMonday";
-            this.checkBoxWeekMonday.Size = new System.Drawing.Size(76, 20);
+            this.checkBoxWeekMonday.Size = new System.Drawing.Size(75, 20);
             this.checkBoxWeekMonday.TabIndex = 1;
             this.checkBoxWeekMonday.Text = "Monday";
             this.checkBoxWeekMonday.UseVisualStyleBackColor = true;
@@ -437,7 +437,7 @@
             this.checkBoxWeekSunday.AutoSize = true;
             this.checkBoxWeekSunday.Location = new System.Drawing.Point(13, 21);
             this.checkBoxWeekSunday.Name = "checkBoxWeekSunday";
-            this.checkBoxWeekSunday.Size = new System.Drawing.Size(73, 20);
+            this.checkBoxWeekSunday.Size = new System.Drawing.Size(72, 20);
             this.checkBoxWeekSunday.TabIndex = 0;
             this.checkBoxWeekSunday.Text = "Sunday";
             this.checkBoxWeekSunday.UseVisualStyleBackColor = true;

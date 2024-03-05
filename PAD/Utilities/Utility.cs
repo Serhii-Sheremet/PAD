@@ -2366,7 +2366,15 @@ namespace PAD
             sec = Math.Abs(sec % 3600);
             int min = sec / 60;
             sec %= 60;
-            return degree + "º" + min + "'" + sec + "\"";
+            return degree + "º" + ConverValueIntoTwoChars(min) + "'" + ConverValueIntoTwoChars(sec) + "\"";
+        }
+
+        private static string ConverValueIntoTwoChars(int value)
+        { 
+            if (value < 10)
+                return "0" + value;
+            else
+                return value.ToString();
         }
 
         public static List<PlanetData> CalculatePlanetsPositionForDate(DateTime date, double latitude, double longitude)

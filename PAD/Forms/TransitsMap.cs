@@ -1,7 +1,9 @@
-﻿using System;
+﻿using PdfSharp.Drawing.BarCodes;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -20,32 +22,1002 @@ namespace PAD
             }
         }
 
-        private Profile _personInfo;
         private ELanguage _activeLang;
-        private DateTime _eventDate;
+        private DateTime _curDate;
 
+        private List<NakshatraDescription> _ndList;
+        private List<ZodiakDescription> _zdList;
+        private Location _location;
+
+        private List<PlanetData> _pdBirthList;
+        private List<PlanetData> _pdList;
+        private double _birthAscendant;
+        private double _curAscendant;
+        private Profile _profile;
+        
         public TransitsMap()
         {
             InitializeComponent();
         }
 
-        public TransitsMap(Profile profile, ELanguage langCode)
+        public TransitsMap(Profile selProfile, ELanguage langCode)
         {
             InitializeComponent();
 
-            _personInfo = profile;
             _activeLang = langCode;
-            _eventDate = DateTime.Now;
+            _curDate = DateTime.Now;
 
-            maskedTextBoxDate.Text = _eventDate.ToString();
+            _ndList = CacheLoad._nakshatraDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
+            _zdList = CacheLoad._zodiakDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
+
+            _profile = selProfile;
+            _location = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
+
+            PrepareDataGridInfoNatal(_activeLang);
+            PrepareDataGridInfoTranzit(_activeLang);
+
+            Location birthLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfBirthId).FirstOrDefault();
+            double latitude, longitude;
+            if (double.TryParse(birthLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(birthLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdBirthList = Utility.CalculatePlanetsPositionForDate(_profile.DateOfBirth, latitude, longitude);
+                _birthAscendant = Utility.CalculateAscendantForDate(_profile.DateOfBirth, latitude, longitude, 0, 'O');
+            }
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
         {
+            Utility.LocalizeForm(this, _activeLang);
+
+            toolStripLabelProfile.Text = _profile.ProfileName;
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            textBoxSeconds.Text = _curDate.Second.ToString();
+            textBoxMinutes.Text = _curDate.Minute.ToString();
+            textBoxHours.Text = _curDate.Hour.ToString();
+            textBoxDay.Text = _curDate.Day.ToString();
+            textBoxMonth.Text = _curDate.Month.ToString();
+            textBoxYear.Text = _curDate.Year.ToString();
+            textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
+
+            ProfileInfoDataGridViewNatalFillByRow(_activeLang);
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void textBoxSeconds_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxMinutes_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxHours_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxDay_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxMonth_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxYear_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxSecondsStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxMinutesStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxHoursStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxDayStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxMonthStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxYearStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void arrowButtonSecondsLeft_Click(object sender, EventArgs e)
+        {
+            textBoxSeconds.Text = (Convert.ToInt32(textBoxSeconds.Text) - Convert.ToInt32(textBoxSecondsStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonSecondsRight_Click(object sender, EventArgs e)
+        {
+            textBoxSeconds.Text = (Convert.ToInt32(textBoxSeconds.Text) + Convert.ToInt32(textBoxSecondsStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonMinutesLeft_Click(object sender, EventArgs e)
+        {
+            textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) - Convert.ToInt32(textBoxMinutesStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonMinutesRight_Click(object sender, EventArgs e)
+        {
+            textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) + Convert.ToInt32(textBoxMinutesStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonHoursLeft_Click(object sender, EventArgs e)
+        {
+            textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) - Convert.ToInt32(textBoxHoursStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonHoursRight_Click(object sender, EventArgs e)
+        {
+            textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) + Convert.ToInt32(textBoxHoursStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonDayLeft_Click(object sender, EventArgs e)
+        {
+            textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) - Convert.ToInt32(textBoxDayStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonDayRight_Click(object sender, EventArgs e)
+        {
+            textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) + Convert.ToInt32(textBoxDayStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonMonthLeft_Click(object sender, EventArgs e)
+        {
+            textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) - Convert.ToInt32(textBoxMonthStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonMonthRight_Click(object sender, EventArgs e)
+        {
+            textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) + Convert.ToInt32(textBoxMonthStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonYearLeft_Click(object sender, EventArgs e)
+        {
+            textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) - Convert.ToInt32(textBoxYearStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void arrowButtonYearRight_Click(object sender, EventArgs e)
+        {
+            textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) + Convert.ToInt32(textBoxYearStep.Text)).ToString();
+            CurrentDateRefresh();
+        }
+
+        private void textBoxSeconds_TextChanged(object sender, EventArgs e)
+        {
+            if (!textBoxSeconds.Text.Equals(string.Empty))
+            {
+                int newValue = 0;
+                int curValue = Convert.ToInt32(textBoxSeconds.Text);
+                if (curValue < 0)
+                {
+                    newValue = 60 + curValue;
+                    textBoxSeconds.Text = newValue.ToString();
+                    textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) - 1).ToString();
+                }
+                else if (curValue >= 60)
+                {
+                    newValue = curValue - 60;
+                    textBoxSeconds.Text = newValue.ToString();
+                    textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) + 1).ToString();
+                }
+            }
+        }
+
+        private void textBoxMinutes_TextChanged(object sender, EventArgs e)
+        {
+            if (!textBoxMinutes.Text.Equals(string.Empty))
+            {
+                int newValue = 0;
+                int curValue = Convert.ToInt32(textBoxMinutes.Text);
+                if (curValue < 0)
+                {
+                    newValue = 60 + curValue;
+                    textBoxMinutes.Text = newValue.ToString();
+                    textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) - 1).ToString();
+                }
+                else if (curValue >= 60)
+                {
+                    newValue = curValue - 60;
+                    textBoxMinutes.Text = newValue.ToString();
+                    textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) + 1).ToString();
+                }
+            }
+        }
+
+        private void textBoxHours_TextChanged(object sender, EventArgs e)
+        {
+            if (!textBoxHours.Text.Equals(string.Empty))
+            {
+                int newValue = 0;
+                int curValue = Convert.ToInt32(textBoxHours.Text);
+                if (curValue < 0)
+                {
+                    newValue = 24 + curValue;
+                    textBoxHours.Text = newValue.ToString();
+                    textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) - 1).ToString();
+                }
+                else if (curValue >= 24)
+                {
+                    newValue = curValue - 24;
+                    textBoxHours.Text = newValue.ToString();
+                    textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) + 1).ToString();
+                }
+            }
+        }
+
+        private void textBoxDay_TextChanged(object sender, EventArgs e)
+        {
+            if (!textBoxDay.Text.Equals(string.Empty))
+            {
+                int newValue = 0, yearValue = 0, monthValue = 0, daysAmount = 0;
+                int curValue = Convert.ToInt32(textBoxDay.Text);
+
+                int daysAmoutCurrent = DateTime.DaysInMonth(_curDate.Year, _curDate.Month);
+                if (curValue <= 0)
+                {
+                    textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) - 1).ToString();
+                    yearValue = Convert.ToInt32(textBoxYear.Text);
+                    monthValue = Convert.ToInt32(textBoxMonth.Text);
+                    daysAmount = DateTime.DaysInMonth(yearValue, monthValue);
+
+                    newValue = daysAmount + curValue;
+                    textBoxDay.Text = newValue.ToString();
+
+                }
+                else if (curValue > daysAmoutCurrent)
+                {
+                    textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) + 1).ToString();
+                    newValue = curValue - daysAmoutCurrent;
+                    textBoxDay.Text = newValue.ToString();
+                }
+            }
+        }
+
+        private void textBoxMonth_TextChanged(object sender, EventArgs e)
+        {
+            if (!textBoxMonth.Text.Equals(string.Empty))
+            {
+                int newValue = 0;
+                int curValue = Convert.ToInt32(textBoxMonth.Text);
+                if (curValue <= 0)
+                {
+                    newValue = 12 + curValue;
+                    textBoxMonth.Text = newValue.ToString();
+                    textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) - 1).ToString();
+                }
+                else if (curValue > 12)
+                {
+                    newValue = curValue - 12;
+                    textBoxMonth.Text = newValue.ToString();
+                    textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) + 1).ToString();
+                }
+            }
+        }
+
+        private void CurrentDateRefresh()
+        {
+            if (textBoxSeconds.Text.Equals(string.Empty))
+                return;
+            if (textBoxMinutes.Text.Equals(string.Empty))
+                return;
+            if (textBoxHours.Text.Equals(string.Empty))
+                return;
+            if (textBoxDay.Text.Equals(string.Empty))
+                return;
+            if (textBoxMonth.Text.Equals(string.Empty))
+                return;
+            if (textBoxYear.Text.Equals(string.Empty))
+                return;
+
+            int year = Convert.ToInt32(textBoxYear.Text);
+            int month = Convert.ToInt32(textBoxMonth.Text);
+            int day = Convert.ToInt32(textBoxDay.Text);
+            int hour = Convert.ToInt32(textBoxHours.Text);
+            int min = Convert.ToInt32(textBoxMinutes.Text);
+            int sec = Convert.ToInt32(textBoxSeconds.Text);
+            _curDate = new DateTime(year, month, day, hour, min, sec);
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+        }
+
+        private void PrepareDataGridInfoTranzit(ELanguage langCode)
+        {
+            dataGridViewInfoTranzit.AutoGenerateColumns = false;
+            dataGridViewInfoTranzit.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            dataGridViewInfoTranzit.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
+
+            DataGridViewColumn column = new DataGridViewColumn();
+            column.DataPropertyName = "Planet";
+            column.Name = Utility.GetLocalizedText("", langCode);
+            column.Width = 30;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewInfoTranzit.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Degree";
+            column.Name = Utility.GetLocalizedText("Degree", langCode);
+            column.Width = 60;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoTranzit.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Znak";
+            column.Name = Utility.GetLocalizedText("Rasi", langCode);
+            column.Width = 90;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoTranzit.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Nakshatra";
+            column.Name = Utility.GetLocalizedText("Nakshatra", langCode);
+            column.Width = 150;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoTranzit.Columns.Add(column);
+
+            int lastColWidth = (dataGridViewInfoTranzit.Width - 330);
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Pada";
+            column.Name = Utility.GetLocalizedText("Pada", langCode);
+            column.Width = lastColWidth;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewInfoTranzit.Columns.Add(column);
+
+            dataGridViewInfoTranzit.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewInfoTranzit.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            foreach (DataGridViewColumn col in dataGridViewInfoTranzit.Columns)
+            {
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            dataGridViewInfoTranzit.EnableHeadersVisualStyles = false;
+            dataGridViewInfoTranzit.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+            dataGridViewInfoTranzit.ScrollBars = ScrollBars.None;
+            dataGridViewInfoTranzit.Height = dataGridViewInfoTranzit.ColumnHeadersHeight;
+        }
+
+        private void PrepareDataGridInfoNatal(ELanguage langCode)
+        {
+            dataGridViewInfoNatal.AutoGenerateColumns = false;
+            dataGridViewInfoNatal.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            dataGridViewInfoNatal.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
+
+            DataGridViewColumn column = new DataGridViewColumn();
+            column.DataPropertyName = "Planet";
+            column.Name = Utility.GetLocalizedText("", langCode);
+            column.Width = 30;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewInfoNatal.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Degree";
+            column.Name = Utility.GetLocalizedText("Degree", langCode);
+            column.Width = 60;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoNatal.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Znak";
+            column.Name = Utility.GetLocalizedText("Rasi", langCode);
+            column.Width = 90;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoNatal.Columns.Add(column);
+
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Nakshatra";
+            column.Name = Utility.GetLocalizedText("Nakshatra", langCode);
+            column.Width = 150;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            dataGridViewInfoNatal.Columns.Add(column);
+
+            int lastColWidth = (dataGridViewInfoNatal.Width - 330);
+            column = new DataGridViewColumn();
+            column.DataPropertyName = "Pada";
+            column.Name = Utility.GetLocalizedText("Pada", langCode);
+            column.Width = lastColWidth;
+            column.CellTemplate = new DataGridViewTextBoxCell();
+            column.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewInfoNatal.Columns.Add(column);
+
+            dataGridViewInfoNatal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
+            dataGridViewInfoNatal.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCellsExceptHeaders;
+            foreach (DataGridViewColumn col in dataGridViewInfoNatal.Columns)
+            {
+                col.HeaderCell.Style.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            }
+            dataGridViewInfoNatal.EnableHeadersVisualStyles = false;
+            dataGridViewInfoNatal.ColumnHeadersDefaultCellStyle.BackColor = Color.LightGoldenrodYellow;
+            dataGridViewInfoNatal.ScrollBars = ScrollBars.None;
+            dataGridViewInfoNatal.Height = dataGridViewInfoTranzit.ColumnHeadersHeight;
+        }
+
+        public struct dgvRowObj
+        {
+            public string Planet { get; set; }
+            public string Degree { get; set; }
+            public string Zodiak { get; set; }
+            public string Nakshatra { get; set; }
+            public string Pada { get; set; }
+        }
+
+        private void ProfileInfoDataGridViewNatalFillByRow(ELanguage langCode)
+        {
+            dgvRowObj rowTemp;
+            List<dgvRowObj> rowList = new List<dgvRowObj>();
+            string degree = string.Empty, zodiak = string.Empty, nakshatra = string.Empty, pada = string.Empty;
+            EAppSetting nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            int nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+            int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+            degree = Utility.ConvertDecimalToDegree(_birthAscendant);
+            nakshatra = GetNakshatraNameById(nakshatraId);
+            pada = padaNum.ToString();
+            zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedText("Lg", langCode),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+
+            int nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().NakshatraId;
+            int padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().PadaId);
+            double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SUN, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MOON, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MARS, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MERCURY, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.JUPITER, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.VENUS, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().PadaId);
+            pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SATURN, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            if (nodesSetting == EAppSetting.NODEMEAN)
+            {
+                nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().PadaId);
+                pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.RAHUMEAN, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+
+                nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().PadaId);
+                pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.KETUMEAN, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+            }
+
+            if (nodesSetting == EAppSetting.NODETRUE)
+            {
+                nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().PadaId);
+                pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.RAHUTRUE, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+
+                nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().PadaId);
+                pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.KETUTRUE, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+            }
+
+            dataGridViewInfoNatal.Rows.Clear();
+            for (int i = 0; i < rowList.Count; i++)
+            {
+                string[] row = new string[] {
+                        rowList[i].Planet,
+                        rowList[i].Degree,
+                        rowList[i].Zodiak,
+                        rowList[i].Nakshatra,
+                        rowList[i].Pada
+                };
+                dataGridViewInfoNatal.Rows.Add(row);
+            }
+
+            int heihgt = dataGridViewInfoNatal.ColumnHeadersHeight;
+            for (int i = 0; i < dataGridViewInfoNatal.RowCount; i++)
+            {
+                int rowHeight = dataGridViewInfoNatal.Rows[i].GetPreferredHeight(i, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true);
+                heihgt += rowHeight;
+            }
+            dataGridViewInfoNatal.Height = heihgt;
+            dataGridViewInfoNatal.ClearSelection();
+        }
+
+        private void ProfileInfoDataGridViewTranzitFillByRow(ELanguage langCode)
+        {
+            dgvRowObj rowTemp;
+            List<dgvRowObj> rowList = new List<dgvRowObj>();
+            string degree = string.Empty, zodiak = string.Empty, nakshatra = string.Empty, pada = string.Empty;
+            EAppSetting nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            int nakshatraId = Utility.GetNakshatraIdFromDegree(_curAscendant);
+            int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_curAscendant));
+            degree = Utility.ConvertDecimalToDegree(_curAscendant);
+            nakshatra = GetNakshatraNameById(nakshatraId);
+            pada = padaNum.ToString();
+            zodiak = GetZodiakNameByIds(nakshatraId, padaNum);
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedText("Lg", langCode),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            
+            int nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().NakshatraId;
+            int padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().PadaId);
+            double pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.SUN).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SUN, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MOON, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.MARS).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MARS, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.MERCURY).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.MERCURY, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.JUPITER).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.JUPITER, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.VENUS).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.VENUS, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().NakshatraId;
+            padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().PadaId);
+            pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.SATURN).FirstOrDefault().Longitude;
+            degree = Utility.ConvertDecimalToDegree(pLong);
+            zodiak = GetZodiakNameByIds(nakId, padaId);
+            nakshatra = GetNakshatraNameById(nakId);
+            pada = padaId.ToString();
+            rowTemp = new dgvRowObj
+            {
+                Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.SATURN, langCode).Substring(0, 2),
+                Degree = degree,
+                Zodiak = zodiak,
+                Nakshatra = nakshatra,
+                Pada = pada
+            };
+            rowList.Add(rowTemp);
+
+            if (nodesSetting == EAppSetting.NODEMEAN)
+            {
+                nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().PadaId);
+                pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.RAHUMEAN, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+
+                nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().PadaId);
+                pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.KETUMEAN).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.KETUMEAN, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+            }
+
+            if (nodesSetting == EAppSetting.NODETRUE)
+            {
+                nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().PadaId);
+                pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.RAHUTRUE, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+
+                nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().NakshatraId;
+                padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().PadaId);
+                pLong = _pdList.Where(i => i.PlanetId == (int)EPlanet.KETUTRUE).FirstOrDefault().Longitude;
+                degree = Utility.ConvertDecimalToDegree(pLong);
+                zodiak = GetZodiakNameByIds(nakId, padaId);
+                nakshatra = GetNakshatraNameById(nakId);
+                pada = padaId.ToString();
+                rowTemp = new dgvRowObj
+                {
+                    Planet = Utility.GetLocalizedPlanetNameByCode(EPlanet.KETUTRUE, langCode).Substring(0, 2),
+                    Degree = degree,
+                    Zodiak = zodiak,
+                    Nakshatra = nakshatra,
+                    Pada = pada
+                };
+                rowList.Add(rowTemp);
+            }
+
+            dataGridViewInfoTranzit.Rows.Clear();
+            for (int i = 0; i < rowList.Count; i++)
+            {
+                string[] row = new string[] {
+                        rowList[i].Planet,
+                        rowList[i].Degree,
+                        rowList[i].Zodiak,
+                        rowList[i].Nakshatra,
+                        rowList[i].Pada
+                };
+                dataGridViewInfoTranzit.Rows.Add(row);
+            }
+
+            int heihgt = dataGridViewInfoTranzit.ColumnHeadersHeight;
+            for (int i = 0; i < dataGridViewInfoTranzit.RowCount; i++)
+            {
+                int rowHeight = dataGridViewInfoTranzit.Rows[i].GetPreferredHeight(i, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true);
+                heihgt += rowHeight;
+            }
+            dataGridViewInfoTranzit.Height = heihgt;
+            dataGridViewInfoTranzit.ClearSelection();
+        }
+
+        private string GetZodiakNameByIds(int nakshatraId, int pada)
+        {
+            int id = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
+            return id + ". " + _zdList.Where(i => i.ZodiakId == id).FirstOrDefault().Name;
+        }
+        private string GetNakshatraNameById(int id)
+        {
+            return id + ". " + _ndList.Where(i => i.NakshatraId == id).FirstOrDefault().Name;
+        }
+
+        private void buttonLivingPlace_Click(object sender, EventArgs e)
+        {
+            LocationForm lForm = new LocationForm(CacheLoad._locationList.ToList(), _activeLang, false);
+            lForm.ShowDialog(this);
+            if (lForm.SelectedLocation != null)
+            {
+                _location = lForm.SelectedLocation;
+                textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
+            }
+        }
+
+        private void textBoxLivingPlace_TextChanged(object sender, EventArgs e)
+        {
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
         }
-        
+
+
+        private void toolStripButtonRefresh_Click(object sender, EventArgs e)
+        {
+            _curDate = DateTime.Now;
+            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            textBoxSeconds.Text = _curDate.Second.ToString();
+            textBoxMinutes.Text = _curDate.Minute.ToString();
+            textBoxHours.Text = _curDate.Hour.ToString();
+            textBoxDay.Text = _curDate.Day.ToString();
+            textBoxMonth.Text = _curDate.Month.ToString();
+            textBoxYear.Text = _curDate.Year.ToString();
+        }
+
+        private void toolStripTextBoxDate_TextChanged(object sender, EventArgs e)
+        {
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
+            ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
+        }
+
         private void PrepareTransitMapMoon()
         {
             Bitmap canvas = new Bitmap(pictureBoxMapMoon.Width, pictureBoxMapMoon.Height);
@@ -122,17 +1094,26 @@ namespace PAD
                         List<int> aspectList = GetAspectDomsListByPlanet(planetsList[planetListCount][planetCount].PlanetCode);
                         for (int aspectCount = 0; aspectCount < aspectList.Count; aspectCount++)
                         {
-                            DomPlanet newDomPlanet = new DomPlanet
+                            if (!planetsList[planetListCount][planetCount].IsNatalPlanet)
                             {
-                                PlanetCode = planetsList[planetListCount][planetCount].PlanetCode,
-                                Retro = string.Empty,
-                                IsActiveAspect = true,
-                                ColorCode =EColor.GRAY
-                            };
-                            if (planetListCount + aspectList[aspectCount] - 1 < 12)
-                                planetsList[planetListCount + aspectList[aspectCount] - 1].Add(newDomPlanet);
-                            else
-                                planetsList[(planetListCount + aspectList[aspectCount] - 1) - 12].Add(newDomPlanet);
+                                DomPlanet newDomPlanet = new DomPlanet
+                                {
+                                    PlanetCode = planetsList[planetListCount][planetCount].PlanetCode,
+                                    IsNatalPlanet = planetsList[planetListCount][planetCount].IsNatalPlanet,
+                                    Retro = string.Empty,
+                                    IsActiveAspect = true,
+                                    ColorCode = EColor.GRAY
+                                };
+
+                                if (planetListCount + aspectList[aspectCount] - 1 < 12)
+                                {
+                                    planetsList[planetListCount + aspectList[aspectCount] - 1].Add(newDomPlanet);
+                                }
+                                else
+                                {
+                                    planetsList[(planetListCount + aspectList[aspectCount] - 1) - 12].Add(newDomPlanet);
+                                }
+                            }
                         }
                     }
                 }
@@ -191,10 +1172,14 @@ namespace PAD
             List<DomPlanet>[] fullList = new List<DomPlanet>[12];
 
             for (int i = 0; i < zList.Count; i++)
+            {
                 fullList[i] = GetPlanetsListByZnak(zList[i].Id, (i + 1));
+            }
 
             if (CheckIfAspectsActive())
+            {
                 fullList = AddAspects(fullList);
+            }
 
             return fullList;
         }
@@ -202,102 +1187,156 @@ namespace PAD
         private List<DomPlanet> GetPlanetsListByZnak(int zodiakId, int dom)
         {
             List<DomPlanet> planetsList = new List<DomPlanet>();
-           /* for (int i = 0; i < _planetsListOfaDay.Length; i++)
+            EAppSetting nodeSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            List<PlanetData> pdTunedNatalList = Utility.ClonePlanetDataList(_pdBirthList);
+            List<PlanetData> pdTunedTranzitList = Utility.ClonePlanetDataList(_pdList);
+
+            if (nodeSetting == EAppSetting.NODEMEAN)
             {
-                DomPlanet dPlanet = GetPlanetIfCurrentZnak(_planetsListOfaDay[i], zodiakId, dom);
+                var planetToRemove = new[] { 10, 11 };
+                pdTunedNatalList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+                pdTunedTranzitList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
+            if (nodeSetting == EAppSetting.NODETRUE)
+            {
+                var planetToRemove = new[] { 8, 9 };
+                pdTunedNatalList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+                pdTunedTranzitList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
+
+            for (int i = 0; i < pdTunedNatalList.Count; i++)
+            {
+                DomPlanet dPlanet = GetPlanetIfCurrentZnak(pdTunedNatalList[i], true, zodiakId, dom);
                 if (dPlanet != null)
+                {
                     planetsList.Add(dPlanet);
-            }*/
+                }
+            }
+            for (int i = 0; i < pdTunedTranzitList.Count; i++)
+            {
+                DomPlanet dPlanet = GetPlanetIfCurrentZnak(pdTunedTranzitList[i], false, zodiakId, dom);
+                if (dPlanet != null)
+                {
+                    planetsList.Add(dPlanet);
+                }
+            }
+            
             return planetsList;
         }
 
-        private DomPlanet GetPlanetIfCurrentZnak(List<Calendar> pList, int zodiakId, int dom)
+        private DomPlanet GetPlanetIfCurrentZnak(PlanetData pd, bool isNatal, int zodiakId, int dom)
         {
             DomPlanet planet = null;
+            EColor pColor = EColor.BLACK;
             string planetExaltation = string.Empty;
             int currentZodiakId = CacheLoad._zodiakList.Where(i => i.Id == zodiakId).FirstOrDefault()?.Id ?? 0;
-           /* for (int i = 0; i < pList.Count; i++)
+
+            int planetId = pd.PlanetId;
+            if (planetId == 10)
             {
-                
-                if (pList[i].ZodiakCode == (EZodiak)currentZodiakId)
+                planetId = 8;
+            }
+            if (planetId == 11)
+            {
+                planetId = 9;
+            }
+
+            if (pd.ZodiakId == currentZodiakId)
+            {
+                EExaltation exalt = Utility.GetExaltationByPlanetAndZnak((EPlanet)planetId, (EZodiak)zodiakId);
+                if (exalt == EExaltation.EXALTATION)
                 {
-                    EExaltation exalt = Utility.GetExaltationByPlanetAndZnak(pList[i].PlanetCode, (EZodiak)zodiakId);
-                    if (exalt == EExaltation.EXALTATION)
-                    {
-                        planetExaltation = "↑";
-                    }
-                    else if (exalt == EExaltation.DEBILITATION)
-                    {
-                        planetExaltation = "↓";
-                    }
-                    planet = new DomPlanet {
-                        PlanetCode = pList[i].PlanetCode,
-                        Retro = pList[i].Retro,
-                        Exaltation = planetExaltation,
-                        IsActiveAspect = false,
-                        ColorCode = (EColor)(CacheLoad._tranzitList.Where(p => p.PlanetId == (int)pList[i].PlanetCode && p.Dom == dom).FirstOrDefault()?.ColorId ?? 0)
-                    };
+                    planetExaltation = "↑";
                 }
-            }*/
+                else if (exalt == EExaltation.DEBILITATION)
+                {
+                    planetExaltation = "↓";
+                }
+
+                if (!isNatal)
+                {
+                    pColor = (EColor)(CacheLoad._tranzitList.Where(p => p.PlanetId == planetId && p.Dom == dom).FirstOrDefault()?.ColorId ?? 0);
+                }
+
+                planet = new DomPlanet
+                {
+                    PlanetCode = (EPlanet)pd.PlanetId,
+                    IsNatalPlanet = isNatal,
+                    Retro = pd.Retro,
+                    Exaltation = planetExaltation,
+                    IsActiveAspect = false,
+                    ColorCode = pColor
+                };
+            }
             return planet;
         }
-
-        private void PrepareTransits(Graphics g, int width, int height)
-        {
-            int posX = 0, posY = 0;
-            // placing dom numbers based on natal moon
-            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            //List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(zList, Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraMoonId, _personInfo.PadaMoon));
-            SettingNumberInDom(g, posX, posY, width, height, zList);
-
-            //Get list of planets per dom
-            List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(zList);
-
-            Font textFont = new Font("Times New Roman", 11, FontStyle.Bold);
-            Font aspectFont = new Font("Times New Roman", 11, FontStyle.Regular);
-            Size textSize = TextRenderer.MeasureText("СоR", textFont);
-
-            for (int i = 0; i < 12; i++)
-                DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
-        }
-
+                
         private void PrepareNatalMoonTransits(Graphics g, int width, int height)
         {
-            int posX = 0, posY = 0;
-            // placing dom numbers based on natal moon
+            int posX = 0, posY = 0, nakshatraId = -1, pada = -1;
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            List<Zodiak> swappedZodiakList = Utility.SwappingZodiakList(zList, Utility.GetZodiakIdFromNakshatraIdandPada(CacheLoad._birthNakshatraMoonId, CacheLoad._birthPadaMoonNumber));
-            SettingNumberInDom(g, posX, posY, width, height, swappedZodiakList);
+            Location birthLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfBirthId).FirstOrDefault();
+            double latitude, longitude;
+            if (double.TryParse(birthLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(birthLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
+                
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
+                nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                int znak = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
 
-            //Get list of planets per dom
-            List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swappedZodiakList);
+                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, znak);
+                SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
 
-            Font textFont = new Font("Times New Roman", 11, FontStyle.Bold);
-            Font aspectFont = new Font("Times New Roman", 11, FontStyle.Regular);
-            Size textSize = TextRenderer.MeasureText("СоR", textFont);
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
 
-            for (int i = 0; i < 12; i++)
-                DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
+                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
+                }
+            }
         }
 
         private void PrepareLagnaTransits(Graphics g, int width, int height)
         {
-            int posX = 0, posY = 0;
-            // placing dom numbers based on lagna
+            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            //int lagnaId = Utility.GetZodiakIdFromNakshatraIdandPada(_personInfo.NakshatraLagnaId, _personInfo.PadaLagna);
-            //List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
-            //SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+            Location livingLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
+            double latitude, longitude;
+            if (double.TryParse(livingLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(livingLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
 
-            //Get list of planets per dom
-            //List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+                nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+                lagnaId = Utility.GetZodiakIdFromDegree(_birthAscendant);
 
-            Font textFont = new Font("Times New Roman", 11, FontStyle.Bold);
-            Font aspectFont = new Font("Times New Roman", 11, FontStyle.Regular);
-            Size textSize = TextRenderer.MeasureText("СоR", textFont);
-            
-            //for (int i = 0; i < 12; i++)
-            //    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
+                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
+                SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+
+                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
+                }
+            }
         }
 
         private void DrawDomWithPlanets(Graphics g, int width, int height, Font textFont, Font aspectFont, int textHeight, List<DomPlanet>[] planetsList, int index)
@@ -389,33 +1428,33 @@ namespace PAD
         {
             int[] listPositionX = new int[12] {  posX + (width / 2),
                                                  posX + (width / 4),
-                                                 posX + (width / 4 - 10),
-                                                 posX + (width / 2 - 10),
-                                                 posX + (width / 4 - 10),
+                                                 posX + (width / 4 - 12),
+                                                 posX + (width / 2 - 12),
+                                                 posX + (width / 4 - 12),
                                                  posX + (width / 4),
                                                  posX + (width / 2),
                                                  posX + ((width - width / 4)),
-                                                 posX + ((width - width / 4) + 10),
-                                                 posX + ((width / 2) + 10),
-                                                 posX + ((width - width / 4) + 10),
+                                                 posX + ((width - width / 4) + 12),
+                                                 posX + ((width / 2) + 12),
+                                                 posX + ((width - width / 4) + 12),
                                                  posX + ((width - width / 4)) };
             return listPositionX;
         }
 
         int[] GetDomNumbersPositionYCoordinate(int posY, int height)
         {
-            int[] listPositionY = new int[12] {  posY + (height / 2 - 10),
-                                                 posY + (height / 4 - 10),
+            int[] listPositionY = new int[12] {  posY + (height / 2 - 12),
+                                                 posY + (height / 4 - 12),
                                                  posY + (height / 4),
                                                  posY + (height / 2),
                                                  posY + ((height - height / 4)),
-                                                 posY + (height - height / 4) + 10,
-                                                 posY + (height / 2) + 10,
-                                                 posY + (height - height / 4) + 10,
+                                                 posY + (height - height / 4) + 12,
+                                                 posY + (height / 2) + 12,
+                                                 posY + (height - height / 4) + 12,
                                                  posY + ((height - height / 4)),
                                                  posY + (height / 2),
                                                  posY + (height / 4),
-                                                 posY + (height / 4 - 10) };
+                                                 posY + (height / 4 - 12) };
             return listPositionY;
         }
 
@@ -1735,7 +2774,7 @@ namespace PAD
             PrepareTransitMapLagna();
         }
 
-        private void checkBoxVenera_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxVenus_CheckedChanged(object sender, EventArgs e)
         {
             if (CheckIfAllPlanetCheckBoxChecked())
                 checkBoxAll.Checked = true;
@@ -1813,36 +2852,11 @@ namespace PAD
             return allUnchecked;
         }
 
-        private void buttonClose_Click(object sender, EventArgs e)
+        private void toolStripTextBoxDate_TextChanged_1(object sender, EventArgs e)
         {
-            Close();
+            PrepareTransitMapMoon();
+            PrepareTransitMapLagna();
+            ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
         }
-
-        private void CalculatePlanetsPosition(DateTime date)
-        {
-            double latitude, longitude;
-            string timeZone = string.Empty;
-            if (Utility.GetGeoCoordinateByLocationId(_personInfo.PlaceOfLivingId, out latitude, out longitude))
-            {
-                //timeZone = Utility.GetTimeZoneIdByGeoCoordinates(latitude, longitude);
-                EpheCalculation eCalc = new EpheCalculation();
-
-                PlanetData moonData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MOON, date);
-                PlanetData sunData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SUN, date);
-                PlanetData mercuryData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MERCURY, date);
-                PlanetData venusData = eCalc.CalculatePlanetData_London(EpheConstants.SE_VENUS, date);
-                PlanetData marsData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MARS, date);
-                PlanetData jupiterData = eCalc.CalculatePlanetData_London(EpheConstants.SE_JUPITER, date);
-                PlanetData saturnData = eCalc.CalculatePlanetData_London(EpheConstants.SE_SATURN, date);
-                PlanetData rahuMeanData = eCalc.CalculatePlanetData_London(EpheConstants.SE_MEAN_NODE, date);
-                PlanetData rahuTrueData = eCalc.CalculatePlanetData_London(EpheConstants.SE_TRUE_NODE, date);
-                PlanetData ketuMeanData = eCalc.CalculateKetu(rahuMeanData);
-                PlanetData ketuTrueData = eCalc.CalculateKetu(rahuTrueData);
-
-            }
-
-        }
-
-        
     }
 }

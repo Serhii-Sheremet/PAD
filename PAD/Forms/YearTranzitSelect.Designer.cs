@@ -41,7 +41,7 @@
             this.labelTranzits.Name = "labelTranzits";
             this.labelTranzits.Size = new System.Drawing.Size(91, 16);
             this.labelTranzits.TabIndex = 16;
-            this.labelTranzits.Text = "Year\'s tranzits";
+            this.labelTranzits.Text = "Year\'s transits";
             // 
             // comboBoxYear
             // 

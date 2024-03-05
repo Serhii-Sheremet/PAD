@@ -1059,7 +1059,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MOONPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1203,7 +1203,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.SUNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1347,7 +1347,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.VENUSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1491,7 +1491,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.JUPITERPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1635,7 +1635,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MERCURYPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1779,7 +1779,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.MARSPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -1923,7 +1923,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.SATURNPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -2085,7 +2085,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.RAHUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;
@@ -2247,7 +2247,7 @@ namespace PAD
                         {
                             desc4 = Utility.GetLocalizedText("House from Lagna", lCode) + ": " + dom + vedha;
                         }
-                        desc5 = Utility.GetLocalizedText("Description of tranzit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
+                        desc5 = Utility.GetLocalizedText("Description of transit", lCode) + ": " + CacheLoad._tranzitDescList.Where(i => i.TranzitId == tr.Id && i.LanguageCode.Equals(lCode.ToString())).FirstOrDefault()?.Description ?? string.Empty;
                         ttEList.Add(new ToolTipEntity { Code = EDVNames.KETUPADA, Title = pName, Period = Utility.GetLocalizedText("Time period", lCode) + ": " + clonedPList.First().DateStart.ToString("dd.MM.yyyy HH:mm:ss") + " - " + clonedPList.First().DateEnd.ToString("dd.MM.yyyy HH:mm:ss"), Description1 = desc1, Description2 = desc2, Description3 = desc3, Description4 = desc4, Description5 = desc5 });
                     }
                     break;

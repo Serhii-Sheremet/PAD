@@ -2,8 +2,8 @@ Personal Astrological Diary|Personal Astrological Diary|en
 Personal Astrological Diary|Персональный Астрологический Ежедневник|ru
 Calendar|Calendar|en
 Calendar|Календарь|ru
-Tranzits|Tranzits|en
-Tranzits|Транзиты|ru
+Transits|Transits|en
+Transits|Транзиты|ru
 OK|OK|en
 OK|OK|ru
 Yes|Yes|en
@@ -60,8 +60,8 @@ Enter profile name.|Enter profile name.|en
 Enter profile name.|Введите имя профиля.|ru
 Choose place of living.|Choose place of living.|en
 Choose place of living.|Выберите место проживания.|ru
-Year's tranzits|Year's tranzits|en
-Year's tranzits|Транзиты на год|ru
+Year's transits|Year's transits|en
+Year's transits|Транзиты на год|ru
 Search:|Search:|en
 Search:|Поиск:|ru
 Locality|Locality|en
@@ -138,10 +138,10 @@ Add as new Profile|Add as new Profile|en
 Add as new Profile|Добавить как новый Профиль|ru
 Default|Default|en
 Default|По умолчанию|ru
-View Tranzit|View Tranzit|en
-View Tranzit|Посмотреть Транзит|ru
-Tranzit Date|Tranzit Date|en
-Tranzit Date|Дата Транзита|ru
+View Transit|View Transit|en
+View Transit|Посмотреть Транзит|ru
+Transit Date|Transit Date|en
+Transit Date|Дата Транзита|ru
 Seconds|Seconds|en
 Seconds|Секунды|ru
 Minutes|Minutes|en
@@ -156,6 +156,16 @@ Year|Year|en
 Year|Год|ru
 Location|Location|en
 Location|Местоположение|ru
+Transit Chart|Transit Chart|en
+Transit Chart|Транзитная Карта|ru
+Transits from Lagna|Transits from Lagna|en
+Transits from Lagna|Транзиты от Лагны|ru
+Transits from Natal Moon|Transits from Natal Moon|en
+Transits from Natal Moon|Транзиты от Натальной Луны|ru
+Natal position of planets|Natal position of planets|en
+Natal position of planets|Натальное положение планет|ru
+Transit position of planets|Transit position of planets|en
+Transit position of planets|Транзитное положение планет|ru
 Color settings|Color settings|en
 Color settings|Конфигурация цветa|ru
 Color settings have been changed. Do you want to apply new settings?|Color settings have been changed. Do you want to apply new settings?|en
@@ -190,14 +200,14 @@ Application settings|Application settings|en
 Application settings|Настройки приложения|ru
 Language|Language|en
 Language|Язык|ru
-Planets tranzits|Planet tranzits|en
-Planets tranzits|Транзиты планет|ru
-Planets tranzits from natal Moon|Planets tranzits from natal Moon|en
-Planets tranzits from natal Moon|Транзиты планет от натальной Луны|ru
-Planets trazits from Lagna|Planets trazits from Lagna|en
-Planets trazits from Lagna|Транзиты планет от Лагны|ru
-Planets tranzits from natal Moon and from Lagna|Planets tranzits from natal Moon and from Lagna|en
-Planets tranzits from natal Moon and from Lagna|Транзиты планет от натальной Луны и от Лагны|ru
+Planets transit|Planets transit|en
+Planets transit|Транзиты планет|ru
+Planets transit from natal Moon|Planets transit from natal Moon|en
+Planets transit from natal Moon|Транзиты планет от натальной Луны|ru
+Planets transit from Lagna|Planets transit from Lagna|en
+Planets transit from Lagna|Транзиты планет от Лагны|ru
+Planets transit from natal Moon and from Lagna|Planets transit from natal Moon and from Lagna|en
+Planets transit from natal Moon and from Lagna|Транзиты планет от натальной Луны и от Лагны|ru
 Hora|Hora|en
 Hora|Хора|ru
 Sunrise-to-Sunset (1/12) + Sunset-to-Sunrise (1/12)|Sunrise-to-Sunset (1/12) + Sunset-to-Sunrise (1/12)|en
@@ -252,8 +262,8 @@ till|till|en
 till|по|ru
 Moon Nakshatra|Moon Nakshatra|en
 Moon Nakshatra|Накшатра Луны|ru
-Tranzit|Tranzit|en
-Tranzit|Транзит|ru
+Transit|Transit|en
+Transit|Транзит|ru
 Zodiac|Zodiac|en
 Zodiac|Зодиак|ru
 Zodiac Sign|Zodiac Sign|en
@@ -348,8 +358,8 @@ House from Lagna|House from Lagna|en
 House from Lagna|Дом от Лагны|ru
 Vedha from|Vedha from|en
 Vedha from|Ведха от|ru
-Description of tranzit|Description of tranzit|en
-Description of tranzit|Описание транзита|ru
+Description of transit|Description of transit|en
+Description of transit|Описание транзита|ru
 Add appointment|Add appointment|en
 Add appointment|Добавить запись|ru
 Edit appointment|Edit appointment|en
