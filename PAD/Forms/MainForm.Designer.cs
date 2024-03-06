@@ -275,8 +275,8 @@
             // 
             // yearsTranzitsToolStripMenuItem
             // 
-            resources.ApplyResources(this.yearsTranzitsToolStripMenuItem, "yearsTranzitsToolStripMenuItem");
             this.yearsTranzitsToolStripMenuItem.Name = "yearsTranzitsToolStripMenuItem";
+            resources.ApplyResources(this.yearsTranzitsToolStripMenuItem, "yearsTranzitsToolStripMenuItem");
             this.yearsTranzitsToolStripMenuItem.Click += new System.EventHandler(this.yearsTranzitsToolStripMenuItem_Click);
             // 
             // swephCalcToolStripMenuItem
