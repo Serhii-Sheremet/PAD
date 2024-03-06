@@ -365,7 +365,7 @@
             this.toolStripTextBoxDate.ReadOnly = true;
             this.toolStripTextBoxDate.Size = new System.Drawing.Size(140, 15);
             this.toolStripTextBoxDate.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.toolStripTextBoxDate.TextChanged += new System.EventHandler(this.toolStripTextBoxDate_TextChanged_1);
+            this.toolStripTextBoxDate.TextChanged += new System.EventHandler(this.toolStripTextBoxDate_TextChanged);
             // 
             // toolStripLabelDate
             // 
@@ -407,7 +407,6 @@
             this.textBoxLivingPlace.ReadOnly = true;
             this.textBoxLivingPlace.Size = new System.Drawing.Size(100, 22);
             this.textBoxLivingPlace.TabIndex = 66;
-            this.textBoxLivingPlace.TextChanged += new System.EventHandler(this.textBoxLivingPlace_TextChanged);
             // 
             // groupBoxYear
             // 

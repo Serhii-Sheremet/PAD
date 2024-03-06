@@ -988,20 +988,18 @@ namespace PAD
             {
                 _location = lForm.SelectedLocation;
                 textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
+                PrepareTransitMapMoon();
+                PrepareTransitMapLagna();
+                ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
             }
         }
-
-        private void textBoxLivingPlace_TextChanged(object sender, EventArgs e)
-        {
-            PrepareTransitMapMoon();
-            PrepareTransitMapLagna();
-            ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
-        }
-
 
         private void toolStripButtonRefresh_Click(object sender, EventArgs e)
         {
             _curDate = DateTime.Now;
+            _location = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
+            textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
+
             toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
             textBoxSeconds.Text = _curDate.Second.ToString();
             textBoxMinutes.Text = _curDate.Minute.ToString();
@@ -1099,8 +1097,10 @@ namespace PAD
                                 DomPlanet newDomPlanet = new DomPlanet
                                 {
                                     PlanetCode = planetsList[planetListCount][planetCount].PlanetCode,
+                                    Longitude = planetsList[planetListCount][planetCount].Longitude,
                                     IsNatalPlanet = planetsList[planetListCount][planetCount].IsNatalPlanet,
                                     Retro = string.Empty,
+                                    Exaltation = string.Empty,
                                     IsActiveAspect = true,
                                     ColorCode = EColor.GRAY
                                 };
@@ -1221,8 +1221,9 @@ namespace PAD
                     planetsList.Add(dPlanet);
                 }
             }
-            
-            return planetsList;
+
+            List<DomPlanet> sortedList = planetsList.OrderBy(i => i.Longitude).ToList();
+            return sortedList;
         }
 
         private DomPlanet GetPlanetIfCurrentZnak(PlanetData pd, bool isNatal, int zodiakId, int dom)
@@ -1262,6 +1263,7 @@ namespace PAD
                 planet = new DomPlanet
                 {
                     PlanetCode = (EPlanet)pd.PlanetId,
+                    Longitude = pd.Longitude,
                     IsNatalPlanet = isNatal,
                     Retro = pd.Retro,
                     Exaltation = planetExaltation,
@@ -1276,10 +1278,10 @@ namespace PAD
         {
             int posX = 0, posY = 0, nakshatraId = -1, pada = -1;
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            Location birthLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfBirthId).FirstOrDefault();
+            //Location birthLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfBirthId).FirstOrDefault();
             double latitude, longitude;
-            if (double.TryParse(birthLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
-                double.TryParse(birthLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            if (double.TryParse(_location.Latitude /*birthLocation.Latitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude /*birthLocation.Longitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
             {
                 _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
                 _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
@@ -1310,10 +1312,10 @@ namespace PAD
         {
             int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
             List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            Location livingLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
+            //Location livingLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
             double latitude, longitude;
-            if (double.TryParse(livingLocation.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
-                double.TryParse(livingLocation.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            if (double.TryParse(_location.Latitude /*livingLocation.Latitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude /*livingLocation.Longitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
             {
                 _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
                 _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
@@ -2852,11 +2854,5 @@ namespace PAD
             return allUnchecked;
         }
 
-        private void toolStripTextBoxDate_TextChanged_1(object sender, EventArgs e)
-        {
-            PrepareTransitMapMoon();
-            PrepareTransitMapLagna();
-            ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
-        }
     }
 }
