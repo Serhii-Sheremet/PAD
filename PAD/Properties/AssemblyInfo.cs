@@ -13,9 +13,9 @@ using System.Runtime.InteropServices;
 #else
 [assembly: AssemblyConfiguration("Release")]
 #endif
-[assembly: AssemblyCompany("Sergey Sheremet")]
+[assembly: AssemblyCompany("Serhii Sheremet")]
 [assembly: AssemblyProduct("Personal Astrological Diary")]
-[assembly: AssemblyCopyright("Copyright © Sergey Sheremet 2020")]
+[assembly: AssemblyCopyright("Copyright © Serhii Sheremet 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -2734,7 +2734,7 @@ namespace PAD
             listViewProfile.Columns.Add("", listViewProfile.Width, HorizontalAlignment.Left);
 
             ImageList imgs = new ImageList();
-            imgs.Images.Add(Properties.Resources.green_check_32);
+            imgs.Images.Add(Properties.Resources.Apply);
             listViewProfile.SmallImageList = imgs;
         }
 

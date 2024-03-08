@@ -63,9 +63,9 @@ namespace PAD.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap close_10 {
+        internal static System.Drawing.Bitmap Apply {
             get {
-                object obj = ResourceManager.GetObject("close_10", resourceCulture);
+                object obj = ResourceManager.GetObject("Apply", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace PAD.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap green_check_32 {
+        internal static System.Drawing.Bitmap close_10 {
             get {
-                object obj = ResourceManager.GetObject("green_check_32", resourceCulture);
+                object obj = ResourceManager.GetObject("close_10", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
