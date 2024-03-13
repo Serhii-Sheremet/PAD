@@ -33,9 +33,10 @@ namespace PAD
             int Znak = Utility.GetZodiakIdFromDegree(houses[0]);
             label1.Text = "House: " + houses[0] + "     " + Znak;*/
 
-            DateTime calcDate = new DateTime(2024, 2, 22, 0, 0, 0);
+            DateTime calcDate = new DateTime(2024, 3, 13, 0, 0, 0);
 
-            double risetime = eCalc.SunRiseCalculation(calcDate, 52.25, 21, 0, 0, 0);
+            double risetime = eCalc.SunRiseCalculation(calcDate, 52.25, 21, 0, 0, 0, EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_HINDU_RISING);
+            // double risetime = eCalc.SunRiseCalculation(calcDate, 52.25, 21, 0, 0, 0, EpheConstants.SE_CALC_SET | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION);
             DateTime sunriseTime = eCalc.DateTimeFromJulday(risetime);
             label1.Text = "Sunrise: " + risetime + "      " + sunriseTime;
         }

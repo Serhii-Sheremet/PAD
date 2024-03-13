@@ -1200,10 +1200,10 @@ namespace PAD
             return ascmc;
         }
 
-        public double SunRiseCalculation(DateTime calcDate, double lat, double lon, double alt, double atpress, double attemp)
+        public double SunRiseCalculation(DateTime calcDate, double lat, double lon, double alt, double atpress, double attemp, int rsmi)
         {
-            // int rsmi = EpheConstants.SE_CALC_RISE;
-            // int rsmi = EpheConstants.SE_CALC_SET;
+            // rsmi = EpheConstants.SE_CALC_SET | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION;
+            // rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_HINDU_RISING;
             double[] geopos = { lon, lat, alt };
 
             EpheFunctions.swe_set_topo(geopos[0], geopos[1], geopos[2]);
@@ -1222,10 +1222,10 @@ namespace PAD
             double dt = lon / 360.0;
             tjd_ut -= dt;
 
-            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION;
+            //int rsmi = EpheConstants.SE_CALC_RISE;
             //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER + EpheConstants.SE_BIT_NO_REFRACTION;
             //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION | EpheConstants.SE_BIT_GEOCTR_NO_ECL_LAT;
-            int rsmi = EpheConstants.SE_CALC_RISE;
+            //int rsmi = EpheConstants.SE_CALC_RISE;
 
 
             int ipl = EpheConstants.SE_SUN;
@@ -1292,7 +1292,7 @@ namespace PAD
             double leftoverMinutes = (hour[0] - Math.Floor(hour[0])) * 60;
             double seconds = Math.Floor( (leftoverMinutes - Math.Floor(leftoverMinutes)) * 60 );
 
-            DateTime dateTime = new DateTime(year[0], month[0], day[0], Convert.ToInt32(hour[0]), Convert.ToInt32(leftoverMinutes), Convert.ToInt32(seconds));
+            DateTime dateTime = new DateTime(year[0], month[0], day[0], Convert.ToInt32(hour[0]), Convert.ToInt32(Math.Floor(leftoverMinutes)), Convert.ToInt32(seconds));
             return dateTime;
         }
 
