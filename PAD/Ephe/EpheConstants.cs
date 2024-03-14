@@ -245,6 +245,13 @@
                                                             * risings and settings. */
         public const int SE_BIT_HINDU_RISING = (SE_BIT_DISC_CENTER | SE_BIT_NO_REFRACTION | SE_BIT_GEOCTR_NO_ECL_LAT);
 
+        //  ---- my custom sunrise const ----
+        public const int SE_SUNRISE_TIP = (SE_CALC_RISE | SE_BIT_GEOCTR_NO_ECL_LAT);
+        public const int SE_SUNRISE_CENTER = (SE_CALC_RISE | SE_BIT_DISC_CENTER | SE_BIT_GEOCTR_NO_ECL_LAT);
+        public const int SE_SUNSET_TIP = (SE_CALC_SET | SE_BIT_GEOCTR_NO_ECL_LAT);
+        public const int SE_SUNSET_CENTER = (SE_CALC_SET | SE_BIT_DISC_CENTER | SE_BIT_GEOCTR_NO_ECL_LAT);
+        //  ----------------------------------
+
         /* for swe_azalt() and swe_azalt_rev() */
         public const int SE_ECL2HOR = 0;
         public const int SE_EQU2HOR = 1;

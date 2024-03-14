@@ -1,5 +1,4 @@
 ﻿using GeoTimeZone;
-using Innovative.SolarCalculator;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -811,24 +810,64 @@ namespace PAD
         public static DateTime? CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
             DateTime? sunrise = null;
-            SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
+            int rsmi = 0;
+            double risetime = 0.0;
+
+            EpheCalculation eCalc = new EpheCalculation();
+            EAppSetting sunriseSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.SUNRISE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+            switch (sunriseSetting)
+            {
+                case EAppSetting.SUNRISETIP:
+                    rsmi = EpheConstants.SE_SUNRISE_TIP;
+                    risetime = eCalc.SunRiseCalculation(date, latitude, longitude, 0, 0, 0, rsmi);
+                    sunrise = eCalc.DateTimeFromJulday(risetime);
+                    break;
+
+                case EAppSetting.SUNRISECENTER:
+                    rsmi = EpheConstants.SE_SUNRISE_CENTER;
+                    risetime = eCalc.SunRiseCalculation(date, latitude, longitude, 0, 0, 0, rsmi);
+                    sunrise = eCalc.DateTimeFromJulday(risetime);
+                    break;
+            }
+
+            //SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
             //LocalDateTime localDateTime = date.ToLocalDateTime();
             //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
-            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
             //return solarTimes.Sunrise.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
+            //sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
             return sunrise;
         }
 
         public static DateTime? CalculateSunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
             DateTime? sunset = null;
-            SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
+            int rsmi = 0;
+            double risetime = 0.0;
+
+            EpheCalculation eCalc = new EpheCalculation();
+            EAppSetting sunriseSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.SUNRISE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+            switch (sunriseSetting)
+            {
+                case EAppSetting.SUNRISETIP:
+                    rsmi = EpheConstants.SE_SUNSET_TIP;
+                    risetime = eCalc.SunRiseCalculation(date, latitude, longitude, 0, 0, 0, rsmi);
+                    sunset = eCalc.DateTimeFromJulday(risetime);
+                    break;
+
+                case EAppSetting.SUNRISECENTER:
+                    rsmi = EpheConstants.SE_SUNSET_CENTER;
+                    risetime = eCalc.SunRiseCalculation(date, latitude, longitude, 0, 0, 0, rsmi);
+                    sunset = eCalc.DateTimeFromJulday(risetime);
+                    break;
+            }
+
+            //SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
             //LocalDateTime localDateTime = date.ToLocalDateTime();
             //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
             //return solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
+            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            //sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
             return sunset;
         }
 
