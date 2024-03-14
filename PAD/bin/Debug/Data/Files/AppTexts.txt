@@ -34,6 +34,10 @@ Tools|Tools|en
 Tools|Инструменты|ru
 English|English|en
 English|English|ru
+Ukrainian|Ukrainian|en
+Ukrainian|Українська|ru
+Polish|Polish|en
+Polish|Polski|ru
 Russian|Russian|en
 Russian|Русский|ru
 Help|Help|en
@@ -248,6 +252,12 @@ Sunday|Sunday|en
 Sunday|Воскресенье|ru
 Monday|Monday|en
 Monday|Понедельник|ru
+Sunrise Calculation|Sunrise Calculation|en
+Sunrise Calculation|Вычисления восхода Солнца|ru
+Visible Tip of Sun's Disk|Visible Tip of Sun's Disk|en
+Visible Tip of Sun's Disk|Видимый верхний край диска Солнца|ru
+Visible Center of Sun's Disk|Visible Center of Sun's Disk|en
+Visible Center of Sun's Disk|Видимый центр диска Солнца|ru
 Configuration settings has been changed. Do you want to apply new settings?|Configuration settings has been changed. Do you want to apply new settings?|en
 Configuration settings has been changed. Do you want to apply new settings?|Настройки приложения были изменены. Применить изменения?|ru
 In order to apply changes application has to be restarted. Do you want to restart application now?|In order to apply changes application has to be restarted. Do you want to restart application now?|en

@@ -8,6 +8,7 @@
         MUHURTAGHATI = 4,
         MRITYUBHAGA = 5,
         NODE = 6,
-        WEEK = 7
+        WEEK = 7,
+        SUNRISE = 8
     }
 }

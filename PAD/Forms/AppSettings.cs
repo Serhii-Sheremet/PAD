@@ -36,6 +36,7 @@ namespace PAD
         private EAppSetting _newSelectedMBMode;
         private EAppSetting _newSelectedNodeMode;
         private EAppSetting _newSelectedWeekMode;
+        private EAppSetting _newSelectedSunriseMode;
         private bool _langChanged;
         private bool _tranChanged;
         private bool _horaChanged;
@@ -43,6 +44,7 @@ namespace PAD
         private bool _mbChanged;
         private bool _nodeChanged;
         private bool _weekChanged;
+        private bool _sunriseChanged;
 
         public AppSettings()
         {
@@ -61,6 +63,7 @@ namespace PAD
             _mbChanged = false;
             _nodeChanged = false;
             _weekChanged = false;
+            _sunriseChanged = false;
             _appSetList = appSetList;
             _activeLang = aLang;
             _activeLanguageSetting = Utility.GetActiveLanguageCode(_appSetList);
@@ -69,7 +72,7 @@ namespace PAD
         
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            if (_langChanged || _tranChanged || _horaChanged || _mgChanged || _mbChanged || _nodeChanged || _weekChanged)
+            if (_langChanged || _tranChanged || _horaChanged || _mgChanged || _mbChanged || _nodeChanged || _weekChanged || _sunriseChanged)
             {
                 DialogResult dialogResult = frmShowMessage.Show(Utility.GetLocalizedText("Configuration settings has been changed. Do you want to apply new settings?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
                 if (dialogResult == DialogResult.Yes)
@@ -108,11 +111,29 @@ namespace PAD
             {
                 case EAppSetting.ENGLISH:
                     checkBoxEnlish.BackColor = Color.DeepSkyBlue;
+                    checkBoxUkrainian.BackColor = Color.LightGray;
+                    checkBoxPolish.BackColor = Color.LightGray;
+                    checkBoxRussian.BackColor = Color.LightGray;
+                    break;
+
+                case EAppSetting.UKRAINIAN:
+                    checkBoxEnlish.BackColor = Color.LightGray;
+                    checkBoxUkrainian.BackColor = Color.DeepSkyBlue;
+                    checkBoxPolish.BackColor = Color.LightGray;
+                    checkBoxRussian.BackColor = Color.LightGray;
+                    break;
+
+                case EAppSetting.POLISH:
+                    checkBoxEnlish.BackColor = Color.LightGray;
+                    checkBoxUkrainian.BackColor = Color.LightGray;
+                    checkBoxPolish.BackColor = Color.DeepSkyBlue;
                     checkBoxRussian.BackColor = Color.LightGray;
                     break;
 
                 case EAppSetting.RUSSIAN:
                     checkBoxEnlish.BackColor = Color.LightGray;
+                    checkBoxUkrainian.BackColor = Color.LightGray;
+                    checkBoxPolish.BackColor = Color.LightGray;
                     checkBoxRussian.BackColor = Color.DeepSkyBlue;
                     break;
             }
@@ -126,6 +147,7 @@ namespace PAD
             EAppSetting activeMB = Utility.GetActiveMrityuBhagaMode(_appSetList);
             EAppSetting activeNode = Utility.GetActiveNodeMode(_appSetList);
             EAppSetting activeWeek = Utility.GetActiveWeekMode(_appSetList);
+            EAppSetting activeSunrise = Utility.GetActiveSunriseMode(_appSetList);
             switch (activeTranzit)
             {
                 case EAppSetting.TRANZITMOON:
@@ -196,6 +218,15 @@ namespace PAD
                     checkBoxWeekMonday.Checked = true;
                     break;
             }
+            switch (activeSunrise)
+            {
+                case EAppSetting.SUNRISETIP:
+                    checkBoxSunriseTip.Checked = true;
+                    break;
+                case EAppSetting.SUNRISECENTER:
+                    checkBoxSunriseCenter.Checked = true;
+                    break;
+            }
         }
 
         private void buttonDefault_Click(object sender, EventArgs e)
@@ -210,6 +241,7 @@ namespace PAD
                 UpdateAppSetting(EAppSettingList.MRITYUBHAGA, EAppSetting.MRITYUBHAGANEQUAL);
                 UpdateAppSetting(EAppSettingList.NODE, EAppSetting.NODEMEAN);
                 UpdateAppSetting(EAppSettingList.WEEK, EAppSetting.WEEKSUNDAY);
+                UpdateAppSetting(EAppSettingList.SUNRISE, EAppSetting.SUNRISETIP);
                 CacheLoad._appSettingList = CacheLoad.GetAppSettingsList();
 
                 DialogResult dialogRestartResultLang = frmShowMessage.Show(Utility.GetLocalizedText("In order to apply changes application has to be restarted. Do you want to restart application now?", _activeLang), Utility.GetLocalizedText("Confirmation", _activeLang), enumMessageIcon.Question, enumMessageButton.YesNo);
@@ -279,6 +311,11 @@ namespace PAD
             {
                 _newSelectedWeekMode = GetSelecteWeekMode();
                 UpdateAppSetting(EAppSettingList.WEEK, _newSelectedWeekMode);
+            }
+            if (_sunriseChanged)
+            {
+                _newSelectedSunriseMode = GetSelecteSunriseMode();
+                UpdateAppSetting(EAppSettingList.SUNRISE, _newSelectedSunriseMode);
             }
         }
 
@@ -371,6 +408,16 @@ namespace PAD
                 return EAppSetting.WEEKMONDAY;
 
             return EAppSetting.WEEKSUNDAY;
+        }
+
+        private EAppSetting GetSelecteSunriseMode()
+        {
+            if (checkBoxSunriseTip.Checked)
+                return EAppSetting.SUNRISETIP;
+            if (checkBoxSunriseCenter.Checked)
+                return EAppSetting.SUNRISECENTER;
+
+            return EAppSetting.SUNRISETIP;
         }
 
         private void CheckTranzitCheckboxDefault()
@@ -704,6 +751,15 @@ namespace PAD
             }
         }
 
+        private void CheckSunriseCheckboxDefault()
+        {
+            if (!checkBoxSunriseTip.Checked && !checkBoxSunriseCenter.Checked)
+            {
+                checkBoxSunriseTip.Checked = true;
+                checkBoxSunriseCenter.Checked = false;
+            }
+        }
+
         private void checkBoxWeekSunday_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBoxWeekSunday.Checked)
@@ -815,6 +871,117 @@ namespace PAD
                 _langChanged = false;
             }
         }
-        
+
+        private void checkBoxUkrainian_Click(object sender, EventArgs e)
+        {
+            checkBoxUkrainian.BackColor = Color.DeepSkyBlue;
+            checkBoxUkrainian.BackColor = Color.LightGray;
+            _newSelectedLanguage = EAppSetting.UKRAINIAN;
+            if (Utility.GetActiveLanguageCode(_appSetList) != _newSelectedLanguage)
+            {
+                _langChanged = true;
+            }
+            else
+            {
+                _langChanged = false;
+            }
+        }
+
+        private void checkBoxUkrainian_MouseEnter(object sender, EventArgs e)
+        {
+            checkBoxUkrainian.BackColor = Color.Yellow;
+        }
+
+        private void checkBoxUkrainian_MouseLeave(object sender, EventArgs e)
+        {
+            if (_activeLanguageSetting != EAppSetting.UKRAINIAN && !_langChanged)
+            {
+                checkBoxUkrainian.BackColor = Color.LightGray;
+            }
+            else
+            {
+                if (_newSelectedLanguage == EAppSetting.UKRAINIAN)
+                {
+                    checkBoxUkrainian.BackColor = Color.DeepSkyBlue;
+                }
+                else
+                {
+                    checkBoxUkrainian.BackColor = Color.LightGray;
+                }
+            }
+        }
+
+        private void checkBoxPolish_Click(object sender, EventArgs e)
+        {
+            checkBoxPolish.BackColor = Color.DeepSkyBlue;
+            checkBoxPolish.BackColor = Color.LightGray;
+            _newSelectedLanguage = EAppSetting.POLISH;
+            if (Utility.GetActiveLanguageCode(_appSetList) != _newSelectedLanguage)
+            {
+                _langChanged = true;
+            }
+            else
+            {
+                _langChanged = false;
+            }
+        }
+
+        private void checkBoxPolish_MouseEnter(object sender, EventArgs e)
+        {
+            checkBoxPolish.BackColor = Color.Yellow;
+        }
+
+        private void checkBoxPolish_MouseLeave(object sender, EventArgs e)
+        {
+            if (_activeLanguageSetting != EAppSetting.POLISH && !_langChanged)
+            {
+                checkBoxPolish.BackColor = Color.LightGray;
+            }
+            else
+            {
+                if (_newSelectedLanguage == EAppSetting.POLISH)
+                {
+                    checkBoxPolish.BackColor = Color.DeepSkyBlue;
+                }
+                else
+                {
+                    checkBoxPolish.BackColor = Color.LightGray;
+                }
+            }
+        }
+
+        private void checkBoxSunriseTip_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSunriseTip.Checked)
+            {
+                checkBoxSunriseCenter.Checked = false;
+            }
+            CheckSunriseCheckboxDefault();
+
+            if (checkBoxSunriseTip.Checked)
+            {
+                if (Utility.GetActiveSunriseMode(_appSetList) != EAppSetting.SUNRISETIP)
+                {
+                    _sunriseChanged = true;
+                }
+            }
+        }
+
+        private void checkBoxSunriseCenter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxSunriseCenter.Checked)
+            {
+                checkBoxSunriseTip.Checked = false;
+            }
+            CheckSunriseCheckboxDefault();
+
+            if (checkBoxSunriseCenter.Checked)
+            {
+                if (Utility.GetActiveSunriseMode(_appSetList) != EAppSetting.SUNRISECENTER)
+                {
+                    _sunriseChanged = true;
+                }
+            }
+        }
     }
 }

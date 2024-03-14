@@ -44,6 +44,10 @@
             this.checkBoxMuhurtsEqual = new System.Windows.Forms.CheckBox();
             this.checkBoxMuhurtsSunRise = new System.Windows.Forms.CheckBox();
             this.groupBoxLanguage = new System.Windows.Forms.GroupBox();
+            this.labelPolish = new System.Windows.Forms.Label();
+            this.labelUkrainian = new System.Windows.Forms.Label();
+            this.checkBoxPolish = new System.Windows.Forms.CheckBox();
+            this.checkBoxUkrainian = new System.Windows.Forms.CheckBox();
             this.labelRussian = new System.Windows.Forms.Label();
             this.labelEnglish = new System.Windows.Forms.Label();
             this.checkBoxRussian = new System.Windows.Forms.CheckBox();
@@ -61,6 +65,9 @@
             this.groupBoxWeek = new System.Windows.Forms.GroupBox();
             this.checkBoxWeekMonday = new System.Windows.Forms.CheckBox();
             this.checkBoxWeekSunday = new System.Windows.Forms.CheckBox();
+            this.groupBoxSunrise = new System.Windows.Forms.GroupBox();
+            this.checkBoxSunriseCenter = new System.Windows.Forms.CheckBox();
+            this.checkBoxSunriseTip = new System.Windows.Forms.CheckBox();
             this.groupBoxTranzits.SuspendLayout();
             this.groupBoxHora.SuspendLayout();
             this.groupBoxMuhurtaGhati.SuspendLayout();
@@ -68,13 +75,14 @@
             this.groupBoxMrityuBhaga.SuspendLayout();
             this.groupBoxNodes.SuspendLayout();
             this.groupBoxWeek.SuspendLayout();
+            this.groupBoxSunrise.SuspendLayout();
             this.SuspendLayout();
             // 
             // buttonClose
             // 
             this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonClose.Location = new System.Drawing.Point(755, 322);
+            this.buttonClose.Location = new System.Drawing.Point(753, 396);
             this.buttonClose.Margin = new System.Windows.Forms.Padding(4);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(80, 28);
@@ -87,7 +95,7 @@
             // 
             this.buttonApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonApply.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonApply.Location = new System.Drawing.Point(641, 322);
+            this.buttonApply.Location = new System.Drawing.Point(639, 396);
             this.buttonApply.Margin = new System.Windows.Forms.Padding(4);
             this.buttonApply.Name = "buttonApply";
             this.buttonApply.Size = new System.Drawing.Size(100, 28);
@@ -101,9 +109,9 @@
             this.groupBoxTranzits.Controls.Add(this.checkBoxBoth);
             this.groupBoxTranzits.Controls.Add(this.checkBoxLagna);
             this.groupBoxTranzits.Controls.Add(this.checkBoxMoon);
-            this.groupBoxTranzits.Location = new System.Drawing.Point(12, 148);
+            this.groupBoxTranzits.Location = new System.Drawing.Point(12, 270);
             this.groupBoxTranzits.Name = "groupBoxTranzits";
-            this.groupBoxTranzits.Size = new System.Drawing.Size(360, 152);
+            this.groupBoxTranzits.Size = new System.Drawing.Size(360, 108);
             this.groupBoxTranzits.TabIndex = 10;
             this.groupBoxTranzits.TabStop = false;
             this.groupBoxTranzits.Text = "Planets transit";
@@ -111,7 +119,7 @@
             // checkBoxBoth
             // 
             this.checkBoxBoth.AutoSize = true;
-            this.checkBoxBoth.Location = new System.Drawing.Point(13, 111);
+            this.checkBoxBoth.Location = new System.Drawing.Point(13, 78);
             this.checkBoxBoth.Name = "checkBoxBoth";
             this.checkBoxBoth.Size = new System.Drawing.Size(303, 20);
             this.checkBoxBoth.TabIndex = 2;
@@ -122,7 +130,7 @@
             // checkBoxLagna
             // 
             this.checkBoxLagna.AutoSize = true;
-            this.checkBoxLagna.Location = new System.Drawing.Point(13, 67);
+            this.checkBoxLagna.Location = new System.Drawing.Point(13, 51);
             this.checkBoxLagna.Name = "checkBoxLagna";
             this.checkBoxLagna.Size = new System.Drawing.Size(179, 20);
             this.checkBoxLagna.TabIndex = 1;
@@ -133,7 +141,7 @@
             // checkBoxMoon
             // 
             this.checkBoxMoon.AutoSize = true;
-            this.checkBoxMoon.Location = new System.Drawing.Point(13, 25);
+            this.checkBoxMoon.Location = new System.Drawing.Point(13, 24);
             this.checkBoxMoon.Name = "checkBoxMoon";
             this.checkBoxMoon.Size = new System.Drawing.Size(207, 20);
             this.checkBoxMoon.TabIndex = 0;
@@ -231,21 +239,79 @@
             // 
             // groupBoxLanguage
             // 
+            this.groupBoxLanguage.Controls.Add(this.labelPolish);
+            this.groupBoxLanguage.Controls.Add(this.labelUkrainian);
+            this.groupBoxLanguage.Controls.Add(this.checkBoxPolish);
+            this.groupBoxLanguage.Controls.Add(this.checkBoxUkrainian);
             this.groupBoxLanguage.Controls.Add(this.labelRussian);
             this.groupBoxLanguage.Controls.Add(this.labelEnglish);
             this.groupBoxLanguage.Controls.Add(this.checkBoxRussian);
             this.groupBoxLanguage.Controls.Add(this.checkBoxEnlish);
             this.groupBoxLanguage.Location = new System.Drawing.Point(12, 6);
             this.groupBoxLanguage.Name = "groupBoxLanguage";
-            this.groupBoxLanguage.Size = new System.Drawing.Size(360, 140);
+            this.groupBoxLanguage.Size = new System.Drawing.Size(360, 262);
             this.groupBoxLanguage.TabIndex = 14;
             this.groupBoxLanguage.TabStop = false;
             this.groupBoxLanguage.Text = "Language";
             // 
+            // labelPolish
+            // 
+            this.labelPolish.AutoSize = true;
+            this.labelPolish.Location = new System.Drawing.Point(68, 235);
+            this.labelPolish.Name = "labelPolish";
+            this.labelPolish.Size = new System.Drawing.Size(44, 16);
+            this.labelPolish.TabIndex = 10;
+            this.labelPolish.Text = "Polish";
+            // 
+            // labelUkrainian
+            // 
+            this.labelUkrainian.AutoSize = true;
+            this.labelUkrainian.Location = new System.Drawing.Point(225, 111);
+            this.labelUkrainian.Name = "labelUkrainian";
+            this.labelUkrainian.Size = new System.Drawing.Size(64, 16);
+            this.labelUkrainian.TabIndex = 9;
+            this.labelUkrainian.Text = "Ukrainian";
+            // 
+            // checkBoxPolish
+            // 
+            this.checkBoxPolish.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxPolish.AutoEllipsis = true;
+            this.checkBoxPolish.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.checkBoxPolish.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxPolish.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxPolish.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxPolish.Image")));
+            this.checkBoxPolish.Location = new System.Drawing.Point(39, 148);
+            this.checkBoxPolish.Margin = new System.Windows.Forms.Padding(5);
+            this.checkBoxPolish.Name = "checkBoxPolish";
+            this.checkBoxPolish.Size = new System.Drawing.Size(112, 83);
+            this.checkBoxPolish.TabIndex = 8;
+            this.checkBoxPolish.UseVisualStyleBackColor = false;
+            this.checkBoxPolish.Click += new System.EventHandler(this.checkBoxPolish_Click);
+            this.checkBoxPolish.MouseEnter += new System.EventHandler(this.checkBoxPolish_MouseEnter);
+            this.checkBoxPolish.MouseLeave += new System.EventHandler(this.checkBoxPolish_MouseLeave);
+            // 
+            // checkBoxUkrainian
+            // 
+            this.checkBoxUkrainian.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxUkrainian.AutoEllipsis = true;
+            this.checkBoxUkrainian.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.checkBoxUkrainian.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxUkrainian.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxUkrainian.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxUkrainian.Image")));
+            this.checkBoxUkrainian.Location = new System.Drawing.Point(204, 24);
+            this.checkBoxUkrainian.Margin = new System.Windows.Forms.Padding(5);
+            this.checkBoxUkrainian.Name = "checkBoxUkrainian";
+            this.checkBoxUkrainian.Size = new System.Drawing.Size(112, 83);
+            this.checkBoxUkrainian.TabIndex = 7;
+            this.checkBoxUkrainian.UseVisualStyleBackColor = false;
+            this.checkBoxUkrainian.Click += new System.EventHandler(this.checkBoxUkrainian_Click);
+            this.checkBoxUkrainian.MouseEnter += new System.EventHandler(this.checkBoxUkrainian_MouseEnter);
+            this.checkBoxUkrainian.MouseLeave += new System.EventHandler(this.checkBoxUkrainian_MouseLeave);
+            // 
             // labelRussian
             // 
             this.labelRussian.AutoSize = true;
-            this.labelRussian.Location = new System.Drawing.Point(231, 111);
+            this.labelRussian.Location = new System.Drawing.Point(231, 235);
             this.labelRussian.Name = "labelRussian";
             this.labelRussian.Size = new System.Drawing.Size(56, 16);
             this.labelRussian.TabIndex = 6;
@@ -268,7 +334,7 @@
             this.checkBoxRussian.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxRussian.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxRussian.Image = ((System.Drawing.Image)(resources.GetObject("checkBoxRussian.Image")));
-            this.checkBoxRussian.Location = new System.Drawing.Point(205, 24);
+            this.checkBoxRussian.Location = new System.Drawing.Point(204, 148);
             this.checkBoxRussian.Margin = new System.Windows.Forms.Padding(5);
             this.checkBoxRussian.Name = "checkBoxRussian";
             this.checkBoxRussian.Size = new System.Drawing.Size(112, 83);
@@ -300,7 +366,7 @@
             // 
             this.buttonDefault.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonDefault.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonDefault.Location = new System.Drawing.Point(12, 322);
+            this.buttonDefault.Location = new System.Drawing.Point(12, 396);
             this.buttonDefault.Margin = new System.Windows.Forms.Padding(4);
             this.buttonDefault.Name = "buttonDefault";
             this.buttonDefault.Size = new System.Drawing.Size(210, 28);
@@ -443,12 +509,46 @@
             this.checkBoxWeekSunday.UseVisualStyleBackColor = true;
             this.checkBoxWeekSunday.CheckedChanged += new System.EventHandler(this.checkBoxWeekSunday_CheckedChanged);
             // 
+            // groupBoxSunrise
+            // 
+            this.groupBoxSunrise.Controls.Add(this.checkBoxSunriseCenter);
+            this.groupBoxSunrise.Controls.Add(this.checkBoxSunriseTip);
+            this.groupBoxSunrise.Location = new System.Drawing.Point(381, 303);
+            this.groupBoxSunrise.Name = "groupBoxSunrise";
+            this.groupBoxSunrise.Size = new System.Drawing.Size(454, 75);
+            this.groupBoxSunrise.TabIndex = 19;
+            this.groupBoxSunrise.TabStop = false;
+            this.groupBoxSunrise.Text = "Sunrise Calculation";
+            // 
+            // checkBoxSunriseCenter
+            // 
+            this.checkBoxSunriseCenter.AutoSize = true;
+            this.checkBoxSunriseCenter.Location = new System.Drawing.Point(13, 45);
+            this.checkBoxSunriseCenter.Name = "checkBoxSunriseCenter";
+            this.checkBoxSunriseCenter.Size = new System.Drawing.Size(189, 20);
+            this.checkBoxSunriseCenter.TabIndex = 1;
+            this.checkBoxSunriseCenter.Text = "Visible Center of Sun\'s Disk";
+            this.checkBoxSunriseCenter.UseVisualStyleBackColor = true;
+            this.checkBoxSunriseCenter.CheckedChanged += new System.EventHandler(this.checkBoxSunriseCenter_CheckedChanged);
+            // 
+            // checkBoxSunriseTip
+            // 
+            this.checkBoxSunriseTip.AutoSize = true;
+            this.checkBoxSunriseTip.Location = new System.Drawing.Point(13, 21);
+            this.checkBoxSunriseTip.Name = "checkBoxSunriseTip";
+            this.checkBoxSunriseTip.Size = new System.Drawing.Size(170, 20);
+            this.checkBoxSunriseTip.TabIndex = 0;
+            this.checkBoxSunriseTip.Text = "Visible Tip of Sun\'s Disk";
+            this.checkBoxSunriseTip.UseVisualStyleBackColor = true;
+            this.checkBoxSunriseTip.CheckedChanged += new System.EventHandler(this.checkBoxSunriseTip_CheckedChanged);
+            // 
             // AppSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(848, 361);
+            this.ClientSize = new System.Drawing.Size(848, 444);
+            this.Controls.Add(this.groupBoxSunrise);
             this.Controls.Add(this.groupBoxWeek);
             this.Controls.Add(this.groupBoxNodes);
             this.Controls.Add(this.groupBoxMrityuBhaga);
@@ -483,6 +583,8 @@
             this.groupBoxNodes.PerformLayout();
             this.groupBoxWeek.ResumeLayout(false);
             this.groupBoxWeek.PerformLayout();
+            this.groupBoxSunrise.ResumeLayout(false);
+            this.groupBoxSunrise.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -520,5 +622,12 @@
         private System.Windows.Forms.CheckBox checkBoxWeekMonday;
         private System.Windows.Forms.CheckBox checkBoxWeekSunday;
         private System.Windows.Forms.CheckBox checkBoxMrityuErnst;
+        private System.Windows.Forms.Label labelPolish;
+        private System.Windows.Forms.Label labelUkrainian;
+        private System.Windows.Forms.CheckBox checkBoxPolish;
+        private System.Windows.Forms.CheckBox checkBoxUkrainian;
+        private System.Windows.Forms.GroupBox groupBoxSunrise;
+        private System.Windows.Forms.CheckBox checkBoxSunriseCenter;
+        private System.Windows.Forms.CheckBox checkBoxSunriseTip;
     }
 }

@@ -517,32 +517,37 @@ namespace PAD
         
         public static EAppSetting GetActiveTranzitMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.TRANZIT.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 3);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.TRANZIT.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 5);
         }
 
         public static EAppSetting GetActiveHoraMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.HORA.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 7);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.HORA.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 9);
         }
 
         public static EAppSetting GetActiveMuhurtaGhatiMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.MUHURTAGHATI.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 10);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.MUHURTAGHATI.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 12);
         }
 
         public static EAppSetting GetActiveMrityuBhagaMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 12);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.MRITYUBHAGA.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 17);
         }
 
         public static EAppSetting GetActiveNodeMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 15);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 18);
         }
 
         public static EAppSetting GetActiveWeekMode(List<AppSettingList> appSetList)
         {
-            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 17);
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.WEEK.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 20);
+        }
+
+        public static EAppSetting GetActiveSunriseMode(List<AppSettingList> appSetList)
+        {
+            return (EAppSetting)(appSetList.Where(i => i.GroupCode.Equals(EAppSettingList.SUNRISE.ToString()) && i.Active == 1).FirstOrDefault()?.Id ?? 22);
         }
 
         public static string GetLocalizedText(string nativeText, ELanguage langCode)

@@ -3,6 +3,8 @@
     public enum ELanguage
     {
         en = 1,
-        ru = 2
+        ua = 2,
+        pl = 3,
+        ru = 4
     }
 }

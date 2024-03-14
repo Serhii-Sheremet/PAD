@@ -1,2 +1,4 @@
 1|en|en-US
-2|ru|ru-RU
+2|ua|uk-UA
+3|pl|pl-PL
+4|ru|ru-RU
