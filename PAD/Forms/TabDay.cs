@@ -2289,12 +2289,12 @@ namespace PAD
                     }
                     if (!tte.Description2.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8) + 4;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description2, textFont, formWidth - 8) + 8;
                         formHeight += 8;
                     }
                     if (!tte.Description3.Equals(string.Empty))
                     {
-                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, textFont, formWidth - 8) + 4;
+                        formHeight += Utility.CalculateRectangleHeightWithTextWrapping(tte.Description3, textFont, formWidth - 8) + 8;
                         formHeight += 8;
                     }
                     if (!tte.Description4.Equals(string.Empty))
@@ -2308,7 +2308,7 @@ namespace PAD
                         formHeight += 8;
                     }
                 }
-                formHeight += 12;
+                formHeight += 20;
 
                 toolTip = new Popup(dayViewToolTip = new DayViewToolTip(ttEList, formWidth, formHeight, titleFont, timeFont, textFont));
                 toolTip.AutoClose = false;
