@@ -3037,9 +3037,16 @@ namespace PAD
 
         private void ModifyProfile(int pId)
         {
-            int locationId = SelectedProfile.PlaceOfLivingId;
+            int birthLocationId = SelectedProfile.PlaceOfBirthId;
+            int currentLocationId = SelectedProfile.PlaceOfLivingId;
+            if (_selectedBirthLocation != null)
+            {
+                birthLocationId = _selectedBirthLocation.Id;
+            }
             if (_selectedLivingLocation != null)
-                locationId = _selectedLivingLocation.Id;
+            {
+                currentLocationId = _selectedLivingLocation.Id;
+            }
 
             Profile newProfile = new Profile
             {
@@ -3047,8 +3054,8 @@ namespace PAD
                 PersonName = textBoxPersonName.Text,
                 PersonSurname = textBoxPersonSurname.Text,
                 DateOfBirth = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture),
-                PlaceOfBirthId = CacheLoad._locationList.Where(i => i.Id == _selectedBirthLocation.Id).FirstOrDefault()?.Id ?? 0,
-                PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == locationId).FirstOrDefault()?.Id ?? 0,
+                PlaceOfBirthId = CacheLoad._locationList.Where(i => i.Id == birthLocationId).FirstOrDefault()?.Id ?? 0,
+                PlaceOfLivingId = CacheLoad._locationList.Where(i => i.Id == currentLocationId).FirstOrDefault()?.Id ?? 0,
                 Message = richTextBoxNotes.Text
             };
 
