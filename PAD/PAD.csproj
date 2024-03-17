@@ -195,6 +195,7 @@
     <Compile Include="Enums\EFontStyle.cs" />
     <Compile Include="Enums\EGhati60.cs" />
     <Compile Include="Enums\EHoraPlanet.cs" />
+    <Compile Include="Enums\ETransitType.cs" />
     <Compile Include="Enums\EYoga.cs" />
     <Compile Include="Enums\ELanguage.cs" />
     <Compile Include="Enums\EMuhurta.cs" />
@@ -370,6 +371,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\GoogleTimeZone .cs" />
     <Compile Include="Utilities\KeyValueData.cs" />
+    <Compile Include="Utilities\TransitChart.cs" />
     <Compile Include="Utilities\Utility.cs" />
     <EmbeddedResource Include="Forms\About.resx">
       <DependentUpon>About.cs</DependentUpon>

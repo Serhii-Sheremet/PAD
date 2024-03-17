@@ -34,7 +34,12 @@ namespace PAD
         private double _birthAscendant;
         private double _curAscendant;
         private Profile _profile;
-        
+
+        private int _spaceLenght = 5;
+        private double _chartHeightCoeficient = 0.7;
+        private int _chartWidth = 0;
+        private int _chartHeight = 0;
+
         public TransitsMap()
         {
             InitializeComponent();
@@ -70,7 +75,67 @@ namespace PAD
         {
             Utility.LocalizeForm(this, _activeLang);
 
-            toolStripLabelProfile.Text = _profile.ProfileName;
+            labelLagna.Top = toolStripProfileMenu.Height + _spaceLenght;
+            labelLagna.Left = _spaceLenght;
+            
+            int topSpace = labelLagna.Top + labelLagna.Height + _spaceLenght;
+            int panelWidth = this.Width - groupBoxSeconds.Width;
+
+            panelTranzits.Width = panelWidth;
+            _chartWidth = (panelWidth / 3) - 10;
+            _chartHeight = (int)(_chartWidth * _chartHeightCoeficient);
+            
+            pictureBoxMapLagna.Width = _chartWidth;
+            pictureBoxMapLagna.Height = _chartHeight;
+            pictureBoxMapLagna.Top = topSpace;
+            pictureBoxMapLagna.Left = _spaceLenght;
+
+            pictureBoxMapMoon.Width = _chartWidth;
+            pictureBoxMapMoon.Height = _chartHeight;
+            pictureBoxMapMoon.Top = topSpace;
+            pictureBoxMapMoon.Left = pictureBoxMapLagna.Width + 2 * _spaceLenght;
+
+            labelNatalMoon.Top = toolStripProfileMenu.Height + _spaceLenght;
+            labelNatalMoon.Left = pictureBoxMapMoon.Left;
+
+            pictureBoxMap.Width = _chartWidth;
+            pictureBoxMap.Height = _chartHeight;
+            pictureBoxMap.Top = topSpace;
+            pictureBoxMap.Left = pictureBoxMapLagna.Width + pictureBoxMapMoon.Width + 3 * _spaceLenght;
+
+            labelCurrent.Top = toolStripProfileMenu.Height + _spaceLenght;
+            labelCurrent.Left = pictureBoxMap.Left;
+
+            int topGridSpace = topSpace + pictureBoxMapLagna.Height + _spaceLenght;
+            labelPeriodRuler.Top = topGridSpace;
+            labelPeriodRuler.Left = pictureBoxMapLagna.Left;
+            labelNatal.Top = topGridSpace;
+            labelNatal.Left = pictureBoxMapMoon.Left;
+            labelTranzit.Top = topGridSpace;
+            labelTranzit.Left = pictureBoxMap.Left;
+
+            pictureBoxPeriodRuler.Width = _chartWidth;
+            pictureBoxPeriodRuler.Height = _chartHeight;
+            pictureBoxPeriodRuler.Top = topGridSpace + labelPeriodRuler.Height + _spaceLenght;
+            pictureBoxPeriodRuler.Left = _spaceLenght;
+
+            dataGridViewInfoNatal.Top = topGridSpace + labelNatal.Height + _spaceLenght;
+            dataGridViewInfoNatal.Left = pictureBoxMapMoon.Left;
+            dataGridViewInfoTranzit.Top = topGridSpace + labelTranzit.Height + _spaceLenght;
+            dataGridViewInfoTranzit.Left = pictureBoxMap.Left;
+
+            int groupBoxTop = pictureBoxMap.Top;
+            int groupBoxHeight = groupBoxSeconds.Height;
+            groupBoxSeconds.Top = groupBoxTop;
+            groupBoxMinutes.Top = groupBoxTop + groupBoxHeight + 2;
+            groupBoxHours.Top = groupBoxTop + 2 * groupBoxHeight + 2;
+            groupBoxDay.Top = groupBoxTop + 3 * groupBoxHeight + 2;
+            groupBoxMonth.Top = groupBoxTop + 4 * groupBoxHeight + 2;
+            groupBoxYear.Top = groupBoxTop + 5 * groupBoxHeight + 2;
+
+            groupBoxAspects.Top = dataGridViewInfoTranzit.Top;
+            groupBoxAspects.Left = groupBoxSeconds.Left;
+
             toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
             textBoxSeconds.Text = _curDate.Second.ToString();
             textBoxMinutes.Text = _curDate.Minute.ToString();
@@ -81,11 +146,11 @@ namespace PAD
             textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
 
             ProfileInfoDataGridViewNatalFillByRow(_activeLang);
-        }
 
-        private void buttonClose_Click(object sender, EventArgs e)
-        {
-            Close();
+            groupBoxEventInfo.Top = dataGridViewInfoTranzit.Top + dataGridViewInfoTranzit.Height + _spaceLenght;  
+            groupBoxEventInfo.Left = groupBoxAspects.Left;
+            groupBoxEventInfo.Height = this.Bottom - dataGridViewInfoTranzit.Bottom - _spaceLenght - 8;;
+            richTextBoxEventDesc.Height = groupBoxEventInfo.Height - richTextBoxEventDesc.Top - 5;
         }
 
         private void textBoxSeconds_KeyPress(object sender, KeyPressEventArgs e)
@@ -371,6 +436,8 @@ namespace PAD
 
         private void PrepareDataGridInfoTranzit(ELanguage langCode)
         {
+            dataGridViewInfoTranzit.Width = 380;
+
             dataGridViewInfoTranzit.AutoGenerateColumns = false;
             dataGridViewInfoTranzit.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
             dataGridViewInfoTranzit.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
@@ -427,6 +494,8 @@ namespace PAD
 
         private void PrepareDataGridInfoNatal(ELanguage langCode)
         {
+            dataGridViewInfoNatal.Width = 380;
+
             dataGridViewInfoNatal.AutoGenerateColumns = false;
             dataGridViewInfoNatal.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
             dataGridViewInfoNatal.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
@@ -990,6 +1059,8 @@ namespace PAD
                 textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
+                PrepareGeneralTransitMap();
+                PreparePeriodRulerMap();
                 ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
             }
         }
@@ -1013,7 +1084,36 @@ namespace PAD
         {
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
             ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
+        }
+
+        private void PreparePeriodRulerMap()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxPeriodRuler.Width, pictureBoxPeriodRuler.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxPeriodRuler.Width - 1, height = pictureBoxPeriodRuler.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            PrepareNatalMoonTransits(g, width, height);
+            pictureBoxPeriodRuler.Image = canvas;
         }
 
         private void PrepareTransitMapMoon()
@@ -1039,9 +1139,41 @@ namespace PAD
             g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
             g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
 
-            // drawing content
             PrepareNatalMoonTransits(g, width, height);
             pictureBoxMapMoon.Image = canvas;
+        }
+
+        private void PrepareNatalMoonTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0, nakshatraId = -1, pada = -1;
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+            double latitude, longitude;
+            if (double.TryParse(_location.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
+
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
+                nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                int znak = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
+
+                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, znak);
+                TransitChart.SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+
+                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+                }
+            }
         }
 
         private void PrepareTransitMapLagna()
@@ -1072,6 +1204,109 @@ namespace PAD
             pictureBoxMapLagna.Image = canvas;
         }
 
+        private void PrepareLagnaTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+            double latitude, longitude;
+            if (double.TryParse(_location.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
+
+                nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+                lagnaId = Utility.GetZodiakIdFromDegree(_birthAscendant);
+
+                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
+                TransitChart.SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+
+                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+                }
+            }
+        }
+        
+        private void PrepareGeneralTransitMap()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxMap.Width, pictureBoxMap.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxMap.Width - 1, height = pictureBoxMap.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            // drawing content
+            PrepareGeneralTransits(g, width, height);
+            pictureBoxMap.Image = canvas;
+        }
+
+        private void PrepareGeneralTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
+            // placing dom numbers based on lagna
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+
+            nakshatraId = Utility.GetNakshatraIdFromDegree(_curAscendant);
+            pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_curAscendant));
+            lagnaId = Utility.GetZodiakIdFromDegree(_curAscendant);
+
+            List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
+            TransitChart.SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+
+            //Get list of planets per dom
+            List<DomPlanet>[] planetsList = GetGeneralPlanetsListWithAspects(swapZodiakList);
+
+            Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+            Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+            Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+            for (int i = 0; i < 12; i++)
+            {
+                TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+            }
+        }
+
+        private List<DomPlanet>[] GetGeneralPlanetsListWithAspects(List<Zodiak> zList)
+        {
+            List<DomPlanet>[] fullList = new List<DomPlanet>[12];
+
+            for (int i = 0; i < zList.Count; i++)
+            {
+                fullList[i] = TransitChart.GetGeneralPlanetsListByZnak(_pdList, zList[i].Id, (i + 1));
+            }
+
+            if (CheckIfAspectsActive())
+            {
+                fullList = AddAspects(fullList);
+            }
+
+            return fullList;
+        }
+
         private bool CheckIfAspectsActive()
         {
             bool active = false;
@@ -1092,13 +1327,13 @@ namespace PAD
                         List<int> aspectList = GetAspectDomsListByPlanet(planetsList[planetListCount][planetCount].PlanetCode);
                         for (int aspectCount = 0; aspectCount < aspectList.Count; aspectCount++)
                         {
-                            if (!planetsList[planetListCount][planetCount].IsNatalPlanet)
+                            if (planetsList[planetListCount][planetCount].TransitType != ETransitType.TRANSITBIRTH)
                             {
                                 DomPlanet newDomPlanet = new DomPlanet
                                 {
                                     PlanetCode = planetsList[planetListCount][planetCount].PlanetCode,
                                     Longitude = planetsList[planetListCount][planetCount].Longitude,
-                                    IsNatalPlanet = planetsList[planetListCount][planetCount].IsNatalPlanet,
+                                    TransitType = planetsList[planetListCount][planetCount].TransitType,
                                     Retro = string.Empty,
                                     Exaltation = string.Empty,
                                     IsActiveAspect = true,
@@ -1173,7 +1408,7 @@ namespace PAD
 
             for (int i = 0; i < zList.Count; i++)
             {
-                fullList[i] = GetPlanetsListByZnak(zList[i].Id, (i + 1));
+                fullList[i] = TransitChart.GetPlanetsListByZnak(_pdBirthList, _pdList, zList[i].Id, (i + 1));
             }
 
             if (CheckIfAspectsActive())
@@ -1182,1538 +1417,6 @@ namespace PAD
             }
 
             return fullList;
-        }
-
-        private List<DomPlanet> GetPlanetsListByZnak(int zodiakId, int dom)
-        {
-            List<DomPlanet> planetsList = new List<DomPlanet>();
-            EAppSetting nodeSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
-
-            List<PlanetData> pdTunedNatalList = Utility.ClonePlanetDataList(_pdBirthList);
-            List<PlanetData> pdTunedTranzitList = Utility.ClonePlanetDataList(_pdList);
-
-            if (nodeSetting == EAppSetting.NODEMEAN)
-            {
-                var planetToRemove = new[] { 10, 11 };
-                pdTunedNatalList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
-                pdTunedTranzitList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
-            }
-            if (nodeSetting == EAppSetting.NODETRUE)
-            {
-                var planetToRemove = new[] { 8, 9 };
-                pdTunedNatalList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
-                pdTunedTranzitList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
-            }
-
-            for (int i = 0; i < pdTunedNatalList.Count; i++)
-            {
-                DomPlanet dPlanet = GetPlanetIfCurrentZnak(pdTunedNatalList[i], true, zodiakId, dom);
-                if (dPlanet != null)
-                {
-                    planetsList.Add(dPlanet);
-                }
-            }
-            for (int i = 0; i < pdTunedTranzitList.Count; i++)
-            {
-                DomPlanet dPlanet = GetPlanetIfCurrentZnak(pdTunedTranzitList[i], false, zodiakId, dom);
-                if (dPlanet != null)
-                {
-                    planetsList.Add(dPlanet);
-                }
-            }
-
-            List<DomPlanet> sortedList = planetsList.OrderBy(i => i.Longitude).ToList();
-            return sortedList;
-        }
-
-        private DomPlanet GetPlanetIfCurrentZnak(PlanetData pd, bool isNatal, int zodiakId, int dom)
-        {
-            DomPlanet planet = null;
-            EColor pColor = EColor.BLACK;
-            string planetExaltation = string.Empty;
-            int currentZodiakId = CacheLoad._zodiakList.Where(i => i.Id == zodiakId).FirstOrDefault()?.Id ?? 0;
-
-            int planetId = pd.PlanetId;
-            if (planetId == 10)
-            {
-                planetId = 8;
-            }
-            if (planetId == 11)
-            {
-                planetId = 9;
-            }
-
-            if (pd.ZodiakId == currentZodiakId)
-            {
-                EExaltation exalt = Utility.GetExaltationByPlanetAndZnak((EPlanet)planetId, (EZodiak)zodiakId);
-                if (exalt == EExaltation.EXALTATION)
-                {
-                    planetExaltation = "↑";
-                }
-                else if (exalt == EExaltation.DEBILITATION)
-                {
-                    planetExaltation = "↓";
-                }
-
-                if (!isNatal)
-                {
-                    pColor = (EColor)(CacheLoad._tranzitList.Where(p => p.PlanetId == planetId && p.Dom == dom).FirstOrDefault()?.ColorId ?? 0);
-                }
-
-                planet = new DomPlanet
-                {
-                    PlanetCode = (EPlanet)pd.PlanetId,
-                    Longitude = pd.Longitude,
-                    IsNatalPlanet = isNatal,
-                    Retro = pd.Retro,
-                    Exaltation = planetExaltation,
-                    IsActiveAspect = false,
-                    ColorCode = pColor
-                };
-            }
-            return planet;
-        }
-                
-        private void PrepareNatalMoonTransits(Graphics g, int width, int height)
-        {
-            int posX = 0, posY = 0, nakshatraId = -1, pada = -1;
-            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            //Location birthLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfBirthId).FirstOrDefault();
-            double latitude, longitude;
-            if (double.TryParse(_location.Latitude /*birthLocation.Latitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
-                double.TryParse(_location.Longitude /*birthLocation.Longitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
-            {
-                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
-                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
-                
-                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.MOON).FirstOrDefault().Longitude;
-                nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
-                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
-                int znak = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
-
-                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, znak);
-                SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
-
-                //Get list of planets per dom
-                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
-
-                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
-                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
-                Size textSize = TextRenderer.MeasureText("СоR", textFont);
-
-                for (int i = 0; i < 12; i++)
-                {
-                    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
-                }
-            }
-        }
-
-        private void PrepareLagnaTransits(Graphics g, int width, int height)
-        {
-            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
-            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
-            //Location livingLocation = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
-            double latitude, longitude;
-            if (double.TryParse(_location.Latitude /*livingLocation.Latitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
-                double.TryParse(_location.Longitude /*livingLocation.Longitude*/, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
-            {
-                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
-                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
-
-                nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
-                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
-                lagnaId = Utility.GetZodiakIdFromDegree(_birthAscendant);
-
-                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, lagnaId);
-                SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
-
-                //Get list of planets per dom
-                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
-
-                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
-                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
-                Size textSize = TextRenderer.MeasureText("СоR", textFont);
-
-                for (int i = 0; i < 12; i++)
-                {
-                    DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i);
-                }
-            }
-        }
-
-        private void DrawDomWithPlanets(Graphics g, int width, int height, Font textFont, Font aspectFont, int textHeight, List<DomPlanet>[] planetsList, int index)
-        {
-            switch (index)
-            {
-                case 0:
-                    DrawDom1(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 1:
-                    DrawDom2(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 2:
-                    DrawDom3(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 3:
-                    DrawDom4(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 4:
-                    DrawDom5(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 5:
-                    DrawDom6(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 6:
-                    DrawDom7(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 7:
-                    DrawDom8(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 8:
-                    DrawDom9(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 9:
-                    DrawDom10(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 10:
-                    DrawDom11(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-
-                case 11:
-                    DrawDom12(g, width, height, textFont, aspectFont, textHeight, planetsList[index]);
-                    break;
-            }
-        }
-
-        private string PreparePlanetName(DomPlanet dp)
-        {
-            string type = string.Empty, exaltation = string.Empty;
-            if (dp.Retro.Equals("R") && dp.PlanetCode != EPlanet.RAHUMEAN && dp.PlanetCode != EPlanet.KETUMEAN && dp.PlanetCode != EPlanet.RAHUTRUE && dp.PlanetCode != EPlanet.KETUTRUE)
-            {
-                type = dp.Retro;
-            }
-            else if (!dp.Retro.Equals("R") && dp.PlanetCode != EPlanet.RAHUMEAN && dp.PlanetCode != EPlanet.KETUMEAN && dp.PlanetCode != EPlanet.RAHUTRUE && dp.PlanetCode != EPlanet.KETUTRUE)
-            {
-                exaltation = dp.Exaltation;
-            }
-            return Utility.GetLocalizedPlanetNameByCode(dp.PlanetCode, _activeLang).Substring(0, 2) + type + exaltation;
-        }
-
-        private void SettingNumberInDom(Graphics g, int posX, int posY, int width, int height, List<Zodiak> zList)
-        {
-            Font textFont = new Font(FontFamily.GenericSansSerif, 10, FontStyle.Regular);
-            SolidBrush textBrush = new SolidBrush(Color.Black);
-
-            StringFormat sf = new StringFormat();
-            sf.LineAlignment = StringAlignment.Center;
-            sf.Alignment = StringAlignment.Center;
-
-            int[] domZnakPositionX = GetDomNumbersPositionXCoordinate(posY, width);
-            int[] domZnakPositionY = GetDomNumbersPositionYCoordinate(posY, height);
-            for (int i = 0; i < zList.Count; i++)
-            {
-                g.DrawString(zList[i].Id.ToString(), textFont, textBrush, domZnakPositionX[i], domZnakPositionY[i], sf);
-            }
-        }
-
-        int[] GetDomNumbersPositionXCoordinate(int posX, int width)
-        {
-            int[] listPositionX = new int[12] {  posX + (width / 2),
-                                                 posX + (width / 4),
-                                                 posX + (width / 4 - 12),
-                                                 posX + (width / 2 - 12),
-                                                 posX + (width / 4 - 12),
-                                                 posX + (width / 4),
-                                                 posX + (width / 2),
-                                                 posX + ((width - width / 4)),
-                                                 posX + ((width - width / 4) + 12),
-                                                 posX + ((width / 2) + 12),
-                                                 posX + ((width - width / 4) + 12),
-                                                 posX + ((width - width / 4)) };
-            return listPositionX;
-        }
-
-        int[] GetDomNumbersPositionYCoordinate(int posY, int height)
-        {
-            int[] listPositionY = new int[12] {  posY + (height / 2 - 12),
-                                                 posY + (height / 4 - 12),
-                                                 posY + (height / 4),
-                                                 posY + (height / 2),
-                                                 posY + ((height - height / 4)),
-                                                 posY + (height - height / 4) + 12,
-                                                 posY + (height / 2) + 12,
-                                                 posY + (height - height / 4) + 12,
-                                                 posY + ((height - height / 4)),
-                                                 posY + (height / 2),
-                                                 posY + (height / 4),
-                                                 posY + (height / 4 - 12) };
-            return listPositionY;
-        }
-
-        private void DrawDom1(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 - 40;
-            int topLineWidth = (width / 2 * (height / 4 - textHeight) / (height / 4)) - 40;
-
-            bool mainLeft = false, mainRight = false, topLeft = false, topRight = false, bottomLeft = false, bottomRight = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedTopWidthLeft = 0, usedTopWidthRight = 0;
-            int usedBottomWidthLeft = 0, usedBottomWidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if(!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedMainWidthLeft - textSize.Width), posY + (height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedMainWidthLeft - textSize.Width), posY + (height / 4 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedMainWidthRight), posY + (height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedMainWidthRight), posY + (height / 4 - textSize.Height / 2));
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedTopWidthLeft + usedTopWidthRight + textSize.Width <= topLineWidth)
-                    {
-                        if (!topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width / 2;
-                            usedTopWidthRight += textSize.Width / 2;
-                            topLeft = true;
-                        }
-                        else if (topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedTopWidthLeft - textSize.Width), posY + (height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedTopWidthLeft - textSize.Width), posY + (height / 4 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width;
-                            topLeft = false;
-                            topRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedTopWidthRight), posY + (height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedTopWidthRight), posY + (height / 4 - textSize.Height - 8));
-                            usedTopWidthRight += textSize.Width;
-                            topLeft = true;
-                            topRight = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height / 4 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width / 2;
-                            usedBottomWidthRight += textSize.Width / 2;
-                            bottomLeft = true;
-                        }
-                        else if (bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedBottomWidthLeft - textSize.Width), posY + (height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedBottomWidthLeft - textSize.Width), posY + (height / 4 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width;
-                            bottomLeft = false;
-                            bottomRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedBottomWidthRight), posY + (height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedBottomWidthRight), posY + (height / 4 + textSize.Height - 8));
-                            usedBottomWidthRight += textSize.Width;
-                            bottomLeft = true;
-                            bottomRight = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom2(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 * (height / 4 - 6) / (height / 4) - 40;
-            int Bottom1LineWidth = width / 2 * (height / 4 - textHeight - 6) / (height / 4) - 40;
-            int Bottom2LineWidth = width / 2 * (height / 4 * textHeight - 2) / (height / 4);
-
-            bool mainLeft = false, mainRight = false, bottom1Left = false, bottom1Right = false, bottom2Left = false, bottom2Right = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedBottom1WidthLeft = 0, usedBottom1WidthRight = 0;
-            int usedBottom2WidthLeft = 0, usedBottom2WidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + 4);
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + 4);
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + 4);
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedBottom1WidthLeft + usedBottom1WidthRight + textSize.Width <= Bottom1LineWidth)
-                    {
-                        if (!bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + textHeight + 4);
-                            usedBottom1WidthLeft += textSize.Width / 2;
-                            usedBottom1WidthRight += textSize.Width / 2;
-                            bottom1Left = true;
-                        }
-                        else if (bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom1WidthLeft - textSize.Width), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom1WidthLeft - textSize.Width), posY + textHeight + 4);
-                            usedBottom1WidthLeft += textSize.Width;
-                            bottom1Left = false;
-                            bottom1Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom1WidthRight), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom1WidthRight), posY + textHeight + 4);
-                            usedBottom1WidthRight += textSize.Width;
-                            bottom1Left = true;
-                            bottom1Right = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + 2 * textHeight + 4);
-                            usedBottom2WidthLeft += textSize.Width / 2;
-                            usedBottom2WidthRight += textSize.Width / 2;
-                            bottom2Left = true;
-                        }
-                        else if (bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom2WidthLeft - textSize.Width), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom2WidthLeft - textSize.Width), posY + 2 * textHeight + 4);
-                            usedBottom2WidthLeft += textSize.Width;
-                            bottom2Left = false;
-                            bottom2Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom2WidthRight), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom2WidthRight), posY + 2 * textHeight + 4);
-                            usedBottom2WidthRight += textSize.Width;
-                            bottom2Left = true;
-                            bottom2Right = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom3(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 4 - 20;
-            int top1LineWidth = width / 4 * (height / 4 - textHeight) / (height / 4);
-            int top2LineWidth = width / 4 * (height / 4 - 2 * textHeight) / (height / 4);
-
-            int usedMainWidth = 0, usedTop1Width = 0, usedTop2Width = 0, usedBottom1Width = 0, usedBottom2Width = 0;
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidth + textSize.Width <= mainLineWidth)
-                {
-                    if (!displayPlanetsList[i].IsActiveAspect)
-                        g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedMainWidth + 4, posY + (height / 4 - textSize.Height / 2));
-                    else
-                        g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedMainWidth + 4, posY + (height / 4 - textSize.Height / 2));
-                    usedMainWidth += textSize.Width;
-                }
-                else
-                {
-                    if (usedTop1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop1Width + 4, posY + (height / 4 - textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop1Width + 4, posY + (height / 4 - textSize.Height - 8));
-                        usedTop1Width += textSize.Width;
-                    }
-                    else if (usedBottom1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom1Width + 4, posY + (height / 4 + textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom1Width + 4, posY + (height / 4 + textSize.Height - 4));
-                        usedBottom1Width += textSize.Width;
-                    }
-                    else if (usedTop2Width + textSize.Width <= top2LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop2Width + 4, posY + (height / 4 - 2 * textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop2Width + 4, posY + (height / 4 - 2 * textSize.Height - 8));
-                        usedTop2Width += textSize.Width;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom2Width + 4, posY + (height / 4 + 2 * textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom2Width + 4, posY + (height / 4 + 2 * textSize.Height - 4));
-                        usedBottom2Width += textSize.Width;
-                    }
-                }
-            }
-        }
-
-        private void DrawDom4(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 - 40;
-            int topLineWidth = (width / 2 * (height / 4 - textHeight) / (height / 4)) - 40;
-
-            bool mainLeft = false, mainRight = false, topLeft = false, topRight = false, bottomLeft = false, bottomRight = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedTopWidthLeft = 0, usedTopWidthRight = 0;
-            int usedBottomWidthLeft = 0, usedBottomWidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedTopWidthLeft + usedTopWidthRight + textSize.Width <= topLineWidth)
-                    {
-                        if (!topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width / 2;
-                            usedTopWidthRight += textSize.Width / 2;
-                            topLeft = true;
-                        }
-                        else if (topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedTopWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedTopWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width;
-                            topLeft = false;
-                            topRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedTopWidthRight), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedTopWidthRight), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthRight += textSize.Width;
-                            topLeft = true;
-                            topRight = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width / 2;
-                            usedBottomWidthRight += textSize.Width / 2;
-                            bottomLeft = true;
-                        }
-                        else if (bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottomWidthLeft - textSize.Width), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottomWidthLeft - textSize.Width), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width;
-                            bottomLeft = false;
-                            bottomRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottomWidthRight), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottomWidthRight), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthRight += textSize.Width;
-                            bottomLeft = true;
-                            bottomRight = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom5(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 4 - 20;
-            int top1LineWidth = width / 4 * (height / 4 - textHeight) / (height / 4);
-            int top2LineWidth = width / 4 * (height / 4 - 2 * textHeight) / (height / 4);
-
-            int usedMainWidth = 0, usedTop1Width = 0, usedTop2Width = 0, usedBottom1Width = 0, usedBottom2Width = 0;
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidth + textSize.Width <= mainLineWidth)
-                {
-                    if (!displayPlanetsList[i].IsActiveAspect)
-                        g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedMainWidth + 4, posY + (height - height / 4 - textSize.Height / 2));
-                    else
-                        g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedMainWidth + 4, posY + (height - height / 4 - textSize.Height / 2));
-                    usedMainWidth += textSize.Width;
-                }
-                else
-                {
-                    if (usedTop1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop1Width + 4, posY + (height - height / 4 - textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop1Width + 4, posY + (height - height / 4 - textSize.Height - 8));
-                        usedTop1Width += textSize.Width;
-                    }
-                    else if (usedBottom1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom1Width + 4, posY + (height - height / 4 + textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom1Width + 4, posY + (height - height / 4 + textSize.Height - 4));
-                        usedBottom1Width += textSize.Width;
-                    }
-                    else if (usedTop2Width + textSize.Width <= top2LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop2Width + 4, posY + (height - height / 4 - 2 * textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedTop2Width + 4, posY + (height - height / 4 - 2 * textSize.Height - 8));
-                        usedTop2Width += textSize.Width;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom2Width + 4, posY + (height - height / 4 + 2 * textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + usedBottom2Width + 4, posY + (height - height / 4 + 2 * textSize.Height - 4));
-                        usedBottom2Width += textSize.Width;
-                    }
-                }
-            }
-        }
-
-        private void DrawDom6(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 * (height / 4 - 6) / (height / 4) - 40;
-            int Bottom1LineWidth = width / 2 * (height / 4 - textHeight - 6) / (height / 4) - 40;
-            int Bottom2LineWidth = width / 2 * (height / 4 * textHeight - 2) / (height / 4);
-
-            bool mainLeft = false, mainRight = false, bottom1Left = false, bottom1Right = false, bottom2Left = false, bottom2Right = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedBottom1WidthLeft = 0, usedBottom1WidthRight = 0;
-            int usedBottom2WidthLeft = 0, usedBottom2WidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - textHeight - 4);
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedMainWidthLeft - textSize.Width), posY + height - textHeight - 4);
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedMainWidthRight), posY + height - textHeight - 4);
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedBottom1WidthLeft + usedBottom1WidthRight + textSize.Width <= Bottom1LineWidth)
-                    {
-                        if (!bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthLeft += textSize.Width / 2;
-                            usedBottom1WidthRight += textSize.Width / 2;
-                            bottom1Left = true;
-                        }
-                        else if (bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom1WidthLeft - textSize.Width), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom1WidthLeft - textSize.Width), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthLeft += textSize.Width;
-                            bottom1Left = false;
-                            bottom1Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom1WidthRight), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom1WidthRight), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthRight += textSize.Width;
-                            bottom1Left = true;
-                            bottom1Right = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - textSize.Width / 2), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthLeft += textSize.Width / 2;
-                            usedBottom2WidthRight += textSize.Width / 2;
-                            bottom2Left = true;
-                        }
-                        else if (bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom2WidthLeft - textSize.Width), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 - usedBottom2WidthLeft - textSize.Width), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthLeft += textSize.Width;
-                            bottom2Left = false;
-                            bottom2Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom2WidthRight), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 4 + usedBottom2WidthRight), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthRight += textSize.Width;
-                            bottom2Left = true;
-                            bottom2Right = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom7(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 - 40;
-            int topLineWidth = (width / 2 * (height / 4 - textHeight) / (height / 4)) - 40;
-
-            bool mainLeft = false, mainRight = false, topLeft = false, topRight = false, bottomLeft = false, bottomRight = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedTopWidthLeft = 0, usedTopWidthRight = 0;
-            int usedBottomWidthLeft = 0, usedBottomWidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedMainWidthLeft - textSize.Width), posY + (height - height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedMainWidthLeft - textSize.Width), posY + (height - height / 4 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedMainWidthRight), posY + (height - height / 4 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedMainWidthRight), posY + (height - height / 4 - textSize.Height / 2));
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedTopWidthLeft + usedTopWidthRight + textSize.Width <= topLineWidth)
-                    {
-                        if (!topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width / 2;
-                            usedTopWidthRight += textSize.Width / 2;
-                            topLeft = true;
-                        }
-                        else if (topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedTopWidthLeft - textSize.Width), posY + (height - height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedTopWidthLeft - textSize.Width), posY + (height - height / 4 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width;
-                            topLeft = false;
-                            topRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedTopWidthRight), posY + (height - height / 4 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedTopWidthRight), posY + (height - height / 4 - textSize.Height - 8));
-                            usedTopWidthRight += textSize.Width;
-                            topLeft = true;
-                            topRight = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - textSize.Width / 2), posY + (height - height / 4 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width / 2;
-                            usedBottomWidthRight += textSize.Width / 2;
-                            bottomLeft = true;
-                        }
-                        else if (bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedBottomWidthLeft - textSize.Width), posY + (height - height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 - usedBottomWidthLeft - textSize.Width), posY + (height - height / 4 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width;
-                            bottomLeft = false;
-                            bottomRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedBottomWidthRight), posY + (height - height / 4 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width / 2 + usedBottomWidthRight), posY + (height - height / 4 + textSize.Height - 8));
-                            usedBottomWidthRight += textSize.Width;
-                            bottomLeft = true;
-                            bottomRight = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom8(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 * (height / 4 - 6) / (height / 4) - 40;
-            int Bottom1LineWidth = width / 2 * (height / 4 - textHeight - 6) / (height / 4) - 40;
-            int Bottom2LineWidth = width / 2 * (height / 4 * textHeight - 2) / (height / 4);
-
-            bool mainLeft = false, mainRight = false, bottom1Left = false, bottom1Right = false, bottom2Left = false, bottom2Right = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedBottom1WidthLeft = 0, usedBottom1WidthRight = 0;
-            int usedBottom2WidthLeft = 0, usedBottom2WidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - textHeight - 4);
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + height - textHeight - 4);
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + height - textHeight - 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + height - textHeight - 4);
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedBottom1WidthLeft + usedBottom1WidthRight + textSize.Width <= Bottom1LineWidth)
-                    {
-                        if (!bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthLeft += textSize.Width / 2;
-                            usedBottom1WidthRight += textSize.Width / 2;
-                            bottom1Left = true;
-                        }
-                        else if (bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom1WidthLeft - textSize.Width), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom1WidthLeft - textSize.Width), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthLeft += textSize.Width;
-                            bottom1Left = false;
-                            bottom1Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom1WidthRight), posY + height - 2 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom1WidthRight), posY + height - 2 * textHeight - 4);
-                            usedBottom1WidthRight += textSize.Width;
-                            bottom1Left = true;
-                            bottom1Right = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthLeft += textSize.Width / 2;
-                            usedBottom2WidthRight += textSize.Width / 2;
-                            bottom2Left = true;
-                        }
-                        else if (bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom2WidthLeft - textSize.Width), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom2WidthLeft - textSize.Width), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthLeft += textSize.Width;
-                            bottom2Left = false;
-                            bottom2Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom2WidthRight), posY + height - 3 * textHeight - 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom2WidthRight), posY + height - 3 * textHeight - 4);
-                            usedBottom2WidthRight += textSize.Width;
-                            bottom2Left = true;
-                            bottom2Right = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom9(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 4 - 20;
-            int top1LineWidth = width / 4 * (height / 4 - textHeight) / (height / 4);
-            int top2LineWidth = width / 4 * (height / 4 - 2 * textHeight) / (height / 4);
-
-            int usedMainWidth = 0, usedTop1Width = 0, usedTop2Width = 0, usedBottom1Width = 0, usedBottom2Width = 0;
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidth + textSize.Width <= mainLineWidth)
-                {
-                    if (!displayPlanetsList[i].IsActiveAspect)
-                        g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedMainWidth - textSize.Width, posY + (height - height / 4 - textSize.Height / 2));
-                    else
-                        g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedMainWidth - textSize.Width, posY + (height - height / 4 - textSize.Height / 2));
-                    usedMainWidth += textSize.Width;
-                }
-                else
-                {
-                    if (usedTop1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop1Width - textSize.Width, posY + (height - height / 4 - textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop1Width - textSize.Width, posY + (height - height / 4 - textSize.Height - 8));
-                        usedTop1Width += textSize.Width;
-                    }
-                    else if (usedBottom1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom1Width - textSize.Width, posY + (height - height / 4 + textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom1Width - textSize.Width, posY + (height - height / 4 + textSize.Height - 4));
-                        usedBottom1Width += textSize.Width;
-                    }
-                    else if (usedTop2Width + textSize.Width <= top2LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop2Width - textSize.Width, posY + (height - height / 4 - 2 * textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop2Width - textSize.Width, posY + (height - height / 4 - 2 * textSize.Height - 8));
-                        usedTop2Width += textSize.Width;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom2Width - textSize.Width, posY + (height - height / 4 + 2 * textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom2Width - textSize.Width, posY + (height - height / 4 + 2 * textSize.Height - 4));
-                        usedBottom2Width += textSize.Width;
-                    }
-                }
-            }
-        }
-
-        private void DrawDom10(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 - 40;
-            int topLineWidth = (width / 2 * (height / 4 - textHeight) / (height / 4)) - 40;
-
-            bool mainLeft = false, mainRight = false, topLeft = false, topRight = false, bottomLeft = false, bottomRight = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedTopWidthLeft = 0, usedTopWidthRight = 0;
-            int usedBottomWidthLeft = 0, usedBottomWidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + (height / 2 - textSize.Height / 2));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + (height / 2 - textSize.Height / 2));
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedTopWidthLeft + usedTopWidthRight + textSize.Width <= topLineWidth)
-                    {
-                        if (!topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width / 2;
-                            usedTopWidthRight += textSize.Width / 2;
-                            topLeft = true;
-                        }
-                        else if (topLeft && !topRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedTopWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedTopWidthLeft - textSize.Width), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthLeft += textSize.Width;
-                            topLeft = false;
-                            topRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedTopWidthRight), posY + (height / 2 - textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedTopWidthRight), posY + (height / 2 - textSize.Height - 8));
-                            usedTopWidthRight += textSize.Width;
-                            topLeft = true;
-                            topRight = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width / 2;
-                            usedBottomWidthRight += textSize.Width / 2;
-                            bottomLeft = true;
-                        }
-                        else if (bottomLeft && !bottomRight)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottomWidthLeft - textSize.Width), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottomWidthLeft - textSize.Width), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthLeft += textSize.Width;
-                            bottomLeft = false;
-                            bottomRight = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottomWidthRight), posY + (height / 2 + textSize.Height - 8));
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottomWidthRight), posY + (height / 2 + textSize.Height - 8));
-                            usedBottomWidthRight += textSize.Width;
-                            bottomLeft = true;
-                            bottomRight = false;
-                        }
-                    }
-                }
-            }
-        }
-
-        private void DrawDom11(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 4 - 20;
-            int top1LineWidth = width / 4 * (height / 4 - textHeight) / (height / 4);
-            int top2LineWidth = width / 4 * (height / 4 - 2 * textHeight) / (height / 4);
-
-            int usedMainWidth = 0, usedTop1Width = 0, usedTop2Width = 0, usedBottom1Width = 0, usedBottom2Width = 0;
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidth + textSize.Width <= mainLineWidth)
-                {
-                    if (!displayPlanetsList[i].IsActiveAspect)
-                        g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedMainWidth - textSize.Width, posY + (height / 4 - textSize.Height / 2));
-                    else
-                        g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedMainWidth - textSize.Width, posY + (height / 4 - textSize.Height / 2));
-                    usedMainWidth += textSize.Width;
-                }
-                else
-                {
-                    if (usedTop1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop1Width - textSize.Width, posY + (height / 4 - textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop1Width - textSize.Width, posY + (height / 4 - textSize.Height - 8));
-                        usedTop1Width += textSize.Width;
-                    }
-                    else if (usedBottom1Width + textSize.Width <= top1LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom1Width - textSize.Width, posY + (height / 4 + textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom1Width - textSize.Width, posY + (height / 4 + textSize.Height - 4));
-                        usedBottom1Width += textSize.Width;
-                    }
-                    else if (usedTop2Width + textSize.Width <= top2LineWidth)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop2Width - textSize.Width, posY + (height / 4 - 2 * textSize.Height - 8));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedTop2Width - textSize.Width, posY + (height / 4 - 2 * textSize.Height - 8));
-                        usedTop2Width += textSize.Width;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom2Width - textSize.Width, posY + (height / 4 + 2 * textSize.Height - 4));
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + width - usedBottom2Width - textSize.Width, posY + (height / 4 + 2 * textSize.Height - 4));
-                        usedBottom2Width += textSize.Width;
-                    }
-                }
-            }
-        }
-
-        private void DrawDom12(Graphics g, int width, int height, Font font, Font aspectFont, int textHeight, List<DomPlanet> displayPlanetsList)
-        {
-            Size textSize;
-            int posX = 0, posY = 0;
-            int mainLineWidth = width / 2 * (height / 4 - 6) / (height / 4) - 40;
-            int Bottom1LineWidth = width / 2 * (height / 4 - textHeight - 6) / (height / 4) - 40;
-            int Bottom2LineWidth = width / 2 * (height / 4 * textHeight - 2) / (height / 4);
-
-            bool mainLeft = false, mainRight = false, bottom1Left = false, bottom1Right = false, bottom2Left = false, bottom2Right = false;
-            int usedMainWidthLeft = 0, usedMainWidthRight = 0;
-            int usedBottom1WidthLeft = 0, usedBottom1WidthRight = 0;
-            int usedBottom2WidthLeft = 0, usedBottom2WidthRight = 0;
-
-            for (int i = 0; i < displayPlanetsList.Count; i++)
-            {
-                string text = PreparePlanetName(displayPlanetsList[i]);
-                if (!displayPlanetsList[i].IsActiveAspect)
-                    textSize = TextRenderer.MeasureText(text, font);
-                else
-                    textSize = TextRenderer.MeasureText(text, aspectFont);
-
-                if (usedMainWidthLeft + usedMainWidthRight + textSize.Width <= mainLineWidth)
-                {
-                    if (!mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + 4);
-                        usedMainWidthLeft += textSize.Width / 2;
-                        usedMainWidthRight += textSize.Width / 2;
-                        mainLeft = true;
-                    }
-                    else if (mainLeft && !mainRight)
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedMainWidthLeft - textSize.Width), posY + 4);
-                        usedMainWidthLeft += textSize.Width;
-                        mainLeft = false;
-                        mainRight = true;
-                    }
-                    else
-                    {
-                        if (!displayPlanetsList[i].IsActiveAspect)
-                            g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + 4);
-                        else
-                            g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedMainWidthRight), posY + 4);
-                        usedMainWidthRight += textSize.Width;
-                        mainLeft = true;
-                        mainRight = false;
-                    }
-                }
-                else
-                {
-                    if (usedBottom1WidthLeft + usedBottom1WidthRight + textSize.Width <= Bottom1LineWidth)
-                    {
-                        if (!bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + textHeight + 4);
-                            usedBottom1WidthLeft += textSize.Width / 2;
-                            usedBottom1WidthRight += textSize.Width / 2;
-                            bottom1Left = true;
-                        }
-                        else if (bottom1Left && !bottom1Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom1WidthLeft - textSize.Width), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom1WidthLeft - textSize.Width), posY + textHeight + 4);
-                            usedBottom1WidthLeft += textSize.Width;
-                            bottom1Left = false;
-                            bottom1Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom1WidthRight), posY + textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom1WidthRight), posY + textHeight + 4);
-                            usedBottom1WidthRight += textSize.Width;
-                            bottom1Left = true;
-                            bottom1Right = false;
-                        }
-                    }
-                    else
-                    {
-                        if (!bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - textSize.Width / 2), posY + 2 * textHeight + 4);
-                            usedBottom2WidthLeft += textSize.Width / 2;
-                            usedBottom2WidthRight += textSize.Width / 2;
-                            bottom2Left = true;
-                        }
-                        else if (bottom2Left && !bottom2Right)
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom2WidthLeft - textSize.Width), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 - usedBottom2WidthLeft - textSize.Width), posY + 2 * textHeight + 4);
-                            usedBottom2WidthLeft += textSize.Width;
-                            bottom2Left = false;
-                            bottom2Right = true;
-                        }
-                        else
-                        {
-                            if (!displayPlanetsList[i].IsActiveAspect)
-                                g.DrawString(text, font, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom2WidthRight), posY + 2 * textHeight + 4);
-                            else
-                                g.DrawString(text, aspectFont, new SolidBrush(Utility.GetColorByColorCode(displayPlanetsList[i].ColorCode)), posX + (width - width / 4 + usedBottom2WidthRight), posY + 2 * textHeight + 4);
-                            usedBottom2WidthRight += textSize.Width;
-                            bottom2Left = true;
-                            bottom2Right = false;
-                        }
-                    }
-                }
-            }
         }
 
         private void CheckAllAspectBoxes()
@@ -2747,12 +1450,16 @@ namespace PAD
                 CheckAllAspectBoxes();
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
+                PrepareGeneralTransitMap();
+                PreparePeriodRulerMap();
             }
             else
             {
                 UncheckAllAspectBoxes();
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
+                PrepareGeneralTransitMap();
+                PreparePeriodRulerMap();
             }
         }
 
@@ -2764,6 +1471,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
@@ -2774,6 +1483,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxVenus_CheckedChanged(object sender, EventArgs e)
@@ -2784,6 +1495,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxJupiter_CheckedChanged(object sender, EventArgs e)
@@ -2794,6 +1507,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxMercury_CheckedChanged(object sender, EventArgs e)
@@ -2804,6 +1519,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxMars_CheckedChanged(object sender, EventArgs e)
@@ -2814,6 +1531,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxSaturn_CheckedChanged(object sender, EventArgs e)
@@ -2824,6 +1543,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private void checkBoxRahu_CheckedChanged(object sender, EventArgs e)
@@ -2834,6 +1555,8 @@ namespace PAD
                 checkBoxAll.Checked = false;
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
+            PrepareGeneralTransitMap();
+            PreparePeriodRulerMap();
         }
 
         private bool CheckIfAllPlanetCheckBoxChecked()
@@ -2854,5 +1577,6 @@ namespace PAD
             return allUnchecked;
         }
 
+        
     }
 }

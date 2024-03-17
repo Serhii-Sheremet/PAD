@@ -5238,6 +5238,40 @@ namespace PAD
             }
         }
 
+        private void OpenTransitChartTab()
+        {
+            int index = -1;
+            bool isPresent = false;
+            string tabLabel = Utility.GetLocalizedText("Transit Chart", _activeLanguageCode);
+
+            for (int i = 0; i < tabControlCalendar.TabPages.Count; i++)
+            {
+                if (tabControlCalendar.TabPages[i].Text.Equals(tabLabel))
+                {
+                    isPresent = true;
+                    index = i;
+                    break;
+                }
+            }
+
+            if (isPresent)
+            {
+                tabControlCalendar.SelectedIndex = index;
+            }
+            else
+            {
+                TabPage newTab = new TabPage() { Name = tabLabel, Text = tabLabel };
+                TransitsMap tabForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
+                tabForm.TopLevel = false;
+                tabForm.Parent = newTab;
+                tabControlCalendar.TabPages.Add(newTab);
+                tabControlCalendar.SelectedTab = newTab;
+                tabForm.Show();
+                tabForm.Dock = DockStyle.Fill;
+            }
+        }
+
+
         private void yearsTranzitsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             YearTranzitSelect ysForm = new YearTranzitSelect(_activeLanguageCode);
@@ -5683,8 +5717,10 @@ namespace PAD
 
         private void tranzitsMapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TransitsMap tmForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
-            tmForm.ShowDialog(this);
+            OpenTransitChartTab();
+            
+            //TransitsMap tmForm = new TransitsMap(_selectedProfile, _activeLanguageCode);
+            //tmForm.ShowDialog(this);
         }
 
         private void viewTranzitToolStripMenuItem_Click(object sender, EventArgs e)
