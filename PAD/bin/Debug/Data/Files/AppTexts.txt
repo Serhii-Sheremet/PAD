@@ -168,6 +168,10 @@ Transits from Natal Moon|Transits from Natal Moon|en
 Transits from Natal Moon|Транзиты от Натальной Луны|ru
 Natal position of planets|Natal position of planets|en
 Natal position of planets|Натальное положение планет|ru
+Current Transits|Current Transits|en
+Current Transits|Текущие транзиты|ru
+Transits from Period Ruler|Transits from Period Ruler|en
+Transits from Period Ruler|Транзиты от Управителя Периода|ru
 Transit position of planets|Transit position of planets|en
 Transit position of planets|Транзитное положение планет|ru
 Color settings|Color settings|en

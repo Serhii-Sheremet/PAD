@@ -2,12 +2,12 @@
 {
     public enum EPlanet
     {
-        MOON = 1,
-        SUN = 2,
-        VENUS = 3,
-        JUPITER = 4,
-        MERCURY = 5,
-        MARS = 6,
+        SUN = 1,
+        MOON = 2,
+        MARS = 3,
+        MERCURY = 4,
+        JUPITER = 5,
+        VENUS = 6,
         SATURN = 7,
         RAHUMEAN = 8,
         KETUMEAN = 9,

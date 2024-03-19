@@ -1,9 +1,9 @@
-1|Moon|en
-2|Sun|en
-3|Venus|en
-4|Jupiter|en
-5|Mercury|en
-6|Mars|en
+1|Sun|en
+2|Moon|en
+3|Mars|en
+4|Mercury|en
+5|Jupiter|en
+6|Venus|en
 7|Saturn|en
 8|Rahu|en
 9|Ketu|en

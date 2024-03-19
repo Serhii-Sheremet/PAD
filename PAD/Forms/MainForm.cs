@@ -2264,12 +2264,12 @@ namespace PAD
                 endPeriodDate = endDate.AddDays(+15);
 
                 //calculate data lists
-                List<PlanetData> moonDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, startPeriodDate, endPeriodDate);
                 List<PlanetData> sunDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_SUN, startPeriodDate, endPeriodDate);
-                List<PlanetData> mercuryDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MERCURY, startPeriodDate, endPeriodDate);
-                List<PlanetData> venusDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_VENUS, startPeriodDate, endPeriodDate);
+                List<PlanetData> moonDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MOON, startPeriodDate, endPeriodDate);
                 List<PlanetData> marsDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MARS, startPeriodDate, endPeriodDate);
+                List<PlanetData> mercuryDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MERCURY, startPeriodDate, endPeriodDate);
                 List<PlanetData> jupiterDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_JUPITER, startPeriodDate, endPeriodDate);
+                List<PlanetData> venusDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_VENUS, startPeriodDate, endPeriodDate);
                 List<PlanetData> saturnDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_SATURN, startPeriodDate, endPeriodDate);
                 List<PlanetData> rahuMeanDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_MEAN_NODE, startPeriodDate, endPeriodDate);
                 List<PlanetData> rahuTrueDataList = eCalc.CalculatePlanetDataList_London(EpheConstants.SE_TRUE_NODE, startPeriodDate, endPeriodDate);
@@ -2279,12 +2279,12 @@ namespace PAD
                 List<NityaYogaData> nityaYogaDataList = eCalc.CalculateNityaYogaDataList_London(startPeriodDate, endDate);
                 List<EclipseData> eclipseDataList = eCalc.CalculateEclipse_London(startPeriodDate, endDate);
 
-                List<MrityuBhagaData> moonMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MOON, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> sunMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SUN, startPeriodDate, endPeriodDate);
-                List<MrityuBhagaData> mercuryMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MERCURY, startPeriodDate, endPeriodDate);
-                List<MrityuBhagaData> venusMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.VENUS, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> moonMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MOON, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> marsMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MARS, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> mercuryMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.MERCURY, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> jupiterMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.JUPITER, startPeriodDate, endPeriodDate);
+                List<MrityuBhagaData> venusMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.VENUS, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> saturnMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.SATURN, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> rahuMeanMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUMEAN, startPeriodDate, endPeriodDate);
                 List<MrityuBhagaData> rahuTrueMBDataList = eCalc.CalculateMrityuBhagaDataList_London(CacheLoad._mrityuBhagaList, EPlanet.RAHUTRUE, startPeriodDate, endPeriodDate);

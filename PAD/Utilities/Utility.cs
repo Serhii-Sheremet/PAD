@@ -2328,22 +2328,22 @@ namespace PAD
             switch (planetId)
             {
                 case 1:
-                    return EpheConstants.SE_MOON;
+                    return EpheConstants.SE_SUN; 
 
                 case 2:
-                    return EpheConstants.SE_SUN;
+                    return EpheConstants.SE_MOON;
 
                 case 3:
-                    return EpheConstants.SE_VENUS;
+                    return EpheConstants.SE_MARS; 
 
                 case 4:
-                    return EpheConstants.SE_JUPITER;
+                    return EpheConstants.SE_MERCURY; 
 
                 case 5:
-                    return EpheConstants.SE_MERCURY;
+                    return EpheConstants.SE_JUPITER;
 
                 case 6:
-                    return EpheConstants.SE_MARS;
+                    return EpheConstants.SE_VENUS;
 
                 case 7:
                     return EpheConstants.SE_SATURN;
@@ -2363,22 +2363,24 @@ namespace PAD
         {
             switch (sweConst)
             {
-                case EpheConstants.SE_MOON:
+                case EpheConstants.SE_SUN:
                     return 1;
 
-                case EpheConstants.SE_SUN:
+                case EpheConstants.SE_MOON:
                     return 2;
 
-                case EpheConstants.SE_VENUS:
+                case EpheConstants.SE_MARS:
+                    
                     return 3;
 
-                case EpheConstants.SE_JUPITER:
+                case EpheConstants.SE_MERCURY:
+                    
                     return 4;
 
-                case EpheConstants.SE_MERCURY:
+                case EpheConstants.SE_JUPITER:
                     return 5;
 
-                case EpheConstants.SE_MARS:
+                case EpheConstants.SE_VENUS:
                     return 6;
 
                 case EpheConstants.SE_SATURN:

@@ -952,6 +952,7 @@ namespace PAD
             
             PlanetData pdTemp = new PlanetData
             {
+                PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
                 Date = curDate.AddSeconds(-1),
                 Longitude = pResults.CalcResults[0],
                 Latitude = pResults.CalcResults[1],
@@ -980,6 +981,7 @@ namespace PAD
 
                 pdTemp = new PlanetData
                 {
+                    PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
                     Date = curDate,
                     Longitude = pResults.CalcResults[0],
                     Latitude = pResults.CalcResults[1],

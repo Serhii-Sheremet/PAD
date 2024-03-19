@@ -195,7 +195,7 @@ namespace PAD
                 catch (SQLiteException ex) { AddingExceptionLabel(ex); }
                 dbCon.Close();
             }
-
+            
             ZodiakDescription zd = new ZodiakDescription();
             List<ZodiakDescription> zdList = new List<ZodiakDescription>();
             string[] tempZDList = File.ReadAllLines(@".\Data\Files\" + langDir + @"\ZodiakDesc.txt", Encoding.GetEncoding(1251));

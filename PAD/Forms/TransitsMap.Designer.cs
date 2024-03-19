@@ -99,6 +99,7 @@
             this.labelCurrent = new System.Windows.Forms.Label();
             this.pictureBoxPeriodRuler = new System.Windows.Forms.PictureBox();
             this.labelPeriodRuler = new System.Windows.Forms.Label();
+            this.comboBoxRuler = new System.Windows.Forms.ComboBox();
             this.toolStripProfileMenu.SuspendLayout();
             this.groupBoxEventInfo.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
@@ -239,7 +240,7 @@
             this.groupBoxEventInfo.Controls.Add(this.textBoxEvent);
             this.groupBoxEventInfo.Controls.Add(this.buttonLivingPlace);
             this.groupBoxEventInfo.Controls.Add(this.textBoxLivingPlace);
-            this.groupBoxEventInfo.Location = new System.Drawing.Point(522, 508);
+            this.groupBoxEventInfo.Location = new System.Drawing.Point(881, 497);
             this.groupBoxEventInfo.Name = "groupBoxEventInfo";
             this.groupBoxEventInfo.Size = new System.Drawing.Size(140, 155);
             this.groupBoxEventInfo.TabIndex = 71;
@@ -814,14 +815,14 @@
             // 
             this.pictureBoxMap.Location = new System.Drawing.Point(681, 69);
             this.pictureBoxMap.Name = "pictureBoxMap";
-            this.pictureBoxMap.Size = new System.Drawing.Size(326, 243);
+            this.pictureBoxMap.Size = new System.Drawing.Size(200, 144);
             this.pictureBoxMap.TabIndex = 93;
             this.pictureBoxMap.TabStop = false;
             // 
             // labelTranzit
             // 
             this.labelTranzit.AutoSize = true;
-            this.labelTranzit.Location = new System.Drawing.Point(766, 322);
+            this.labelTranzit.Location = new System.Drawing.Point(765, 228);
             this.labelTranzit.Name = "labelTranzit";
             this.labelTranzit.Size = new System.Drawing.Size(159, 16);
             this.labelTranzit.TabIndex = 92;
@@ -830,7 +831,7 @@
             // labelNatal
             // 
             this.labelNatal.AutoSize = true;
-            this.labelNatal.Location = new System.Drawing.Point(470, 322);
+            this.labelNatal.Location = new System.Drawing.Point(469, 228);
             this.labelNatal.Name = "labelNatal";
             this.labelNatal.Size = new System.Drawing.Size(150, 16);
             this.labelNatal.TabIndex = 91;
@@ -843,7 +844,7 @@
             this.dataGridViewInfoNatal.AllowUserToResizeColumns = false;
             this.dataGridViewInfoNatal.AllowUserToResizeRows = false;
             this.dataGridViewInfoNatal.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewInfoNatal.Location = new System.Drawing.Point(473, 341);
+            this.dataGridViewInfoNatal.Location = new System.Drawing.Point(472, 247);
             this.dataGridViewInfoNatal.MultiSelect = false;
             this.dataGridViewInfoNatal.Name = "dataGridViewInfoNatal";
             this.dataGridViewInfoNatal.ReadOnly = true;
@@ -858,7 +859,7 @@
             this.dataGridViewInfoTranzit.AllowUserToResizeColumns = false;
             this.dataGridViewInfoTranzit.AllowUserToResizeRows = false;
             this.dataGridViewInfoTranzit.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridViewInfoTranzit.Location = new System.Drawing.Point(761, 338);
+            this.dataGridViewInfoTranzit.Location = new System.Drawing.Point(760, 244);
             this.dataGridViewInfoTranzit.MultiSelect = false;
             this.dataGridViewInfoTranzit.Name = "dataGridViewInfoTranzit";
             this.dataGridViewInfoTranzit.ReadOnly = true;
@@ -888,7 +889,7 @@
             // 
             this.pictureBoxMapLagna.Location = new System.Drawing.Point(11, 69);
             this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
-            this.pictureBoxMapLagna.Size = new System.Drawing.Size(329, 243);
+            this.pictureBoxMapLagna.Size = new System.Drawing.Size(242, 157);
             this.pictureBoxMapLagna.TabIndex = 86;
             this.pictureBoxMapLagna.TabStop = false;
             // 
@@ -896,7 +897,7 @@
             // 
             this.pictureBoxMapMoon.Location = new System.Drawing.Point(356, 69);
             this.pictureBoxMapMoon.Name = "pictureBoxMapMoon";
-            this.pictureBoxMapMoon.Size = new System.Drawing.Size(318, 243);
+            this.pictureBoxMapMoon.Size = new System.Drawing.Size(198, 157);
             this.pictureBoxMapMoon.TabIndex = 85;
             this.pictureBoxMapMoon.TabStop = false;
             // 
@@ -911,20 +912,29 @@
             // 
             // pictureBoxPeriodRuler
             // 
-            this.pictureBoxPeriodRuler.Location = new System.Drawing.Point(11, 357);
+            this.pictureBoxPeriodRuler.Location = new System.Drawing.Point(12, 256);
             this.pictureBoxPeriodRuler.Name = "pictureBoxPeriodRuler";
-            this.pictureBoxPeriodRuler.Size = new System.Drawing.Size(328, 244);
+            this.pictureBoxPeriodRuler.Size = new System.Drawing.Size(232, 181);
             this.pictureBoxPeriodRuler.TabIndex = 95;
             this.pictureBoxPeriodRuler.TabStop = false;
             // 
             // labelPeriodRuler
             // 
             this.labelPeriodRuler.AutoSize = true;
-            this.labelPeriodRuler.Location = new System.Drawing.Point(12, 338);
+            this.labelPeriodRuler.Location = new System.Drawing.Point(13, 237);
             this.labelPeriodRuler.Name = "labelPeriodRuler";
             this.labelPeriodRuler.Size = new System.Drawing.Size(162, 16);
             this.labelPeriodRuler.TabIndex = 96;
             this.labelPeriodRuler.Text = "Transits from Period Ruler";
+            // 
+            // comboBoxRuler
+            // 
+            this.comboBoxRuler.FormattingEnabled = true;
+            this.comboBoxRuler.Location = new System.Drawing.Point(181, 229);
+            this.comboBoxRuler.Name = "comboBoxRuler";
+            this.comboBoxRuler.Size = new System.Drawing.Size(140, 24);
+            this.comboBoxRuler.TabIndex = 97;
+            this.comboBoxRuler.SelectedIndexChanged += new System.EventHandler(this.comboBoxRuler_SelectedIndexChanged);
             // 
             // TransitsMap
             // 
@@ -932,6 +942,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1178, 691);
+            this.Controls.Add(this.comboBoxRuler);
             this.Controls.Add(this.labelPeriodRuler);
             this.Controls.Add(this.pictureBoxPeriodRuler);
             this.Controls.Add(this.labelCurrent);
@@ -1063,5 +1074,6 @@
         private System.Windows.Forms.Label labelCurrent;
         private System.Windows.Forms.PictureBox pictureBoxPeriodRuler;
         private System.Windows.Forms.Label labelPeriodRuler;
+        private System.Windows.Forms.ComboBox comboBoxRuler;
     }
 }

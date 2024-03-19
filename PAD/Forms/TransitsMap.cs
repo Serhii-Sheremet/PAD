@@ -22,11 +22,13 @@ namespace PAD
             }
         }
 
+        private EAppSetting _nodesSetting;
         private ELanguage _activeLang;
         private DateTime _curDate;
 
         private List<NakshatraDescription> _ndList;
         private List<ZodiakDescription> _zdList;
+        private List<PlanetDescription> _plDescList;
         private Location _location;
 
         private List<PlanetData> _pdBirthList;
@@ -49,11 +51,25 @@ namespace PAD
         {
             InitializeComponent();
 
+            _nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
             _activeLang = langCode;
             _curDate = DateTime.Now;
 
             _ndList = CacheLoad._nakshatraDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
             _zdList = CacheLoad._zodiakDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
+            _plDescList = CacheLoad._planetDescList.Where(i => i.LanguageCode.Equals(_activeLang.ToString())).ToList();
+
+            
+            if (_nodesSetting == EAppSetting.NODEMEAN)
+            {
+                var planetToRemove = new[] { 10, 11 };
+                _plDescList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
+            if (_nodesSetting == EAppSetting.NODETRUE)
+            {
+                var planetToRemove = new[] { 8, 9 };
+                _plDescList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
 
             _profile = selProfile;
             _location = CacheLoad._locationList.Where(i => i.Id == _profile.PlaceOfLivingId).FirstOrDefault();
@@ -69,6 +85,12 @@ namespace PAD
                 _pdBirthList = Utility.CalculatePlanetsPositionForDate(_profile.DateOfBirth, latitude, longitude);
                 _birthAscendant = Utility.CalculateAscendantForDate(_profile.DateOfBirth, latitude, longitude, 0, 'O');
             }
+
+            foreach (PlanetDescription pd in _plDescList)
+            {
+                comboBoxRuler.Items.Add(new KeyValueData(pd.Name, pd.PlanetId));
+            }
+            //_plDescList.ForEach(i => comboBoxRuler.Items.Add(i.Name));
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
@@ -106,11 +128,16 @@ namespace PAD
             labelCurrent.Top = toolStripProfileMenu.Height + _spaceLenght;
             labelCurrent.Left = pictureBoxMap.Left;
 
-            int topGridSpace = topSpace + pictureBoxMapLagna.Height + _spaceLenght;
+            int topGridSpace = topSpace + pictureBoxMapLagna.Height + 2 * _spaceLenght;
             labelPeriodRuler.Top = topGridSpace;
             labelPeriodRuler.Left = pictureBoxMapLagna.Left;
+            comboBoxRuler.Top = topGridSpace - _spaceLenght;
+            comboBoxRuler.Left = labelPeriodRuler.Width + 4;
+            comboBoxRuler.SelectedIndex = 0;
+
             labelNatal.Top = topGridSpace;
             labelNatal.Left = pictureBoxMapMoon.Left;
+            
             labelTranzit.Top = topGridSpace;
             labelTranzit.Left = pictureBoxMap.Left;
 
@@ -564,7 +591,6 @@ namespace PAD
             dgvRowObj rowTemp;
             List<dgvRowObj> rowList = new List<dgvRowObj>();
             string degree = string.Empty, zodiak = string.Empty, nakshatra = string.Empty, pada = string.Empty;
-            EAppSetting nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
 
             int nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
             int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
@@ -702,7 +728,7 @@ namespace PAD
             };
             rowList.Add(rowTemp);
 
-            if (nodesSetting == EAppSetting.NODEMEAN)
+            if (_nodesSetting == EAppSetting.NODEMEAN)
             {
                 nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().NakshatraId;
                 padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().PadaId);
@@ -739,7 +765,7 @@ namespace PAD
                 rowList.Add(rowTemp);
             }
 
-            if (nodesSetting == EAppSetting.NODETRUE)
+            if (_nodesSetting == EAppSetting.NODETRUE)
             {
                 nakId = _pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().NakshatraId;
                 padaId = Utility.GetPadaNumberByPadaId(_pdBirthList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().PadaId);
@@ -804,7 +830,6 @@ namespace PAD
             dgvRowObj rowTemp;
             List<dgvRowObj> rowList = new List<dgvRowObj>();
             string degree = string.Empty, zodiak = string.Empty, nakshatra = string.Empty, pada = string.Empty;
-            EAppSetting nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
 
             int nakshatraId = Utility.GetNakshatraIdFromDegree(_curAscendant);
             int padaNum = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_curAscendant));
@@ -942,7 +967,7 @@ namespace PAD
             };
             rowList.Add(rowTemp);
 
-            if (nodesSetting == EAppSetting.NODEMEAN)
+            if (_nodesSetting == EAppSetting.NODEMEAN)
             {
                 nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().NakshatraId;
                 padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUMEAN).FirstOrDefault().PadaId);
@@ -979,7 +1004,7 @@ namespace PAD
                 rowList.Add(rowTemp);
             }
 
-            if (nodesSetting == EAppSetting.NODETRUE)
+            if (_nodesSetting == EAppSetting.NODETRUE)
             {
                 nakId = _pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().NakshatraId;
                 padaId = Utility.GetPadaNumberByPadaId(_pdList.Where(i => i.PlanetId == (int)EPlanet.RAHUTRUE).FirstOrDefault().PadaId);
@@ -1060,7 +1085,8 @@ namespace PAD
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
                 PrepareGeneralTransitMap();
-                PreparePeriodRulerMap();
+                KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+                PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
                 ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
             }
         }
@@ -1085,11 +1111,12 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
             ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
         }
 
-        private void PreparePeriodRulerMap()
+        private void PreparePeriodRulerMap(EPlanet planet)
         {
             Bitmap canvas = new Bitmap(pictureBoxPeriodRuler.Width, pictureBoxPeriodRuler.Height);
             Graphics g = Graphics.FromImage(canvas);
@@ -1112,7 +1139,7 @@ namespace PAD
             g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
             g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
 
-            PrepareNatalMoonTransits(g, width, height);
+            PrepareRulerTransits(g, width, height, planet);
             pictureBoxPeriodRuler.Image = canvas;
         }
 
@@ -1290,6 +1317,39 @@ namespace PAD
             }
         }
 
+        private void PrepareRulerTransits(Graphics g, int width, int height, EPlanet planet)
+        {
+            int posX = 0, posY = 0, nakshatraId = -1, pada = -1;
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+            double latitude, longitude;
+            if (double.TryParse(_location.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
+
+                double pLong = _pdBirthList.Where(i => i.PlanetId == (int)planet).FirstOrDefault().Longitude;
+                nakshatraId = Utility.GetNakshatraIdFromDegree(pLong);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(pLong));
+                int znak = Utility.GetZodiakIdFromNakshatraIdandPada(nakshatraId, pada);
+
+                List<Zodiak> swapZodiakList = Utility.SwappingZodiakList(zList, znak);
+                TransitChart.SettingNumberInDom(g, posX, posY, width, height, swapZodiakList);
+
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetPlanetsListWithAspects(swapZodiakList);
+
+                Font textFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 14, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+                }
+            }
+        }
+
         private List<DomPlanet>[] GetGeneralPlanetsListWithAspects(List<Zodiak> zList)
         {
             List<DomPlanet>[] fullList = new List<DomPlanet>[12];
@@ -1451,7 +1511,9 @@ namespace PAD
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
                 PrepareGeneralTransitMap();
-                PreparePeriodRulerMap();
+
+                KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+                PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
             }
             else
             {
@@ -1459,7 +1521,9 @@ namespace PAD
                 PrepareTransitMapMoon();
                 PrepareTransitMapLagna();
                 PrepareGeneralTransitMap();
-                PreparePeriodRulerMap();
+
+                KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+                PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
             }
         }
 
@@ -1472,7 +1536,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
@@ -1484,7 +1550,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxVenus_CheckedChanged(object sender, EventArgs e)
@@ -1496,7 +1564,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxJupiter_CheckedChanged(object sender, EventArgs e)
@@ -1508,7 +1578,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxMercury_CheckedChanged(object sender, EventArgs e)
@@ -1520,7 +1592,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxMars_CheckedChanged(object sender, EventArgs e)
@@ -1532,7 +1606,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxSaturn_CheckedChanged(object sender, EventArgs e)
@@ -1544,7 +1620,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private void checkBoxRahu_CheckedChanged(object sender, EventArgs e)
@@ -1556,7 +1634,9 @@ namespace PAD
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
-            PreparePeriodRulerMap();
+
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
         private bool CheckIfAllPlanetCheckBoxChecked()
@@ -1577,6 +1657,10 @@ namespace PAD
             return allUnchecked;
         }
 
-        
+        private void comboBoxRuler_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
+            PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+        }
     }
 }
