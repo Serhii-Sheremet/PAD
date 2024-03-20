@@ -38,7 +38,7 @@ namespace PAD
         private Profile _profile;
 
         private int _spaceLenght = 5;
-        private double _chartHeightCoeficient = 0.7;
+        private double _chartHeightCoeficient = 0.72;
         private int _chartWidth = 0;
         private int _chartHeight = 0;
 
@@ -50,6 +50,7 @@ namespace PAD
         public TransitsMap(Profile selProfile, ELanguage langCode)
         {
             InitializeComponent();
+            //this.Shown += new EventHandler(this.TransitsMap_Shown);
 
             _nodesSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
             _activeLang = langCode;
@@ -90,7 +91,6 @@ namespace PAD
             {
                 comboBoxRuler.Items.Add(new KeyValueData(pd.Name, pd.PlanetId));
             }
-            //_plDescList.ForEach(i => comboBoxRuler.Items.Add(i.Name));
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
@@ -151,6 +151,27 @@ namespace PAD
             dataGridViewInfoTranzit.Top = topGridSpace + labelTranzit.Height + _spaceLenght;
             dataGridViewInfoTranzit.Left = pictureBoxMap.Left;
 
+            ProfileInfoDataGridViewNatalFillByRow(_activeLang);
+
+            int navHeight = _chartHeight - dataGridViewInfoNatal.Height - labelNatalNavamsa.Height - 2 * _spaceLenght;
+            int navWidth = (int)(navHeight * 1.5);
+            int navTop = topGridSpace + labelNatal.Height + dataGridViewInfoNatal.Height + 2 * _spaceLenght;
+
+            labelNatalNavamsa.Top = navTop;
+            labelNatalNavamsa.Left = pictureBoxMapMoon.Left;
+            labelTransitNavamsa.Top = navTop;
+            labelTransitNavamsa.Left = pictureBoxMap.Left;
+
+            pictureBoxNatalNavamsa.Width = navWidth;
+            pictureBoxNatalNavamsa.Height = navHeight;
+            pictureBoxNatalNavamsa.Top = navTop + labelNatalNavamsa.Height + _spaceLenght;
+            pictureBoxNatalNavamsa.Left = pictureBoxMapMoon.Left;
+
+            pictureBoxTransitNavamsa.Width = navWidth;
+            pictureBoxTransitNavamsa.Height = navHeight;
+            pictureBoxTransitNavamsa.Top = navTop + labelTransitNavamsa.Height + _spaceLenght;
+            pictureBoxTransitNavamsa.Left = pictureBoxMap.Left;
+
             int groupBoxTop = pictureBoxMap.Top;
             int groupBoxHeight = groupBoxSeconds.Height;
             groupBoxSeconds.Top = groupBoxTop;
@@ -171,8 +192,6 @@ namespace PAD
             textBoxMonth.Text = _curDate.Month.ToString();
             textBoxYear.Text = _curDate.Year.ToString();
             textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
-
-            ProfileInfoDataGridViewNatalFillByRow(_activeLang);
 
             groupBoxEventInfo.Top = dataGridViewInfoTranzit.Top + dataGridViewInfoTranzit.Height + _spaceLenght;  
             groupBoxEventInfo.Left = groupBoxAspects.Left;
@@ -1088,6 +1107,8 @@ namespace PAD
                 KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
                 PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
                 ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
+                PrepareNatalNavamsa();
+                PrepareTransitNavamsa();
             }
         }
 
@@ -1108,12 +1129,15 @@ namespace PAD
 
         private void toolStripTextBoxDate_TextChanged(object sender, EventArgs e)
         {
+            //this.Shown += new EventHandler(this.TransitsMap_Shown);
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
             ProfileInfoDataGridViewTranzitFillByRow(_activeLang);
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void PreparePeriodRulerMap(EPlanet planet)
@@ -1350,6 +1374,120 @@ namespace PAD
             }
         }
 
+        private void PrepareNatalNavamsa()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxNatalNavamsa.Width, pictureBoxNatalNavamsa.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxNatalNavamsa.Width - 1, height = pictureBoxNatalNavamsa.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            PrepareNatalNavamsaTransits(g, width, height);
+            pictureBoxNatalNavamsa.Image = canvas;
+        }
+
+        private void PrepareNatalNavamsaTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+            double latitude, longitude;
+            if (double.TryParse(_location.Latitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out latitude) &&
+                double.TryParse(_location.Longitude, NumberStyles.AllowExponent | NumberStyles.AllowDecimalPoint | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out longitude))
+            {
+                _pdList = Utility.CalculatePlanetsPositionForDate(_curDate, latitude, longitude);
+                _curAscendant = Utility.CalculateAscendantForDate(_curDate, latitude, longitude, 0, 'O');
+
+                nakshatraId = Utility.GetNakshatraIdFromDegree(_birthAscendant);
+                pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_birthAscendant));
+                lagnaId = Utility.GetZodiakIdFromDegree(_birthAscendant);
+                int navamsa = Utility.GetNavamsaByNakshatraAndPada(nakshatraId, pada);
+
+                List<int> swapNawamshaList = Utility.SwappingNavamsaArray(navamsa);
+                TransitChart.SettingNavamsaNumberInDom(g, posX, posY, width, height, swapNawamshaList);
+
+                //Get list of planets per dom
+                List<DomPlanet>[] planetsList = GetNatalNavamsaPlanetsListWithAspects(swapNawamshaList);
+
+                Font textFont = new Font("Times New Roman", 8, FontStyle.Regular);
+                Font aspectFont = new Font("Times New Roman", 8, FontStyle.Regular);
+                Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+                for (int i = 0; i < 12; i++)
+                {
+                    TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+                }
+            }
+        }
+
+        private void PrepareTransitNavamsa()
+        {
+            Bitmap canvas = new Bitmap(pictureBoxTransitNavamsa.Width, pictureBoxTransitNavamsa.Height);
+            Graphics g = Graphics.FromImage(canvas);
+            g.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+            Pen pen = new Pen(Color.Black, 1);
+            SolidBrush brush = new SolidBrush(Color.LightGoldenrodYellow);
+
+            int posX = 0, posY = 0, width = pictureBoxTransitNavamsa.Width - 1, height = pictureBoxTransitNavamsa.Height - 1;
+
+            // drawing doms triangles
+            Rectangle rect = new Rectangle(posX, posY, width, height);
+            g.FillRectangle(brush, rect);
+            g.DrawRectangle(pen, rect);
+            g.DrawLine(pen, posX, posY, posX + width, posY + height);
+            g.DrawLine(pen, posX, posY + height, posX + width, posY);
+            g.DrawLine(pen, posX + width / 2, posY, posX, posY + height / 2);
+            g.DrawLine(pen, posX + width / 2, posY, posX + width, posY + height / 2);
+            g.DrawLine(pen, posX, posY + height / 2, posX + width / 2, posY + height);
+            g.DrawLine(pen, posX + width / 2, posY + height, posX + width, posY + height / 2);
+
+            PrepareTransitNavamsaTransits(g, width, height);
+            pictureBoxTransitNavamsa.Image = canvas;
+        }
+
+        private void PrepareTransitNavamsaTransits(Graphics g, int width, int height)
+        {
+            int posX = 0, posY = 0, lagnaId = -1, nakshatraId = -1, pada = -1;
+            // placing dom numbers based on lagna
+            List<Zodiak> zList = CacheLoad._zodiakList.ToList();
+
+            nakshatraId = Utility.GetNakshatraIdFromDegree(_curAscendant);
+            pada = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_curAscendant));
+            lagnaId = Utility.GetZodiakIdFromDegree(_curAscendant);
+            int navamsa = Utility.GetNavamsaByNakshatraAndPada(nakshatraId, pada);
+
+            List<int> swapNawamshaList = Utility.SwappingNavamsaArray(navamsa);
+            TransitChart.SettingNavamsaNumberInDom(g, posX, posY, width, height, swapNawamshaList);
+
+            //Get list of planets per dom
+            List<DomPlanet>[] planetsList = GetTransitNavamsaPlanetsListWithAspects(swapNawamshaList);
+
+            Font textFont = new Font("Times New Roman", 8, FontStyle.Regular);
+            Font aspectFont = new Font("Times New Roman", 8, FontStyle.Regular);
+            Size textSize = TextRenderer.MeasureText("СоR", textFont);
+
+            for (int i = 0; i < 12; i++)
+            {
+                TransitChart.DrawDomWithPlanets(g, width, height, textFont, aspectFont, textSize.Height, planetsList, i, _activeLang);
+            }
+        }
+
         private List<DomPlanet>[] GetGeneralPlanetsListWithAspects(List<Zodiak> zList)
         {
             List<DomPlanet>[] fullList = new List<DomPlanet>[12];
@@ -1387,7 +1525,7 @@ namespace PAD
                         List<int> aspectList = GetAspectDomsListByPlanet(planetsList[planetListCount][planetCount].PlanetCode);
                         for (int aspectCount = 0; aspectCount < aspectList.Count; aspectCount++)
                         {
-                            if (planetsList[planetListCount][planetCount].TransitType != ETransitType.TRANSITBIRTH)
+                            if (planetsList[planetListCount][planetCount].TransitType != ETransitType.TRANSITBIRTH && planetsList[planetListCount][planetCount].TransitType != ETransitType.NATALNAVAMSA && planetsList[planetListCount][planetCount].TransitType != ETransitType.TRANSITNAVAMSA)
                             {
                                 DomPlanet newDomPlanet = new DomPlanet
                                 {
@@ -1479,6 +1617,30 @@ namespace PAD
             return fullList;
         }
 
+        private List<DomPlanet>[] GetNatalNavamsaPlanetsListWithAspects(List<int> navamsaList)
+        {
+            List<DomPlanet>[] fullList = new List<DomPlanet>[12];
+
+            for (int i = 0; i < navamsaList.Count; i++)
+            {
+                fullList[i] = TransitChart.GetNatalNavamsaPlanetsListByNavamsaZnak(_pdBirthList, navamsaList[i], (i + 1));
+            }
+
+            return fullList;
+        }
+
+        private List<DomPlanet>[] GetTransitNavamsaPlanetsListWithAspects(List<int> navamsaList)
+        {
+            List<DomPlanet>[] fullList = new List<DomPlanet>[12];
+
+            for (int i = 0; i < navamsaList.Count; i++)
+            {
+                fullList[i] = TransitChart.GetNatalNavamsaPlanetsListByNavamsaZnak(_pdList, navamsaList[i], (i + 1));
+            }
+
+            return fullList;
+        }
+
         private void CheckAllAspectBoxes()
         {
             checkBoxMoon.Checked = true;
@@ -1514,6 +1676,9 @@ namespace PAD
 
                 KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
                 PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+                PrepareNatalNavamsa();
+                PrepareTransitNavamsa();
             }
             else
             {
@@ -1524,6 +1689,9 @@ namespace PAD
 
                 KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
                 PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+                PrepareNatalNavamsa();
+                PrepareTransitNavamsa();
             }
         }
 
@@ -1539,6 +1707,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxSun_CheckedChanged(object sender, EventArgs e)
@@ -1553,6 +1724,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxVenus_CheckedChanged(object sender, EventArgs e)
@@ -1567,6 +1741,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxJupiter_CheckedChanged(object sender, EventArgs e)
@@ -1581,6 +1758,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxMercury_CheckedChanged(object sender, EventArgs e)
@@ -1595,6 +1775,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxMars_CheckedChanged(object sender, EventArgs e)
@@ -1609,6 +1792,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxSaturn_CheckedChanged(object sender, EventArgs e)
@@ -1623,6 +1809,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private void checkBoxRahu_CheckedChanged(object sender, EventArgs e)
@@ -1637,6 +1826,9 @@ namespace PAD
 
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+
+            PrepareNatalNavamsa();
+            PrepareTransitNavamsa();
         }
 
         private bool CheckIfAllPlanetCheckBoxChecked()
@@ -1662,5 +1854,7 @@ namespace PAD
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
+
+        
     }
 }

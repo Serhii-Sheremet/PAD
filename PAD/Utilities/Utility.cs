@@ -137,9 +137,18 @@ namespace PAD
         public static List<Zodiak> SwappingZodiakList(List<Zodiak> zList, int id)
         {
             List<Zodiak> newList = new List<Zodiak>();
-            newList.AddRange(zList.Where(s => s.Id >= id).ToList());
-            newList.AddRange(zList.Where(s => s.Id < id).ToList());
+            newList.AddRange(zList.Where(i => i.Id >= id).ToList());
+            newList.AddRange(zList.Where(i => i.Id < id).ToList());
             return newList;
+        }
+
+        public static List<int> SwappingNavamsaArray(int navamsa)
+        {
+            List<int> navamsaList = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            List<int> navamsaListSorted = new List<int>();
+            navamsaListSorted.AddRange(navamsaList.Where(i => i >= navamsa).ToList());
+            navamsaListSorted.AddRange(navamsaList.Where(i => i < navamsa).ToList());
+            return navamsaListSorted;
         }
 
         private static List<DateTime> GetDatesFromJogaList(List<Calendar> jcList, DateTime currentDate)
@@ -1332,6 +1341,7 @@ namespace PAD
                     SpedInLatitude = pd.SpedInLatitude,
                     Retro = pd.Retro,
                     ZodiakId = pd.ZodiakId,
+                    NavamsaZodiakId = pd.NavamsaZodiakId,
                     NakshatraId = pd.NakshatraId,
                     PadaId = pd.PadaId
                 };
@@ -2116,11 +2126,11 @@ namespace PAD
                 indexLagna = swappedPadaByLagnaList.FindIndex(l => l.Id == pId);
                 if ((indexMoon + 1) == badNavamshaArray[i])
                 {
-                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsha from Natal Moon", lCode) + ", ";
+                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsa from Natal Moon", lCode) + ", ";
                 }
                 if ((indexLagna + 1) == badNavamshaArray[i])
                 {
-                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsha from Lagna", lCode) + ", ";
+                    badNavamsha += badNavamshaArray[i] + " " + GetLocalizedText("Navamsa from Lagna", lCode) + ", ";
                 }
             }
             return badNavamsha;
@@ -2531,6 +2541,11 @@ namespace PAD
         public static int GetPadaNumberByPadaId(int padaId)
         {
             return CacheLoad._padaList.Where(i => i.Id == padaId).FirstOrDefault()?.PadaNumber ?? 0;
+        }
+
+        public static int GetNavamsaByNakshatraAndPada(int nakshatraId, int pada)
+        {
+            return CacheLoad._padaList.Where(i => i.NakshatraId == nakshatraId && i.PadaNumber == pada).FirstOrDefault()?.Navamsha ?? 0;
         }
 
         public static string GetLocalizedPlanetNameByCode(EPlanet planetCode, ELanguage langCode)

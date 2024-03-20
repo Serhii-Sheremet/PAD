@@ -27,6 +27,24 @@ namespace PAD
             }
         }
 
+        public static void SettingNavamsaNumberInDom(Graphics g, int posX, int posY, int width, int height, List<int> navamsaList)
+        {
+            
+            Font textFont = new Font(FontFamily.GenericSansSerif, 8, FontStyle.Regular);
+            SolidBrush textBrush = new SolidBrush(Color.Black);
+
+            StringFormat sf = new StringFormat();
+            sf.LineAlignment = StringAlignment.Center;
+            sf.Alignment = StringAlignment.Center;
+
+            int[] domZnakPositionX = GetDomNumbersPositionXCoordinate(posY, width);
+            int[] domZnakPositionY = GetDomNumbersPositionYCoordinate(posY, height);
+            for (int i = 0; i < 12; i++)
+            {
+                g.DrawString(navamsaList[i].ToString(), textFont, textBrush, domZnakPositionX[i], domZnakPositionY[i], sf);
+            }
+        }
+
         static int[] GetDomNumbersPositionXCoordinate(int posX, int width)
         {
             int[] listPositionX = new int[12] {  posX + (width / 2),
@@ -133,12 +151,42 @@ namespace PAD
             return planetsList;
         }
 
+        public static List<DomPlanet> GetNatalNavamsaPlanetsListByNavamsaZnak(List<PlanetData> pdList, int navamsa, int dom)
+        {
+            List<DomPlanet> planetsList = new List<DomPlanet>();
+
+            // remove nodes from list based on config
+            EAppSetting nodeSetting = (EAppSetting)CacheLoad._appSettingList.Where(i => i.GroupCode.Equals(EAppSettingList.NODE.ToString()) && i.Active == 1).FirstOrDefault().Id;
+
+            List<PlanetData> pdTunedList = Utility.ClonePlanetDataList(pdList);
+            if (nodeSetting == EAppSetting.NODEMEAN)
+            {
+                var planetToRemove = new[] { 10, 11 };
+                pdTunedList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
+            if (nodeSetting == EAppSetting.NODETRUE)
+            {
+                var planetToRemove = new[] { 8, 9 };
+                pdTunedList.RemoveAll(i => planetToRemove.Contains(i.PlanetId));
+            }
+
+            for (int i = 0; i < pdTunedList.Count; i++)
+            {
+                DomPlanet dPlanet = GetNavamsaPlanetIfCurrentZnak(pdTunedList[i], ETransitType.NATALNAVAMSA, navamsa, dom);
+                if (dPlanet != null)
+                {
+                    planetsList.Add(dPlanet);
+                }
+            }
+            return planetsList;
+        }
+
         private static DomPlanet GetPlanetIfCurrentZnak(PlanetData pd, ETransitType transitType, int zodiakId, int dom)
         {
             DomPlanet planet = null;
             EColor pColor = EColor.BLACK;
             string planetExaltation = string.Empty;
-            int currentZodiakId = CacheLoad._zodiakList.Where(i => i.Id == zodiakId).FirstOrDefault()?.Id ?? 0;
+            //int currentZodiakId = CacheLoad._zodiakList.Where(i => i.Id == zodiakId).FirstOrDefault()?.Id ?? 0;
 
             int planetId = pd.PlanetId;
             if (planetId == 10)
@@ -150,7 +198,7 @@ namespace PAD
                 planetId = 9;
             }
 
-            if (pd.ZodiakId == currentZodiakId)
+            if (pd.ZodiakId == zodiakId)
             {
                 EExaltation exalt = Utility.GetExaltationByPlanetAndZnak((EPlanet)planetId, (EZodiak)zodiakId);
                 if (exalt == EExaltation.EXALTATION)
@@ -162,9 +210,51 @@ namespace PAD
                     planetExaltation = "↓";
                 }
 
-                if (transitType != ETransitType.TRANSITGENERAL && transitType != ETransitType.TRANSITBIRTH)
+                if (transitType != ETransitType.TRANSITGENERAL && transitType != ETransitType.TRANSITBIRTH && transitType != ETransitType.NATALNAVAMSA && transitType != ETransitType.TRANSITNAVAMSA)
                 {
                     pColor = (EColor)(CacheLoad._tranzitList.Where(p => p.PlanetId == planetId && p.Dom == dom).FirstOrDefault()?.ColorId ?? 0);
+                }
+
+                planet = new DomPlanet
+                {
+                    PlanetCode = (EPlanet)pd.PlanetId,
+                    Longitude = pd.Longitude,
+                    TransitType = transitType,
+                    Retro = pd.Retro,
+                    Exaltation = planetExaltation,
+                    IsActiveAspect = false,
+                    ColorCode = pColor
+                };
+            }
+            return planet;
+        }
+
+        private static DomPlanet GetNavamsaPlanetIfCurrentZnak(PlanetData pd, ETransitType transitType, int navamsa, int dom)
+        {
+            DomPlanet planet = null;
+            EColor pColor = EColor.BLACK;
+            string planetExaltation = string.Empty;
+
+            int planetId = pd.PlanetId;
+            if (planetId == 10)
+            {
+                planetId = 8;
+            }
+            if (planetId == 11)
+            {
+                planetId = 9;
+            }
+
+            if (pd.NavamsaZodiakId == navamsa)
+            {
+                EExaltation exalt = Utility.GetExaltationByPlanetAndZnak((EPlanet)planetId, (EZodiak)navamsa);
+                if (exalt == EExaltation.EXALTATION)
+                {
+                    planetExaltation = "↑";
+                }
+                else if (exalt == EExaltation.DEBILITATION)
+                {
+                    planetExaltation = "↓";
                 }
 
                 planet = new DomPlanet

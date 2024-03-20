@@ -100,6 +100,10 @@
             this.pictureBoxPeriodRuler = new System.Windows.Forms.PictureBox();
             this.labelPeriodRuler = new System.Windows.Forms.Label();
             this.comboBoxRuler = new System.Windows.Forms.ComboBox();
+            this.pictureBoxTransitNavamsa = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNatalNavamsa = new System.Windows.Forms.PictureBox();
+            this.labelNatalNavamsa = new System.Windows.Forms.Label();
+            this.labelTransitNavamsa = new System.Windows.Forms.Label();
             this.toolStripProfileMenu.SuspendLayout();
             this.groupBoxEventInfo.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
@@ -115,6 +119,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTransitNavamsa)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNatalNavamsa)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripProfileMenu
@@ -936,12 +942,50 @@
             this.comboBoxRuler.TabIndex = 97;
             this.comboBoxRuler.SelectedIndexChanged += new System.EventHandler(this.comboBoxRuler_SelectedIndexChanged);
             // 
+            // pictureBoxTransitNavamsa
+            // 
+            this.pictureBoxTransitNavamsa.Location = new System.Drawing.Point(546, 476);
+            this.pictureBoxTransitNavamsa.Name = "pictureBoxTransitNavamsa";
+            this.pictureBoxTransitNavamsa.Size = new System.Drawing.Size(232, 153);
+            this.pictureBoxTransitNavamsa.TabIndex = 99;
+            this.pictureBoxTransitNavamsa.TabStop = false;
+            // 
+            // pictureBoxNatalNavamsa
+            // 
+            this.pictureBoxNatalNavamsa.Location = new System.Drawing.Point(277, 476);
+            this.pictureBoxNatalNavamsa.Name = "pictureBoxNatalNavamsa";
+            this.pictureBoxNatalNavamsa.Size = new System.Drawing.Size(232, 104);
+            this.pictureBoxNatalNavamsa.TabIndex = 98;
+            this.pictureBoxNatalNavamsa.TabStop = false;
+            // 
+            // labelNatalNavamsa
+            // 
+            this.labelNatalNavamsa.AutoSize = true;
+            this.labelNatalNavamsa.Location = new System.Drawing.Point(274, 456);
+            this.labelNatalNavamsa.Name = "labelNatalNavamsa";
+            this.labelNatalNavamsa.Size = new System.Drawing.Size(101, 16);
+            this.labelNatalNavamsa.TabIndex = 100;
+            this.labelNatalNavamsa.Text = "Natal Navamsa";
+            // 
+            // labelTransitNavamsa
+            // 
+            this.labelTransitNavamsa.AutoSize = true;
+            this.labelTransitNavamsa.Location = new System.Drawing.Point(543, 457);
+            this.labelTransitNavamsa.Name = "labelTransitNavamsa";
+            this.labelTransitNavamsa.Size = new System.Drawing.Size(110, 16);
+            this.labelTransitNavamsa.TabIndex = 101;
+            this.labelTransitNavamsa.Text = "Transit Navamsa";
+            // 
             // TransitsMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1178, 691);
+            this.Controls.Add(this.labelTransitNavamsa);
+            this.Controls.Add(this.labelNatalNavamsa);
+            this.Controls.Add(this.pictureBoxTransitNavamsa);
+            this.Controls.Add(this.pictureBoxNatalNavamsa);
             this.Controls.Add(this.comboBoxRuler);
             this.Controls.Add(this.labelPeriodRuler);
             this.Controls.Add(this.pictureBoxPeriodRuler);
@@ -998,6 +1042,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTransitNavamsa)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNatalNavamsa)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1075,5 +1121,9 @@
         private System.Windows.Forms.PictureBox pictureBoxPeriodRuler;
         private System.Windows.Forms.Label labelPeriodRuler;
         private System.Windows.Forms.ComboBox comboBoxRuler;
+        private System.Windows.Forms.PictureBox pictureBoxTransitNavamsa;
+        private System.Windows.Forms.PictureBox pictureBoxNatalNavamsa;
+        private System.Windows.Forms.Label labelNatalNavamsa;
+        private System.Windows.Forms.Label labelTransitNavamsa;
     }
 }

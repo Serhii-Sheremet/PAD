@@ -14,6 +14,7 @@ namespace PAD
         public double SpedInLatitude { get; set; }
         public string Retro { get; set; } // "R" or "D"
         public int ZodiakId { get; set; } // 1 - 12
+        public int NavamsaZodiakId { get; set; } // 1 - 12
         public int NakshatraId { get; set; } // 1- 27
         public int PadaId { get; set; } // 1 - 108
 

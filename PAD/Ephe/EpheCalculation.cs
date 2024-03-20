@@ -914,6 +914,7 @@ namespace PAD
             {
                 pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
             }
+            int navamsaZodiak = Utility.GetNavamsaByNakshatraAndPada(pParameters.CurrentNakshatra, Utility.GetPadaNumberByPadaId(pParameters.CurrentPada));
             PlanetData pdData = new PlanetData
             {
                 PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
@@ -924,6 +925,7 @@ namespace PAD
                 SpedInLatitude = pResults.CalcResults[4],
                 Retro = pParameters.CurrentRetro,
                 ZodiakId = pParameters.CurrentZnak,
+                NavamsaZodiakId = navamsaZodiak,
                 NakshatraId = pParameters.CurrentNakshatra,
                 PadaId = pParameters.CurrentPada
             };
@@ -944,12 +946,11 @@ namespace PAD
                                                                     CurrentRetro = string.Empty};
             
             List<PlanetData> planetDataList = new List<PlanetData>();
-
             if (planetConstant != EpheConstants.SE_SUN && planetConstant != EpheConstants.SE_MOON)
             {
                 pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
             }
-            
+            int navamsaZodiak = Utility.GetNavamsaByNakshatraAndPada(pParameters.CurrentNakshatra, Utility.GetPadaNumberByPadaId(pParameters.CurrentPada));
             PlanetData pdTemp = new PlanetData
             {
                 PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
@@ -960,6 +961,7 @@ namespace PAD
                 SpedInLatitude = pResults.CalcResults[4],
                 Retro = pParameters.CurrentRetro,
                 ZodiakId = pParameters.CurrentZnak,
+                NavamsaZodiakId = navamsaZodiak,
                 NakshatraId = pParameters.CurrentNakshatra,
                 PadaId = pParameters.CurrentPada
             };
@@ -978,7 +980,7 @@ namespace PAD
                 {
                     pParameters.CurrentRetro = GetRetroInfo(pResults.CalcResults[3]);
                 }
-
+                navamsaZodiak = Utility.GetNavamsaByNakshatraAndPada(pParameters.CurrentNakshatra, Utility.GetPadaNumberByPadaId(pParameters.CurrentPada));
                 pdTemp = new PlanetData
                 {
                     PlanetId = Utility.GetPlanetIdBySWEConst(planetConstant),
@@ -989,6 +991,7 @@ namespace PAD
                     SpedInLatitude = pResults.CalcResults[4],
                     Retro = pParameters.CurrentRetro,
                     ZodiakId = pParameters.CurrentZnak,
+                    NavamsaZodiakId = navamsaZodiak,
                     NakshatraId = pParameters.CurrentNakshatra,
                     PadaId = pParameters.CurrentPada
                 };
@@ -1106,6 +1109,10 @@ namespace PAD
             {
                 planetId = 11;
             }
+            int zodiakId = Utility.GetZodiakIdFromDegree(kLongitude);
+            int nakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude);
+            int padaId = Utility.GetPadaIdFromDegree(kLongitude);
+            int navamsaZodiakId = Utility.GetNavamsaByNakshatraAndPada(nakshatraId, Utility.GetPadaNumberByPadaId(padaId));
 
             PlanetData pdData = new PlanetData
             {
@@ -1116,9 +1123,10 @@ namespace PAD
                 SpeedInLongitude = rahuData.SpeedInLongitude,
                 SpedInLatitude = rahuData.SpedInLatitude,
                 Retro = rahuData.Retro,
-                ZodiakId = Utility.GetZodiakIdFromDegree(kLongitude),
-                NakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude),
-                PadaId = Utility.GetPadaIdFromDegree(kLongitude)
+                ZodiakId = zodiakId,
+                NavamsaZodiakId = navamsaZodiakId,
+                NakshatraId = nakshatraId,
+                PadaId = padaId
             };
             return pdData;
         }
@@ -1129,6 +1137,11 @@ namespace PAD
             foreach (PlanetData pd in rahuList)
             {
                 double kLongitude = CalculateKetuDegree(pd.Longitude);
+                int zodiakId = Utility.GetZodiakIdFromDegree(kLongitude);
+                int nakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude);
+                int padaId = Utility.GetPadaIdFromDegree(kLongitude);
+                int navamsaZodiakId = Utility.GetNavamsaByNakshatraAndPada(nakshatraId, Utility.GetPadaNumberByPadaId(padaId));
+
                 PlanetData pdTemp = new PlanetData
                 {
                     Date = pd.Date,
@@ -1137,9 +1150,10 @@ namespace PAD
                     SpeedInLongitude = pd.SpeedInLongitude,
                     SpedInLatitude = pd.SpedInLatitude,
                     Retro = pd.Retro,
-                    ZodiakId = Utility.GetZodiakIdFromDegree(kLongitude),
-                    NakshatraId = Utility.GetNakshatraIdFromDegree(kLongitude),
-                    PadaId = Utility.GetPadaIdFromDegree(kLongitude)
+                    ZodiakId = zodiakId,
+                    NavamsaZodiakId = navamsaZodiakId,
+                    NakshatraId = nakshatraId,
+                    PadaId = padaId
                 };
                 ketuList.Add(pdTemp);
             }
