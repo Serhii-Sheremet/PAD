@@ -5723,10 +5723,6 @@ namespace PAD
             //tmForm.ShowDialog(this);
         }
 
-        private void viewTranzitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ViewTranzit vtForm = new ViewTranzit(_selectedProfile, _activeLanguageCode);
-            vtForm.ShowDialog(this);
-        }
+        
     }
 }

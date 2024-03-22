@@ -54,9 +54,7 @@
             this.profileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.locationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.viewTranzitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tranzitsMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.yearsTranzitsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.swephCalcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -231,9 +229,7 @@
             this.profileToolStripMenuItem,
             this.locationToolStripMenuItem,
             this.toolStripSeparator1,
-            this.viewTranzitToolStripMenuItem,
             this.tranzitsMapToolStripMenuItem,
-            this.toolStripSeparator7,
             this.yearsTranzitsToolStripMenuItem,
             this.swephCalcToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
@@ -256,22 +252,11 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             // 
-            // viewTranzitToolStripMenuItem
-            // 
-            this.viewTranzitToolStripMenuItem.Name = "viewTranzitToolStripMenuItem";
-            resources.ApplyResources(this.viewTranzitToolStripMenuItem, "viewTranzitToolStripMenuItem");
-            this.viewTranzitToolStripMenuItem.Click += new System.EventHandler(this.viewTranzitToolStripMenuItem_Click);
-            // 
             // tranzitsMapToolStripMenuItem
             // 
             this.tranzitsMapToolStripMenuItem.Name = "tranzitsMapToolStripMenuItem";
             resources.ApplyResources(this.tranzitsMapToolStripMenuItem, "tranzitsMapToolStripMenuItem");
             this.tranzitsMapToolStripMenuItem.Click += new System.EventHandler(this.tranzitsMapToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             // 
             // yearsTranzitsToolStripMenuItem
             // 
@@ -414,7 +399,5 @@
         private System.Windows.Forms.ToolStripMenuItem exportYearToPDFToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem swephCalcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tranzitsMapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewTranzitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
     }
 }
