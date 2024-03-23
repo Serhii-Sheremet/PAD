@@ -180,6 +180,9 @@ namespace PAD
             groupBoxMonth.Top = groupBoxTop + 4 * groupBoxHeight + 2;
             groupBoxYear.Top = groupBoxTop + 5 * groupBoxHeight + 2;
 
+            buttonRefresh.Top = pictureBoxMap.Bottom - buttonRefresh.Height;
+            buttonRefresh.Left = groupBoxYear.Left;
+
             groupBoxAspects.Top = dataGridViewInfoTranzit.Top;
             groupBoxAspects.Left = groupBoxSeconds.Left;
 
@@ -469,6 +472,11 @@ namespace PAD
             if (textBoxYear.Text.Equals(string.Empty))
                 return;
 
+            ConstructNewDate();
+        }
+
+        private void ConstructNewDate()
+        {
             int year = Convert.ToInt32(textBoxYear.Text);
             int month = Convert.ToInt32(textBoxMonth.Text);
             int day = Convert.ToInt32(textBoxDay.Text);
@@ -1855,6 +1863,7 @@ namespace PAD
         {
             KeyValueData selectedItem = (KeyValueData)comboBoxRuler.SelectedItem;
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
+            pictureBoxPeriodRuler.Focus();
         }
 
         private void toolStripButtonAdd_Click(object sender, EventArgs e)
@@ -1887,6 +1896,11 @@ namespace PAD
                 textBoxEvent.Text = selectedEvent.EventName;
                 richTextBoxEventDesc.Text = selectedEvent.Description;
             }
+        }
+
+        private void buttonRefresh_Click(object sender, EventArgs e)
+        {
+            CurrentDateRefresh();
         }
     }
 }

@@ -30,10 +30,10 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TransitsMap));
             this.toolStripProfileMenu = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
             this.toolStripButtonPreview = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxDate = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
@@ -100,6 +100,7 @@
             this.pictureBoxMap = new System.Windows.Forms.PictureBox();
             this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
             this.pictureBoxMapMoon = new System.Windows.Forms.PictureBox();
+            this.buttonRefresh = new System.Windows.Forms.Button();
             this.toolStripProfileMenu.SuspendLayout();
             this.groupBoxEventInfo.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
@@ -136,21 +137,6 @@
             this.toolStripProfileMenu.Size = new System.Drawing.Size(1178, 39);
             this.toolStripProfileMenu.TabIndex = 64;
             // 
-            // toolStripButtonRefresh
-            // 
-            this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonRefresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRefresh.Image")));
-            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
-            this.toolStripButtonRefresh.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonRefresh.Text = "Refresh";
-            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
-            // 
             // toolStripButtonAdd
             // 
             this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -170,6 +156,21 @@
             this.toolStripButtonPreview.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonPreview.Text = "Preview Event";
             this.toolStripButtonPreview.Click += new System.EventHandler(this.toolStripButtonPreview_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
+            // 
+            // toolStripButtonRefresh
+            // 
+            this.toolStripButtonRefresh.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonRefresh.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonRefresh.Image")));
+            this.toolStripButtonRefresh.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRefresh.Name = "toolStripButtonRefresh";
+            this.toolStripButtonRefresh.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonRefresh.Text = "Refresh";
+            this.toolStripButtonRefresh.Click += new System.EventHandler(this.toolStripButtonRefresh_Click);
             // 
             // toolStripLabel2
             // 
@@ -936,12 +937,24 @@
             this.pictureBoxMapMoon.TabIndex = 85;
             this.pictureBoxMapMoon.TabStop = false;
             // 
+            // buttonRefresh
+            // 
+            this.buttonRefresh.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRefresh.Location = new System.Drawing.Point(875, 422);
+            this.buttonRefresh.Name = "buttonRefresh";
+            this.buttonRefresh.Size = new System.Drawing.Size(140, 32);
+            this.buttonRefresh.TabIndex = 102;
+            this.buttonRefresh.Text = "Refresh Date";
+            this.buttonRefresh.UseVisualStyleBackColor = true;
+            this.buttonRefresh.Click += new System.EventHandler(this.buttonRefresh_Click);
+            // 
             // TransitsMap
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1178, 691);
+            this.Controls.Add(this.buttonRefresh);
             this.Controls.Add(this.labelTransitNavamsa);
             this.Controls.Add(this.labelNatalNavamsa);
             this.Controls.Add(this.pictureBoxTransitNavamsa);
@@ -1081,5 +1094,6 @@
         private System.Windows.Forms.PictureBox pictureBoxNatalNavamsa;
         private System.Windows.Forms.Label labelNatalNavamsa;
         private System.Windows.Forms.Label labelTransitNavamsa;
+        private System.Windows.Forms.Button buttonRefresh;
     }
 }

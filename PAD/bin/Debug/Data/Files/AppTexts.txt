@@ -156,6 +156,8 @@ Month|Month|en
 Month|Месяц|ru
 Year|Year|en
 Year|Год|ru
+Refresh Date|Refresh Date|en
+Refresh Date|Обновить Дату|ru
 Location|Location|en
 Location|Местоположение|ru
 Transit Chart|Transit Chart|en
