@@ -71,7 +71,7 @@
             this.labelSearch.AutoSize = true;
             this.labelSearch.Location = new System.Drawing.Point(308, 62);
             this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(54, 16);
+            this.labelSearch.Size = new System.Drawing.Size(53, 16);
             this.labelSearch.TabIndex = 2;
             this.labelSearch.Text = "Search:";
             // 
@@ -80,7 +80,7 @@
             this.labelLocality.AutoSize = true;
             this.labelLocality.Location = new System.Drawing.Point(308, 100);
             this.labelLocality.Name = "labelLocality";
-            this.labelLocality.Size = new System.Drawing.Size(54, 16);
+            this.labelLocality.Size = new System.Drawing.Size(53, 16);
             this.labelLocality.TabIndex = 4;
             this.labelLocality.Text = "Locality";
             // 
@@ -98,7 +98,7 @@
             this.labelRegion.AutoSize = true;
             this.labelRegion.Location = new System.Drawing.Point(308, 139);
             this.labelRegion.Name = "labelRegion";
-            this.labelRegion.Size = new System.Drawing.Size(102, 16);
+            this.labelRegion.Size = new System.Drawing.Size(101, 16);
             this.labelRegion.TabIndex = 6;
             this.labelRegion.Text = "Region / District";
             // 
@@ -116,7 +116,7 @@
             this.labelState.AutoSize = true;
             this.labelState.Location = new System.Drawing.Point(308, 180);
             this.labelState.Name = "labelState";
-            this.labelState.Size = new System.Drawing.Size(39, 16);
+            this.labelState.Size = new System.Drawing.Size(38, 16);
             this.labelState.TabIndex = 8;
             this.labelState.Text = "State";
             // 
@@ -134,7 +134,7 @@
             this.labelCountry.AutoSize = true;
             this.labelCountry.Location = new System.Drawing.Point(308, 219);
             this.labelCountry.Name = "labelCountry";
-            this.labelCountry.Size = new System.Drawing.Size(53, 16);
+            this.labelCountry.Size = new System.Drawing.Size(52, 16);
             this.labelCountry.TabIndex = 10;
             this.labelCountry.Text = "Country";
             // 
@@ -152,7 +152,7 @@
             this.labelLatitude.AutoSize = true;
             this.labelLatitude.Location = new System.Drawing.Point(308, 260);
             this.labelLatitude.Name = "labelLatitude";
-            this.labelLatitude.Size = new System.Drawing.Size(55, 16);
+            this.labelLatitude.Size = new System.Drawing.Size(54, 16);
             this.labelLatitude.TabIndex = 12;
             this.labelLatitude.Text = "Latitude";
             // 
@@ -170,7 +170,7 @@
             this.labelLongitude.AutoSize = true;
             this.labelLongitude.Location = new System.Drawing.Point(308, 300);
             this.labelLongitude.Name = "labelLongitude";
-            this.labelLongitude.Size = new System.Drawing.Size(67, 16);
+            this.labelLongitude.Size = new System.Drawing.Size(66, 16);
             this.labelLongitude.TabIndex = 14;
             this.labelLongitude.Text = "Longitude";
             // 

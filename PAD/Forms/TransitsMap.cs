@@ -1,5 +1,4 @@
-﻿using PdfSharp.Drawing.BarCodes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
@@ -1125,6 +1124,9 @@ namespace PAD
             textBoxDay.Text = _curDate.Day.ToString();
             textBoxMonth.Text = _curDate.Month.ToString();
             textBoxYear.Text = _curDate.Year.ToString();
+
+            textBoxEvent.Text = string.Empty;
+            richTextBoxEventDesc.Text = string.Empty;
         }
 
         private void toolStripTextBoxDate_TextChanged(object sender, EventArgs e)
@@ -1855,6 +1857,36 @@ namespace PAD
             PreparePeriodRulerMap((EPlanet)selectedItem.ItemId);
         }
 
-        
+        private void toolStripButtonAdd_Click(object sender, EventArgs e)
+        {
+            PersonTransitEvents pteForm = new PersonTransitEvents(_profile, _location.Id, _curDate, _activeLang);
+            pteForm.ShowDialog(this);
+            TransitEvent selectedEvent = pteForm.SelectedTransitEvent;
+            if (selectedEvent != null)
+            {
+                _curDate = selectedEvent.EventDate;
+                toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+                _location = CacheLoad._locationList.Where(i => i.Id == selectedEvent.LocationId).FirstOrDefault();
+                textBoxLivingPlace.Text = _location.Locality;
+                textBoxEvent.Text = selectedEvent.EventName;
+                richTextBoxEventDesc.Text = selectedEvent.Description;
+            }
+        }
+
+        private void toolStripButtonPreview_Click(object sender, EventArgs e)
+        {
+            PersonTransitEvents pteForm = new PersonTransitEvents(_profile, _activeLang);
+            pteForm.ShowDialog(this);
+            TransitEvent selectedEvent = pteForm.SelectedTransitEvent;
+            if (selectedEvent != null)
+            {
+                _curDate = selectedEvent.EventDate;
+                toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+                _location = CacheLoad._locationList.Where(i => i.Id == selectedEvent.LocationId).FirstOrDefault();
+                textBoxLivingPlace.Text = _location.Locality;
+                textBoxEvent.Text = selectedEvent.EventName;
+                richTextBoxEventDesc.Text = selectedEvent.Description;
+            }
+        }
     }
 }

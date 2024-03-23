@@ -16,6 +16,7 @@ namespace PAD
         public static List<Location> _locationList;
         public static List<Profile> _profileList;
         public static List<PersonEvent> _personEventsList;
+        public static List<TransitEvent> _transitEventsList;
 
         public static List<AppSettingList> _appSettingList;
         public static List<Colors> _colorList;
@@ -588,6 +589,39 @@ namespace PAD
                 dbCon.Close();
             }
             return pevList;
+        }
+
+        public static List<TransitEvent> GetTransitEventsList()
+        {
+            List<TransitEvent> tevList = new List<TransitEvent>();
+            using (SQLiteConnection dbCon = Utility.GetSQLConnection())
+            {
+                dbCon.Open();
+                try
+                {
+                    SQLiteCommand command = new SQLiteCommand("select ID, PROFILEID, EVENTDATE, LOCATIONID, EVENTNAME, DESCRIPTION from TRANSIT_EVENTS order by ID", dbCon);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            TransitEvent temp = new TransitEvent
+                            {
+                                Id = reader.IntValue(0),
+                                ProfileId = reader.IntValue(1),
+                                EventDate = DateTime.ParseExact(reader.GetString(2), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture),
+                                LocationId = reader.IntValue(3),
+                                EventName = reader.StringValue(4),
+                                Description = reader.StringValue(5)
+                            };
+                            tevList.Add(temp);
+                        }
+                        reader.Close();
+                    }
+                }
+                catch { }
+                dbCon.Close();
+            }
+            return tevList;
         }
 
         public static List<Planet> GetPlanetsList()

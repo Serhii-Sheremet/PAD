@@ -3001,7 +3001,6 @@ namespace PAD
 
         private void InsertNewProfile()
         {
-            DateTime date = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             Profile newProfile = new Profile
             {
                 ProfileName = textBoxProfileName.Text,
@@ -3180,6 +3179,9 @@ namespace PAD
                     _nakshatralagnaId = Utility.GetNakshatraIdFromDegree(_ascendant);
                     _padaLagna = Utility.GetPadaNumberByPadaId(Utility.GetPadaIdFromDegree(_ascendant));
                     _lagnaId = Utility.GetZodiakIdFromDegree(_ascendant);
+
+                    SelectedProfile = null;
+
                     PrepareTransitMap();
                     ProfileInfoDataGridViewFillByRow(_activeLang);
                 }

@@ -118,6 +118,7 @@ namespace PAD
             CacheLoad._fontDescList = CacheLoad.GetFontDescList();
             CacheLoad._profileList = CacheLoad.GetProfilesList();
             CacheLoad._personEventsList = CacheLoad.GetPersonsEventsList();
+            CacheLoad._transitEventsList = CacheLoad.GetTransitEventsList();
             CacheLoad._planetList = CacheLoad.GetPlanetsList();
             CacheLoad._planetDescList = CacheLoad.GetPlanetDescList();
             CacheLoad._zodiakList = CacheLoad.GetZodiaksList();

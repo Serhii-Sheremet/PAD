@@ -142,8 +142,6 @@ Add as new Profile|Add as new Profile|en
 Add as new Profile|Добавить как новый Профиль|ru
 Default|Default|en
 Default|По умолчанию|ru
-View Transit|View Transit|en
-View Transit|Посмотреть Транзит|ru
 Transit Date|Transit Date|en
 Transit Date|Дата Транзита|ru
 Seconds|Seconds|en
@@ -162,6 +160,20 @@ Location|Location|en
 Location|Местоположение|ru
 Transit Chart|Transit Chart|en
 Transit Chart|Транзитная Карта|ru
+Add Event|Add Event|en
+Add Event|Добавить Событие|ru
+Preview Event|Preview Event|en
+Preview Event|Просмотреть Событие|ru
+Transit Events|Transit Events|en
+Transit Events|Транзитные События|ru
+Edit Event|Edit Event|en
+Edit Event|Редактировать Событие|ru
+Delete Event|Delete Event|en
+Delete Event|Удалить Событие|ru
+Save Event|Save Event|en
+Save Event|Сохранить Событие|ru
+Transit Name|Transit Name|en
+Transit Name|Имя Транзита|ru
 Transits from Lagna|Transits from Lagna|en
 Transits from Lagna|Транзиты от Лагны|ru
 Transits from Natal Moon|Transits from Natal Moon|en

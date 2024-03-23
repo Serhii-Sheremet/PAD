@@ -33,11 +33,7 @@
             this.toolStripButtonRefresh = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButtonAdd = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonEdit = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonSave = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripButtonPreview = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripTextBoxDate = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripLabelDate = new System.Windows.Forms.ToolStripLabel();
@@ -87,23 +83,23 @@
             this.checkBoxSun = new System.Windows.Forms.CheckBox();
             this.checkBoxMoon = new System.Windows.Forms.CheckBox();
             this.checkBoxAll = new System.Windows.Forms.CheckBox();
-            this.pictureBoxMap = new System.Windows.Forms.PictureBox();
             this.labelTranzit = new System.Windows.Forms.Label();
             this.labelNatal = new System.Windows.Forms.Label();
             this.dataGridViewInfoNatal = new System.Windows.Forms.DataGridView();
             this.dataGridViewInfoTranzit = new System.Windows.Forms.DataGridView();
             this.labelLagna = new System.Windows.Forms.Label();
             this.labelNatalMoon = new System.Windows.Forms.Label();
-            this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
-            this.pictureBoxMapMoon = new System.Windows.Forms.PictureBox();
             this.labelCurrent = new System.Windows.Forms.Label();
-            this.pictureBoxPeriodRuler = new System.Windows.Forms.PictureBox();
             this.labelPeriodRuler = new System.Windows.Forms.Label();
             this.comboBoxRuler = new System.Windows.Forms.ComboBox();
-            this.pictureBoxTransitNavamsa = new System.Windows.Forms.PictureBox();
-            this.pictureBoxNatalNavamsa = new System.Windows.Forms.PictureBox();
             this.labelNatalNavamsa = new System.Windows.Forms.Label();
             this.labelTransitNavamsa = new System.Windows.Forms.Label();
+            this.pictureBoxTransitNavamsa = new System.Windows.Forms.PictureBox();
+            this.pictureBoxNatalNavamsa = new System.Windows.Forms.PictureBox();
+            this.pictureBoxPeriodRuler = new System.Windows.Forms.PictureBox();
+            this.pictureBoxMap = new System.Windows.Forms.PictureBox();
+            this.pictureBoxMapLagna = new System.Windows.Forms.PictureBox();
+            this.pictureBoxMapMoon = new System.Windows.Forms.PictureBox();
             this.toolStripProfileMenu.SuspendLayout();
             this.groupBoxEventInfo.SuspendLayout();
             this.groupBoxYear.SuspendLayout();
@@ -113,14 +109,14 @@
             this.groupBoxMinutes.SuspendLayout();
             this.groupBoxSeconds.SuspendLayout();
             this.groupBoxAspects.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoNatal)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoTranzit)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTransitNavamsa)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNatalNavamsa)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).BeginInit();
             this.SuspendLayout();
             // 
             // toolStripProfileMenu
@@ -128,14 +124,10 @@
             this.toolStripProfileMenu.AutoSize = false;
             this.toolStripProfileMenu.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStripProfileMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonRefresh,
-            this.toolStripSeparator1,
             this.toolStripButtonAdd,
-            this.toolStripButtonEdit,
-            this.toolStripButtonDelete,
-            this.toolStripSeparator2,
-            this.toolStripButtonSave,
-            this.toolStripLabel1,
+            this.toolStripButtonPreview,
+            this.toolStripSeparator1,
+            this.toolStripButtonRefresh,
             this.toolStripLabel2,
             this.toolStripTextBoxDate,
             this.toolStripLabelDate});
@@ -162,54 +154,22 @@
             // toolStripButtonAdd
             // 
             this.toolStripButtonAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonAdd.Enabled = false;
             this.toolStripButtonAdd.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonAdd.Image")));
             this.toolStripButtonAdd.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButtonAdd.Name = "toolStripButtonAdd";
             this.toolStripButtonAdd.Size = new System.Drawing.Size(36, 36);
             this.toolStripButtonAdd.Text = "Add Event";
+            this.toolStripButtonAdd.Click += new System.EventHandler(this.toolStripButtonAdd_Click);
             // 
-            // toolStripButtonEdit
+            // toolStripButtonPreview
             // 
-            this.toolStripButtonEdit.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonEdit.Enabled = false;
-            this.toolStripButtonEdit.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonEdit.Image")));
-            this.toolStripButtonEdit.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonEdit.Name = "toolStripButtonEdit";
-            this.toolStripButtonEdit.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonEdit.Text = "Edit Event";
-            // 
-            // toolStripButtonDelete
-            // 
-            this.toolStripButtonDelete.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonDelete.Enabled = false;
-            this.toolStripButtonDelete.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonDelete.Image")));
-            this.toolStripButtonDelete.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonDelete.Text = "Delete Event";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripButtonSave
-            // 
-            this.toolStripButtonSave.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButtonSave.Enabled = false;
-            this.toolStripButtonSave.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSave.Image")));
-            this.toolStripButtonSave.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSave.Name = "toolStripButtonSave";
-            this.toolStripButtonSave.Size = new System.Drawing.Size(36, 36);
-            this.toolStripButtonSave.Text = "Save Event";
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.AutoSize = false;
-            this.toolStripLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(120, 36);
+            this.toolStripButtonPreview.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButtonPreview.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonPreview.Image")));
+            this.toolStripButtonPreview.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonPreview.Name = "toolStripButtonPreview";
+            this.toolStripButtonPreview.Size = new System.Drawing.Size(36, 36);
+            this.toolStripButtonPreview.Text = "Preview Event";
+            this.toolStripButtonPreview.Click += new System.EventHandler(this.toolStripButtonPreview_Click);
             // 
             // toolStripLabel2
             // 
@@ -817,14 +777,6 @@
             this.checkBoxAll.UseVisualStyleBackColor = true;
             this.checkBoxAll.CheckedChanged += new System.EventHandler(this.checkBoxAll_CheckedChanged);
             // 
-            // pictureBoxMap
-            // 
-            this.pictureBoxMap.Location = new System.Drawing.Point(681, 69);
-            this.pictureBoxMap.Name = "pictureBoxMap";
-            this.pictureBoxMap.Size = new System.Drawing.Size(200, 144);
-            this.pictureBoxMap.TabIndex = 93;
-            this.pictureBoxMap.TabStop = false;
-            // 
             // labelTranzit
             // 
             this.labelTranzit.AutoSize = true;
@@ -855,7 +807,7 @@
             this.dataGridViewInfoNatal.Name = "dataGridViewInfoNatal";
             this.dataGridViewInfoNatal.ReadOnly = true;
             this.dataGridViewInfoNatal.RowHeadersVisible = false;
-            this.dataGridViewInfoNatal.Size = new System.Drawing.Size(216, 150);
+            this.dataGridViewInfoNatal.Size = new System.Drawing.Size(216, 108);
             this.dataGridViewInfoNatal.TabIndex = 90;
             // 
             // dataGridViewInfoTranzit
@@ -870,7 +822,7 @@
             this.dataGridViewInfoTranzit.Name = "dataGridViewInfoTranzit";
             this.dataGridViewInfoTranzit.ReadOnly = true;
             this.dataGridViewInfoTranzit.RowHeadersVisible = false;
-            this.dataGridViewInfoTranzit.Size = new System.Drawing.Size(207, 150);
+            this.dataGridViewInfoTranzit.Size = new System.Drawing.Size(207, 94);
             this.dataGridViewInfoTranzit.TabIndex = 89;
             // 
             // labelLagna
@@ -891,22 +843,6 @@
             this.labelNatalMoon.TabIndex = 87;
             this.labelNatalMoon.Text = "Transits from Natal Moon";
             // 
-            // pictureBoxMapLagna
-            // 
-            this.pictureBoxMapLagna.Location = new System.Drawing.Point(11, 69);
-            this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
-            this.pictureBoxMapLagna.Size = new System.Drawing.Size(242, 157);
-            this.pictureBoxMapLagna.TabIndex = 86;
-            this.pictureBoxMapLagna.TabStop = false;
-            // 
-            // pictureBoxMapMoon
-            // 
-            this.pictureBoxMapMoon.Location = new System.Drawing.Point(356, 69);
-            this.pictureBoxMapMoon.Name = "pictureBoxMapMoon";
-            this.pictureBoxMapMoon.Size = new System.Drawing.Size(198, 157);
-            this.pictureBoxMapMoon.TabIndex = 85;
-            this.pictureBoxMapMoon.TabStop = false;
-            // 
             // labelCurrent
             // 
             this.labelCurrent.AutoSize = true;
@@ -915,14 +851,6 @@
             this.labelCurrent.Size = new System.Drawing.Size(100, 16);
             this.labelCurrent.TabIndex = 94;
             this.labelCurrent.Text = "Current Transits";
-            // 
-            // pictureBoxPeriodRuler
-            // 
-            this.pictureBoxPeriodRuler.Location = new System.Drawing.Point(12, 256);
-            this.pictureBoxPeriodRuler.Name = "pictureBoxPeriodRuler";
-            this.pictureBoxPeriodRuler.Size = new System.Drawing.Size(232, 181);
-            this.pictureBoxPeriodRuler.TabIndex = 95;
-            this.pictureBoxPeriodRuler.TabStop = false;
             // 
             // labelPeriodRuler
             // 
@@ -942,26 +870,10 @@
             this.comboBoxRuler.TabIndex = 97;
             this.comboBoxRuler.SelectedIndexChanged += new System.EventHandler(this.comboBoxRuler_SelectedIndexChanged);
             // 
-            // pictureBoxTransitNavamsa
-            // 
-            this.pictureBoxTransitNavamsa.Location = new System.Drawing.Point(546, 476);
-            this.pictureBoxTransitNavamsa.Name = "pictureBoxTransitNavamsa";
-            this.pictureBoxTransitNavamsa.Size = new System.Drawing.Size(232, 153);
-            this.pictureBoxTransitNavamsa.TabIndex = 99;
-            this.pictureBoxTransitNavamsa.TabStop = false;
-            // 
-            // pictureBoxNatalNavamsa
-            // 
-            this.pictureBoxNatalNavamsa.Location = new System.Drawing.Point(277, 476);
-            this.pictureBoxNatalNavamsa.Name = "pictureBoxNatalNavamsa";
-            this.pictureBoxNatalNavamsa.Size = new System.Drawing.Size(232, 104);
-            this.pictureBoxNatalNavamsa.TabIndex = 98;
-            this.pictureBoxNatalNavamsa.TabStop = false;
-            // 
             // labelNatalNavamsa
             // 
             this.labelNatalNavamsa.AutoSize = true;
-            this.labelNatalNavamsa.Location = new System.Drawing.Point(274, 456);
+            this.labelNatalNavamsa.Location = new System.Drawing.Point(18, 468);
             this.labelNatalNavamsa.Name = "labelNatalNavamsa";
             this.labelNatalNavamsa.Size = new System.Drawing.Size(101, 16);
             this.labelNatalNavamsa.TabIndex = 100;
@@ -970,11 +882,59 @@
             // labelTransitNavamsa
             // 
             this.labelTransitNavamsa.AutoSize = true;
-            this.labelTransitNavamsa.Location = new System.Drawing.Point(543, 457);
+            this.labelTransitNavamsa.Location = new System.Drawing.Point(274, 478);
             this.labelTransitNavamsa.Name = "labelTransitNavamsa";
             this.labelTransitNavamsa.Size = new System.Drawing.Size(110, 16);
             this.labelTransitNavamsa.TabIndex = 101;
             this.labelTransitNavamsa.Text = "Transit Navamsa";
+            // 
+            // pictureBoxTransitNavamsa
+            // 
+            this.pictureBoxTransitNavamsa.Location = new System.Drawing.Point(277, 497);
+            this.pictureBoxTransitNavamsa.Name = "pictureBoxTransitNavamsa";
+            this.pictureBoxTransitNavamsa.Size = new System.Drawing.Size(232, 98);
+            this.pictureBoxTransitNavamsa.TabIndex = 99;
+            this.pictureBoxTransitNavamsa.TabStop = false;
+            // 
+            // pictureBoxNatalNavamsa
+            // 
+            this.pictureBoxNatalNavamsa.Location = new System.Drawing.Point(21, 487);
+            this.pictureBoxNatalNavamsa.Name = "pictureBoxNatalNavamsa";
+            this.pictureBoxNatalNavamsa.Size = new System.Drawing.Size(232, 104);
+            this.pictureBoxNatalNavamsa.TabIndex = 98;
+            this.pictureBoxNatalNavamsa.TabStop = false;
+            // 
+            // pictureBoxPeriodRuler
+            // 
+            this.pictureBoxPeriodRuler.Location = new System.Drawing.Point(12, 256);
+            this.pictureBoxPeriodRuler.Name = "pictureBoxPeriodRuler";
+            this.pictureBoxPeriodRuler.Size = new System.Drawing.Size(232, 181);
+            this.pictureBoxPeriodRuler.TabIndex = 95;
+            this.pictureBoxPeriodRuler.TabStop = false;
+            // 
+            // pictureBoxMap
+            // 
+            this.pictureBoxMap.Location = new System.Drawing.Point(681, 69);
+            this.pictureBoxMap.Name = "pictureBoxMap";
+            this.pictureBoxMap.Size = new System.Drawing.Size(200, 144);
+            this.pictureBoxMap.TabIndex = 93;
+            this.pictureBoxMap.TabStop = false;
+            // 
+            // pictureBoxMapLagna
+            // 
+            this.pictureBoxMapLagna.Location = new System.Drawing.Point(11, 69);
+            this.pictureBoxMapLagna.Name = "pictureBoxMapLagna";
+            this.pictureBoxMapLagna.Size = new System.Drawing.Size(242, 157);
+            this.pictureBoxMapLagna.TabIndex = 86;
+            this.pictureBoxMapLagna.TabStop = false;
+            // 
+            // pictureBoxMapMoon
+            // 
+            this.pictureBoxMapMoon.Location = new System.Drawing.Point(356, 69);
+            this.pictureBoxMapMoon.Name = "pictureBoxMapMoon";
+            this.pictureBoxMapMoon.Size = new System.Drawing.Size(198, 157);
+            this.pictureBoxMapMoon.TabIndex = 85;
+            this.pictureBoxMapMoon.TabStop = false;
             // 
             // TransitsMap
             // 
@@ -1036,14 +996,14 @@
             this.groupBoxSeconds.PerformLayout();
             this.groupBoxAspects.ResumeLayout(false);
             this.groupBoxAspects.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoNatal)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewInfoTranzit)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxTransitNavamsa)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxNatalNavamsa)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxPeriodRuler)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMap)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapLagna)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxMapMoon)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1053,9 +1013,6 @@
         private System.Windows.Forms.ToolStrip toolStripProfileMenu;
         private System.Windows.Forms.ToolStripButton toolStripButtonRefresh;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton toolStripButtonSave;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripLabel toolStripLabelDate;
         private System.Windows.Forms.ToolStripTextBox toolStripTextBoxDate;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
@@ -1095,8 +1052,7 @@
         private System.Windows.Forms.RichTextBox richTextBoxEventDesc;
         private System.Windows.Forms.TextBox textBoxEvent;
         private System.Windows.Forms.ToolStripButton toolStripButtonAdd;
-        private System.Windows.Forms.ToolStripButton toolStripButtonEdit;
-        private System.Windows.Forms.ToolStripButton toolStripButtonDelete;
+        private System.Windows.Forms.ToolStripButton toolStripButtonPreview;
         private System.Windows.Forms.Panel panelTranzits;
         private System.Windows.Forms.GroupBox groupBoxAspects;
         private System.Windows.Forms.CheckBox checkBoxRahu;
