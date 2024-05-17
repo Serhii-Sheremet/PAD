@@ -671,7 +671,7 @@ namespace PAD
                     {
                         LocalizeGroupBox((GroupBox)c, languageCode);
                     }
-                    if (c is RadioButton || c is Label || c is CheckBox)
+                    if (c is RadioButton || c is Label || c is CheckBox || c is Button)
                     {
                         c.Text = GetLocalizedText(c.Text, languageCode);
                     }
@@ -2411,7 +2411,7 @@ namespace PAD
         {
             int degree = (int)decimalValue;
             
-            if (degree > 30)
+            if (degree >= 30)
             {
                 int amount = degree / 30;
                 degree = degree - (amount * 30);

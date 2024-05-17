@@ -4,6 +4,7 @@ using System.Data;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Forms;
 
 namespace PAD
@@ -36,10 +37,12 @@ namespace PAD
         private double _curAscendant;
         private Profile _profile;
 
-        private int _spaceLenght = 5;
-        private double _chartHeightCoeficient = 0.72;
+        private int _spaceLenght = 4;
+        private double _chartHeightCoeficient = 0.74;
         private int _chartWidth = 0;
         private int _chartHeight = 0;
+
+        private string[] _stepsList = new string[]{ "Seconds", "Minutes", "Hours", "Day", "Month", "Year" };
 
         public TransitsMap()
         {
@@ -90,6 +93,11 @@ namespace PAD
             {
                 comboBoxRuler.Items.Add(new KeyValueData(pd.Name, pd.PlanetId));
             }
+
+            for (int i = 0; i < _stepsList.Length; i++)
+            {
+                comboBoxDateStep.Items.Add(new KeyValueData(Utility.GetLocalizedText(_stepsList[i], _activeLang), (i + 1)));
+            }
         }
 
         private void TransitsMap_Shown(object sender, EventArgs e)
@@ -100,18 +108,16 @@ namespace PAD
             labelLagna.Left = _spaceLenght;
             
             int topSpace = labelLagna.Top + labelLagna.Height + _spaceLenght;
-            int panelWidth = this.Width - groupBoxSeconds.Width;
 
-            panelTranzits.Width = panelWidth;
-            _chartWidth = (panelWidth / 3) - 10;
-            _chartHeight = (int)(_chartWidth * _chartHeightCoeficient);
+            _chartWidth = (this.Width - 5 * _spaceLenght) / 7;
+            _chartHeight = (int)(_chartWidth * 2 * _chartHeightCoeficient);
             
-            pictureBoxMapLagna.Width = _chartWidth;
+            pictureBoxMapLagna.Width = _chartWidth * 2;
             pictureBoxMapLagna.Height = _chartHeight;
             pictureBoxMapLagna.Top = topSpace;
             pictureBoxMapLagna.Left = _spaceLenght;
 
-            pictureBoxMapMoon.Width = _chartWidth;
+            pictureBoxMapMoon.Width = _chartWidth * 2;
             pictureBoxMapMoon.Height = _chartHeight;
             pictureBoxMapMoon.Top = topSpace;
             pictureBoxMapMoon.Left = pictureBoxMapLagna.Width + 2 * _spaceLenght;
@@ -119,10 +125,29 @@ namespace PAD
             labelNatalMoon.Top = toolStripProfileMenu.Height + _spaceLenght;
             labelNatalMoon.Left = pictureBoxMapMoon.Left;
 
-            pictureBoxMap.Width = _chartWidth;
+            pictureBoxMap.Width = _chartWidth * 2;
             pictureBoxMap.Height = _chartHeight;
             pictureBoxMap.Top = topSpace;
             pictureBoxMap.Left = pictureBoxMapLagna.Width + pictureBoxMapMoon.Width + 3 * _spaceLenght;
+
+            int navLeft = pictureBoxMapLagna.Width + pictureBoxMapMoon.Width + pictureBoxMap.Width + 4 * _spaceLenght;
+            labelNatalNavamsa.Top = toolStripProfileMenu.Height + _spaceLenght;
+            labelNatalNavamsa.Left = navLeft;
+
+            int navHeight = (int)(_chartHeight - labelNatalNavamsa.Height - _spaceLenght) / 2 - 2;
+
+            pictureBoxNatalNavamsa.Width = _chartWidth;
+            pictureBoxNatalNavamsa.Height = navHeight;
+            pictureBoxNatalNavamsa.Top = topSpace;
+            pictureBoxNatalNavamsa.Left = navLeft;
+
+            labelTransitNavamsa.Top = pictureBoxNatalNavamsa.Bottom + _spaceLenght;
+            labelTransitNavamsa.Left = navLeft;
+
+            pictureBoxTransitNavamsa.Width = _chartWidth;
+            pictureBoxTransitNavamsa.Height = navHeight;
+            pictureBoxTransitNavamsa.Top = labelTransitNavamsa.Bottom + _spaceLenght;
+            pictureBoxTransitNavamsa.Left = navLeft;
 
             labelCurrent.Top = toolStripProfileMenu.Height + _spaceLenght;
             labelCurrent.Left = pictureBoxMap.Left;
@@ -130,7 +155,7 @@ namespace PAD
             int topGridSpace = topSpace + pictureBoxMapLagna.Height + 2 * _spaceLenght;
             labelPeriodRuler.Top = topGridSpace;
             labelPeriodRuler.Left = pictureBoxMapLagna.Left;
-            comboBoxRuler.Top = topGridSpace - _spaceLenght;
+            comboBoxRuler.Top = topGridSpace - (_spaceLenght + 1);
             comboBoxRuler.Left = labelPeriodRuler.Width + 4;
             comboBoxRuler.SelectedIndex = 0;
 
@@ -140,7 +165,7 @@ namespace PAD
             labelTranzit.Top = topGridSpace;
             labelTranzit.Left = pictureBoxMap.Left;
 
-            pictureBoxPeriodRuler.Width = _chartWidth;
+            pictureBoxPeriodRuler.Width = _chartWidth * 2;
             pictureBoxPeriodRuler.Height = _chartHeight;
             pictureBoxPeriodRuler.Top = topGridSpace + labelPeriodRuler.Height + _spaceLenght;
             pictureBoxPeriodRuler.Left = _spaceLenght;
@@ -152,339 +177,36 @@ namespace PAD
 
             ProfileInfoDataGridViewNatalFillByRow(_activeLang);
 
-            int navHeight = _chartHeight - dataGridViewInfoNatal.Height - labelNatalNavamsa.Height - 2 * _spaceLenght;
-            int navWidth = (int)(navHeight * 1.5);
-            int navTop = topGridSpace + labelNatal.Height + dataGridViewInfoNatal.Height + 2 * _spaceLenght;
-
-            labelNatalNavamsa.Top = navTop;
-            labelNatalNavamsa.Left = pictureBoxMapMoon.Left;
-            labelTransitNavamsa.Top = navTop;
-            labelTransitNavamsa.Left = pictureBoxMap.Left;
-
-            pictureBoxNatalNavamsa.Width = navWidth;
-            pictureBoxNatalNavamsa.Height = navHeight;
-            pictureBoxNatalNavamsa.Top = navTop + labelNatalNavamsa.Height + _spaceLenght;
-            pictureBoxNatalNavamsa.Left = pictureBoxMapMoon.Left;
-
-            pictureBoxTransitNavamsa.Width = navWidth;
-            pictureBoxTransitNavamsa.Height = navHeight;
-            pictureBoxTransitNavamsa.Top = navTop + labelTransitNavamsa.Height + _spaceLenght;
-            pictureBoxTransitNavamsa.Left = pictureBoxMap.Left;
-
             int groupBoxTop = pictureBoxMap.Top;
-            int groupBoxHeight = groupBoxSeconds.Height;
-            groupBoxSeconds.Top = groupBoxTop;
-            groupBoxMinutes.Top = groupBoxTop + groupBoxHeight + 2;
-            groupBoxHours.Top = groupBoxTop + 2 * groupBoxHeight + 2;
-            groupBoxDay.Top = groupBoxTop + 3 * groupBoxHeight + 2;
-            groupBoxMonth.Top = groupBoxTop + 4 * groupBoxHeight + 2;
-            groupBoxYear.Top = groupBoxTop + 5 * groupBoxHeight + 2;
+            int groupBoxHeight = groupBoxDateInput.Height;
+            groupBoxDateInput.Top = groupBoxTop;
 
-            buttonRefresh.Top = pictureBoxMap.Bottom - buttonRefresh.Height;
-            buttonRefresh.Left = groupBoxYear.Left;
-
-            groupBoxAspects.Top = dataGridViewInfoTranzit.Top;
-            groupBoxAspects.Left = groupBoxSeconds.Left;
+            groupBoxAspects.Top = dataGridViewInfoTranzit.Top - _spaceLenght;
+            groupBoxAspects.Left = navLeft;
 
             toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
-            textBoxSeconds.Text = _curDate.Second.ToString();
-            textBoxMinutes.Text = _curDate.Minute.ToString();
-            textBoxHours.Text = _curDate.Hour.ToString();
-            textBoxDay.Text = _curDate.Day.ToString();
-            textBoxMonth.Text = _curDate.Month.ToString();
-            textBoxYear.Text = _curDate.Year.ToString();
+            maskedTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
             textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
 
-            groupBoxEventInfo.Top = dataGridViewInfoTranzit.Top + dataGridViewInfoTranzit.Height + _spaceLenght;  
-            groupBoxEventInfo.Left = groupBoxAspects.Left;
-            groupBoxEventInfo.Height = this.Bottom - dataGridViewInfoTranzit.Bottom - _spaceLenght - 8;;
-            richTextBoxEventDesc.Height = groupBoxEventInfo.Height - richTextBoxEventDesc.Top - 5;
-        }
+            groupBoxEventInfo.Top = dataGridViewInfoNatal.Bottom + _spaceLenght;  
+            groupBoxEventInfo.Left = pictureBoxPeriodRuler.Left + pictureBoxPeriodRuler.Width + _spaceLenght;
+            groupBoxEventInfo.Height = pictureBoxPeriodRuler.Bottom - groupBoxEventInfo.Top + 2; //this.Bottom - (groupBoxEventInfo.Top + 3);
+            groupBoxEventInfo.Width = _chartWidth * 4 + _spaceLenght;
+            textBoxEvent.Width = groupBoxEventInfo.Width - 8;
+            richTextBoxEventDesc.Top = textBoxEvent.Bottom + 3;
+            richTextBoxEventDesc.Height = groupBoxEventInfo.Height - (richTextBoxEventDesc.Top + 3);
+            richTextBoxEventDesc.Width = groupBoxEventInfo.Width - 8;
 
-        private void textBoxSeconds_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxMinutes_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxHours_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxDay_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxMonth_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxYear_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxSecondsStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxMinutesStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxHoursStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxDayStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxMonthStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void textBoxYearStep_KeyPress(object sender, KeyPressEventArgs e)
-        {
-            const char Delete = (char)8;
-            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
-        }
-
-        private void arrowButtonSecondsLeft_Click(object sender, EventArgs e)
-        {
-            textBoxSeconds.Text = (Convert.ToInt32(textBoxSeconds.Text) - Convert.ToInt32(textBoxSecondsStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonSecondsRight_Click(object sender, EventArgs e)
-        {
-            textBoxSeconds.Text = (Convert.ToInt32(textBoxSeconds.Text) + Convert.ToInt32(textBoxSecondsStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonMinutesLeft_Click(object sender, EventArgs e)
-        {
-            textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) - Convert.ToInt32(textBoxMinutesStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonMinutesRight_Click(object sender, EventArgs e)
-        {
-            textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) + Convert.ToInt32(textBoxMinutesStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonHoursLeft_Click(object sender, EventArgs e)
-        {
-            textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) - Convert.ToInt32(textBoxHoursStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonHoursRight_Click(object sender, EventArgs e)
-        {
-            textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) + Convert.ToInt32(textBoxHoursStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonDayLeft_Click(object sender, EventArgs e)
-        {
-            textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) - Convert.ToInt32(textBoxDayStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonDayRight_Click(object sender, EventArgs e)
-        {
-            textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) + Convert.ToInt32(textBoxDayStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonMonthLeft_Click(object sender, EventArgs e)
-        {
-            textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) - Convert.ToInt32(textBoxMonthStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonMonthRight_Click(object sender, EventArgs e)
-        {
-            textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) + Convert.ToInt32(textBoxMonthStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonYearLeft_Click(object sender, EventArgs e)
-        {
-            textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) - Convert.ToInt32(textBoxYearStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void arrowButtonYearRight_Click(object sender, EventArgs e)
-        {
-            textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) + Convert.ToInt32(textBoxYearStep.Text)).ToString();
-            CurrentDateRefresh();
-        }
-
-        private void textBoxSeconds_TextChanged(object sender, EventArgs e)
-        {
-            if (!textBoxSeconds.Text.Equals(string.Empty))
-            {
-                int newValue = 0;
-                int curValue = Convert.ToInt32(textBoxSeconds.Text);
-                if (curValue < 0)
-                {
-                    newValue = 60 + curValue;
-                    textBoxSeconds.Text = newValue.ToString();
-                    textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) - 1).ToString();
-                }
-                else if (curValue >= 60)
-                {
-                    newValue = curValue - 60;
-                    textBoxSeconds.Text = newValue.ToString();
-                    textBoxMinutes.Text = (Convert.ToInt32(textBoxMinutes.Text) + 1).ToString();
-                }
-            }
-        }
-
-        private void textBoxMinutes_TextChanged(object sender, EventArgs e)
-        {
-            if (!textBoxMinutes.Text.Equals(string.Empty))
-            {
-                int newValue = 0;
-                int curValue = Convert.ToInt32(textBoxMinutes.Text);
-                if (curValue < 0)
-                {
-                    newValue = 60 + curValue;
-                    textBoxMinutes.Text = newValue.ToString();
-                    textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) - 1).ToString();
-                }
-                else if (curValue >= 60)
-                {
-                    newValue = curValue - 60;
-                    textBoxMinutes.Text = newValue.ToString();
-                    textBoxHours.Text = (Convert.ToInt32(textBoxHours.Text) + 1).ToString();
-                }
-            }
-        }
-
-        private void textBoxHours_TextChanged(object sender, EventArgs e)
-        {
-            if (!textBoxHours.Text.Equals(string.Empty))
-            {
-                int newValue = 0;
-                int curValue = Convert.ToInt32(textBoxHours.Text);
-                if (curValue < 0)
-                {
-                    newValue = 24 + curValue;
-                    textBoxHours.Text = newValue.ToString();
-                    textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) - 1).ToString();
-                }
-                else if (curValue >= 24)
-                {
-                    newValue = curValue - 24;
-                    textBoxHours.Text = newValue.ToString();
-                    textBoxDay.Text = (Convert.ToInt32(textBoxDay.Text) + 1).ToString();
-                }
-            }
-        }
-
-        private void textBoxDay_TextChanged(object sender, EventArgs e)
-        {
-            if (!textBoxDay.Text.Equals(string.Empty))
-            {
-                int newValue = 0, yearValue = 0, monthValue = 0, daysAmount = 0;
-                int curValue = Convert.ToInt32(textBoxDay.Text);
-
-                int daysAmoutCurrent = DateTime.DaysInMonth(_curDate.Year, _curDate.Month);
-                if (curValue <= 0)
-                {
-                    textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) - 1).ToString();
-                    yearValue = Convert.ToInt32(textBoxYear.Text);
-                    monthValue = Convert.ToInt32(textBoxMonth.Text);
-                    daysAmount = DateTime.DaysInMonth(yearValue, monthValue);
-
-                    newValue = daysAmount + curValue;
-                    textBoxDay.Text = newValue.ToString();
-
-                }
-                else if (curValue > daysAmoutCurrent)
-                {
-                    textBoxMonth.Text = (Convert.ToInt32(textBoxMonth.Text) + 1).ToString();
-                    newValue = curValue - daysAmoutCurrent;
-                    textBoxDay.Text = newValue.ToString();
-                }
-            }
-        }
-
-        private void textBoxMonth_TextChanged(object sender, EventArgs e)
-        {
-            if (!textBoxMonth.Text.Equals(string.Empty))
-            {
-                int newValue = 0;
-                int curValue = Convert.ToInt32(textBoxMonth.Text);
-                if (curValue <= 0)
-                {
-                    newValue = 12 + curValue;
-                    textBoxMonth.Text = newValue.ToString();
-                    textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) - 1).ToString();
-                }
-                else if (curValue > 12)
-                {
-                    newValue = curValue - 12;
-                    textBoxMonth.Text = newValue.ToString();
-                    textBoxYear.Text = (Convert.ToInt32(textBoxYear.Text) + 1).ToString();
-                }
-            }
-        }
-
-        private void CurrentDateRefresh()
-        {
-            if (textBoxSeconds.Text.Equals(string.Empty))
-                return;
-            if (textBoxMinutes.Text.Equals(string.Empty))
-                return;
-            if (textBoxHours.Text.Equals(string.Empty))
-                return;
-            if (textBoxDay.Text.Equals(string.Empty))
-                return;
-            if (textBoxMonth.Text.Equals(string.Empty))
-                return;
-            if (textBoxYear.Text.Equals(string.Empty))
-                return;
-
-            ConstructNewDate();
-        }
-
-        private void ConstructNewDate()
-        {
-            int year = Convert.ToInt32(textBoxYear.Text);
-            int month = Convert.ToInt32(textBoxMonth.Text);
-            int day = Convert.ToInt32(textBoxDay.Text);
-            int hour = Convert.ToInt32(textBoxHours.Text);
-            int min = Convert.ToInt32(textBoxMinutes.Text);
-            int sec = Convert.ToInt32(textBoxSeconds.Text);
-            _curDate = new DateTime(year, month, day, hour, min, sec);
-            toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
+            groupBoxDateInput.Top = groupBoxEventInfo.Top;
+            groupBoxDateInput.Left = groupBoxAspects.Left;
+            groupBoxDateInput.Width = _chartWidth;
+            groupBoxDateInput.Height = pictureBoxPeriodRuler.Bottom - groupBoxDateInput.Top + 2; //this.Bottom - (groupBoxDateInput.Top + 3);
+            maskedTextBoxDate.Width = groupBoxDateInput.Width - 14;
+            buttonApply.Width = maskedTextBoxDate.Width;
+            buttonApply.Top = comboBoxDateStep.Bottom + _spaceLenght;
+            buttonApply.Left = maskedTextBoxDate.Left;
+            buttonApply.Height = groupBoxDateInput.Height - (buttonApply.Top + 4);
+            comboBoxDateStep.SelectedIndex = 0;
         }
 
         private void PrepareDataGridInfoTranzit(ELanguage langCode)
@@ -492,8 +214,8 @@ namespace PAD
             dataGridViewInfoTranzit.Width = 380;
 
             dataGridViewInfoTranzit.AutoGenerateColumns = false;
-            dataGridViewInfoTranzit.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-            dataGridViewInfoTranzit.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
+            dataGridViewInfoTranzit.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 8, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            dataGridViewInfoTranzit.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 8, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
 
             DataGridViewColumn column = new DataGridViewColumn();
             column.DataPropertyName = "Planet";
@@ -550,8 +272,8 @@ namespace PAD
             dataGridViewInfoNatal.Width = 380;
 
             dataGridViewInfoNatal.AutoGenerateColumns = false;
-            dataGridViewInfoNatal.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 10, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
-            dataGridViewInfoNatal.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 9, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
+            dataGridViewInfoNatal.ColumnHeadersDefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.TRANSTOOLTIPHEADER)), 8, Utility.GetFontStyleBySettings(EFontList.TRANSTOOLTIPHEADER));
+            dataGridViewInfoNatal.DefaultCellStyle.Font = new Font(new FontFamily(Utility.GetFontNameByCode(EFontList.DWTOOLTIPTEXT)), 8, Utility.GetFontStyleBySettings(EFontList.DWTOOLTIPTEXT));
 
             DataGridViewColumn column = new DataGridViewColumn();
             column.DataPropertyName = "Planet";
@@ -841,13 +563,13 @@ namespace PAD
                 dataGridViewInfoNatal.Rows.Add(row);
             }
 
-            int heihgt = dataGridViewInfoNatal.ColumnHeadersHeight;
+            int height = dataGridViewInfoNatal.ColumnHeadersHeight;
             for (int i = 0; i < dataGridViewInfoNatal.RowCount; i++)
             {
                 int rowHeight = dataGridViewInfoNatal.Rows[i].GetPreferredHeight(i, DataGridViewAutoSizeRowMode.AllCellsExceptHeader, true);
-                heihgt += rowHeight;
+                height += rowHeight;
             }
-            dataGridViewInfoNatal.Height = heihgt;
+            dataGridViewInfoNatal.Height = height;
             dataGridViewInfoNatal.ClearSelection();
         }
 
@@ -1126,12 +848,7 @@ namespace PAD
             textBoxLivingPlace.Text = CacheLoad._locationList.Where(i => i.Id == _location.Id).FirstOrDefault()?.Locality ?? string.Empty;
 
             toolStripTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
-            textBoxSeconds.Text = _curDate.Second.ToString();
-            textBoxMinutes.Text = _curDate.Minute.ToString();
-            textBoxHours.Text = _curDate.Hour.ToString();
-            textBoxDay.Text = _curDate.Day.ToString();
-            textBoxMonth.Text = _curDate.Month.ToString();
-            textBoxYear.Text = _curDate.Year.ToString();
+            maskedTextBoxDate.Text = _curDate.ToString("dd.MM.yyyy HH:mm:ss");
 
             textBoxEvent.Text = string.Empty;
             richTextBoxEventDesc.Text = string.Empty;
@@ -1140,6 +857,7 @@ namespace PAD
         private void toolStripTextBoxDate_TextChanged(object sender, EventArgs e)
         {
             //this.Shown += new EventHandler(this.TransitsMap_Shown);
+            _curDate = DateTime.ParseExact(toolStripTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture); 
             PrepareTransitMapMoon();
             PrepareTransitMapLagna();
             PrepareGeneralTransitMap();
@@ -1898,9 +1616,154 @@ namespace PAD
             }
         }
 
+        private void arrowButtonLeft_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime date = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                KeyValueData selectedItem = (KeyValueData)comboBoxDateStep.SelectedItem;
+                DateTime newDate = GetDateFromStepValueForward(date, selectedItem.ItemId, Convert.ToInt32(textBoxStep.Text), false);
+                maskedTextBoxDate.Text = newDate.ToString("dd.MM.yyyy HH:mm:ss");
+                toolStripTextBoxDate.Text = newDate.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+            catch
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Improper date entered. Please correct date.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+            };
+
+        }
+
+        private void arrowButtonRight_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DateTime date = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                KeyValueData selectedItem = (KeyValueData)comboBoxDateStep.SelectedItem;
+                DateTime newDate = GetDateFromStepValueForward(date, selectedItem.ItemId, Convert.ToInt32(textBoxStep.Text));
+                maskedTextBoxDate.Text = newDate.ToString("dd.MM.yyyy HH:mm:ss");
+                toolStripTextBoxDate.Text = newDate.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+            catch
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Improper date entered. Please correct date.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+            };
+        }
+
         private void buttonRefresh_Click(object sender, EventArgs e)
         {
-            CurrentDateRefresh();
+            try
+            {
+                DateTime newDate = DateTime.ParseExact(maskedTextBoxDate.Text, "dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                toolStripTextBoxDate.Text = newDate.ToString("dd.MM.yyyy HH:mm:ss");
+            }
+            catch 
+            {
+                frmShowMessage.Show(Utility.GetLocalizedText("Improper date entered. Please correct date.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
+            };
         }
+
+        private void maskedTextBoxDate_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void textBoxStep_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            const char Delete = (char)8;
+            e.Handled = !Char.IsDigit(e.KeyChar) && e.KeyChar != Delete;
+        }
+
+        private void comboBoxDateStep_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBoxDateStep.SelectedIndex == 0)
+            {
+                textBoxStep.Text = 10.ToString();
+            }
+            else 
+            {
+                textBoxStep.Text = 1.ToString();
+            }
+        }
+
+        private DateTime GetDateFromStepValueForward(DateTime date, int step, int time, bool forward = true)
+        {
+            DateTime value = date;
+            switch (step)
+            {
+                case 1:
+                    if (forward)
+                    {
+                        value = date.AddSeconds(time);
+                    }
+                    else
+                    {
+                        value = date.AddSeconds(-time);
+                    }
+                    break;
+
+                case 2:
+                    if (forward)
+                    {
+                        value = date.AddMinutes(time);
+                    }
+                    else
+                    {
+                        value = date.AddMinutes(-time);
+                    }
+                    break;
+
+                case 3:
+                    if (forward)
+                    {
+                        value = date.AddHours(time);
+                    }
+                    else
+                    {
+                        value = date.AddHours(-time);
+                    }
+                    break;
+
+                case 4:
+                    if (forward)
+                    {
+                        value = date.AddDays(time);
+                    }
+                    else
+                    {
+                        value = date.AddDays(-time);
+                    }
+                    break;
+
+                case 5:
+                    if (forward)
+                    {
+                        value = date.AddMonths(time);
+                    }
+                    else
+                    {
+                        value = date.AddMonths(-time);
+                    }
+                    break;
+
+                case 6:
+                    if (forward)
+                    {
+                        value = date.AddYears(time);
+                    }
+                    else
+                    {
+                        value = date.AddYears(-time);
+                    }
+                    break;
+
+                default:
+                    value = date;
+                    break;
+            }
+            return value;
+        }
+
+
     }
 }

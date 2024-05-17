@@ -12,9 +12,6 @@ using PdfSharp.Drawing;
 using PopupControl;
 using System.IO;
 using System.Drawing.Imaging;
-using TimeZoneConverter;
-//using Innovative.SolarCalculator;
-using NodaTime;
 
 namespace PAD
 {

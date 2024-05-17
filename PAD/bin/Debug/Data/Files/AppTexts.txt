@@ -156,8 +156,10 @@ Month|Month|en
 Month|Месяц|ru
 Year|Year|en
 Year|Год|ru
-Refresh Date|Refresh Date|en
-Refresh Date|Обновить Дату|ru
+Setting date|Setting date|en
+Setting date|Установка даты|ru
+Apply new Date|Apply new Date|en
+Apply new Date|Применить новую Дату|ru
 Location|Location|en
 Location|Местоположение|ru
 Transit Chart|Transit Chart|en
@@ -187,11 +189,13 @@ Current Transits|Текущие транзиты|ru
 Transits from Period Ruler|Transits from Period Ruler|en
 Transits from Period Ruler|Транзиты от Управителя Периода|ru
 Natal Navamsa|Natal Navamsa|en
-Natal Navamsa|Натальная навамша|ru
+Natal Navamsa|Натальная Навамша|ru
 Transit Navamsa|Transit Navamsa|en
 Transit Navamsa|Транзитная Навамша|ru
 Transit position of planets|Transit position of planets|en
 Transit position of planets|Транзитное положение планет|ru
+Improper date entered. Please correct date.|Improper date entered. Please correct date.|en
+Improper date entered. Please correct date.|Введена неправильная дата. Пожалуйста, исправьте дату.|ru
 Color settings|Color settings|en
 Color settings|Конфигурация цветa|ru
 Color settings have been changed. Do you want to apply new settings?|Color settings have been changed. Do you want to apply new settings?|en
