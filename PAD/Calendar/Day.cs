@@ -238,16 +238,7 @@ namespace PAD
             Date = date;
             IsDayOfMonth = flag;
             SunRise = sunRise;
-            SunSet = SunSet;
-
-            double latitude, longitude;
-            string timeZone = string.Empty;
-            if (Utility.GetGeoCoordinateByLocationId(sPerson.PlaceOfLivingId, out latitude, out longitude))
-            {
-                timeZone = Utility.GetTimeZoneDotNetIdByGeoCoordinates(latitude, longitude);
-                SunRise = Utility.CalculateSunriseForDateAndLocation(date, latitude, longitude, timeZone);
-                SunSet = Utility.CalculateSunsetForDateAndLocation(date, latitude, longitude, timeZone);
-            }
+            SunSet = sunSet;
 
             List<PlanetCalendar> moonLagnaList = Utility.ClonePlanetCalendarList(moonZodiakList);
             List<PlanetCalendar> moonRetroLagnaList = Utility.ClonePlanetCalendarList(moonZodiakRetroList);

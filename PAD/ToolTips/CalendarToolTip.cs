@@ -96,8 +96,8 @@ namespace PAD
                 e.Graphics.DrawString(dayText, dayFont, outDayBrush, posX, posY + 2);
 
             // Sunrise / sunset
-            string sunriseTime = Utility.GetSunStatusName(ESun.SUNRISE, lang) + currDay.SunRise?.ToString("HH:mm:ss");
-            string sunsetTime = Utility.GetSunStatusName(ESun.SUNSET, lang) + currDay.SunSet?.ToString("HH:mm:ss");
+            string sunriseTime = Utility.GetSunStatusName(ESun.SUNRISE, lang) + currDay.SunRise.Value.ToString("HH:mm:ss");
+            string sunsetTime = Utility.GetSunStatusName(ESun.SUNSET, lang) + currDay.SunSet.Value.ToString("HH:mm:ss");
             Size textSize = TextRenderer.MeasureText(sunsetTime, sunFont);
             int posYSunrise = posY + ((dayFrameHeight / 2  - textSize.Height) / 2);
             int posYSunset = posYSunrise + textSize.Height;

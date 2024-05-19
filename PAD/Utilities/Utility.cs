@@ -1,4 +1,5 @@
 ﻿using GeoTimeZone;
+using Innovative.SolarCalculator;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -789,7 +790,9 @@ namespace PAD
             if (daylightStart.Day != 0 && daylightStart.Month != 0 && daylightStart.Week != 0)
             {
                 if (date >= GetAdjustmentDate(daylightStart, date.Year) && date <= GetAdjustmentDate(daylightEnd, date.Year))
-                    newDate = newDate.Add(daylightDelta);
+                {
+                    newDate =  newDate.Add(daylightDelta);
+                }
             }
             return newDate;
         }
@@ -816,9 +819,9 @@ namespace PAD
             return newDate;
         }
 
-        public static DateTime? CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
+        public static DateTime CalculateSunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            DateTime? sunrise = null;
+            DateTime sunrise = new DateTime();
             int rsmi = 0;
             double risetime = 0.0;
 
@@ -839,18 +842,12 @@ namespace PAD
                     break;
             }
 
-            //SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            //LocalDateTime localDateTime = date.ToLocalDateTime();
-            //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
-            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            //return solarTimes.Sunrise.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            //sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
             return sunrise;
         }
 
-        public static DateTime? CalculateSunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
+        public static DateTime CalculateSunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
         {
-            DateTime? sunset = null;
+            DateTime sunset = new DateTime();
             int rsmi = 0;
             double risetime = 0.0;
 
@@ -871,12 +868,24 @@ namespace PAD
                     break;
             }
 
-            //SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
-            //LocalDateTime localDateTime = date.ToLocalDateTime();
-            //ZonedDateTime zoneDateTime = localDateTime.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZoneId]);
-            //return solarTimes.Sunset.ToUniversalTime().ShiftByNodaTimeOffset(zoneDateTime.Offset);
-            //TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
-            //sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
+            return sunset;
+        }
+
+        public static DateTime? CalculateNOASunriseForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
+        {
+            DateTime? sunrise = null;
+            SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            sunrise = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunrise.ToUniversalTime(), tzi);
+            return sunrise;
+        }
+
+        public static DateTime? CalculateNOASunsetForDateAndLocation(DateTime date, double latitude, double longitude, string timeZoneId)
+        {
+            DateTime? sunset = null;
+            SolarTimes solarTimes = new SolarTimes(date, latitude, longitude);
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            sunset = TimeZoneInfo.ConvertTimeFromUtc(solarTimes.Sunset.ToUniversalTime(), tzi);
             return sunset;
         }
 

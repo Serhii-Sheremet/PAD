@@ -67,6 +67,14 @@
       <HintPath>bin\Debug\Lib\GeoTimeZone.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Innovative.Geometry.Angle">
+      <HintPath>bin\Debug\Lib\Innovative.Geometry.Angle.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Innovative.SolarCalculator">
+      <HintPath>bin\Debug\Lib\Innovative.SolarCalculator.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="MonthCalendarControl">
       <HintPath>bin\Debug\Lib\MonthCalendarControl.dll</HintPath>
       <Private>False</Private>

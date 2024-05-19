@@ -2118,8 +2118,8 @@ namespace PAD
                     }
 
                     //Drawing sunrise, sunset
-                    string sunriseTime = Utility.GetSunStatusName(ESun.SUNRISE, _activeLanguageCode) + daysList[day].SunRise?.ToString("HH:mm:ss");
-                    string sunsetTime = Utility.GetSunStatusName(ESun.SUNSET, _activeLanguageCode) + daysList[day].SunSet?.ToString("HH:mm:ss");
+                    string sunriseTime = Utility.GetSunStatusName(ESun.SUNRISE, _activeLanguageCode) + daysList[day].SunRise.Value.ToString("HH:mm:ss");
+                    string sunsetTime = Utility.GetSunStatusName(ESun.SUNSET, _activeLanguageCode) + daysList[day].SunSet.Value.ToString("HH:mm:ss");
                     Size textSise = TextRenderer.MeasureText(sunriseTime, sunFontPoint);
                     float posXSunrise = posX + (_dayWidth - textSise.Width);
                     g.DrawString(sunriseTime, sunFontPoint, textBrush, posXSunrise, posY);
@@ -2531,8 +2531,16 @@ namespace PAD
                 // Preparing original List<DayCalendars> list
                 for (DateTime currentDay = startDate; currentDay <= endDate;)
                 {
-                    DateTime? sunrise = Utility.CalculateSunriseForDateAndLocation(currentDay, latitude, longitude, timeZone);
-                    DateTime? sunset = Utility.CalculateSunsetForDateAndLocation(currentDay, latitude, longitude, timeZone);
+                    DateTime? sunrise = Utility.CalculateNOASunriseForDateAndLocation(currentDay, latitude, longitude, timeZone);
+                    DateTime? sunset = Utility.CalculateNOASunsetForDateAndLocation(currentDay, latitude, longitude, timeZone);
+
+                    //DateTime sunrise = Utility.CalculateSunriseForDateAndLocation(currentDay, latitude, longitude, timeZone);
+                    //sunrise = Utility.ShiftDateByDaylightDelta(sunrise, adjustmentRules);
+                    //sunrise.ShiftByDaylightDelta(adjustmentRules);
+
+                    //DateTime sunset = Utility.CalculateSunsetForDateAndLocation(currentDay, latitude, longitude, timeZone);
+                    //sunset = Utility.ShiftDateByDaylightDelta(sunset, adjustmentRules);
+                    //sunset.ShiftByDaylightDelta(adjustmentRules);
 
                     bool isDayOfMonth = (currentDay.Month == startDateOfMonth.Month) ? true : false;
                     tempDay = new Day (
@@ -2612,9 +2620,16 @@ namespace PAD
 
                 for (int day = 0; day < daysList.Count; day++)
                 {
-                    DateTime? sunrisePrevious = Utility.CalculateSunriseForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
-                    DateTime? sunsetPrevious = Utility.CalculateSunsetForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
-                    DateTime? sunriseNext = Utility.CalculateSunriseForDateAndLocation(daysList[day].Date.AddDays(+1), latitude, longitude, timeZone);
+                    DateTime? sunrisePrevious = Utility.CalculateNOASunriseForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
+                    DateTime? sunsetPrevious = Utility.CalculateNOASunsetForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
+                    DateTime? sunriseNext = Utility.CalculateNOASunriseForDateAndLocation(daysList[day].Date.AddDays(+1), latitude, longitude, timeZone);
+
+                    //DateTime sunrisePrevious = Utility.CalculateSunriseForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
+                    //sunrisePrevious.ShiftByDaylightDelta(adjustmentRules);
+                    //DateTime sunsetPrevious = Utility.CalculateSunsetForDateAndLocation(daysList[day].Date.AddDays(-1), latitude, longitude, timeZone);
+                    //sunsetPrevious.ShiftByDaylightDelta(adjustmentRules);
+                    //DateTime sunriseNext = Utility.CalculateSunriseForDateAndLocation(daysList[day].Date.AddDays(+1), latitude, longitude, timeZone);
+                    //sunriseNext.ShiftByDaylightDelta(adjustmentRules);
 
                     // Adding List<JogaCalendar> lists to List<DayCalendars> list
                     daysList[day].DwipushkarJogaDayList = PrepareYogaList(EYoga.DWIPUSHKAR, daysList, daysList[day].Date, daysList[day].SunRise, sunrisePrevious, sunriseNext);

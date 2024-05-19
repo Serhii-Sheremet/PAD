@@ -1218,8 +1218,6 @@ namespace PAD
 
         public double SunRiseCalculation(DateTime calcDate, double lat, double lon, double alt, double atpress, double attemp, int rsmi)
         {
-            // rsmi = EpheConstants.SE_CALC_SET | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION;
-            // rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_HINDU_RISING;
             double[] geopos = { lon, lat, alt };
 
             EpheFunctions.swe_set_topo(geopos[0], geopos[1], geopos[2]);
@@ -1237,12 +1235,6 @@ namespace PAD
             tjd_ut = EpheFunctions.swe_julday(jyear, jmonth, jday, jut, EpheConstants.SE_GREG_CAL);
             double dt = lon / 360.0;
             tjd_ut -= dt;
-
-            //int rsmi = EpheConstants.SE_CALC_RISE;
-            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER + EpheConstants.SE_BIT_NO_REFRACTION;
-            //int rsmi = EpheConstants.SE_CALC_RISE | EpheConstants.SE_BIT_DISC_CENTER | EpheConstants.SE_BIT_NO_REFRACTION | EpheConstants.SE_BIT_GEOCTR_NO_ECL_LAT;
-            //int rsmi = EpheConstants.SE_CALC_RISE;
-
 
             int ipl = EpheConstants.SE_SUN;
             int epheflag = EpheConstants.SEFLG_SWIEPH;
