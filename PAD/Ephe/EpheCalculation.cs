@@ -1,7 +1,9 @@
-﻿using System;
+﻿using NodaTime.Calendars;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PAD
 {
@@ -441,6 +443,20 @@ namespace PAD
             while (curDate < toDate.AddSeconds(+1))
             {
                 dateChange = SWEPH_OccultationGlobal_Calculation(curDate, EpheConstants.SE_SUN, EpheConstants.SE_ECL_TOTAL, longitude, latitude, altitude);
+                curDate = dateChange;
+                EclipseData ecTemp = new EclipseData
+                {
+                    Date = curDate,
+                    EclipseId = 2
+                };
+                ecDataList.Add(ecTemp);
+                curDate = curDate.AddDays(+1);
+            }
+
+            curDate = fromDate;
+            while (curDate < toDate.AddSeconds(+1))
+            {
+                dateChange = SWEPH_OccultationGlobal_Calculation(curDate, EpheConstants.SE_SUN, EpheConstants.SE_ECL_PARTIAL, longitude, latitude, altitude);
                 curDate = dateChange;
                 EclipseData ecTemp = new EclipseData
                 {
@@ -1218,9 +1234,16 @@ namespace PAD
 
         public double SunRiseCalculation(DateTime calcDate, double lat, double lon, double alt, double atpress, double attemp, int rsmi)
         {
-            double[] geopos = { lon, lat, alt };
+            iflag = 0;
+            whicheph = EpheConstants.SEFLG_SWIEPH;
+            iflag |= EpheConstants.SEFLG_SIDEREAL;
+            EpheFunctions.swe_set_sid_mode(EpheConstants.SE_SIDM_LAHIRI, 0, 0);
+            EpheFunctions.swe_set_topo(lon, lat, alt);
 
-            EpheFunctions.swe_set_topo(geopos[0], geopos[1], geopos[2]);
+            iflag = (iflag & ~SEFLG_EPHMASK) | whicheph;
+
+            double[] geopos = { lon, lat, alt };
+            //EpheFunctions.swe_set_topo(geopos[0], geopos[1], geopos[2]);
 
             double jut;
             double tjd_ut;
@@ -1237,7 +1260,7 @@ namespace PAD
             tjd_ut -= dt;
 
             int ipl = EpheConstants.SE_SUN;
-            int epheflag = EpheConstants.SEFLG_SWIEPH;
+            //int epheflag = EpheConstants.SEFLG_SWIEPH;
 
             IntPtr ptrDouble_geopos = Marshal.AllocHGlobal(Marshal.SizeOf(geopos[0]) * geopos.Length);
             Marshal.Copy(geopos, 0, ptrDouble_geopos, 3);
@@ -1254,7 +1277,7 @@ namespace PAD
             IntPtr ptrChar_starname = Marshal.AllocHGlobal(Marshal.SizeOf(starname[0]));
             Marshal.Copy(starname, 0, ptrChar_starname, 1);
 
-            int return_code = EpheFunctions.swe_rise_trans(tjd_ut, ipl, ptrChar_starname, Convert.ToInt32(epheflag), rsmi, ptrDouble_geopos, atpress, attemp, ptrDouble_tret, ptrChar_serr);
+            int return_code = EpheFunctions.swe_rise_trans(tjd_ut, ipl, ptrChar_starname, (int)iflag /*Convert.ToInt32(epheflag)*/, rsmi, ptrDouble_geopos, atpress, attemp, ptrDouble_tret, ptrChar_serr);
 
             Marshal.Copy(ptrDouble_tret, tret, 0, 1);
             Marshal.Copy(ptrChar_serr, serr, 0, 1);
@@ -1263,6 +1286,8 @@ namespace PAD
             Marshal.FreeHGlobal(ptrDouble_tret);
             Marshal.FreeHGlobal(ptrChar_serr);
             Marshal.FreeHGlobal(ptrChar_starname);
+
+            DateTime date = DateTime.FromOADate(tret[0] - 2415018.5);
 
             return tret[0];
         }
@@ -1296,6 +1321,8 @@ namespace PAD
             Marshal.FreeHGlobal(ptrInt_month);
             Marshal.FreeHGlobal(ptrInt_day);
             Marshal.FreeHGlobal(ptrDouble_hour);
+
+            //jut = jhour + jmin / 60.0 + jsec / 3600.0;
 
             double leftoverMinutes = (hour[0] - Math.Floor(hour[0])) * 60;
             double seconds = Math.Floor( (leftoverMinutes - Math.Floor(leftoverMinutes)) * 60 );
@@ -1370,6 +1397,13 @@ namespace PAD
         //// polar regions
         //double dt = geo_longitude / 360.0;
         //tjd = tjd - dt; ".
+
+        
+
+
+
+
+
 
 
 

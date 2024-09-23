@@ -20,7 +20,7 @@ namespace PAD
         public static extern double swe_julday(int year, int month, int day, double hour, int gregFlag);
 
         [DllImport("swedll32.dll")]
-        public static extern void swe_revjul(double tjd, int gregflag, IntPtr year, IntPtr month, IntPtr day, IntPtr hours);
+        public static extern void swe_revjul(double tjd, int gregflag, IntPtr year, IntPtr month, IntPtr day, IntPtr hour);
 
         [DllImport("swedll32.dll")]
         public static extern int swe_utc_to_jd(int iyear, int imonth, int iday, int ihour, int imin, double dsec, int gregflag, double[] dret, IntPtr serr); /* note : second is a decimal */
