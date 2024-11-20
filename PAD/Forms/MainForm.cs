@@ -650,7 +650,7 @@ namespace PAD
 
         private void datePicker_ValueChanged(object sender, CustomControls.CheckDateEventArgs e)
         {
-            if (datePicker.Value.Month == _selectedDate.Month)
+            if (datePicker.Value.Month == _selectedDate.Month && datePicker.Value.Year == _selectedDate.Year)
                 return;
 
             if (_selectedProfile != null)
