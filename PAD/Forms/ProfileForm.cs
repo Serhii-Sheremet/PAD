@@ -3146,7 +3146,7 @@ namespace PAD
 
         private void buttonGenerateMap_Click(object sender, EventArgs e)
         {
-            if (maskedTextBoxDate.Text.Equals(string.Empty))
+            if (!maskedTextBoxDate.MaskFull)
             {
                 frmShowMessage.Show(Utility.GetLocalizedText("Enter date of Birth.", _activeLang), Utility.GetLocalizedText("Error", _activeLang), enumMessageIcon.Error, enumMessageButton.OK);
                 return;
@@ -3188,6 +3188,7 @@ namespace PAD
                 catch { }
             }
         }
+
         private void buttonSaveProfile_Click(object sender, EventArgs e)
         {
             if (textBoxProfileName.Text.Equals(string.Empty))

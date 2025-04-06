@@ -2447,7 +2447,7 @@ namespace PAD
             EpheCalculation eCalc = new EpheCalculation();
             List<PlanetData> pdList = new List<PlanetData>();
             string timeZone = string.Empty;
-            timeZone = Utility.GetTimeZoneNameByGeoCoordinates(latitude, longitude);
+            timeZone = GetTimeZoneNameByGeoCoordinates(latitude, longitude);
             LocalDateTime localDateTimeStart = date.ToLocalDateTime();
             ZonedDateTime zoneDateTimeStart = localDateTimeStart.InZoneLeniently(DateTimeZoneProviders.Tzdb[timeZone]);
             DateTime shiftedDate = date.ShiftByNodaTimeOffset(-zoneDateTimeStart.Offset);
